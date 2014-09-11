@@ -1,0 +1,8 @@
+<div class="email-login">
+    <p class="lead text-center">Not so <em>social</em>?</p>
+    <div class="text-center">
+        {% url "account_login" as login_url %}
+        {% url "account_signup" as signup_url %}
+        <p><a href="{{ login_url }}" class="btn btn-default btn-lg">Log In</a> or <a href="{{ signup_url }}" class="btn btn-primary btn-lg">Sign Up</a> with your email address.</p>
+    </div>
+</div>
