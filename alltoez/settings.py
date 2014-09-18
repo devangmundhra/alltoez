@@ -1,5 +1,6 @@
 import os
 
+from datetime import timedelta
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 PACKAGE_ROOT = os.path.abspath(os.path.dirname(__file__))
@@ -136,6 +137,8 @@ INSTALLED_APPS = [
 
     # project
     "alltoez",
+    "events",
+    "core"
 ]
 
 # A sample logging configuration. The only tangible logging
@@ -156,13 +159,20 @@ LOGGING = {
             "level": "ERROR",
             "filters": ["require_debug_false"],
             "class": "django.utils.log.AdminEmailHandler"
-        }
+        },
+        'null': {
+            'class': 'django.utils.log.NullHandler',
+        },
     },
     "loggers": {
         "django.request": {
             "handlers": ["mail_admins"],
             "level": "ERROR",
             "propagate": True,
+        },
+        'django.security.DisallowedHost': {
+            'handlers': ['null'],
+            'propagate': False,
         },
     }
 }
@@ -180,7 +190,7 @@ ACCOUNT_EMAIL_UNIQUE = True
 ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = False
 ACCOUNT_LOGIN_REDIRECT_URL = "home"
 ACCOUNT_LOGOUT_REDIRECT_URL = "home"
-ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 2
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
 
 AUTHENTICATION_BACKENDS = [
     "social.backends.google.GoogleOAuth2",
@@ -218,3 +228,29 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     "profile",
     "email"
 ]
+
+# Celery configurations
+BROKER_URL = 'redis://'
+CELERY_RESULT_BACKEND = BROKER_URL
+CELERY_SEND_TASK_ERROR_EMAILS = False
+CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
+
+CELERYBEAT_SCHEDULE = {
+    'parse-events-every-day': {
+        'task': 'events.tasks.scrape_events_look_ahead',
+        'schedule': timedelta(days=1),
+    },
+}
+
+
+CELERY_TASK_PUBLISH_RETRY_POLICY = {
+    'max_retries': 15,
+    'interval_start': 1,
+    'interval_step': 10,
+    'interval_max': 3600,
+}
+
+try:
+    from local_settings import *
+except ImportError, e:
+    pass

@@ -56,11 +56,12 @@ def extract_info_from_sfkids_event(url):
     content = response.read()
     soup = BeautifulSoup(content)
     article = soup.article
-    event_info = article.contents[3]
+    event_info = article.find("div", class_="content")
     
     event = dict()
-    event['title'] = soup.title.contents[0]
-    event['orig_link'] = url
+    event[u'title'] = soup.title.contents[0]
+    event[u'orig_link'] = url
+
     for info in event_info.contents:
         if info.name != u'div':
             continue
@@ -78,7 +79,7 @@ def extract_info_from_sfkids_event(url):
 
         for idx, child in enumerate(info.children):
             if 'field-label' in child.attrs.get('class', None):
-                info_label = repr(list(child.strings)[0])[:-5]
+                info_label = unicode(repr(list(child.strings)[0])[2:-6])
                 continue
             elif idx == 0:
                 #This is a field where the label is not available. Deduce it from the class of the info.
@@ -182,8 +183,8 @@ def extract_info_from_redtri_event(url):
     event_info = event_info.find("div", class_="col-2")
 
     event = dict()
-    event['title'] = soup.title.contents[0]
-    event['orig_link'] = url
+    event[u'title'] = soup.title.contents[0]
+    event[u'orig_link'] = url
     for info in event_info.contents:
         if info.name != "div" and info.name != "p":
             continue
@@ -195,10 +196,10 @@ def extract_info_from_redtri_event(url):
         if "the scoop:" in repr(list(info.strings)):
             event_des_soup = info.find("div", class_="prose")
             event_des = repr(list(event_des_soup.strings))
-            event["description"] = event_des
+            event[u"description"] = event_des
         elif "more info:" in repr(list(info.strings)):
             event_url = info.a["href"]
-            event["url"] = event_url
+            event[u"url"] = event_url
         else:
             event_label_soup = info.find("span", class_="event-label")
             if not event_label_soup:
@@ -214,5 +215,3 @@ def extract_info_from_redtri_event(url):
             event[event_label] = event_content
 
     return event
-
-print get_redtri_events()

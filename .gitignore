@@ -1,5 +1,6 @@
 # Project related settings
 .idea/
+local_settings.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
