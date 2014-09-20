@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 import logging
 from datetime import datetime
+import json
 
 from celery import shared_task
 
@@ -15,7 +16,7 @@ logger = logging.getLogger(__name__)
 """
 Number of days before which an event for the date should be created
 """
-EVENTS_NUM_DAYS_LOOK_AHEAD = 12
+EVENTS_NUM_DAYS_LOOK_AHEAD = 11
 
 @shared_task
 def scrape_events_look_ahead():
@@ -24,14 +25,14 @@ def scrape_events_look_ahead():
     for parsed_event in events:
         title = parsed_event.get('title', None)
         url = parsed_event.get('orig_link', None)
-        draft_event, created = DraftEvent.objects.get_or_create(title=title, raw=parsed_event,
+        draft_event, created = DraftEvent.objects.get_or_create(title=title, raw=json.dumps(parsed_event, ensure_ascii=True),
                                                                 source=DraftEvent.SFKIDS, source_url=url)
 
     events = get_redtri_events(EVENTS_NUM_DAYS_LOOK_AHEAD)
     for parsed_event in events:
         title = parsed_event.get('title', None)
         url = parsed_event.get('orig_link', None)
-        draft_event, created = DraftEvent.objects.get_or_create(title=title, raw=parsed_event,
+        draft_event, created = DraftEvent.objects.get_or_create(title=title, raw=json.dumps(parsed_event, ensure_ascii=True),
                                                                 source=DraftEvent.REDTRI, source_url=url)
     end_time = datetime.today()
 

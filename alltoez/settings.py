@@ -193,9 +193,7 @@ ACCOUNT_LOGOUT_REDIRECT_URL = "home"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
 
 AUTHENTICATION_BACKENDS = [
-    "social.backends.google.GoogleOAuth2",
     "social.backends.facebook.FacebookOAuth2",
-    "social.backends.twitter.TwitterOAuth",
     "django.contrib.auth.backends.ModelBackend"
 ]
 
@@ -214,18 +212,10 @@ SOCIAL_AUTH_PIPELINE = [
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/"
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY")
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET")
-SOCIAL_AUTH_TWITTER_KEY = os.environ.get("SOCIAL_AUTH_TWITTER_KEY")
-SOCIAL_AUTH_TWITTER_SECRET = os.environ.get("SOCIAL_AUTH_TWITTER_SECRET")
 SOCIAL_AUTH_FACEBOOK_KEY = os.environ.get("SOCIAL_AUTH_FACEBOOK_KEY")
 SOCIAL_AUTH_FACEBOOK_SECRET = os.environ.get("SOCIAL_AUTH_FACEBOOK_SECRET")
 
 SOCIAL_AUTH_FACEBOOK_SCOPE = [
-    "email"
-]
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-    "profile",
     "email"
 ]
 

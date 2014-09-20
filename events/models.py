@@ -43,7 +43,7 @@ class DraftEvent(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=200)
-    raw = JSONField(unique=True)
+    raw = models.TextField(unique=True)
     '''
     These are some of the sources for the events
     '''
