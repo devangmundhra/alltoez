@@ -4,6 +4,45 @@ from django.db import models
 
 from jsonfield import JSONField
 
+
+class Category(models.Model):
+    """
+    Category class
+    This class stores categories references by Django model
+    Currently the categories are expected to be as follows:
+    * Outdoors
+        - Hiking trails
+        - Biking trails
+        - Parks and Playgrounds
+        - Beaches
+        - Dog Parks
+    * Food
+        - Restaurants
+        - Food trucks
+        - Sweet treats
+    * Classes and Extra Curricular
+        - Athletic Activities
+        - Cooking
+        - Crafts
+    * Tours and Trips
+        - Museums
+        - Aquariums and Zoos
+        - Library events
+        - Mini family excursions
+    * Seasonal
+        - Concerts
+        - Movies
+        - Camps
+        - Orchard picking
+        - Halloween
+        - Thanksgiving
+        - Christmas
+    """
+    parent_category = models.ForeignKey('self', null=True, blank=True)
+    name = models.CharField(max_length=200, db_index=True)
+    description = models.CharField(max_length=200)
+
+
 class Location(models.Model):
     """
     Location class
@@ -68,7 +107,7 @@ class Event(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=50)
     description = models.TextField()
-    category = models.CharField(max_length=200, db_index=True)
+    category = models.ManyToManyField(Category, db_index=True)
     location = JSONField()
     image = JSONField()
     min_age = models.PositiveSmallIntegerField(default=0)
