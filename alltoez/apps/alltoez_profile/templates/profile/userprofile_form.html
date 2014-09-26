@@ -1,0 +1,19 @@
+{% extends "alltoez/ui/layouts/base.html" %}
+{% load common_tags %}
+
+{% block title %}Editing Your Profile{% endblock %}
+{% block page_title %}Editing Your Profile{% endblock %}
+
+{% block content %}
+	<p class="lead">To update your profile complete the form below and click the 'Save' button.</p>
+
+<form enctype="multipart/form-data" action="" id="submit-profile" method="post" class="form-horizontal">{% csrf_token %}
+	<fieldset>
+		{% render_form form %}
+		<div class="form-actions">
+			<button type="submit" class="btn btn-primary">Save</button>
+		</div>
+	</fieldset>
+</form>
+
+{% endblock %}

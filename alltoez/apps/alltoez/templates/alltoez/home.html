@@ -1,0 +1,24 @@
+{% extends "alltoez/ui/layouts/base.html" %}
+
+{% block title %}Helping parents and kids find activities they love to do.{% endblock %}
+{% block page_title_outer %}{% endblock %}
+{% block body_class %}home{% endblock %}
+
+{% block content_full_width %}
+	<div id="above-the-fold" class="container">
+		<h1>Welcome to Alltoez</h1>
+		<h2>Helping parents and kids find activities they love to do.</h2>
+		<a href="{% url 'account_signup' %}" class="btn btn-primary btn-lg">Join Alltoez</a>
+	</div>
+
+	<div class="strip white">
+		<div class="container">
+			<p>
+				Sed a lobortis urna. Nam leo elit, porta quis ultricies ut, tempor vel diam. Quisque lacinia et turpis lacinia lobortis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultricies erat eros, porttitor venenatis nibh bibendum ac. Ut eget tortor turpis. Vivamus nec tellus sit amet purus mollis vulputate et ac nisl. Pellentesque in dolor eu lectus maximus ultricies ac id velit. Donec ultrices elit a dui interdum, vel mattis risus tempor. In quis lacus ac lectus elementum molestie. Nullam in risus sed leo imperdiet commodo.
+			</p>
+			<p class="last">
+				Sed a lobortis urna. Nam leo elit, porta quis ultricies ut, tempor vel diam. Quisque lacinia et turpis lacinia lobortis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultricies erat eros, porttitor venenatis nibh bibendum ac. Ut eget tortor turpis. Vivamus nec tellus sit amet purus mollis vulputate et ac nisl. Pellentesque in dolor eu lectus maximus ultricies ac id velit. Donec ultrices elit a dui interdum, vel mattis risus tempor. In quis lacus ac lectus elementum molestie. Nullam in risus sed leo imperdiet commodo.
+			</p>
+		</div>
+	</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "alltoez/ui/layouts/base.html" %}
+{% load common_tags %}
+
+{% block title %}{{object}}{% endblock %}
+{% block page_title %}{{object}}{% endblock %}
+
+{% block content %}
+	Username: {{object.user.username}}<br/>
+	Email: {{object.user.email}}<br/>
+
+    {% if object.user == user %}<a href="{% url edit_profile %}" class="btn">Edit Profile</a>{% endif %}
+
+{% endblock %}

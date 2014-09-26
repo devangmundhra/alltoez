@@ -1,0 +1,2 @@
+#!/bin/sh
+python ./alltoez/configs/${DEPLOYMENT_TARGET:="common"}/manage.py $*

@@ -1,0 +1,25 @@
+{% if not request.session.premium_access_backdoor %}
+<div class="block">
+	<div class="block-holder">
+		{% if not request.user.is_authenticated %}
+		<form action="#" class="login-form">
+			<fieldset>
+				<h3>Login</h3>
+				<p>To access premium content you must login. If you don’t have an account <a href="{% url account_signup %}">Register</a> here.</p>
+				<a class="btn-submit" href="{% url signin %}">Login</a>
+			</fieldset>
+		</form>
+		{% else %}
+		<form action="#" class="logout-form">
+			<fieldset>
+				<h4>Welcome, {{request.user}}</h4>
+				<p>You are now logged in as {{request.user}}. All premium content is accessible.</p>
+				<a class="btn-submit" href="{% url logout %}">Logout</a>
+				<!--input type="image" class="btn-submit" value="logout" src="{{STATIC_URL}}images/bg-logout-submit.png" /-->
+			</fieldset>
+		</form>
+		{% endif %}
+	</div>
+</div>
+{% endif %}
+

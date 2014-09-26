@@ -1,0 +1,100 @@
+{% load cache compressed %}
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html class="not-ie" lang="en" xmlns:fb="http://ogp.me/ns/fb#"> <!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<title>{% block title_outer %}Alltoez | {% block head_title %}{% block title %}{% endblock %}{% endblock %}{% endblock %}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="{% block site-meta-description %}Alltoez helps parents and kids find activities they love to do.{% endblock %}" />
+		<meta name="author" content="">
+		<meta name="robots" content="{% if settings.DEBUG %}nofollow{% else %}index, follow{% endif %}" />
+
+		{% block fb_meta %}
+			<meta property="og:title"       content="Alltoez" />
+			<meta property="og:description" content="Alltoez helps parents and kids find activities they love to do." />
+			<meta property="og:type"        content="website" />
+			<meta property="og:image"       content="http://alltoez.com/static/img/logo-square.png" />
+			<meta property="og:url"         content="http://www.facebook.com/alltoez" />
+			<meta property="og:site_name"   content="alltoez" />
+		{% endblock %}
+
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+		{% compressed_css 'theme' %}
+
+		{% if settings.DEBUG %}
+		<link rel="stylesheet/less" type="text/css" href="{{STATIC_URL}}less/theme.less">
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js"></script>
+		{% endif %}
+
+		<!--[if IE 7]>
+			<link href="css/font-awesome-ie7.min.css" rel="stylesheet">
+		<![endif]-->
+
+		<link rel="canonical" href="http://{{request.META.HTTP_HOST}}{{request.path}}" />
+
+		<!-- IE6-8 support of HTML5 elements -->
+		<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+
+		{% block extracss %}{% endblock %}
+		<!-- fav and touch icons -->
+		<link rel="shortcut icon" href="{{STATIC_URL}}ico/favicon.ico">
+		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{STATIC_URL}}ico/apple-touch-icon-114-precomposed.png">
+		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{STATIC_URL}}ico/apple-touch-icon-72-precomposed.png">
+		<link rel="apple-touch-icon-precomposed" href="{{STATIC_URL}}ico/apple-touch-icon-57-precomposed.png">
+		{% block extra_head %}{% endblock %}
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+		<script type="text/javascript">var csrftoken = "{{ csrf_token }}";</script>
+	</head>
+
+	<body class="{% block body_class %}{% endblock %}">
+		{% include "alltoez/ui/fragments/header.html" %}
+
+		{% block content_full_width %}
+			<div class="container">
+				{% block page_title_outer %}
+				<div class="page-header">
+				<h1>{% block page_title %}{% endblock %}</h1>
+				</div>
+				{% endblock %}
+
+				<div class="row">
+					<div class="span9">
+						{% block content %}{% endblock %}
+					</div>
+
+					<div class="span3">
+						{% block sidebar %}{% endblock %}
+					</div>
+				</div>
+			</div>
+		{% endblock %}
+
+		{% include "alltoez/ui/fragments/footer.html" %}
+
+		{% compressed_js 'base' %}
+
+		{% if not settings.DEBUG and not request.user.is_staff and settings.GOOGLE_ANALYTICS_CODE %}
+			<!-- asynchronous google analytics -->
+			<script>
+			 var _gaq = [['_setAccount', '{{settings.GOOGLE_ANALYTICS_CODE}}'], ['_trackPageview']];
+			 (function(d, t) {
+			  var g = d.createElement(t),
+				  s = d.getElementsByTagName(t)[0];
+			  g.async = true;
+			  g.src = '//www.google-analytics.com/ga.js';
+			  s.parentNode.insertBefore(g, s);
+			 })(document, 'script');
+			</script>
+		{% endif %}
+		{% block extra_js %}{% endblock %}
+		{% block extra_body %}{% endblock %}
+	</body>
+</html>

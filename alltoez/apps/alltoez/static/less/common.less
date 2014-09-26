@@ -1,0 +1,72 @@
+// MAIN CONTENT
+// --------------------------------------------------
+
+// Standard elements
+p { margin-bottom: 20px; }
+body {
+	padding-top: 74px;
+}
+
+// Header
+header {
+	.navbar {
+		border-radius: 0px; opacity: 0.9;
+
+		.navbar-brand { color: #000000; }
+		.navbar-nav {
+			&.navbar-right {
+				.dropdown-toggle {
+					padding-left: 55px;
+
+					img {
+						position: absolute;
+						top: 10px;
+						left: 15px;
+					}
+				}
+			}
+		}
+	}
+}
+
+footer {
+	background: rgba(0, 0, 0, 0.8);
+	color: #FFFFFF; font-weight: 300;
+	padding-top: 60px; padding-bottom: 60px;
+	a { color: #FFFFFF; }
+	p { margin-bottom: 0px; }
+}
+
+
+// Home specific classes
+body.home {
+	background: url(../img/img-background.jpg) center top no-repeat;
+	background-size: 100%;
+
+	#above-the-fold {
+		text-align: center;
+
+		h1 {
+			color: #FFFFFF;
+			font-weight: 600;
+			margin-top: 300px;
+			margin-bottom: 0px;
+			font-size: 70px;
+		}
+		h2 {
+			color: #FFF;
+			font-size: 24px;
+			font-weight: 300;
+			margin-top: 0px;
+			margin-bottom: 30px;
+		}
+	}
+
+	.strip {
+		padding-top: 60px; padding-bottom: 60px;
+		&.white {
+			background: #FFFFFF;
+		}
+		p.last { margin-bottom: 0px; }
+	}
+}
