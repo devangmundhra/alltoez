@@ -1,4 +1,5 @@
 import os, django, urllib
+from datetime import timedelta
 from django.utils.translation import ugettext_lazy as _
 
 #-------------------------------------------------------------------------------
@@ -22,11 +23,12 @@ ADMINS = (('Raw Jam Dev', 'dev@rawjam.co.uk')),
 MANAGERS = ('Raw Jam Dev', 'dev@rawjam.co.uk'),
 
 # Local time
-TIME_ZONE = 'Europe/London'
-LANGUAGE_CODE = 'en-gb'
+TIME_ZONE = "UTC"
+LANGUAGE_CODE = "en-us"
 SITE_ID = 1
 USE_I18N = False
 DATE_INPUT_FORMATS = ('%d-%m-%Y','%Y-%m-%d')
+USE_TZ = True
 
 TEMPLATE_LOADERS = (
 	'django.template.loaders.filesystem.Loader',
@@ -127,8 +129,8 @@ DATABASES = {
 	'default': {
 		'ENGINE': 'django.db.backends.postgresql_psycopg2',
 		'NAME': 'alltoez',
-		'USER': 'XXXXX',
-		'PASSWORD': 'XXXX',
+		# 'USER': 'XXXXX',
+		# 'PASSWORD': 'XXXX',
 		'HOST': 'localhost',
 	}
 }
@@ -242,6 +244,30 @@ FILEBROWSER_VERSIONS = {
 FILEBROWSER_ADMIN_VERSIONS = [
 	'thumb', 'small','medium','large',
 ]
+
+
+#-------------------------------------------------------------------------------
+#	CELERY SETTINGS
+#-------------------------------------------------------------------------------
+BROKER_URL = 'redis://'
+CELERY_RESULT_BACKEND = BROKER_URL
+CELERY_SEND_TASK_ERROR_EMAILS = False
+CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
+
+CELERYBEAT_SCHEDULE = {
+    'parse-events-every-day': {
+        'task': 'events.tasks.scrape_events_look_ahead',
+        'schedule': timedelta(days=1),
+    },
+}
+
+
+CELERY_TASK_PUBLISH_RETRY_POLICY = {
+    'max_retries': 15,
+    'interval_start': 1,
+    'interval_step': 10,
+    'interval_max': 3600,
+}
 
 
 #-------------------------------------------------------------------------------

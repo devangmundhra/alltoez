@@ -1,7 +1,7 @@
 # Project related settings
 .idea/
 local_settings.py
-alltoez/site_media/static/*
+alltoez/static/*
 .DS_Store
 alltoez/media/*
 

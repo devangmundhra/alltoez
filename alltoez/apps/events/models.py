@@ -1,7 +1,9 @@
-import json, urllib
-
 from django.db import models
+from django.template.defaultfilters import slugify, truncatechars
+
 from jsonfield import JSONField
+from location_field.models import PlainLocationField
+
 
 class Category(models.Model):
     """
@@ -22,10 +24,10 @@ class Category(models.Model):
         - Athletic Activities
         - Cooking
         - Crafts
+        - Library events
     * Tours and Trips
         - Museums
         - Aquariums and Zoos
-        - Library events
         - Mini family excursions
     * Seasonal
         - Concerts
@@ -40,36 +42,8 @@ class Category(models.Model):
     name = models.CharField(max_length=200, db_index=True)
     description = models.CharField(max_length=200)
 
-
-class Location(models.Model):
-    """
-    Location class
-    This class stores location information about an event
-    """
-    address_1 = models.CharField(max_length=200)
-    address_2 = models.CharField(max_length=200, blank=True, null=True)
-    address_3 = models.CharField(max_length=200, blank=True, null=True)
-    city = models.CharField(max_length=200)
-    country = models.CharField(max_length=200)
-    postcode = models.CharField(max_length=15)
-    latitude = models.FloatField(null=True, blank=True)
-    longitude = models.FloatField(null=True, blank=True)
-    formatted_address = models.TextField(null=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        geo = json.loads(Location.get_latlon("%s,%s,%s,%s %s" % (self.address_1, self.address_2, self.address_3,
-                                                                 self.city, self.postcode)))
-        if geo['status'] == "OK":
-            self.latitude = geo['results'][0]['geometry']['location']['lat']
-            self.longitude = geo['results'][0]['geometry']['location']['lng']
-            self.formatted_address = geo['results'][0]['formatted_address']
-        super(Location, self).save(*args, **kwargs)
-
-    @classmethod
-    def get_latlon(cls, address):
-        qt_address = urllib.quote_plus(address)
-        geo = urllib.urlopen("http://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=%s" % qt_address)
-        return geo.read()
+    def __unicode__(self):
+        return unicode(self.description)
 
 
 class DraftEvent(models.Model):
@@ -90,14 +64,17 @@ class DraftEvent(models.Model):
     source_url = models.URLField(blank=True, null=True, unique=True)
     processed = models.BooleanField(default=False)
 
+    def __unicode__(self):
+        return u'{} from {}'.format(self.title, self.source)
+
 
 class Event(models.Model):
     """
     Event class
     This class describes the details of an event.
     The class also contains information about recurring events.
-    TODO: Implement recurring event.
-    More about implementing recurring events at: http://stackoverflow.com/q/5183630/712476
+    Recurring events implemented through cron job format
+    Another way of implementing recurring events- http://stackoverflow.com/q/5183630/712476
     """
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -106,20 +83,32 @@ class Event(models.Model):
     slug = models.SlugField(max_length=50)
     description = models.TextField()
     category = models.ManyToManyField(Category, db_index=True)
-    location = JSONField()
-    image = JSONField()
+    address = models.TextField()
+    location = PlainLocationField(based_fields=[address], zoom=16)
+    image = JSONField(default="{\"url\":\"\",\"source_name\":\"\",\"source_url\":\"\"}")
     min_age = models.PositiveSmallIntegerField(default=0)
     max_age = models.PositiveSmallIntegerField(default=100)
     cost = models.PositiveSmallIntegerField(default=0)
-    recurring = models.BooleanField(default=False)
-    recurring_start_date = models.DateTimeField(null=True, blank=True)
-    recurring_end_date = models.DateTimeField(null=True, blank=True)
-    recurring_frequency = JSONField(blank=True, null=True)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField(blank=True, null=True)
     next_date = models.DateTimeField(null=True, blank=True)
+    cron_recurrence_format = models.CharField(max_length=50, null=True, blank=True,
+                                              help_text="Repeating event? Use cron fromat \'min hour day month day_of_week\' \nMore details: http://en.wikipedia.org/wiki/Cron")
     url = models.URLField(blank=True, null=True, unique=True)
 
     class Meta:
         ordering = ['next_date']
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(truncatechars(self.title, 50))
+        if self.pk is None:
+            # This is a new object being created
+            self.next_date = self.start_date
+        super(Event, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return unicode(self.title)
+
 
 class EventRecord(models.Model):
     """
@@ -132,3 +121,6 @@ class EventRecord(models.Model):
     class Meta:
         unique_together = ('event', 'date')
         ordering = ['date']
+
+    def __unicode__(self):
+        return u'{} on {}'.format(self.event.title, self.date)

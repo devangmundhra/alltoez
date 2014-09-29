@@ -5,10 +5,11 @@ from datetime import date, timedelta, datetime
 
 from bs4 import BeautifulSoup
 
-'''
-Get a list of events from sfkids.org/events at a certain number of days after today
-'''
+
 def get_sfkids_events(days_from_today = 0):
+    """
+    Get a list of events from sfkids.org/events at a certain number of days after today
+    """
     find_date = date.today() + timedelta(days = days_from_today)
     find_date_str = find_date.strftime('%m/%d/%Y')
     print 'Getting events from sfkids for date ' + find_date_str
@@ -40,15 +41,19 @@ def get_sfkids_events(days_from_today = 0):
     events = []
     for link in soup.find_all('a'):
         href = link.get('href')[2:-2] #it starts and ends with \"
-        event = extract_info_from_sfkids_event(host + href)
+        try:
+            event = extract_info_from_sfkids_event(host + href)
+        except:
+            pass
         events.append(event)
 
     return events
 
-'''
-Extract the event information for the particular event from sfkids.org/events
-'''
+
 def extract_info_from_sfkids_event(url):
+    """
+    Extract the event information for the particular event from sfkids.org/events
+    """
     print 'Extracting info from url ' + url
 
     req = urllib2.Request(url)
@@ -103,39 +108,46 @@ def extract_info_from_sfkids_event(url):
 
     return event
 
-'''
-Get a list of events from redtri.com/events/san-francisco at a certain number of days after today
-'''
+
 def get_redtri_events(days_from_today = 0):
-    find_date = date.today() + timedelta(days = days_from_today)
-    find_date_str = find_date.strftime('%m/%d/%Y')
+    """
+    Get a list of events from redtri.com/events/san-francisco at a certain number of days after today
+    """
+    find_date = date.today() + timedelta(days=days_from_today)
+    find_date_str = find_date.strftime('%Y/%m/%d')
     print 'Getting events from redtri for date ' + find_date_str
 
-    url = "http://redtri.com/events/san-francisco/"
+    url = "{}/{}/".format("http://redtri.com/events/san-francisco", find_date_str)
+
     req = urllib2.Request(url)
     response = urllib2.urlopen(req)
     content = response.read()
 
     soup = BeautifulSoup(content)
     pager_soup = soup.find("div", class_="pager")
-    next_link_soup = pager_soup.find_all("a", class_="page-numbers")
 
     events = []
+    if pager_soup:
+        next_link_soup = pager_soup.find_all("a", class_="page-numbers")
 
-    # Get the events for the current page
-    events += (get_redtri_events_at_url(url, find_date))
+        # Get the events for the current page
+        events += (get_redtri_events_at_url(url, find_date))
 
-    # Get the events for the next pages
-    for next_link in next_link_soup:
-        url = next_link["href"]
+        # Get the events for the next pages
+        for next_link in next_link_soup:
+            url = next_link["href"]
+            events += get_redtri_events_at_url(url, find_date)
+    else:
+        # This is probably the end of the month
         events += get_redtri_events_at_url(url, find_date)
 
     return events
 
-'''
-Get a list of events from redtri.com/events/san-francisco on a particular pagination page at a certain date
-'''
+
 def get_redtri_events_at_url(url, find_date):
+    """
+    Get a list of events from redtri.com/events/san-francisco on a particular pagination page at a certain date
+    """
     req = urllib2.Request(url)
     response = urllib2.urlopen(req)
     content = response.read()
@@ -168,10 +180,11 @@ def get_redtri_events_at_url(url, find_date):
 
     return events
 
-'''
-Extract the event information for the particular event from redtri.com
-'''
+
 def extract_info_from_redtri_event(url):
+    """
+    Extract the event information for the particular event from redtri.com
+    """
     print 'Extracting info from url ' + url
 
     req = urllib2.Request(url)
@@ -180,7 +193,7 @@ def extract_info_from_redtri_event(url):
     soup = BeautifulSoup(content)
 
     event_info = soup.find("div", class_="event-single")
-    event_info = event_info.find("div", class_="col-2")
+    event_info = event_info.find("div", class_="column-2")
 
     event = dict()
     event[u'title'] = soup.title.contents[0]
@@ -215,3 +228,5 @@ def extract_info_from_redtri_event(url):
             event[event_label] = event_content
 
     return event
+
+print get_redtri_events(12)
