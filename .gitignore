@@ -1,6 +1,5 @@
 # Project related settings
 .idea/
-local_settings.py
 alltoez/static/*
 .DS_Store
 alltoez/media/*
@@ -61,3 +60,5 @@ docs/_build/
 target/
 
 celerybeat-schedule
+
+alltoez/configs/common/local_settings.py

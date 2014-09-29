@@ -12,3 +12,7 @@ Run "python manage.py runserver"
 To run tests:
 
 python manage.py test
+
+If syncdb fails due to GEOSException error, postgis installation might be needed.
+For Ubuntu, check http://trac.osgeo.org/postgis/wiki/UsersWikiPostGIS21UbuntuPGSQL93Apt
+For Mac/Windows, https://docs.djangoproject.com/en/1.6/ref/contrib/gis/install/#macosx

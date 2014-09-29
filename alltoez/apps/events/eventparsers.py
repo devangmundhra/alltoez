@@ -228,5 +228,3 @@ def extract_info_from_redtri_event(url):
             event[event_label] = event_content
 
     return event
-
-print get_redtri_events(12)
