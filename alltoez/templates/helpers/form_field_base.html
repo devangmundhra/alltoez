@@ -2,33 +2,27 @@
 
 <div id="div_id_{{ field.html_name }}" class="form-group {% if field.errors %}has-error{% endif %} {% if forloop.last %}last{% endif %}">
 	{% if not hide_labels %}
-	<div>
-		<label class="control-label" for="id_{{ field.html_name }}">{{ field.label }} {% if field.field.required %}<span class="required">*</span>{% endif %}</label>
-	</div>
+	<label for="id_{{ field.html_name }}">{{ field.label }} {% if field.field.required %}<span class="required">*</span>{% endif %}</label>
 	{% endif %}
-	{% if input_span %}<div class="row">{% endif %}
-	<div class="{% if input_span %}col-xs-{{input_span}}{% endif %}">
-		{% if field.field.widget|field_type == "DateInput" %}
-			{% include "helpers/form_fields/date.html" %}
+
+	{% if field.field.widget|field_type == "DateInput" %}
+		{% include "helpers/form_fields/date.html" %}
+	{% else %}
+		{% if field.field.widget|field_type == "TimeInput" %}
+			{% include "helpers/form_fields/time.html" %}
 		{% else %}
-			{% if field.field.widget|field_type == "TimeInput" %}
-				{% include "helpers/form_fields/time.html" %}
+			{% if field.field.widget|field_type == "FileInput" or field.field.widget|field_type == "ClearableFileInput" %}
+				{% include "helpers/form_fields/file.html" %}
 			{% else %}
-				{% if field.field.widget|field_type == "FileInput" or field.field.widget|field_type == "ClearableFileInput" %}
-					{% include "helpers/form_fields/file.html" %}
-				{% else %}
-					{% block extra-custom-fields %}
-						{{ field|add_class:'form-control' }}
-					{% endblock %}
-				{% endif %}
+				{% block extra-custom-fields %}
+					{{ field|add_class:'form-control input-lg' }}
+				{% endblock %}
 			{% endif %}
 		{% endif %}
-		{% if field.errors and not hide_field_error_labels %}<span class="help-block">{% for e in field.errors %}{{ e }}{% if not forloop.last %}, {% endif %}{% endfor%}</span><div class="clearfix"></div>{% endif %}
-	</div>
-	{% if input_span %}</div>{% endif %}
+	{% endif %}
+
+	{% if field.errors and not hide_field_error_labels %}<span class="help-block">{% for e in field.errors %}{{ e }}{% if not forloop.last %}, {% endif %}{% endfor%}</span><div class="clearfix"></div>{% endif %}
 	{% if field.help_text %}
-	<div class="col-lg-12">
-		<p class="help-block">{{ field.help_text }}</p>
-	</div>
+	<p class="help-block">{{ field.help_text }}</p>
 	{% endif %}
 </div>

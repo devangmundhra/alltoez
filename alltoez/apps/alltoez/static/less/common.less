@@ -4,13 +4,14 @@
 // Standard elements
 p { margin-bottom: 20px; }
 body {
-	padding-top: 74px;
+	padding-top: 51px; background: rgba(0, 0, 0, 0.8);
 }
+.form-horizontal .form-group { margin-left: 0px; margin-right: 0px;  }
 
 // Header
 header {
 	.navbar {
-		border-radius: 0px; opacity: 0.9;
+		border-radius: 0px; opacity: 0.9; margin-bottom: 0px;
 
 		.navbar-brand { color: #000000; }
 		.navbar-nav {
@@ -30,37 +31,18 @@ header {
 }
 
 footer {
-	background: rgba(0, 0, 0, 0.8);
 	color: #FFFFFF; font-weight: 300;
 	padding-top: 60px; padding-bottom: 60px;
 	a { color: #FFFFFF; }
 	p { margin-bottom: 0px; }
 }
 
-
-// Home specific classes
-body.home {
-	background: url(../img/img-background.jpg) center top no-repeat;
-	background-size: 100%;
-
-	#above-the-fold {
-		text-align: center;
-
-		h1 {
-			color: #FFFFFF;
-			font-weight: 600;
-			margin-top: 300px;
-			margin-bottom: 0px;
-			font-size: 70px;
-		}
-		h2 {
-			color: #FFF;
-			font-size: 24px;
-			font-weight: 300;
-			margin-top: 0px;
-			margin-bottom: 30px;
-		}
+body {
+	.page-header {
+		text-align: center; margin-top: 0px;
+		h1 { margin-top: 0px; }
 	}
+	.lead { text-align: center; margin-bottom: 60px; }
 
 	.strip {
 		padding-top: 60px; padding-bottom: 60px;
@@ -68,5 +50,42 @@ body.home {
 			background: #FFFFFF;
 		}
 		p.last { margin-bottom: 0px; }
+	}
+
+	// Home specific classes
+	&.home {
+		background: url(../img/img-background.jpg) center top no-repeat;
+		background-size: 100%;
+
+		#above-the-fold {
+			text-align: center;
+
+			h1 {
+				color: #FFFFFF;
+				font-weight: 600;
+				margin-top: 300px;
+				margin-bottom: 0px;
+				font-size: 70px;
+			}
+			h2 {
+				color: #FFF;
+				font-size: 24px;
+				font-weight: 300;
+				margin-top: 0px;
+				margin-bottom: 30px;
+			}
+		}
+	}
+
+	// Event specific classes
+	&.events {
+		.filter-category {
+			border-bottom: dashed 1px @brand-primary;
+			&:hover { text-decoration: none; }
+		}
+		ul.event-list {
+			padding-left: 0px;
+			list-style: none;
+		}
 	}
 }

@@ -6,7 +6,7 @@
 	{% if field.field.widget|field_type in 'CheckboxInput,SelectMultiple' %}
 		{{field}}
 	{% else %}
-		{{field|add_class:'form-control'}}
+		{{field|add_class:'form-control input-lg'}}
 	{% endif %}
 
 {% endblock %}

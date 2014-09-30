@@ -1,7 +1,10 @@
-import json, urllib
-
 from django.db import models
 from jsonfield import JSONField
+
+from apps.alltoez.utils.abstract_models import BaseModel
+from apps.alltoez.utils.model_utils import unique_slugify
+
+import json, urllib
 
 class Category(models.Model):
     """
@@ -38,7 +41,14 @@ class Category(models.Model):
     """
     parent_category = models.ForeignKey('self', null=True, blank=True)
     name = models.CharField(max_length=200, db_index=True)
+    slug = models.SlugField(null=True, blank=True, help_text="The part of the title that is used in the url. Leave this blank if you want the system to generate one for you.")
     description = models.CharField(max_length=200)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            unique_slugify(self, self.name)
+
+        return super(Category, self).save(*args, **kwargs)
 
 
 class Location(models.Model):
@@ -120,6 +130,12 @@ class Event(models.Model):
 
     class Meta:
         ordering = ['next_date']
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            unique_slugify(self, self.title)
+
+        return super(Event, self).save(*args, **kwargs)
 
 class EventRecord(models.Model):
     """

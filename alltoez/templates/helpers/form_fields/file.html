@@ -1,13 +1,11 @@
 {% load common_tags fb_versions %}
 
 <div class="fileinput">
-	{% if form.instance.pk and field.value %}<img src="{% version field.value 'thumb' %}" style="margin-bottom: 10px;" class="img-polaroid" /><br/>{% endif %}
+	{% if form.instance.pk and field.value %}<img src="{% version field.value 'thumb' %}" style="margin-bottom: 10px;" class="img-rounded" /><br/>{% endif %}
 
-	<div class="fileupload fileupload-new" data-provides="fileupload">
-		<div class="input-append">
-		<div class="uneditable-input span3"><i class="icon-file fileupload-exists"></i>&nbsp;<span class="fileupload-preview"></span></div><span class="btn btn-file"><span class="fileupload-new">Select file</span><span class="fileupload-exists">Change</span><input type="file" name="{{field.html_name}}" id="id_{{field.html_name}}" /></span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
-		</div>
-	</div>
-	{% if form.instance.pk and field.value %}<label for="{{field.html_name}}-clear_id" style="float: left; margin-right: 10px;">Clear: </label> <input type="checkbox" name="{{field.html_name}}-clear" id="{{field.html_name}}-clear_id">{% endif %}
+	<input type="file" name="{{field.html_name}}" id="id_{{field.html_name}}" />
+	{% if form.instance.pk and field.value %}
+		<label for="{{field.html_name}}-clear_id" style="float: left; margin-right: 10px;">Clear: </label> <input type="checkbox" name="{{field.html_name}}-clear" id="{{field.html_name}}-clear_id">
+	{% endif %}
 	<div style="clear: both;"></div>
 </div>

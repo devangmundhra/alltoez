@@ -58,20 +58,17 @@
 		{% include "alltoez/ui/fragments/header.html" %}
 
 		{% block content_full_width %}
-			<div class="container">
-				{% block page_title_outer %}
-				<div class="page-header">
-				<h1>{% block page_title %}{% endblock %}</h1>
-				</div>
-				{% endblock %}
-
-				<div class="row">
-					<div class="span9">
-						{% block content %}{% endblock %}
-					</div>
-
-					<div class="span3">
-						{% block sidebar %}{% endblock %}
+			<div class="strip white">
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-12 col-sm-8 col-sm-offset-2">
+							{% block page_title_outer %}
+							<div class="page-header">
+								<h1>{% block page_title %}{% endblock %}</h1>
+							</div>
+							{% endblock %}
+							{% block content %}{% endblock %}
+						</div>
 					</div>
 				</div>
 			</div>

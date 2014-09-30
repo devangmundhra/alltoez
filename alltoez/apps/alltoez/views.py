@@ -3,9 +3,12 @@ from django.contrib import messages
 from django.views.generic import TemplateView, FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.list import ListView
 from django.views.decorators.csrf import csrf_exempt, requires_csrf_token
+from django.utils import timezone
 
 from apps.alltoez.utils.view_utils import MessageMixin
+from apps.events.models import Event
 
 @requires_csrf_token
 def server_error(request, template_name='500.html'):
@@ -23,6 +26,21 @@ Base alltoez views
 """
 class Home(TemplateView):
 	template_name = "alltoez/home.html"
+
+	def get_context_data(self, **kwargs):
+		return {}
+
+class Events(ListView):
+	template_name = "alltoez/events.html"
+	model = Event
+
+	def get_context_data(self, **kwargs):
+		context = super(Events, self).get_context_data(**kwargs)
+		context['now'] = timezone.now()
+		return context
+
+class Contact(TemplateView):
+	template_name = "alltoez/contact.html"
 
 	def get_context_data(self, **kwargs):
 		return {}
