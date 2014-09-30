@@ -17,21 +17,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'events', ['Category'])
 
-        # Adding model 'Location'
-        db.create_table(u'events_location', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('address_1', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('address_2', self.gf('django.db.models.fields.CharField')(max_length=200, null=True, blank=True)),
-            ('address_3', self.gf('django.db.models.fields.CharField')(max_length=200, null=True, blank=True)),
-            ('city', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('country', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('postcode', self.gf('django.db.models.fields.CharField')(max_length=15)),
-            ('latitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
-            ('longitude', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
-            ('formatted_address', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-        ))
-        db.send_create_signal(u'events', ['Location'])
-
         # Adding model 'DraftEvent'
         db.create_table(u'events_draftevent', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -54,16 +39,16 @@ class Migration(SchemaMigration):
             ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
             ('slug', self.gf('django.db.models.fields.SlugField')(max_length=50)),
             ('description', self.gf('django.db.models.fields.TextField')()),
-            ('location', self.gf('jsonfield.fields.JSONField')(default={})),
-            ('image', self.gf('jsonfield.fields.JSONField')(default={})),
+            ('address', self.gf('django.db.models.fields.TextField')()),
+            ('location', self.gf('location_field.models.PlainLocationField')(max_length=63)),
+            ('image', self.gf('jsonfield.fields.JSONField')(default='{"url":"","source_name":"","source_url":""}')),
             ('min_age', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
             ('max_age', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=100)),
             ('cost', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
-            ('recurring', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('recurring_start_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('recurring_end_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('recurring_frequency', self.gf('jsonfield.fields.JSONField')(null=True, blank=True)),
+            ('start_date', self.gf('django.db.models.fields.DateTimeField')()),
+            ('end_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('next_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('cron_recurrence_format', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
             ('url', self.gf('django.db.models.fields.URLField')(max_length=200, unique=True, null=True, blank=True)),
         ))
         db.send_create_signal(u'events', ['Event'])
@@ -95,9 +80,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'Category'
         db.delete_table(u'events_category')
-
-        # Deleting model 'Location'
-        db.delete_table(u'events_location')
 
         # Deleting model 'DraftEvent'
         db.delete_table(u'events_draftevent')
@@ -133,22 +115,22 @@ class Migration(SchemaMigration):
         },
         u'events.event': {
             'Meta': {'ordering': "['next_date']", 'object_name': 'Event'},
+            'address': ('django.db.models.fields.TextField', [], {}),
             'category': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['events.Category']", 'db_index': 'True', 'symmetrical': 'False'}),
             'cost': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'cron_recurrence_format': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {}),
             'draft': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['events.DraftEvent']", 'null': 'True', 'blank': 'True'}),
+            'end_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('jsonfield.fields.JSONField', [], {'default': '{}'}),
-            'location': ('jsonfield.fields.JSONField', [], {'default': '{}'}),
+            'image': ('jsonfield.fields.JSONField', [], {'default': '\'{"url":"","source_name":"","source_url":""}\''}),
+            'location': ('location_field.models.PlainLocationField', [], {'max_length': '63'}),
             'max_age': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '100'}),
             'min_age': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
             'next_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'recurring': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'recurring_end_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'recurring_frequency': ('jsonfield.fields.JSONField', [], {'null': 'True', 'blank': 'True'}),
-            'recurring_start_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'}),
+            'start_date': ('django.db.models.fields.DateTimeField', [], {}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'unique': 'True', 'null': 'True', 'blank': 'True'})
@@ -158,19 +140,6 @@ class Migration(SchemaMigration):
             'date': ('django.db.models.fields.DateTimeField', [], {'db_index': 'True'}),
             'event': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['events.Event']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
-        },
-        u'events.location': {
-            'Meta': {'object_name': 'Location'},
-            'address_1': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
-            'address_2': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'address_3': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'city': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
-            'country': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
-            'formatted_address': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'latitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'longitude': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'postcode': ('django.db.models.fields.CharField', [], {'max_length': '15'})
         }
     }
 
