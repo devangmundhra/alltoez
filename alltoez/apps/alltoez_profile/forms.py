@@ -1,6 +1,7 @@
 from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.forms.models import inlineformset_factory
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
 
@@ -29,3 +30,5 @@ class UserProfileForm(forms.ModelForm):
 		profile.user.email = self.cleaned_data.get('email')
 		profile.user.save()
 		return profile
+
+ChildrenFormset = inlineformset_factory(UserProfileForm, Child, extra=2)

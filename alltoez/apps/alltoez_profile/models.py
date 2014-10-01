@@ -1,3 +1,4 @@
+from alltoez.apps.alltoez.utils.model_utils import get_namedtuple_choices
 from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -12,6 +13,12 @@ from apps.alltoez.utils.abstract_models import BaseModel
 
 import re, unicodedata, os, random, string
 
+GENDER_CHOICES = get_namedtuple_choices('GENDER_CHOICES', (
+    (0, 'MALE', 'Male'),
+    (1, 'FEMALE', 'Female'),
+))
+
+
 class UserProfile(BaseModel):
 	"""
 	Profile and configurations for a user
@@ -20,8 +27,10 @@ class UserProfile(BaseModel):
 		name, ext = os.path.splitext(filename)
 		name = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(20))
 		new_filename = '%s%s' % (name, ext.lower())
+        gender = models.PositiveSmallIntegerField(choices=GENDER_CHOICES.get_choices(), db_index=True)
+        zip_code = models.CharField(max_length=10)
 
-		return os.path.join('uploads/users/profile/images', new_filename)
+        return os.path.join('uploads/users/profile/images', new_filename)
 
 	user = AutoOneToOneField(User, related_name="profile", editable=False)
 	profile_image = models.ImageField(upload_to=get_upload_to, null=True, blank=True)
@@ -47,3 +56,8 @@ class UserProfile(BaseModel):
 			return "%s %s" % (user.first_name, user.last_name)
 		else:
 			return user.username
+
+class Child(models.Model):
+    user = models.ForeignKey(User, related_name="children")
+    gender = models.PositiveSmallIntegerField(choices=GENDER_CHOICES.get_choices(), db_index=True, blank=True, null=True)
+    age = models.PositiveSmallIntegerField(blank=True, null=True)

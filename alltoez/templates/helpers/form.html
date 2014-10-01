@@ -1,11 +1,5 @@
 {% load common_tags %}
 
-{% if form.errors %}
-<div class="alert alert-danger">
-	<strong>Oops, </strong>there is a problem with this form. {% firstof global_error_msg 'Please try again.' %}
-</div>
-{% endif %}
-
 {% for hidden in form.hidden_fields %}
 	{{ hidden }}
 {% endfor %}

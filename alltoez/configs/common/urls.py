@@ -12,17 +12,13 @@ import os
 handler500 = 'apps.alltoez.views.server_error'
 admin.autodiscover()
 
-# Pluggable / django apps
+# Pluggable / django apps / inernal apps
 urlpatterns = patterns('',
 	url(r'^admin/', include(admin.site.urls)),
+    url(r'^', include('apps.alltoez.urls')),
+	url(r'^accounts/', include('apps.alltoez_profile.urls')),
 	url(r'^accounts/', include('allauth.urls')),
 	url(r'^admin/filebrowser/', include(site.urls))
-)
-
-# Internal apps
-urlpatterns += patterns('',
-	url(r'^', include('apps.alltoez.urls')),
-	url(r'^accounts/', include('apps.alltoez_profile.urls'))
 )
 
 urlpatterns += patterns('',
