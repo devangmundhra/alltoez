@@ -33,9 +33,10 @@ class EventAdminForm(forms.ModelForm):
         cur_cron_format = self.cleaned_data['cron_recurrence_format']
         if cur_cron_format is not None:
             cur_start_date = self.cleaned_data['start_date']
-            cron = croniter(cur_cron_format, cur_start_date)
+            cur_start_time = self.cleaned_data['start_time']
+            cron = croniter(cur_cron_format, datetime.combine(cur_start_date, cur_start_time))
             next_date = cron.get_next(datetime)
-            if next_date.date() == cur_start_date.date():
+            if next_date.date() == cur_start_date:
                 raise forms.ValidationError("Cron format is probably incorrect. "
                 "Next occurance of event seems to be on the same day", code="incorrect")
 

@@ -87,18 +87,17 @@ def create_event_records():
     event_records = []
 
     events = Event.objects.filter(next_date__range=(now, look_ahead_date)).only('cron_recurrence_format', 'next_date',
-                                                                                'start_date', 'end_date')
+                                                                                'start_date', 'start_time', 'end_date')
     for event in events:
-        next_date = event.next_date
-        event_records += EventRecord(event=event, date=next_date)
+        next_datetime = datetime.combine(event.next_date, event.start_time)
+        event_records += EventRecord(event=event, date=next_datetime)
         if event.cron_recurrence_format is not None:
-            cron = croniter(event.cron_recurrence_format, next_date)
-            next_date = cron.get_next(ret_type=datetime)
-            if next_date > event.end_date:
+            cron = croniter(event.cron_recurrence_format, next_datetime)
+            next_datetime = cron.get_next(ret_type=datetime)
+            if next_datetime.date() > event.end_date:
                 event.next_date = None
             else:
-                event.next_date = datetime.combine(next_date.date(), event.start_date.time())
-                event.next_date = event.next_date.replace(tzinfo=pytz.UTC)
+                event.next_date = next_datetime.date()
         else:
             event.next_date = None
         event.save(update_fields=['next_date'])
