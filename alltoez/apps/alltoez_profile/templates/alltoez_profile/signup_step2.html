@@ -1,0 +1,86 @@
+<div class="row">
+<div class="col-xs-12 col-sm-8 col-sm-offset-2">
+
+<div class="page-header">
+<h1>Editing Your Profile</h1>
+</div>
+<p class="lead">To update your profile complete the form below and click the 'Save' button.</p>
+<form enctype="multipart/form-data" action="" id="submit-profile" method="post" class="form-horizontal"><input type="hidden" name="csrfmiddlewaretoken" value="XLGiczykYQhAKFkL16OU4Ope1eR1oiXm">
+<div id="div_id_profile_image" class="form-group  ">
+<label for="id_profile_image">Profile image </label>
+<div class="fileinput">
+<input type="file" name="profile_image" id="id_profile_image">
+<div style="clear: both;"></div>
+</div>
+</div>
+<div id="div_id_gender" class="form-group  ">
+<label for="id_gender">Gender <span class="required">*</span></label>
+<select id="id_gender" name="gender">
+<option value="0" selected="selected">Male</option>
+<option value="1">Female</option>
+</select>
+</div>
+<div id="div_id_zip_code" class="form-group  ">
+<label for="id_zip_code">Zip code <span class="required">*</span></label>
+<input id="id_zip_code" name="zip_code" type="text" class="form-control input-lg">
+</div>
+<div id="div_id_first_name" class="form-group  ">
+<label for="id_first_name">First name <span class="required">*</span></label>
+<input id="id_first_name" name="first_name" type="text" class="form-control input-lg">
+</div>
+<div id="div_id_last_name" class="form-group  last">
+<label for="id_last_name">Last name <span class="required">*</span></label>
+<input id="id_last_name" name="last_name" type="text" class="form-control input-lg">
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+$('.datepicker').datepicker({dateFormat: '', autoclose:true});
+
+// For standard selects
+$("select:not([multiple]):not(.create_options, .prevent_chosen, .dob)").chosen({
+search_contains: true,
+disable_search_threshold: 10,
+inherit_select_classes: true
+});
+$("select.dob").chosen({
+disable_search: true,
+inherit_select_classes: true
+});
+$("select:not([multiple]).create_options").chosen({
+persistent_create_option: true,
+create_option: true,
+search_contains: true,
+inherit_select_classes: true
+});
+
+// For multiple selects
+$("select[multiple]:not(.create_options, .prevent_chosen)").chosen({
+create_option: false,
+search_contains: true,
+disable_search_threshold: 10,
+inherit_select_classes: true
+});
+$("select[multiple].create_options").chosen({
+create_option_text: 'Add',
+create_option: true,
+persistent_create_option: true,
+search_contains: true,
+inherit_select_classes: true
+});
+
+// Color Picker
+try {
+$(".minicolors").minicolors();
+}
+catch (err) {
+
+}
+});
+</script>
+
+<div class="form-actions">
+<button type="submit" class="btn btn-primary">Save</button>
+</div>
+</form>
+</div>
+</div>
