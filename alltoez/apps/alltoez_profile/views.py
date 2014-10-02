@@ -94,4 +94,4 @@ class AlltoezSignupStep2View(UpdateView):
 
         children = self.request.POST.get('chidlren', None)
         print "blah-", children
-        return HttpResponseRedirect('thanks/')
+        return HttpResponseRedirect('/events')

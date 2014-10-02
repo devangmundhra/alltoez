@@ -60,28 +60,32 @@
     var children = [];
 
     $(document).ready(function(){
-        console.log("doc ready");
-        //function addChild() {
+        function addChild() {
         // Add a child to the children array
-            $(".add-child").click(function(e){
-                console.log("here");
-                e.preventDefault();
-                var childAge = $("input[name=child_age]").val();
-                var childGender = $("select[name=child_gender]").val();
-                children.push({'age':childAge, 'gender':childGender});
-                console.log(children);
+            var childAge = $("input[name=child_age]").val();
+            var childGender = $("select[name=child_gender]").val();
+            children.push({'age':childAge, 'gender':childGender});
+            console.log(children);
 
             // Clear the inputs for next addition
             $("input[name=child_age]").val("");
             $("select[name=child_gender]").val("");
-            });
+        }
 
-        //}
 
-        function preSubmitForm(e) {
-            // Called when the form is submitted, this will prepare the
-            // form data (i.e. hidden fields) for submission to the view
+        $(".add-child").click(function(e){
+            e.preventDefault();
+            addChild();
+         })
+        $("form").submit(function(){
+            preSubmitForm()
+        })
+
+        // Called when the form is submitted, this will prepare the
+        // form data (i.e. hidden fields) for submission to the view
+        function preSubmitForm() {
             $("input[name=children]").val(children);
+            console.log("AAQQUUII!");
         }
     });
 
