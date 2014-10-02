@@ -20,42 +20,43 @@ GENDER_CHOICES = get_namedtuple_choices('GENDER_CHOICES', (
 
 
 class UserProfile(BaseModel):
-	"""
-	Profile and configurations for a user
-	"""
-	def get_upload_to(instance, filename):
-		name, ext = os.path.splitext(filename)
-		name = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(20))
-		new_filename = '%s%s' % (name, ext.lower())
-        gender = models.PositiveSmallIntegerField(choices=GENDER_CHOICES.get_choices(), db_index=True)
-        zip_code = models.CharField(max_length=10)
+    """
+    Profile and configurations for a user
+    """
+    def get_upload_to(instance, filename):
+        name, ext = os.path.splitext(filename)
+        name = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(20))
+        new_filename = '%s%s' % (name, ext.lower())
 
         return os.path.join('uploads/users/profile/images', new_filename)
 
-	user = AutoOneToOneField(User, related_name="profile", editable=False)
-	profile_image = models.ImageField(upload_to=get_upload_to, null=True, blank=True)
+    user = AutoOneToOneField(User, related_name="profile", editable=False)
+    profile_image = models.ImageField(upload_to=get_upload_to, null=True, blank=True)
+    gender = models.PositiveSmallIntegerField(choices=GENDER_CHOICES.get_choices(), db_index=True, default=0)
+    zip_code = models.CharField(max_length=10)
 
-	def get_absolute_url(self):
-		return reverse('profile', args=[self.user.username])
+    def get_absolute_url(self):
+        return reverse('profile', args=[self.user.username])
 
-	@property
-	def username(self):
-		return self.user.username
+    @property
+    def username(self):
+        return self.user.username
 
-	@property
-	def first_name(self):
-		return self.user.first_name
+    @property
+    def first_name(self):
+        return self.user.first_name
 
-	@property
-	def last_name(self):
-		return self.user.last_name
+    @property
+    def last_name(self):
+        return self.user.last_name
 
-	def __unicode__(self):
-		user = self.user
-		if user.first_name:
-			return "%s %s" % (user.first_name, user.last_name)
-		else:
-			return user.username
+    def __unicode__(self):
+        user = self.user
+        if user.first_name:
+            return "%s %s" % (user.first_name, user.last_name)
+        else:
+            return user.username
+
 
 class Child(models.Model):
     user = models.ForeignKey(User, related_name="children")

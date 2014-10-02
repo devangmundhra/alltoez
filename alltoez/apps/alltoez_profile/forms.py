@@ -7,28 +7,33 @@ from django.core.urlresolvers import reverse
 
 from allauth.account.forms import LoginForm
 
-from models import UserProfile
+from models import UserProfile, Child, GENDER_CHOICES
+
 
 class UserProfileForm(forms.ModelForm):
-	first_name = forms.CharField()
-	last_name = forms.CharField()
-	email = forms.EmailField()
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+    gender = forms.Select(choices=GENDER_CHOICES)
+    zip_code = forms.CharField()
+    # child_age = forms.NumberInput
+    # child_gender = forms.Select(choices=GENDER_CHOICES)
+    # email = forms.EmailField()
 
-	class Meta:
-		model = UserProfile
+    class Meta:
+        model = UserProfile
 
-	def __init__(self, *args, **kwargs):
-		super(UserProfileForm, self).__init__(*args, **kwargs)
-		self.fields['first_name'].initial = self.instance.user.first_name
-		self.fields['last_name'].initial = self.instance.user.last_name
-		self.fields['email'].initial = self.instance.user.email
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].initial = self.instance.user.first_name
+        self.fields['last_name'].initial = self.instance.user.last_name
+        # self.fields['email'].initial = self.instance.user.email
 
-	def save(self, *args, **kwargs):
-		profile = super(UserProfileForm, self).save(*args, **kwargs)
-		profile.user.first_name = self.cleaned_data.get('first_name')
-		profile.user.last_name = self.cleaned_data.get('last_name')
-		profile.user.email = self.cleaned_data.get('email')
-		profile.user.save()
-		return profile
+    def save(self, *args, **kwargs):
+        profile = super(UserProfileForm, self).save(*args, **kwargs)
+        profile.user.first_name = self.cleaned_data.get('first_name')
+        profile.user.last_name = self.cleaned_data.get('last_name')
+        # profile.user.email = self.cleaned_data.get('email')
+        profile.user.save()
+        return profile
 
-ChildrenFormset = inlineformset_factory(UserProfileForm, Child, extra=2)
+ChildrenFormset = inlineformset_factory(User, Child, extra=1)

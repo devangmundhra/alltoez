@@ -1,86 +1,127 @@
+{% extends "alltoez/ui/layouts/base.html" %}
+{% load common_tags %}
+
+<!--{% block title %}Sign Up - Step 2{% endblock %}-->
+{% block page_title %}Sign Up - Step 2{% endblock %}
+
+{% block content %}
 <div class="row">
-<div class="col-xs-12 col-sm-8 col-sm-offset-2">
+    <div class="col-xs-12 col-sm-8 col-sm-offset-2">
 
-<div class="page-header">
-<h1>Editing Your Profile</h1>
-</div>
-<p class="lead">To update your profile complete the form below and click the 'Save' button.</p>
-<form enctype="multipart/form-data" action="" id="submit-profile" method="post" class="form-horizontal"><input type="hidden" name="csrfmiddlewaretoken" value="XLGiczykYQhAKFkL16OU4Ope1eR1oiXm">
-<div id="div_id_profile_image" class="form-group  ">
-<label for="id_profile_image">Profile image </label>
-<div class="fileinput">
-<input type="file" name="profile_image" id="id_profile_image">
-<div style="clear: both;"></div>
-</div>
-</div>
-<div id="div_id_gender" class="form-group  ">
-<label for="id_gender">Gender <span class="required">*</span></label>
-<select id="id_gender" name="gender">
-<option value="0" selected="selected">Male</option>
-<option value="1">Female</option>
-</select>
-</div>
-<div id="div_id_zip_code" class="form-group  ">
-<label for="id_zip_code">Zip code <span class="required">*</span></label>
-<input id="id_zip_code" name="zip_code" type="text" class="form-control input-lg">
-</div>
-<div id="div_id_first_name" class="form-group  ">
-<label for="id_first_name">First name <span class="required">*</span></label>
-<input id="id_first_name" name="first_name" type="text" class="form-control input-lg">
-</div>
-<div id="div_id_last_name" class="form-group  last">
-<label for="id_last_name">Last name <span class="required">*</span></label>
-<input id="id_last_name" name="last_name" type="text" class="form-control input-lg">
-</div>
-<script type="text/javascript">
-$(document).ready(function() {
-$('.datepicker').datepicker({dateFormat: '', autoclose:true});
+        <div class="page-header">
+            <!--<h1>Editing Your Profile</h1>-->
+        </div>
+        <p class="lead">To update your profile complete the form below and click the 'Save' button.</p>
+        <form enctype="multipart/form-data" action="." id="submit-profile" class="signup-step2" method="post" class="form-horizontal">{% csrf_token %}
+            <!--<input type="hidden" name="csrfmiddlewaretoken" value="XLGiczykYQhAKFkL16OU4Ope1eR1oiXm">-->
+            <input type="hidden" name="children" value="" />
 
-// For standard selects
-$("select:not([multiple]):not(.create_options, .prevent_chosen, .dob)").chosen({
-search_contains: true,
-disable_search_threshold: 10,
-inherit_select_classes: true
-});
-$("select.dob").chosen({
-disable_search: true,
-inherit_select_classes: true
-});
-$("select:not([multiple]).create_options").chosen({
-persistent_create_option: true,
-create_option: true,
-search_contains: true,
-inherit_select_classes: true
-});
+            {% with hide_labels=1 %}
+                {% render_form form %}
+            {% endwith %}
+            <!--<div id="div_id_gender" class="form-group  ">-->
+                <!--<select class="form-control parent-gender" name="parent_gender">-->
+                    <!--<option value="">Your Gender:</option>-->
+                      <!--{% for gender in GENDER_CHOICES %}-->
+                        <!--<option value="{{ gender.0 }}">{{ gender.1 }}</option>-->
+                      <!--{% endfor %}-->
+                <!--</select>-->
+            <!--</div>-->
+            <!--<div id="div_id_zip_code" class="form-group  ">-->
+                <!--<input id="id_zip_code" name="zip_code" type="text" class="form-control input-lg" placeholder="Zip Code">-->
+            <!--</div>-->
+            <!--<div id="div_id_first_name" class="form-group  ">-->
+                <!--<input id="id_first_name" name="first_name" type="text" class="form-control input-lg" placeholder="First Name">-->
+            <!--</div>-->
+            <!--<div id="div_id_last_name" class="form-group  last">-->
+                <!--<input id="id_last_name" name="last_name" type="text" class="form-control input-lg" placeholder="Last Name">-->
+            <!--</div>-->
+            <div class="div_add_children">
+                <p>Add children:</p>
+                <input type="number" class="form-control child-age" name="child_age" placeholder="Child age" min="0">
+                <select class="form-control child-gender" name="child_gender">
+                    <option value="">Child Gender:</option>
+                      {% for gender in GENDER_CHOICES %}
+                        <option value="{{ gender.0 }}">{{ gender.1 }}</option>
+                      {% endfor %}
+                </select>
+                <span class="btn btn-primary add-child">Add Child</span>
+            </div>
+            {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+            {% endif %}
+            <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="application/javascript">
+    var children = [];
 
-// For multiple selects
-$("select[multiple]:not(.create_options, .prevent_chosen)").chosen({
-create_option: false,
-search_contains: true,
-disable_search_threshold: 10,
-inherit_select_classes: true
-});
-$("select[multiple].create_options").chosen({
-create_option_text: 'Add',
-create_option: true,
-persistent_create_option: true,
-search_contains: true,
-inherit_select_classes: true
-});
+    $(document).ready(function(){
+        console.log("doc ready");
+        //function addChild() {
+        // Add a child to the children array
+            $(".add-child").click(function(e){
+                console.log("here");
+                e.preventDefault();
+                var childAge = $("input[name=child_age]").val();
+                var childGender = $("select[name=child_gender]").val();
+                children.push({'age':childAge, 'gender':childGender});
+                console.log(children);
 
-// Color Picker
-try {
-$(".minicolors").minicolors();
-}
-catch (err) {
+            // Clear the inputs for next addition
+            $("input[name=child_age]").val("");
+            $("select[name=child_gender]").val("");
+            });
 
-}
-});
+        //}
+
+        function preSubmitForm(e) {
+            // Called when the form is submitted, this will prepare the
+            // form data (i.e. hidden fields) for submission to the view
+            $("input[name=children]").val(children);
+        }
+    });
+
+
+//	$(document).ready(function(){
+//		$("form.signup-step2").submit(function(e){
+//			e.preventDefault();
+//			var $form = $(this);
+//			var parentGender = $("select[name=parent_gender]", $form).val();
+//			var firstName = $("input[name=first_name]", $form).val();
+//			var lastName = $("input[name=last_name]", $form).val();
+//            var childAge = $("input[name=child_age]", $form).val();
+//			var childGender = $("select[name=child_gender]", $form).val();
+//
+//			$form.find(".bg-danger").remove();
+//
+//			console.log(parentGender, firstName, lastName, childAge, childGender);
+//			var data = {
+//				'parentGender': parentGender,
+//				'firstName': firstName,
+//				'lastName': lastName,
+//                'childAge': childAge,
+//                'childGender': childGender,
+//				'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]", $form).val()
+//			};
+//
+//			$.ajax({
+//				type: "POST",
+//				url: "{% url 'register_children' %}",
+//				data: data,
+//				dataType: "json",
+//				success: function(result) {
+//					window.location = result.location;
+//					window.location.reload();
+//				},
+//
+//			});
+//
+//			return false;
+//		});
+//	});
 </script>
-
-<div class="form-actions">
-<button type="submit" class="btn btn-primary">Save</button>
-</div>
-</form>
-</div>
-</div>
+{% endblock %}
