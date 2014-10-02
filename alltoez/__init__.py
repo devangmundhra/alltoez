@@ -5,7 +5,7 @@
 
 #def exception_printer(sender, **kwargs):
 #	print >> sys.stderr, ''.join(traceback.format_exception(*sys.exc_info()))
-	
+
 #got_request_exception.connect(exception_printer)
 
 # This will make sure the app is always imported when

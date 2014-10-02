@@ -13,6 +13,7 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('parent_category', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['events.Category'], null=True, blank=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=200, db_index=True)),
+            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=50, null=True, blank=True)),
             ('description', self.gf('django.db.models.fields.CharField')(max_length=200)),
         ))
         db.send_create_signal(u'events', ['Category'])
@@ -45,11 +46,14 @@ class Migration(SchemaMigration):
             ('min_age', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
             ('max_age', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=100)),
             ('cost', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
-            ('start_date', self.gf('django.db.models.fields.DateTimeField')()),
-            ('end_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('next_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('start_date', self.gf('django.db.models.fields.DateField')()),
+            ('start_time', self.gf('django.db.models.fields.TimeField')()),
+            ('end_time', self.gf('django.db.models.fields.TimeField')()),
+            ('end_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
+            ('next_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
             ('cron_recurrence_format', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
             ('url', self.gf('django.db.models.fields.URLField')(max_length=200, unique=True, null=True, blank=True)),
+            ('additional_info', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
         ))
         db.send_create_signal(u'events', ['Event'])
 
@@ -100,7 +104,8 @@ class Migration(SchemaMigration):
             'description': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'db_index': 'True'}),
-            'parent_category': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['events.Category']", 'null': 'True', 'blank': 'True'})
+            'parent_category': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['events.Category']", 'null': 'True', 'blank': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'})
         },
         u'events.draftevent': {
             'Meta': {'object_name': 'DraftEvent'},
@@ -114,7 +119,8 @@ class Migration(SchemaMigration):
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         },
         u'events.event': {
-            'Meta': {'ordering': "['next_date']", 'object_name': 'Event'},
+            'Meta': {'ordering': "['next_date', 'start_time']", 'object_name': 'Event'},
+            'additional_info': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'address': ('django.db.models.fields.TextField', [], {}),
             'category': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['events.Category']", 'db_index': 'True', 'symmetrical': 'False'}),
             'cost': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
@@ -122,15 +128,17 @@ class Migration(SchemaMigration):
             'cron_recurrence_format': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {}),
             'draft': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['events.DraftEvent']", 'null': 'True', 'blank': 'True'}),
-            'end_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'end_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
+            'end_time': ('django.db.models.fields.TimeField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('jsonfield.fields.JSONField', [], {'default': '\'{"url":"","source_name":"","source_url":""}\''}),
             'location': ('location_field.models.PlainLocationField', [], {'max_length': '63'}),
             'max_age': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '100'}),
             'min_age': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
-            'next_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'next_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'}),
-            'start_date': ('django.db.models.fields.DateTimeField', [], {}),
+            'start_date': ('django.db.models.fields.DateField', [], {}),
+            'start_time': ('django.db.models.fields.TimeField', [], {}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'unique': 'True', 'null': 'True', 'blank': 'True'})
