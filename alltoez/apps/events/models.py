@@ -10,6 +10,7 @@ from apps.alltoez.utils.model_utils import unique_slugify
 
 import json, urllib
 
+
 class Category(models.Model):
     """
     Category class
@@ -45,7 +46,9 @@ class Category(models.Model):
     """
     parent_category = models.ForeignKey('self', null=True, blank=True)
     name = models.CharField(max_length=200, db_index=True)
-    slug = models.SlugField(null=True, blank=True, help_text="The part of the title that is used in the url. Leave this blank if you want the system to generate one for you.")
+    slug = models.SlugField(null=True, blank=True, help_text="The part of the title that is used in the url. "
+                                                             "Leave this blank if you want the system to generate one "
+                                                             "for you.")
     description = models.CharField(max_length=200)
 
     def save(self, *args, **kwargs):
@@ -101,15 +104,21 @@ class Event(models.Model):
     min_age = models.PositiveSmallIntegerField(default=0)
     max_age = models.PositiveSmallIntegerField(default=100)
     cost = models.PositiveSmallIntegerField(default=0)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField(blank=True, null=True)
-    next_date = models.DateTimeField(null=True, blank=True)
+    # Currently we expect an event to occur atmost once per day (so only one start time/end time)
+    start_date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    end_date = models.DateField(blank=True, null=True)
+    next_date = models.DateField(null=True, blank=True)
     cron_recurrence_format = models.CharField(max_length=50, null=True, blank=True,
-                                              help_text="Repeating event? Use cron fromat \'min hour day month day_of_week\' \nMore details: http://en.wikipedia.org/wiki/Cron")
+                                              help_text="Repeating event? Use cron format "
+                                                        "\'min hour day month day_of_week\' "
+                                                        "\nMore details: http://en.wikipedia.org/wiki/Cron")
     url = models.URLField(blank=True, null=True, unique=True)
+    additional_info = models.TextField(blank=True, null=True)
 
     class Meta:
-        ordering = ['next_date']
+        ordering = ['next_date', 'start_time']
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -121,6 +130,7 @@ class Event(models.Model):
 
     def __unicode__(self):
         return unicode(self.title)
+
 
 class EventRecord(models.Model):
     """
