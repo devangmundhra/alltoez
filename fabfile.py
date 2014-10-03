@@ -5,7 +5,7 @@ Base configuration
 """
 env.project_name = 'alltoez'
 env.python = 'python2.7'
-env.repository_url = 'ssh://sls@slsapp.com:1234/rawjam/alltoez.git'
+env.repository_url = 'https://github.com/devangmundhra/alltoez.git'
 
 """
 Environments
@@ -15,9 +15,9 @@ def production():
     Work on production environment
     """
     env.settings = 'production'
-    env.user = 'rawjam'
-    env.hosts = ['production.rawjam.co.uk']
-    env.path = '/home/rawjam/sites/%(project_name)s' % env
+    env.user = 'root'
+    env.hosts = ['alltoez.com']
+    env.path = '/home/dajngo/sites/%(project_name)s' % env
     env.env_path = '%(path)s/env' % env
     env.repo_path = '%(path)s/repository' % env
     env.site_packages_path = '%(env_path)s/lib/python2.7/site-packages' % env
