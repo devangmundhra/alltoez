@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
-LOGFILE=/home/ubuntu/logs/alltoez_gunicorn.access.log
-ERRORFILE=/home/ubuntu/logs/alltoez_gunicorn.error.log
+LOGFILE=/home/django/logs/alltoez_gunicorn.access.log
+ERRORFILE=/home/django/logs/alltoez_gunicorn.error.log
 LOGDIR=$(dirname $LOGFILE)
 NUM_WORKERS=3  #recommended formula here is 1 + 2 * NUM_CORES
 
@@ -9,10 +9,10 @@ NUM_WORKERS=3  #recommended formula here is 1 + 2 * NUM_CORES
 USER=www-data
 GROUP=www-data
 
-cd /home/ubuntu/sites/alltoez/repository
+cd /home/django/sites/alltoez/repository
 source ../env/bin/activate
-export PYTHONPATH=$PYTHONPATH:/home/ubuntu/sites/alltoez/repository/rawjam
-export PYTHONPATH=$PYTHONPATH:/home/ubuntu/sites/alltoez/repository/alltoez
+export PYTHONPATH=$PYTHONPATH:/home/django/sites/alltoez/repository/rawjam
+export PYTHONPATH=$PYTHONPATH:/home/django/sites/alltoez/repository/alltoez
 test -d $LOGDIR || mkdir -p $LOGDIR
 exec gunicorn_django -w $NUM_WORKERS \
 	--log-level=debug \
