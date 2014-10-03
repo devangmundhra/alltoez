@@ -1,9 +1,11 @@
+import json
 from allauth.account.views import SignupView
 from alltoez.apps.alltoez.utils.view_utils import LoginRequiredMixin, MessageMixin
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.conf import settings
+from django.http.response import HttpResponseBadRequest
 from django.utils.decorators import method_decorator
 from django.views.generic.base import View
 from django.views.generic import TemplateView, FormView
@@ -12,7 +14,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import Http404, HttpResponseRedirect
 
 from forms import UserProfileForm, ChildrenFormset
-from models import UserProfile, GENDER_CHOICES
+from models import UserProfile, GENDER_CHOICES, Child, CHILD_GENDER_CHOICES
 
 
 class UserProfileDetail(LoginRequiredMixin, DetailView):
@@ -86,12 +88,23 @@ class AlltoezSignupStep2View(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(AlltoezSignupStep2View, self).get_context_data(**kwargs)
-        context.update({'GENDER_CHOICES': GENDER_CHOICES.get_choices()})
+        context.update({
+            'GENDER_CHOICES': GENDER_CHOICES.get_choices(),
+            'CHILD_GENDER_CHOICES': CHILD_GENDER_CHOICES.get_choices()
+        })
         return context
 
     def form_valid(self, form):
         form.save()
-
-        children = self.request.POST.get('chidlren', None)
-        print "blah-", children
+        children = self.request.POST.get('children', None)
+        try:
+            children = json.loads(children)
+            for child in children:
+                new_child = Child()
+                new_child.age = child['age']
+                new_child.gender = child['gender']
+                new_child.user = self.request.user
+                new_child.save()
+        except ValueError:
+            return HttpResponseBadRequest
         return HttpResponseRedirect('/events')

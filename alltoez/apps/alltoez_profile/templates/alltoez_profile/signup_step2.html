@@ -12,44 +12,37 @@
             <!--<h1>Editing Your Profile</h1>-->
         </div>
         <p class="lead">To update your profile complete the form below and click the 'Save' button.</p>
-        <form enctype="multipart/form-data" action="." id="submit-profile" class="signup-step2" method="post" class="form-horizontal">{% csrf_token %}
+        <form enctype="multipart/form-data" action="." id="submit-profile" class="signup-step2 form-horizontal" method="post">{% csrf_token %}
             <!--<input type="hidden" name="csrfmiddlewaretoken" value="XLGiczykYQhAKFkL16OU4Ope1eR1oiXm">-->
             <input type="hidden" name="children" value="" />
 
             {% with hide_labels=1 %}
                 {% render_form form %}
             {% endwith %}
-            <!--<div id="div_id_gender" class="form-group  ">-->
-                <!--<select class="form-control parent-gender" name="parent_gender">-->
-                    <!--<option value="">Your Gender:</option>-->
-                      <!--{% for gender in GENDER_CHOICES %}-->
-                        <!--<option value="{{ gender.0 }}">{{ gender.1 }}</option>-->
-                      <!--{% endfor %}-->
-                <!--</select>-->
-            <!--</div>-->
-            <!--<div id="div_id_zip_code" class="form-group  ">-->
-                <!--<input id="id_zip_code" name="zip_code" type="text" class="form-control input-lg" placeholder="Zip Code">-->
-            <!--</div>-->
-            <!--<div id="div_id_first_name" class="form-group  ">-->
-                <!--<input id="id_first_name" name="first_name" type="text" class="form-control input-lg" placeholder="First Name">-->
-            <!--</div>-->
-            <!--<div id="div_id_last_name" class="form-group  last">-->
-                <!--<input id="id_last_name" name="last_name" type="text" class="form-control input-lg" placeholder="Last Name">-->
-            <!--</div>-->
             <div class="div_add_children">
-                <p>Add children:</p>
-                <input type="number" class="form-control child-age" name="child_age" placeholder="Child age" min="0">
-                <select class="form-control child-gender" name="child_gender">
-                    <option value="">Child Gender:</option>
-                      {% for gender in GENDER_CHOICES %}
-                        <option value="{{ gender.0 }}">{{ gender.1 }}</option>
-                      {% endfor %}
-                </select>
-                <span class="btn btn-primary add-child">Add Child</span>
+                <p class="lead">Add children:</p>
+                <ul>
+                    <li>
+                        <input type="number" class="form-control child-age" name="child_age" placeholder="Age" min="0">
+                    </li>
+                    <li>
+                        <select class="child-gender  chosen-select" name="child_gender" data-placeholder="Gender">
+                        <!--<option value="">Child Gender:</option>-->
+                            {% for gender in CHILD_GENDER_CHOICES %}
+                            <option value="{{ gender.0 }}">{{ gender.1 }}</option>
+                            {% endfor %}
+                        </select>
+                    </li>
+                    <li>
+                        <span class="btn btn-primary add-child">Add Child</span>
+                    </li>
+                </ul>
+                <ul class="children-list"></ul>
             </div>
             {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
             {% endif %}
+            <br>
             <div class="form-actions">
             <button type="submit" class="btn btn-primary">Save</button>
             </div>
@@ -60,18 +53,33 @@
     var children = [];
 
     $(document).ready(function(){
+
         function addChild() {
-        // Add a child to the children array
+            // Add a child to the children array
             var childAge = $("input[name=child_age]").val();
             var childGender = $("select[name=child_gender]").val();
-            children.push({'age':childAge, 'gender':childGender});
-            console.log(children);
+            var child = {'age':childAge, 'gender':childGender};
+            children.push(child);
+            addChildHtml(child);
 
             // Clear the inputs for next addition
             $("input[name=child_age]").val("");
             $("select[name=child_gender]").val("");
         }
 
+        function addChildHtml(child) {
+            // Adds the recently added child to the table html
+            var childHtml =
+                '<li>' + (child.gender==0?'Boy':'Girl') + ': <span>'+child.age+' years old</span></li>';
+            $(".children-list").append(childHtml);
+        }
+
+        // Called when the form is submitted, this will prepare the
+        // form data (i.e. hidden fields) for submission to the view
+        function preSubmitForm() {
+            $("input[name=children]").val(JSON.stringify(children));
+            console.log("AAQQUUII!");
+        }
 
         $(".add-child").click(function(e){
             e.preventDefault();
@@ -80,52 +88,6 @@
         $("form").submit(function(){
             preSubmitForm()
         })
-
-        // Called when the form is submitted, this will prepare the
-        // form data (i.e. hidden fields) for submission to the view
-        function preSubmitForm() {
-            $("input[name=children]").val(children);
-            console.log("AAQQUUII!");
-        }
     });
-
-
-//	$(document).ready(function(){
-//		$("form.signup-step2").submit(function(e){
-//			e.preventDefault();
-//			var $form = $(this);
-//			var parentGender = $("select[name=parent_gender]", $form).val();
-//			var firstName = $("input[name=first_name]", $form).val();
-//			var lastName = $("input[name=last_name]", $form).val();
-//            var childAge = $("input[name=child_age]", $form).val();
-//			var childGender = $("select[name=child_gender]", $form).val();
-//
-//			$form.find(".bg-danger").remove();
-//
-//			console.log(parentGender, firstName, lastName, childAge, childGender);
-//			var data = {
-//				'parentGender': parentGender,
-//				'firstName': firstName,
-//				'lastName': lastName,
-//                'childAge': childAge,
-//                'childGender': childGender,
-//				'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]", $form).val()
-//			};
-//
-//			$.ajax({
-//				type: "POST",
-//				url: "{% url 'register_children' %}",
-//				data: data,
-//				dataType: "json",
-//				success: function(result) {
-//					window.location = result.location;
-//					window.location.reload();
-//				},
-//
-//			});
-//
-//			return false;
-//		});
-//	});
 </script>
 {% endblock %}

@@ -17,6 +17,10 @@ GENDER_CHOICES = get_namedtuple_choices('GENDER_CHOICES', (
     (0, 'MALE', 'Male'),
     (1, 'FEMALE', 'Female'),
 ))
+CHILD_GENDER_CHOICES = get_namedtuple_choices('CHILD_GENDER_CHOICES', (
+    (0, 'BOY', 'Boy'),
+    (1, 'GIRL', 'Girl'),
+))
 
 
 class UserProfile(BaseModel):
@@ -60,5 +64,5 @@ class UserProfile(BaseModel):
 
 class Child(models.Model):
     user = models.ForeignKey(User, related_name="children")
-    gender = models.PositiveSmallIntegerField(choices=GENDER_CHOICES.get_choices(), db_index=True, blank=True, null=True)
+    gender = models.PositiveSmallIntegerField(choices=CHILD_GENDER_CHOICES.get_choices(), db_index=True, blank=True, null=True)
     age = models.PositiveSmallIntegerField(blank=True, null=True)

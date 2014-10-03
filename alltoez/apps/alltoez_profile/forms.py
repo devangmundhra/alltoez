@@ -11,16 +11,17 @@ from models import UserProfile, Child, GENDER_CHOICES
 
 
 class UserProfileForm(forms.ModelForm):
-    first_name = forms.CharField()
-    last_name = forms.CharField()
+    first_name = forms.CharField(label='First name', widget=forms.TextInput(attrs={'placeholder': 'First name'}))
+    last_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Last Name'}))
     gender = forms.Select(choices=GENDER_CHOICES)
-    zip_code = forms.CharField()
+    zip_code = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Zip Code'}))
     # child_age = forms.NumberInput
     # child_gender = forms.Select(choices=GENDER_CHOICES)
     # email = forms.EmailField()
 
     class Meta:
         model = UserProfile
+        fields = ('gender', 'first_name', 'last_name', 'zip_code')
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
