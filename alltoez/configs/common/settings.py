@@ -87,6 +87,7 @@ INSTALLED_APPS = [
 	'django.contrib.admin',
 	'django.contrib.sitemaps',
 	'django.contrib.humanize',
+	'location_field',
 
 	# Utilities & Helper Apps
 	'south',

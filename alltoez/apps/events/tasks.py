@@ -53,9 +53,10 @@ def scrape_events_look_ahead():
             redtri_count += 1
 
     subject = "Alltoez draft events | {}".format(today.strftime("%A, %d. %B %Y"))
-    body = "New unprocessed events on {} for date {}\n"
-    "{} through SFKids\n{} through Redtri".format(today.strftime("%A, %d. %B %Y"), event_date.strftime("%A, %d. %B %Y"),
-                                                  sfkids_count, redtri_count)
+    body = "New unprocessed events on {} for date {}\n{} through SFKids\n{} through Redtri".format(
+        today.strftime("%A, %d. %B %Y"),
+        event_date.strftime("%A, %d. %B %Y"),
+        sfkids_count, redtri_count)
 
     msg = MIMEText(body)
     msg['Subject'] = subject
