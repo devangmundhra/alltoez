@@ -19,7 +19,7 @@ class EventAdminForm(forms.ModelForm):
 
     def clean_cron_recurrence_format(self):
         cur_cron_format = self.cleaned_data['cron_recurrence_format']
-        if cur_cron_format is not None:
+        if cur_cron_format:
             try:
                 base = datetime.now()
                 cron = croniter(cur_cron_format, base)
@@ -31,7 +31,7 @@ class EventAdminForm(forms.ModelForm):
 
     def clean(self):
         cur_cron_format = self.cleaned_data['cron_recurrence_format']
-        if cur_cron_format is not None:
+        if cur_cron_format:
             cur_start_date = self.cleaned_data['start_date']
             cur_start_time = self.cleaned_data['start_time']
             cron = croniter(cur_cron_format, datetime.combine(cur_start_date, cur_start_time))

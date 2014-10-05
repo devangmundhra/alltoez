@@ -79,6 +79,11 @@ class DraftEvent(models.Model):
     source_url = models.URLField(blank=True, null=True, unique=True)
     processed = models.BooleanField(default=False)
 
+    def save(self, *args, **kwargs):
+        if self.event_set:
+            self.processed = True
+        super(DraftEvent, self).save(*args, **kwargs)
+
     def __unicode__(self):
         return u'{} from {}'.format(self.title, self.source)
 
