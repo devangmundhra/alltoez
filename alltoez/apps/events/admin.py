@@ -92,9 +92,10 @@ class EventAdmin(admin.ModelAdmin):
     Note: This is similar to EventInline above
     """
     prepopulated_fields = {'slug': ('title',), }
-    exclude = ('slug',)
+    #exclude = ('slug',)
     search_fields = ['title', 'description']
     form = EventAdminForm
+    pass
 
 admin.site.register(Event, EventAdmin)
 

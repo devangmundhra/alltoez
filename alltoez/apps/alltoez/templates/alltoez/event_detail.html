@@ -1,0 +1,62 @@
+{% extends "alltoez/ui/layouts/base.html" %}
+{% load common_tags %}
+
+{% block title %}Events{% endblock %}
+{% block page_title %}{% endblock %}
+{% block body_class %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            <div class="left-side">
+                <h1>{{ object.title }}</h1>
+                <dl >
+                    <dt>WHERE</dt>
+                    <dd>{{ object.address }}</dd>
+                </dl>
+                <img src="{{ object.image.url }}">
+                <p>{{ object.description}}</p>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-6">
+            <div class="right-side">
+                <div class="socail_actions">
+                    <span>Bookmark it</span>
+                    <span>Done It</span>
+                    <span>Share</span>
+                </div>
+                <span>{{ object.location }}</span>
+                <h4>{{ object.title}}</h4>
+                <p>{{ object.address }}</p>
+                <div class="open-hours">
+                    <dl class="dl-horizontal">
+                        <dt>Starts on:</dt>
+                        <dd>{{ object.start_date }}</dd>
+                        <dt>Ends on:</dt>
+                        <dd>{{ object.end_date }}</dd>
+                    </dl>
+                </div>
+                <div class="age-allowed">
+                    <dl class="dl-horizontal">
+                        <dt>Min. age:</dt>
+                        <dd>{{ object.min_age }}</dd>
+                        <dt>Max. age:</dt>
+                        <dd>{{ object.max_age }}</dd>
+                    </dl>
+                </div>
+                <div class="cost">
+                    <dl class="dl-horizontal">
+                        <dt>Cost:</dt>
+                        <dd>${{ object.cost }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-4">
+
+        </div>
+    </div>
+
+{% endblock %}
