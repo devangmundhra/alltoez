@@ -50,6 +50,7 @@ class EventInline(admin.StackedInline):
     model = Event
     exclude = ('slug',)
     max_num = 1
+    extra = 0
     form = EventAdminForm
 
 
