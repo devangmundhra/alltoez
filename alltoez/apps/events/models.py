@@ -8,8 +8,8 @@ from location_field.models import PlainLocationField
 from apps.alltoez.utils.abstract_models import BaseModel
 from apps.alltoez.utils.model_utils import unique_slugify
 
-import json, urllib
 
+import json, urllib
 
 class Category(models.Model):
     """
