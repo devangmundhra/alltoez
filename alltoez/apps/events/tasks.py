@@ -7,12 +7,11 @@ import smtplib
 from email.mime.text import MIMEText
 from croniter import croniter
 from celery import shared_task
-import pytz
 
 from django.utils import timezone
 
 from apps.events.models import DraftEvent, Event, EventRecord
-from apps.events.eventparsers import get_sfkids_events, get_redtri_events
+from apps.events.eventparsers import sfkids, redtri
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -30,7 +29,8 @@ def scrape_events_look_ahead():
     :return:
     """
     today = datetime.today()
-    sfkids_events = get_sfkids_events(EVENTS_NUM_DAYS_SCRAPE_LOOK_AHEAD)
+    event_date = today + timedelta(days=EVENTS_NUM_DAYS_SCRAPE_LOOK_AHEAD)
+    sfkids_events = sfkids.get_events(EVENTS_NUM_DAYS_SCRAPE_LOOK_AHEAD)
     sfkids_count = 0
     for parsed_event in sfkids_events:
         title = parsed_event.get('title', None)
@@ -41,7 +41,7 @@ def scrape_events_look_ahead():
         if created:
             sfkids_count += 1
 
-    redtri_events = get_redtri_events(EVENTS_NUM_DAYS_SCRAPE_LOOK_AHEAD)
+    redtri_events = redtri.get_events(EVENTS_NUM_DAYS_SCRAPE_LOOK_AHEAD)
     redtri_count = 0
     for parsed_event in redtri_events:
         title = parsed_event.get('title', None)
@@ -53,9 +53,10 @@ def scrape_events_look_ahead():
             redtri_count += 1
 
     subject = "Alltoez draft events | {}".format(today.strftime("%A, %d. %B %Y"))
-    body = "New unprocessed events on {}\n{} through SFKids\n{} through Redtri".format(today.strftime("%A, %d. %B %Y"),
-                                                             sfkids_count,
-                                                             redtri_count)
+    body = "New unprocessed events on {} for date {}\n{} through SFKids\n{} through Redtri".format(
+        today.strftime("%A, %d. %B %Y"),
+        event_date.strftime("%A, %d. %B %Y"),
+        sfkids_count, redtri_count)
 
     msg = MIMEText(body)
     msg['Subject'] = subject
