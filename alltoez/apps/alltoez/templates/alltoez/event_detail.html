@@ -9,13 +9,21 @@
     <div class="row">
         <div class="col-xs-12 col-md-6">
             <div class="left-side">
-                <h1>{{ object.title }}</h1>
-                <dl >
-                    <dt>WHERE</dt>
-                    <dd>{{ object.address }}</dd>
-                </dl>
-                <img src="{{ object.image.url }}">
-                <p>{{ object.description}}</p>
+                <div class="event-title">
+                    <h1>{{ object.title }}</h1>
+                </div>
+                <div class="event-address">
+                    <dl >
+                        <dt>WHERE</dt>
+                        <dd>{{ object.address }}</dd>
+                    </dl>
+                </div>
+                <div class="event-image">
+                    <img src="{{ object.image.url }}">
+                </div>
+                <div class="description">
+                    <p>{{ object.description}}</p>
+                </div>
             </div>
         </div>
         <div class="col-xs-12 col-md-6">
@@ -25,9 +33,13 @@
                     <span>Done It</span>
                     <span>Share</span>
                 </div>
-                <span>{{ object.location }}</span>
-                <h4>{{ object.title}}</h4>
-                <p>{{ object.address }}</p>
+                <div class="event-map">
+                    <span>{{ object.location }}</span>
+                </div>
+                <div class="event-detail">
+                    <h4>{{ object.title}}</h4>
+                    <p>{{ object.address }}</p>
+                </div>
                 <div class="open-hours">
                     <dl class="dl-horizontal">
                         <dt>Starts on:</dt>

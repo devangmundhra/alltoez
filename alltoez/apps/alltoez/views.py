@@ -1,14 +1,11 @@
 from alltoez.apps.events.models import Category
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-<<<<<<< HEAD
 from django.http import Http404
 from django.template.defaulttags import regroup
-=======
 from django.http import Http404, HttpResponseServerError
 from django.template import loader, RequestContext
 from django.conf import settings
->>>>>>> 5e18e33829b1a2903a91eb5fd6f722c0e87275b8
 from django.views.generic import TemplateView, FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
