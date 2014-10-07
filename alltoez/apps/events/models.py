@@ -44,12 +44,15 @@ class Category(models.Model):
         - Thanksgiving
         - Christmas
     """
-    parent_category = models.ForeignKey('self', null=True, blank=True)
+    parent_category = models.ForeignKey('self', null=True, blank=True, related_name="children")
     name = models.CharField(max_length=200, db_index=True)
     slug = models.SlugField(null=True, blank=True, help_text="The part of the title that is used in the url. "
                                                              "Leave this blank if you want the system to generate one "
                                                              "for you.")
     description = models.CharField(max_length=200)
+
+    class Meta:
+        ordering = ("-parent_category__name", "name")
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -59,6 +62,9 @@ class Category(models.Model):
 
     def __unicode__(self):
         return unicode(self.description)
+
+    def parent(self):
+        return self.parent_category
 
 
 class DraftEvent(models.Model):

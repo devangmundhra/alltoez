@@ -6,25 +6,54 @@
 {% block body_class %}events{% endblock %}
 
 {% block content %}
-	<p class="lead">I'm looking for <a href="#" class="filter-category">Outdoors</a></p>
+	<p class="lead">I'm looking for <a href="{% url 'events' %}" class="filter-category">All events</a></p>
 
-    <ul class="category_list">
-        {% for category in category_list %}
-            <li><a href="{% url 'events' category.slug %}">{{ category.name }}</a></li>
-        {% endfor %}
-        <li><a href="{% url 'events' %}">All Events</a></li>
-    </ul>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+            <div class="event-item">
+                <ul class="event-list">
+            		{% for event in events_list %}
+                    <li>
+                        <a href="{% url 'event_detail' event.slug %}">
+                            <div class="event-image">
+                                <img src="{{ event.image.url }}" height="210" width="334">
+                            </div>
+                            <div class="event-info">
+                                <h4>{{ event.title }}</h4>
+                                <p>{{ event.address }}</p>
+                            </div>
+                            <span class="event-date">{{ event.start_date|date }}</span>
+                            <div class="event-meta">
+                                <span>Posted {{ event.created_at|timesince }} ago</span>
+                            </div>
+                        </a>
+                    </li>
+                    {% endfor %}
+	            </ul>
+            </div>
+        </div>
+    </div>
+    {% comment %}
+    <div class="category-selection clearfix">
+        {% regroup category_list by parent as parent_list %}
+        <ul class="category-list">
+            {% for parent_category in parent_list %}
+            <li class="parent-list">
+                <p>{{ parent_category.grouper }}</p>
+                <ul>
+                    {% for child_list in parent_category.list %}
+                    <li>
+                        <a href="">{{ child_list.name }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
+            {% endfor %}
+            <li><a href="{% url 'events' %}">All Events</a></li>
+        </ul>
+    </div>
+        {% endcomment %}
 
-	<ul class="event-list">
-		{% for event in events_list %}
-			<li>
-                <a href="{% url 'event_detail' event.slug %}">
-                    <img src="{{ event.image.url }}" height="210" width="334">
-				    <h4>{{ event.title }}</h4>
-                    <p>{{ event.address }}</p>
-                </a>
-			</li>
-		{% endfor %}
-	</ul>
+
 
 {% endblock %}

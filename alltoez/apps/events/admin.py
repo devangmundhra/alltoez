@@ -100,5 +100,10 @@ class EventAdmin(admin.ModelAdmin):
 admin.site.register(Event, EventAdmin)
 
 class CategoryAdmin(admin.ModelAdmin):
+
+    def is_parent(obj):
+        return True if not obj.parent_category else False
+
     prepopulated_fields = {'slug': ('name',), }
+    list_display = ('name', is_parent, 'parent_category',)
 admin.site.register(Category, CategoryAdmin)

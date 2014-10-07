@@ -2,6 +2,7 @@ from alltoez.apps.events.models import Category
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import Http404
+from django.template.defaulttags import regroup
 from django.views.generic import TemplateView, FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -41,10 +42,10 @@ class Events(ListView):
     category_list = None
     category_slug = None
 
-
     def get(self, request, *args, **kwargs):
+        regroup
         self.category_slug = kwargs.get('slug', None)
-        self.category_list = Category.objects.all()
+        self.category_list = Category.objects.filter(parent_category__isnull=False)
         if (self.category_slug):
             self.events_list = Event.objects.filter(category__slug=self.category_slug)
         else:
