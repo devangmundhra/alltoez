@@ -91,8 +91,8 @@ def create_event_records():
                                                                                 'start_date', 'start_time', 'end_date')
     for event in events:
         next_datetime = datetime.combine(event.next_date, event.start_time)
-        event_records += EventRecord(event=event, date=next_datetime)
-        if event.cron_recurrence_format is not None:
+        event_records.append(EventRecord(event=event, date=next_datetime))
+        if event.cron_recurrence_format:
             cron = croniter(event.cron_recurrence_format, next_datetime)
             next_datetime = cron.get_next(ret_type=datetime)
             if next_datetime.date() > event.end_date:

@@ -1,6 +1,6 @@
 from alltoez.configs.common.settings import *
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 PROJECT_DOMAIN = "http://alltoez.com"
 

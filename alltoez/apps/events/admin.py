@@ -18,7 +18,7 @@ class EventAdminForm(forms.ModelForm):
         self.fields['image'].widget = SplitJSONWidget()
 
     def clean_cron_recurrence_format(self):
-        cur_cron_format = self.cleaned_data['cron_recurrence_format']
+        cur_cron_format = self.cleaned_data.get('cron_recurrence_format', None)
         if cur_cron_format:
             try:
                 base = datetime.now()
@@ -30,7 +30,7 @@ class EventAdminForm(forms.ModelForm):
         return cur_cron_format
 
     def clean(self):
-        cur_cron_format = self.cleaned_data['cron_recurrence_format']
+        cur_cron_format = self.cleaned_data.get('cron_recurrence_format', None)
         if cur_cron_format:
             cur_start_date = self.cleaned_data['start_date']
             cur_start_time = self.cleaned_data['start_time']
@@ -50,7 +50,7 @@ class EventInline(admin.StackedInline):
     model = Event
     exclude = ('slug',)
     max_num = 1
-    extra = 0
+    extra = 1
     form = EventAdminForm
 
 
