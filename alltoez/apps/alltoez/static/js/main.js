@@ -10,4 +10,9 @@ $(document).ready(function() {
 	$(window).on('resize', function(){
 		resizeHeader();
 	});
+
+	$("#filter-category").on('click', function(e) {
+		e.preventDefault();
+		$("#filter-header").toggleClass('visible');
+	});
 });

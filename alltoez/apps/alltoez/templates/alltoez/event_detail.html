@@ -1,0 +1,74 @@
+{% extends "alltoez/ui/layouts/base.html" %}
+{% load common_tags %}
+
+{% block title %}Events{% endblock %}
+{% block page_title %}{% endblock %}
+{% block body_class %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            <div class="left-side">
+                <div class="event-title">
+                    <h1>{{ object.title }}</h1>
+                </div>
+                <div class="event-address">
+                    <dl >
+                        <dt>WHERE</dt>
+                        <dd>{{ object.address }}</dd>
+                    </dl>
+                </div>
+                <div class="event-image">
+                    <img src="{{ object.image.url }}">
+                </div>
+                <div class="description">
+                    <p>{{ object.description}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-6">
+            <div class="right-side">
+                <div class="socail_actions">
+                    <span>Bookmark it</span>
+                    <span>Done It</span>
+                    <span>Share</span>
+                </div>
+                <div class="event-map">
+                    <span>{{ object.location }}</span>
+                </div>
+                <div class="event-detail">
+                    <h4>{{ object.title}}</h4>
+                    <p>{{ object.address }}</p>
+                </div>
+                <div class="open-hours">
+                    <dl class="dl-horizontal">
+                        <dt>Starts on:</dt>
+                        <dd>{{ object.start_date }}</dd>
+                        <dt>Ends on:</dt>
+                        <dd>{{ object.end_date }}</dd>
+                    </dl>
+                </div>
+                <div class="age-allowed">
+                    <dl class="dl-horizontal">
+                        <dt>Min. age:</dt>
+                        <dd>{{ object.min_age }}</dd>
+                        <dt>Max. age:</dt>
+                        <dd>{{ object.max_age }}</dd>
+                    </dl>
+                </div>
+                <div class="cost">
+                    <dl class="dl-horizontal">
+                        <dt>Cost:</dt>
+                        <dd>${{ object.cost }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-4">
+
+        </div>
+    </div>
+
+{% endblock %}

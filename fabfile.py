@@ -17,7 +17,7 @@ def production():
     env.settings = 'production'
     env.user = 'root'
     env.hosts = ['alltoez.com']
-    env.path = '/home/dajngo/sites/%(project_name)s' % env
+    env.path = '/home/django/sites/%(project_name)s' % env
     env.env_path = '%(path)s/env' % env
     env.repo_path = '%(path)s/repository' % env
     env.site_packages_path = '%(env_path)s/lib/python2.7/site-packages' % env
