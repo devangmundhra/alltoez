@@ -385,6 +385,8 @@ body {
 // EVENT DETAIL PAGE
 
 .left-side {
+  background: #ffffff;
+  padding: 20px;
   .event-title {
     h1 {
       font-weight: bold;
@@ -410,6 +412,125 @@ body {
   .event-image {
     img {
       width: 100%;
+    }
+  }
+  .event-description {
+    p {
+      margin-top: 30px;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 20px;
+      color: #6d6d6d;
+      line-height: 1.3em;
+    }
+  }
+}
+.right-side {
+  .social-actions {
+    background: #ffffff;
+    margin-bottom: 30px;
+    height: 75px;
+    border-radius: 6px;
+    span {
+      background: #4884af;
+      padding: 16px 30px;
+      border-radius: 6px;
+      height: 42px;
+      font-size: 18px;
+      color: #ffffff;
+      font-weight: bold;
+      cursor: pointer;
+      top: 25px;
+      position: relative;
+      left: 16px;
+      &:last-child {
+        margin-left: 10px;
+      }
+    }
+  }
+  .event-location {
+    background: #ffffff;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    margin-bottom: 30px;
+    .event-map {
+      width: 100%;
+      height: 250px;
+      position: relative;
+      background-color: gray;
+    }
+    .event-detail {
+      padding-left: 20px;
+      h4 {
+        margin-top: 15px;
+        margin-bottom: 3px;
+        font-size: 20px;
+        color: #282828;
+
+      }
+      p {
+        margin-top: 0px;
+        font-size: 15px;
+        font-weight: normal;
+        color: #6d6d6d;
+        line-height: 1.2em;
+        white-space: nowrap;
+      }
+    }
+    .event-web {
+      border-top: 1px solid #ebebeb;
+      height: 50px;
+      text-align: center;
+      .site {
+        border-right: 1px solid #ebebeb;
+        float: left;
+        height: 100%;
+        width: 50%;
+        a {
+          text-decoration: none;
+          font-size: 16px;
+          position: relative;
+          top: 15px;
+          color: #6d6d6d;
+          &:hover {
+            color: #409cab;
+          }
+        }
+      }
+      .facebook {
+        a {
+          text-decoration: none;
+          font-size: 16px;
+          position: relative;
+          top: 15px;
+          color: #6d6d6d;
+          &:hover {
+            color: #409cab;
+          }
+        }
+      }
+    }
+  }
+  .open-hours, .age-allowed, .cost {
+    background: #ffffff;
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 20px;
+    dl {
+      margin-bottom: 0px;
+    }
+    dt {
+      text-align: left;
+      font-size: 20px;
+    }
+    dd {
+      text-align: right;
+      font-size: 20px;
+      color: #5a9aa8;
+      margin-bottom: 25px;
+      &:last-child {
+        margin-bottom: 0px;
+      }
     }
   }
 }
