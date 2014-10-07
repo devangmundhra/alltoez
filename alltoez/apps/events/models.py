@@ -50,6 +50,7 @@ class Category(models.Model):
                                                              "Leave this blank if you want the system to generate one "
                                                              "for you.")
     description = models.CharField(max_length=200)
+    font_awesome_icon_class = models.CharField(max_length=50, null=True, blank=True)
 
     class Meta:
         ordering = ("-parent_category__name", "name")

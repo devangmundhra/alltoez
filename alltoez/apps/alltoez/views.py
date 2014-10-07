@@ -39,33 +39,35 @@ class Home(TemplateView):
 
 
 class Events(ListView):
-    template_name = "alltoez/events.html"
-    model = Event
-    events_list = None
-    category_list = None
-    category_slug = None
+	template_name = "alltoez/events.html"
+	model = Event
+	events_list = None
+	category = None
+	category_list = None
+	category_slug = None
 
-    def get(self, request, *args, **kwargs):
-        regroup
-        self.category_slug = kwargs.get('slug', None)
-        self.category_list = Category.objects.filter(parent_category__isnull=False)
-        if (self.category_slug):
-            self.events_list = Event.objects.filter(category__slug=self.category_slug)
-        else:
-            self.events_list = Event.objects.all()
+	def get(self, request, *args, **kwargs):
+		self.category_slug = kwargs.get('slug', None)
+		self.category_list = Category.objects.filter(parent_category__isnull=False)
+		if (self.category_slug):
+			self.events_list = Event.objects.filter(category__slug=self.category_slug)
+			try:
+				self.category = Category.objects.get(slug=self.category_slug)
+			except Category.DoesNotExist:
+				pass
+		else:
+			self.events_list = Event.objects.all()
+		return super(Events, self).get(self, request, *args, **kwargs)
 
-        return super(Events, self).get(self, request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super(Events, self).get_context_data(**kwargs)
-        context = {
-            'now': timezone.now(),
-            'events_list': self.events_list,
-            'category_list': self.category_list,
-        }
-        # context['now'] = timezone.now()
-        # context.update({'events_list': self.events_list})
-        return context
+	def get_context_data(self, **kwargs):
+		context = super(Events, self).get_context_data(**kwargs)
+		context = {
+			'now': timezone.now(),
+			'events_list': self.events_list,
+			'category_list': self.category_list,
+			'category': self.category
+		}
+		return context
 
 class EventDetailView(DetailView):
     model = Event
