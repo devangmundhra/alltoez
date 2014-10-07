@@ -41,10 +41,10 @@ footer {
 
 body {
 	.page-header {
-		text-align: center; margin-top: 0px;
+		text-align: center; margin-top: 0px; margin-bottom: 0px;
 		h1 { margin-top: 0px; }
 	}
-	.lead { text-align: center; margin-bottom: 60px; }
+	.lead { text-align: center; margin-bottom: 0px; }
 
 	.strip {
 		padding-top: 60px; padding-bottom: 60px;
@@ -52,6 +52,10 @@ body {
 			//background: #FFFFFF;
             background: #f4f4f4;
 		}
+		&.light-grey {
+			background: #EEEEEE;
+		}
+		&.narrow { padding-top: 20px; padding-bottom: 20px;  }
 		p.last { margin-bottom: 0px; }
 	}
 
@@ -86,6 +90,51 @@ body {
 			border-bottom: dashed 1px @brand-primary;
 			&:hover { text-decoration: none; }
 		}
+		p.lead { }
+		.filter-header {
+			position: relative; margin-top: 40px; opacity: 0.0;
+			height: 0px; .transition(all 250ms ease-out);
+			overflow: hidden;
+
+			.category-selection {
+				> ul {
+					list-style: none;
+					padding-left: 0px;
+					h4 { text-transform: uppercase; font-size: 13px; font-weight: bold; }
+					> li {
+						float: left; text-align: center;
+						width: 20%;
+						.fa {
+							color: #CCC; font-size: 40px;
+						}
+						> ul {
+							list-style: none; padding-left: 0px;
+							margin: 0px 10px;
+							> li {
+								text-align: center;
+								a {
+									text-decoration: none; font-size: 12px; color: #666;
+									padding: 4px; border-radius: 4px;
+									line-height: 14px;
+									display: block; .transition(all 250ms ease-out);
+
+									&:hover {
+										background: @brand-primary; color: #FFFFFF;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			&.visible {
+				height: 240px;  opacity: 1.0;
+			}
+		}
+
+		.qty-events { font-weight: bold; }
+		.sort-events { float: right; }
+
 		ul.event-list {
 			padding-left: 0px;
 			list-style: none;
@@ -364,23 +413,6 @@ body {
     border-color: #e5e5e5;
   }
 }
-
-// CATEGORY PANEL
-.category-selection {
-  background-color: #e7e7e7;
-  .category-list {
-    list-style: none;
-    padding-left: 0px;
-    .parent-list {
-      float: left;
-      a {
-        text-decoration: none;
-      }
-
-    }
-  }
-}
-
 
 // EVENT DETAIL PAGE
 

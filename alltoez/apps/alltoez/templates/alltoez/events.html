@@ -2,58 +2,89 @@
 {% load common_tags %}
 
 {% block title %}Events{% endblock %}
-{% block page_title %}Events{% endblock %}
 {% block body_class %}events{% endblock %}
 
-{% block content %}
-	<p class="lead">I'm looking for <a href="{% url 'events' %}" class="filter-category">All events</a></p>
+{% block content_full_width %}
+	<div class="strip white">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12">
+					<div class="page-header">
+						<h1>Events</h1>
+						<p class="lead">I'm looking for <a href="#" id="filter-category" class="filter-category">{% firstof category.name 'All events' %}</a></p>
 
-    <div class="row">
-        <div class="col-xs-12 col-sm-12">
-            <div class="event-item">
-                <ul class="event-list">
-            		{% for event in events_list %}
-                    <li>
-                        <a href="{% url 'event_detail' event.slug %}">
-                            <div class="event-image">
-                                <img src="{{ event.image.url }}" height="210" width="334">
-                            </div>
-                            <div class="event-info">
-                                <h4>{{ event.title }}</h4>
-                                <p>{{ event.address }}</p>
-                            </div>
-                            <span class="event-date">{{ event.start_date|date }}</span>
-                            <div class="event-meta">
-                                <span>Posted {{ event.created_at|timesince }} ago</span>
-                            </div>
-                        </a>
-                    </li>
-                    {% endfor %}
-	            </ul>
-            </div>
-        </div>
-    </div>
-    {% comment %}
-    <div class="category-selection clearfix">
-        {% regroup category_list by parent as parent_list %}
-        <ul class="category-list">
-            {% for parent_category in parent_list %}
-            <li class="parent-list">
-                <p>{{ parent_category.grouper }}</p>
-                <ul>
-                    {% for child_list in parent_category.list %}
-                    <li>
-                        <a href="">{{ child_list.name }}</a>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </li>
-            {% endfor %}
-            <li><a href="{% url 'events' %}">All Events</a></li>
-        </ul>
-    </div>
-        {% endcomment %}
+						<div id="filter-header" class="filter-header">
+							<div class="category-selection clearfix">
+								{% regroup category_list by parent as parent_list %}
 
+								<ul>
+									{% for parent_category in parent_list %}
+										<li>
+											<a href="#"><i class="fa {{ parent_category.grouper.font_awesome_icon_class }}"></i></a>
+											<h4>{{ parent_category.grouper }}</h4>
+											<ul>
+												{% for child_list in parent_category.list %}
+												<li>
+													<a href="{% url 'events' child_list.slug %}">{{ child_list.name }}</a>
+												</li>
+												{% endfor %}
+											</ul>
+										</li>
+									{% endfor %}
+									<!--li><a href="{% url 'events' %}">All Events</a></li-->
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
+	<div class="strip narrow light-grey">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12">
+					<span class="qty-events">{{ events_list|length }} events</span>
+					<select class="sort-events">
+						<option>Sort by</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
 
+	<div class="strip white">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12">
+							<div class="event-item">
+								<ul class="event-list">
+									{% for event in events_list %}
+									<li>
+										<a href="{% url 'event_detail' event.slug %}">
+											<div class="event-image">
+												<img src="{{ event.image.url }}" height="210" width="334">
+											</div>
+											<div class="event-info">
+												<h4>{{ event.title }}</h4>
+												<p>{{ event.address }}</p>
+											</div>
+											<span class="event-date">{{ event.start_date|date }}</span>
+											<div class="event-meta">
+												<span>Posted {{ event.created_at|timesince }} ago</span>
+											</div>
+										</a>
+									</li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
