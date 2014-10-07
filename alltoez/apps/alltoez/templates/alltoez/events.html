@@ -57,34 +57,25 @@
 	<div class="strip white">
 		<div class="container">
 			<div class="row">
-				<div class="col-xs-12 col-sm-12">
-					<div class="row">
-						<div class="col-xs-12 col-sm-12">
-							<div class="event-item">
-								<ul class="event-list">
-									{% for event in events_list %}
-									<li>
-										<a href="{% url 'event_detail' event.slug %}">
-											<div class="event-image">
-												<img src="{{ event.image.url }}" height="210" width="334">
-											</div>
-											<div class="event-info">
-												<h4>{{ event.title }}</h4>
-												<p>{{ event.address }}</p>
-											</div>
-											<span class="event-date">{{ event.start_date|date }}</span>
-											<div class="event-meta">
-												<span>Posted {{ event.created_at|timesince }} ago</span>
-											</div>
-										</a>
-									</li>
-									{% endfor %}
-								</ul>
+				{% for event in events_list %}
+				<div class="col-xs-12 col-sm-4">
+					<div class="event-item">
+						<a href="{% url 'event_detail' event.slug %}">
+							<div class="event-image">
+								<img src="{{ event.image.url }}" width="100%">
 							</div>
-						</div>
+							<div class="event-info">
+								<h4>{{ event.title }}</h4>
+								<p>{{ event.address }}</p>
+							</div>
+							<span class="event-date">{{ event.start_date|date }}</span>
+							<div class="event-meta">
+								<span>Posted {{ event.created_at|timesince }} ago</span>
+							</div>
+						</a>
 					</div>
 				</div>
-			</div>
+				{% endfor %}
 		</div>
 	</div>
 {% endblock %}
