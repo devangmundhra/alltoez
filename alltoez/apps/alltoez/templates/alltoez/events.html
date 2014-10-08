@@ -1,5 +1,5 @@
 {% extends "alltoez/ui/layouts/base.html" %}
-{% load common_tags %}
+{% load common_tags endless %}
 
 {% block title %}Events{% endblock %}
 {% block body_class %}events{% endblock %}
@@ -31,9 +31,9 @@
 											</ul>
 										</li>
 									{% endfor %}
-									<!--li><a href="{% url 'events' %}">All Events</a></li-->
 								</ul>
-							</div>
+                                <a href="{% url 'events' %}">All Events</a>
+                            </div>
 						</div>
 					</div>
 				</div>
@@ -47,7 +47,11 @@
 				<div class="col-xs-12 col-sm-12">
 					<span class="qty-events">{{ events_list|length }} events</span>
 					<select class="sort-events">
-						<option>Sort by</option>
+                        <option value="">All Events</option>
+                        <option value="start_date" {% if request.GET.sort == 'start_date' %}SELECTED{% endif %}>New on Alltoez</option>
+                        <option value="next_date" {% if request.GET.sort == 'next_date' %}SELECTED{% endif %}>Upcoming</option>
+                        <option value="min_age" {% if request.GET.sort == 'min_age' %}SELECTED{% endif %}>Min. Age</option>
+                        <option value="cost" {% if request.GET.sort == 'cost' %}SELECTED{% endif %}>Cost</option>
 					</select>
 				</div>
 			</div>
@@ -55,27 +59,43 @@
 	</div>
 
 	<div class="strip white">
-		<div class="container">
-			<div class="row">
-				{% for event in events_list %}
-				<div class="col-xs-12 col-sm-4">
-					<div class="event-item">
-						<a href="{% url 'event_detail' event.slug %}">
-							<div class="event-image">
-								<img src="{{ event.image.url }}" width="100%">
-							</div>
-							<div class="event-info">
-								<h4>{{ event.title }}</h4>
-								<p>{{ event.address }}</p>
-							</div>
-							<span class="event-date">{{ event.start_date|date }}</span>
-							<div class="event-meta">
-								<span>Posted {{ event.created_at|timesince }} ago</span>
-							</div>
-						</a>
-					</div>
-				</div>
-				{% endfor %}
-		</div>
+        <div class="container events-list">
+            <div class="row">
+                {% paginate events_list %}
+                {% for event in events_list %}
+                <div class="col-xs-12 col-sm-4">
+                    <div class="event-item">
+                        <a href="{% url 'event_detail' event.slug %}">
+                            <div class="event-image">
+                                <img src="{{ event.image.url }}" width="100%">
+                            </div>
+                            <div class="event-info">
+                                <h4>{{ event.title }}</h4>
+                                <p>{{ event.address }}</p>
+                            </div>
+                            <span class="event-date">{{ event.start_date|date }}</span>
+                            <div class="event-age-cost">
+                                <div class="age">
+                                    {% if event.min_age == 0 %}
+                                        <span>Family Event</span>
+                                    {% else %}
+                                        <span>Min. Age: {{ event.min_age }} </span>
+                                    {% endif %}
+                                </div>
+                                <div class="cost">
+                                    <span>Cost: ${{ event.cost }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="event-meta">
+                        <span>Posted {{ event.created_at|timesince }} ago</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% show_pages %}
+        </div>
 	</div>
 {% endblock %}
+

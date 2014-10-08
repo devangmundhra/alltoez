@@ -1,7 +1,7 @@
 from alltoez.apps.events.models import Category
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-from django.http import Http404
+from django.http import Http404, HttpResponseBadRequest
 from django.template.defaulttags import regroup
 from django.http import Http404, HttpResponseServerError
 from django.template import loader, RequestContext
@@ -39,35 +39,68 @@ class Home(TemplateView):
 
 
 class Events(ListView):
-	template_name = "alltoez/events.html"
-	model = Event
-	events_list = None
-	category = None
-	category_list = None
-	category_slug = None
+    template_name = "alltoez/events.html"
+    model = Event
+    events_list = None
+    category = None
+    category_list = None
+    category_slug = None
 
-	def get(self, request, *args, **kwargs):
-		self.category_slug = kwargs.get('slug', None)
-		self.category_list = Category.objects.filter(parent_category__isnull=False)
-		if (self.category_slug):
-			self.events_list = Event.objects.filter(category__slug=self.category_slug)
-			try:
-				self.category = Category.objects.get(slug=self.category_slug)
-			except Category.DoesNotExist:
-				pass
-		else:
-			self.events_list = Event.objects.all()
-		return super(Events, self).get(self, request, *args, **kwargs)
+    def get(self, request, *args, **kwargs):
+        sort = self.request.GET.get('sort')
+        self.category_slug = kwargs.get('slug', None)
 
-	def get_context_data(self, **kwargs):
-		context = super(Events, self).get_context_data(**kwargs)
-		context = {
-			'now': timezone.now(),
-			'events_list': self.events_list,
-			'category_list': self.category_list,
-			'category': self.category
-		}
-		return context
+        self.category_list = Category.objects.filter(parent_category__isnull=False)
+        self.events_list = Event.objects.all().order_by('title')
+        if (self.category_slug):
+            self.events_list = self.events_list.filter(category__slug=self.category_slug)
+            try:
+                self.category = Category.objects.get(slug=self.category_slug)
+            except Category.DoesNotExist:
+                pass
+        if (sort):
+            self.events_list = self.events_list.order_by(sort)
+        return super(Events, self).get(self, request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(Events, self).get_context_data(**kwargs)
+        context = {
+            'now': timezone.now(),
+            'events_list': self.events_list,
+            'category_list': self.category_list,
+            'category': self.category
+        }
+        return context
+
+
+# class EventsFragmentListView(ListView):
+#     template_name = "alltoez/ui/fragments/events_list.html"
+#     model = Event
+#     events_list = None
+#
+#     def get(self, request, *args, **kwargs):
+#         sort = self.request.GET.get('sort')
+#         # order by whatever
+#         if not sort:
+#             return HttpResponseBadRequest()
+#
+#         if category_slug:
+#             self.events_list = Event.objects.filter(category=category_slug)
+#         else:
+#             self.events_list = Event.objects.filter(category=category_slug)
+#
+#         if sort == 'all':
+#             self.events_list = Event.objects.all()
+#         self.events_list = Event.objects.all().order_by(sort)
+#         return super(EventsFragmentListView, self).get(self, request, *args, **kwargs)
+#
+#     def get_context_data(self, **kwargs):
+#         context = super(EventsFragmentListView, self).get_context_data(**kwargs)
+#         context = {
+#             'events_list': self.events_list
+#         }
+#         return context
+
 
 class EventDetailView(DetailView):
     model = Event
