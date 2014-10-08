@@ -67,10 +67,10 @@
                     <div class="event-item">
                         <a href="{% url 'event_detail' event.slug %}">
                             <div class="event-image">
-                                <img src="{{ event.image.url }}" width="100%">
+                                <img src="{{ event.image.url }}">
                             </div>
                             <div class="event-info">
-                                <h4>{{ event.title }}</h4>
+                                <h4>{{ event.title|truncatechars:'62' }}</h4>
                                 <p>{{ event.address }}</p>
                             </div>
                             <span class="event-date">{{ event.start_date|date }}</span>
