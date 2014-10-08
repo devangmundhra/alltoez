@@ -5,6 +5,7 @@ from django.template.base import TemplateSyntaxError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils.functional import allow_lazy
 from django.template.defaultfilters import stringfilter
+from django.utils.text import normalize_newlines
 from django.conf import settings
 from django.utils.encoding import force_unicode
 from django.contrib.admin.util import NestedObjects
@@ -31,6 +32,18 @@ def contains(value, arg):
 	Usage: {% if link_url|contains:"http://www.youtube.com/" %}...
 	"""
 	return arg in str(value)
+
+def remove_newlines(text):
+    """
+    Removes all newline characters from a block of text.
+    """
+    # First normalize the newlines using Django's nifty utility
+    normalized_text = normalize_newlines(text)
+    # Then simply remove the newlines like so.
+    return mark_safe(normalized_text.replace('\n', ' '))
+remove_newlines.is_safe = True
+remove_newlines = stringfilter(remove_newlines)
+register.filter(remove_newlines)
 
 def truncate_chars(s, num):
 	"""
@@ -283,10 +296,10 @@ def youtubize(text):
 	matches = regex.findall(text)
 	if not matches:
 		return text
-	
+
 	for match in matches:
 		text = text.replace(match[0], """
-			<iframe class="youtube-embeded" width="100%%" 
+			<iframe class="youtube-embeded" width="100%%"
 			height="250px" src="//www.youtube.com/embed/%s?wmode=transparent"
 			frameborder="0" wmode="Opaque" allowfullscreen></iframe>
 	    """ % match[4])
