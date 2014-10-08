@@ -97,6 +97,26 @@ body {
 			overflow: hidden;
 
 			.category-selection {
+				position: relative;
+				padding-top: 40px;
+
+				.all-events {
+					position: absolute;
+					top: 0px;
+					right: 0px;
+					background: rgba(0,0,0,0.2);
+					color: #FFFFFF;
+					border-radius: 5px;
+					padding: 2px 6px;
+					text-transform: uppercase;
+					font-size: 12px;
+					.transition(all 250ms ease-out);
+
+					&:hover {
+						text-decoration: none;
+						background: rgba(0,0,0,0.1);
+					}
+				}
 				> ul {
 					list-style: none;
 					padding-left: 0px;
@@ -128,7 +148,7 @@ body {
 				}
 			}
 			&.visible {
-				height: 240px;  opacity: 1.0;
+				height: 280px;  opacity: 1.0;
 			}
 		}
 
@@ -140,7 +160,7 @@ body {
 				&:hover { text-decoration: none; }
 			}
 			//height: 379px;
-			margin-right: 30px;
+			//margin-right: 30px;
 			margin-bottom: 5px;
 			border: 1px solid #ebebeb;
 			background: #ffffff;
@@ -213,8 +233,9 @@ body {
         .event-meta {
             margin-bottom: 40px;
             margin-top: 5px;
-            color: #6d6d6d;
+            color: #999999;
             font-size: 12px;
+			text-align: center;
         }
 
 	}
@@ -499,22 +520,23 @@ body {
     border-radius: 6px;
     a {
       text-decoration: none;
-      background: #4884af;
+      background: @brand-primary;
       padding: 16px 30px;
       border-radius: 6px;
       height: 42px;
       font-size: 18px;
       color: #ffffff;
       font-weight: bold;
-      cursor: pointer;
       top: 25px;
       position: relative;
       left: 12px;
-      margin-right: 5px;
+      margin-right: 9px;
       &:last-child {
-        margin-left: 10px;
         margin-right: 0px;
       }
+	  &:hover {
+		background: darken(@brand-primary, 5%);
+	  }
     }
   }
   .event-location {

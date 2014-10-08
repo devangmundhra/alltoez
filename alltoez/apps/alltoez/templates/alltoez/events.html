@@ -15,8 +15,9 @@
 
 						<div id="filter-header" class="filter-header">
 							<div class="category-selection clearfix">
-								{% regroup category_list by parent as parent_list %}
+								<a href="{% url 'events' %}" class="all-events">All Events</a>
 
+								{% regroup category_list by parent as parent_list %}
 								<ul>
 									{% for parent_category in parent_list %}
 										<li>
@@ -32,7 +33,6 @@
 										</li>
 									{% endfor %}
 								</ul>
-                                <a href="{% url 'events' %}">All Events</a>
                             </div>
 						</div>
 					</div>
@@ -98,4 +98,3 @@
         </div>
 	</div>
 {% endblock %}
-
