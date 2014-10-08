@@ -28,3 +28,14 @@ sudo /etc/init.d/nginx restart
 WHenever you pull the latest version of the code, if there are any static changes (i.e. to images, css or JS files) then you will need to collect static:
 
 python manage.py collectstatic
+
+Additionally, we have added a deployment script to fabfile.py (in the root of this project). Simply execute (on your local machine):
+
+fab production branch:dev deploy
+
+This will then ask you for the password on the server. Once entered it will run through a sequence of procedures to update the server with the latesat code... namely:
+
+- Pull latest version of the code from git
+- Run collectstatic
+- Run 'migrate'
+- Restart the webserver
