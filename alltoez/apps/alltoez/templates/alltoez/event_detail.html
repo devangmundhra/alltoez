@@ -55,18 +55,23 @@
                 </div>
                 <div class="open-hours">
                     <dl class="dl-horizontal">
-                        <dt>Starts on:</dt>
-                        <dd>{{ object.start_date }}</dd>
-                        <dt>Ends on:</dt>
-                        <dd>{{ object.end_date }}</dd>
+                        <dt>Start time:</dt>
+                        <dd>{{ object.start_time }}</dd>
+                        <dt>End time:</dt>
+                        <dd>{{ object.end_time }}</dd>
                     </dl>
                 </div>
                 <div class="age-allowed">
                     <dl class="dl-horizontal">
-                        <dt>Min. age:</dt>
-                        <dd>{{ object.min_age }}</dd>
-                        <dt>Max. age:</dt>
-                        <dd>{{ object.max_age }}</dd>
+                        {% if object.min_age == 0 and object.max_age == 100 %}
+                            <dt>Age: </dt>
+                            <dd>Family Event</dd>
+                        {% else %}
+                            <dt>Min. age:</dt>
+                            <dd>{{ object.min_age }}</dd>
+                            <dt>Max. age:</dt>
+                            <dd>{{ object.max_age }}</dd>
+                        {% endif %}
                     </dl>
                 </div>
                 <div class="cost">

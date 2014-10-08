@@ -97,6 +97,26 @@ body {
 			overflow: hidden;
 
 			.category-selection {
+				position: relative;
+				padding-top: 40px;
+
+				.all-events {
+					position: absolute;
+					top: 0px;
+					right: 0px;
+					background: rgba(0,0,0,0.2);
+					color: #FFFFFF;
+					border-radius: 5px;
+					padding: 2px 6px;
+					text-transform: uppercase;
+					font-size: 12px;
+					.transition(all 250ms ease-out);
+
+					&:hover {
+						text-decoration: none;
+						background: rgba(0,0,0,0.1);
+					}
+				}
 				> ul {
 					list-style: none;
 					padding-left: 0px;
@@ -128,7 +148,7 @@ body {
 				}
 			}
 			&.visible {
-				height: 240px;  opacity: 1.0;
+				height: 280px;  opacity: 1.0;
 			}
 		}
 
@@ -139,9 +159,9 @@ body {
 			a {
 				&:hover { text-decoration: none; }
 			}
-			height: 370px;
-			margin-right: 30px;
-			margin-bottom: 40px;
+			//height: 379px;
+			//margin-right: 30px;
+			margin-bottom: 5px;
 			border: 1px solid #ebebeb;
 			background: #ffffff;
 			position: relative;
@@ -149,11 +169,11 @@ body {
 				margin-right: 0px;
 			}
 			.event-image {
-				height: 210px;
+				//height: 210px;
 				overflow: hidden;
 			}
 			.event-info {
-				margin-bottom: 35px;
+              height: 107px;
 				h4 {
 					font-size: 20px;
 					padding-left: 10px;
@@ -167,14 +187,32 @@ body {
 					color: #8f8f8f;
 				}
 			}
-			.event-meta {
-				padding: 11px 10px 10px;
-				border-top: 1px solid #ebebeb;
-				height: 46px;
-				color: #030303;
-				font-weight: 400;
-				font-size: 12px;
-			}
+            .event-age-cost {
+                background: #ffffff;
+                border-top: 1px solid #ebebeb;
+                height: 50px;
+                text-align: center;
+                .age {
+                    border-right: 1px solid #ebebeb;
+                    float: left;
+                    height: 100%;
+                    width: 50%;
+                    span {
+                      font-size: 14px;
+                      position: relative;
+                      top: 15px;
+                      color: #6d6d6d;
+                    }
+                }
+                .cost {
+                    span {
+                      font-size: 14px;
+                      position: relative;
+                      top: 15px;
+                      color: #6d6d6d;
+                    }
+                }
+            }
 			.event-date {
 				position: absolute;
 				top: 10px;
@@ -187,11 +225,18 @@ body {
 			}
 			&:hover {
 				border: 1px solid #4583b1;
-				h4, .event-meta {
+				h4 {
 				color:#4583b1;
 				}
 			}
 		}
+        .event-meta {
+            margin-bottom: 40px;
+            margin-top: 5px;
+            color: #999999;
+            font-size: 12px;
+			text-align: center;
+        }
 
 	}
 }
@@ -203,7 +248,7 @@ body {
   list-style: none;
   padding-left: 0px;
   h1 {
-    margin-bottom: 30px;
+    margin-bottom: 50px;
   }
   a {
     .fa {
@@ -412,6 +457,16 @@ body {
     border-color: #e5e5e5;
   }
 }
+.password-reset {
+  text-align: center;
+  #id_email {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+  .reset-btn {
+    height: 42px;
+  }
+}
 
 // EVENT DETAIL PAGE
 
@@ -465,22 +520,23 @@ body {
     border-radius: 6px;
     a {
       text-decoration: none;
-      background: #4884af;
+      background: @brand-primary;
       padding: 16px 30px;
       border-radius: 6px;
       height: 42px;
       font-size: 18px;
       color: #ffffff;
       font-weight: bold;
-      cursor: pointer;
       top: 25px;
       position: relative;
       left: 12px;
-      margin-right: 5px;
+      margin-right: 9px;
       &:last-child {
-        margin-left: 10px;
         margin-right: 0px;
       }
+	  &:hover {
+		background: darken(@brand-primary, 5%);
+	  }
     }
   }
   .event-location {
@@ -568,4 +624,39 @@ body {
       }
     }
   }
+}
+
+// ENDLESS
+.endless_page_current, .endless_page_link {
+  padding: 7px 0px 0px 0px;
+  border-radius: 8px;
+  color: #ffffff;
+  height: 35px;
+  width: 35px;
+  float: left;
+  displaY: block;
+  margin-right: 8px;
+  margin-top: 60px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+}
+.endless_page_current {
+  background: #333333;
+}
+.endless_page_link {
+  text-decoration: none;
+  background: #6d6d6d;
+  &:last-child {
+    margin-right: 0;
+  }
+  &:hover {
+    text-decoration: none;
+    color: #ffffff;
+    background: darken(#333333, 5%);
+  }
+}
+.endless_separator {
+  font-size: 20px;
+  font-weight: bold;
 }
