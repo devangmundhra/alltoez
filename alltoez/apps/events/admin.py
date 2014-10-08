@@ -71,7 +71,7 @@ class DraftEventAdmin(admin.ModelAdmin):
     ordering = ['created_at']
     search_fields = ['title',]
     inlines = [EventInline]
-    actions = ["mark_processed"]
+    actions = ["mark_processed", "mark_unprocessed"]
     list_display = ('title', 'source')
     form = DraftEventAdminForm
 
@@ -79,6 +79,11 @@ class DraftEventAdmin(admin.ModelAdmin):
         rows_updated = queryset.update(processed=True)
         self.message_user(request, "%s draft event(s) successfully marked as processed." % rows_updated)
     mark_processed.short_description = "Mark selected draft events as processed"
+
+    def mark_unprocessed(self, request, queryset):
+        rows_updated = queryset.update(processed=False)
+        self.message_user(request, "%s draft event(s) successfully marked as unprocessed." % rows_updated)
+    mark_unprocessed.short_description = "Mark selected draft events as unprocessed"
 
 admin.site.register(DraftEvent, DraftEventAdmin)
 

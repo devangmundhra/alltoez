@@ -87,7 +87,7 @@ class DraftEvent(models.Model):
     processed = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        if self.event_set:
+        if len(self.event_set):
             self.processed = True
         super(DraftEvent, self).save(*args, **kwargs)
 
