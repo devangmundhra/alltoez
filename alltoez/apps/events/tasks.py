@@ -9,6 +9,7 @@ from croniter import croniter
 from celery import shared_task
 
 from django.utils import timezone
+from django.db import IntegrityError
 
 from apps.events.models import DraftEvent, Event, EventRecord
 from apps.events.eventparsers import sfkids, redtri
@@ -35,22 +36,28 @@ def scrape_events_look_ahead():
     for parsed_event in sfkids_events:
         title = parsed_event.get('title', None)
         url = parsed_event.get('orig_link', None)
-        draft_event, created = DraftEvent.objects.get_or_create(title=title,
-                                                                raw=json.dumps(parsed_event, ensure_ascii=True),
-                                                                source=DraftEvent.SFKIDS, source_url=url)
-        if created:
-            sfkids_count += 1
+        try:
+            draft_event, created = DraftEvent.objects.get_or_create(title=title,
+                                                                    raw=json.dumps(parsed_event, ensure_ascii=True),
+                                                                    source=DraftEvent.SFKIDS, source_url=url)
+            if created:
+                sfkids_count += 1
+        except IntegrityError:
+            pass
 
     redtri_events = redtri.get_events(EVENTS_NUM_DAYS_SCRAPE_LOOK_AHEAD)
     redtri_count = 0
     for parsed_event in redtri_events:
         title = parsed_event.get('title', None)
         url = parsed_event.get('orig_link', None)
-        draft_event, created = DraftEvent.objects.get_or_create(title=title,
-                                                                raw=json.dumps(parsed_event, ensure_ascii=True),
-                                                                source=DraftEvent.REDTRI, source_url=url)
-        if created:
-            redtri_count += 1
+        try:
+            draft_event, created = DraftEvent.objects.get_or_create(title=title,
+                                                                    raw=json.dumps(parsed_event, ensure_ascii=True),
+                                                                    source=DraftEvent.REDTRI, source_url=url)
+            if created:
+                redtri_count += 1
+        except IntegrityError:
+            pass
 
     subject = "Alltoez draft events | {}".format(today.strftime("%A, %d. %B %Y"))
     body = "New unprocessed events on {} for date {}\n{} through SFKids\n{} through Redtri".format(
@@ -61,7 +68,7 @@ def scrape_events_look_ahead():
     msg = MIMEText(body)
     msg['Subject'] = subject
     msg['From'] = "noreply@sandboxe9f734d40d854192ac1344226e7b5125.mailgun.org"
-    msg['To'] = "devangmundhra@gmail.com"
+    msg['To'] = "devangmundhra@gmail.com, ruchikadamani90@gmail.com"
 
     s = smtplib.SMTP('smtp.mailgun.org', 587)
 
