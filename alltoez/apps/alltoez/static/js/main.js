@@ -5,7 +5,7 @@ function resizeHeader() {
 }
 
 FB.init({
-    appId : '664097797036046', status : true, cookie : true, oauth: true
+    appId : '436853689787509', status : true, cookie : true, oauth: true
 });
 
 function sendReqeustViaMultiFriendSelector() {

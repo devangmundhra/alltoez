@@ -1,6 +1,6 @@
 from alltoez.configs.common.settings import *
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 PROJECT_DOMAIN = "http://alltoez.com"
 
@@ -14,8 +14,8 @@ DATABASES = {
     }
 }
 
-ADMINS = (('Raw Jam Dev', 'dev@rawjam.co.uk')),
-MANAGERS = ('Raw Jam Dev', 'dev@rawjam.co.uk'),
+ADMINS = (('Devang', 'devangmundhra@gmail.com')),
+MANAGERS = ('Devang', 'devangmundhra@gmail.com'),
 
 ALLOWED_HOSTS = [
     '.alltoez.com',
