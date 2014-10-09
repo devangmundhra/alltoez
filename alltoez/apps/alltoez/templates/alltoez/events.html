@@ -61,7 +61,7 @@
 	<div class="strip white">
         <div class="container events-list">
             <div class="row">
-                {% paginate events_list %}
+                {% paginate 9 events_list %}
                 {% for event in events_list %}
                 <div class="col-xs-12 col-sm-4">
                     <div class="event-item">

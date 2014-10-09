@@ -2,13 +2,13 @@
 {% load common_tags %}
 
 <!--{% block title %}Sign Up - Step 2{% endblock %}-->
-{% block page_title %}Sign Up - Step 2{% endblock %}
+{% block page_title %}Almost there...{% endblock %}
 
 {% block content %}
 <div class="row">
-    <div class="col-xs-12 col-sm-6 col-sm-offset-4">
+    <div class="col-xs-12 col-sm-6 col-sm-offset-3">
 
-        <div class="page-header">
+        <div class="page-header step2-help-text">
             <!--<h1>Editing Your Profile</h1>-->
         </div>
         <p class="lead">To update your profile complete the form below and click the 'Save' button.</p>
@@ -20,7 +20,7 @@
                 {% render_form form %}
             {% endwith %}
             <div class="div_add_children">
-                <p class="lead">Add children:</p>
+                <p class="lead">Add your children detail:</p>
                 <ul>
                     <li>
                         <input type="number" class="form-control child-age" name="child_age" placeholder="Age" min="0">

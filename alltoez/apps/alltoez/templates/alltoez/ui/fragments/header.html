@@ -20,18 +20,19 @@
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
+                    <li><a href="" class="invite">Invite Friends</a></li>
 					{% if user.is_authenticated %}
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">{% if user.profile.profile_image %}<img src="{{ MEDIA_URL }}{{ user.profile.profile_image }}" class="img-circle" width="30"> {% endif %}{{user.username|truncatechars:'30'}} <b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<li><a href="{% url 'edit_profile' %}"><i class="icon-user"></i>  Edit Profile</a></li>
-								<li><a href="{% url 'account_change_password' %}"><i class="icon-user"></i>  Change Password</a></li>
-								<li class="divider"></li>
-								<li><a href="{% url 'account_logout' %}"><i class="icon-remove"></i>  Logout</a></li>
+							<ul class="dropdown-menu" role="menu">
+								<li role="presentation"><a href="{% url 'edit_profile' %}" role="menuitem"><i class="icon-user"></i>  Edit Profile</a></li>
+								<li role="presentation"><a href="{% url 'account_change_password' %}" role="menuitem"><i class="icon-user"></i>  Change Password</a></li>
+								<li role="presentation" class="divider"></li>
+								<li role="presentation"><a href="{% url 'account_logout' %}" role="menuitem"><i class="icon-remove"></i>  Logout</a></li>
 							</ul>
 						</li>
 					{% else %}
-						<li><a href="{% url 'account_login' %}">Login</a></li>
+                    <li><a href="{% url 'account_login' %}">Login</a></li>
 					{% endif %}
 				</ul>
 			</div>
@@ -63,8 +64,8 @@
 					</ul>
 				{% else %}
 					<ul class="nav pull-right">
-						<li><a href="{% url 'account_login' %}">Login</a></li>
-					</ul>
+                        <li><a href="{% url 'account_login' %}">Login</a></li>
+                    </ul>
 				{% endif %}
 			</div>
 		</div>
@@ -83,3 +84,4 @@
 {% endif %}
 
 {% endcomment %}
+

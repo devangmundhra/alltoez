@@ -4,13 +4,13 @@
 {% load i18n common_tags %}
 
 {% block head_title %}{% trans "Signup" %}{% endblock %}
-
+{% block page_title %}{% trans "Sign Up" %}{% endblock %}
 {% block content %}
 
 <div class="row">
     <div class="col-xs-12 col-sm-6 col-sm-offset-3">
         <div class="socialaccount-ballot">
-            <h1>{% trans "Sign Up" %}</h1>
+            <!--<h1>{% trans "Sign Up" %}</h1>-->
 
             {% if socialaccount.providers  %}
 
