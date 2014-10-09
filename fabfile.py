@@ -27,9 +27,9 @@ def staging():
     Work on staging environment
     """
     env.settings = 'staging'
-    env.user = 'rawjam'
-    env.hosts = ['staging.rawjam.co.uk']
-    env.path = '/home/rawjam/sites/%(project_name)s' % env
+    env.user = 'alltoez'
+    env.hosts = ['staging.alltoez.co.uk']
+    env.path = '/home/alltoez/sites/%(project_name)s' % env
     env.env_path = '%(path)s/env' % env
     env.repo_path = '%(path)s/repository' % env
     env.site_packages_path = '%(env_path)s/lib/python2.7/site-packages' % env
@@ -124,9 +124,6 @@ def checkout_latest():
     run('cd %(repo_path)s; git pull origin %(branch)s' % env)
     run('cd %(repo_path)s; git submodule init' % env)
     run('cd %(repo_path)s; git submodule update' % env)
-
-    #run('cd %(repo_path)s/rawjam; git pull origin %(branch)s' % env)
-    #run('cd %(repo_path)s/allauth; git pull origin %(branch)s' % env)
 
 def install_requirements():
     """

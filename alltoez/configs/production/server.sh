@@ -11,7 +11,6 @@ GROUP=www-data
 
 cd /home/django/sites/alltoez/repository
 source ../env/bin/activate
-export PYTHONPATH=$PYTHONPATH:/home/django/sites/alltoez/repository/rawjam
 export PYTHONPATH=$PYTHONPATH:/home/django/sites/alltoez/repository/alltoez
 test -d $LOGDIR || mkdir -p $LOGDIR
 exec gunicorn_django -w $NUM_WORKERS \

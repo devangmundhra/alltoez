@@ -2,7 +2,7 @@ from alltoez.configs.common.settings import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-PROJECT_DOMAIN = "http://alltoez.rawjam.co.uk"
+PROJECT_DOMAIN = "http://alltoez.alltoez.co.uk"
 
 # Database
 DATABASES = {
@@ -15,7 +15,7 @@ DATABASES = {
 }
 
 # Project settings and active names
-PROJECT_SITE_DOMAIN = 'alltoez.rawjam.co.uk'
+PROJECT_SITE_DOMAIN = 'alltoez.alltoez.co.uk'
 GOOGLE_MAPS_API_KEY = "AIzaSyBg7rZjToQyi9izk13QfLegTueVEuWxfa0"
 
 # Caching
@@ -26,7 +26,7 @@ INTERNAL_IPS = ('0.0.0.0')
 
 # Email addresses
 MANAGERS = (
-    ('Benjamin Dell', 'ben@rawjam.co.uk'),
+    ('Benjamin Dell', 'ben@alltoez.co.uk'),
 )
 
 # logging

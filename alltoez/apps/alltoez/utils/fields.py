@@ -670,9 +670,3 @@ class PositionField(models.IntegerField):
         %%(position_field)s = (%%(position_field)s %(plus_or_minus)s 1)""" % {
             'plus_or_minus': plus_or_minus
         }
-
-# SOUTH INTROSPECTION RULES
-add_introspection_rules([], ["^rawjam\.core\.utils\.fields\.MultiSelectField"])
-add_introspection_rules([], ["^rawjam\.core\.utils\.fields\.PositionField"])
-add_introspection_rules([], ["^filebrowser\.fields\.FileBrowseField"])
-add_introspection_rules([], ["^rawjam\.core\.utils\.fields\.CountryField"])
