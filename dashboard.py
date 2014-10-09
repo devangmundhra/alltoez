@@ -17,10 +17,10 @@ class CustomIndexDashboard(Dashboard):
     """
     Custom index dashboard for www.
     """
-    
+
     def init_with_context(self, context):
         site_name = get_admin_site_name(context)
-        
+
         # append an app list module for "Applications"
         self.children.append(modules.Group(
             _('alltoez'),
@@ -34,14 +34,7 @@ class CustomIndexDashboard(Dashboard):
                 ),
             ]
         ))
-        
-        self.children.append(modules.ModelList(
-            _('Billing'),
-            collapsible=True,
-            column=1,
-            models=('rawjam.contrib.billing.models.*',),
-        ))
-        
+
         self.children.append(modules.Group(
             _('CMS & Site Content'),
             column=1,
@@ -59,7 +52,7 @@ class CustomIndexDashboard(Dashboard):
                 ),
             ]
         ))
-        
+
         self.children.append(modules.AppList(
             _('Social Signups and Authentication'),
             collapsible=True,
@@ -67,7 +60,7 @@ class CustomIndexDashboard(Dashboard):
             css_classes=('grp-closed',),
             models=('allauth.*','emailconfirmation.*',),
         ))
-        
+
         self.children.append(modules.AppList(
             _('Site Administration'),
             collapsible=True,
@@ -75,7 +68,7 @@ class CustomIndexDashboard(Dashboard):
             css_classes=('grp-closed',),
             models=('django.contrib.*',),
         ))
-        
+
         # append another link list module for "support".
         self.children.append(modules.LinkList(
             _('Media Management'),
@@ -88,38 +81,7 @@ class CustomIndexDashboard(Dashboard):
                 },
             ]
         ))
-        
-        # append another link list module for "support".
-        self.children.append(modules.LinkList(
-            _('Getting In Touch With Raw Jam'),
-            column=2,
-            children=[
-                {
-                    'title': _('Technical Support'),
-                    'url': 'mailto:support@rawjam.co.uk',
-                    'external': True,
-                },
-                {
-                    'title': _('Sales'),
-                    'url': 'mailto:sales@rawjam.co.uk',
-                    'external': True,
-                },
-                {
-                    'title': _('View our up-to-date portfolio'),
-                    'url': 'http://www.rawjam.co.uk/our-work/',
-                    'external': True,
-                },
-            ]
-        ))
-        
-        # append a feed module
-        self.children.append(modules.Feed(
-            _('Latest Raw Jam News'),
-            column=2,
-            feed_url='http://www.rawjam.co.uk/feeds/news/',
-            limit=5
-        ))
-        
+
         # append a recent actions module
         self.children.append(modules.RecentActions(
             _('Recent Actions'),
@@ -127,5 +89,3 @@ class CustomIndexDashboard(Dashboard):
             collapsible=False,
             column=3,
         ))
-
-

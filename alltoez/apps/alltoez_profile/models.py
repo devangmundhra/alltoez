@@ -42,6 +42,16 @@ class UserProfile(BaseModel):
     def get_absolute_url(self):
         return reverse('profile', args=[self.user.username])
 
+    def profile_complete(self):
+        # Returns True if the profile is deemed complete
+        print "------"
+        print self.zip_code
+        print "-------"
+        if self.gender == None or self.zip_code == None or self.zip_code == "":
+            return False
+        else:
+            return True
+
     @property
     def username(self):
         return self.user.username

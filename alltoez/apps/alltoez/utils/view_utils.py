@@ -15,9 +15,6 @@ from django.utils.functional import Promise
 from apps.alltoez.utils.decorators import render_to
 import json
 
-
-#import simplejson # commented out because it now conflicts with rawjam.contrib.wadofstuff.django.serializers
-
 """
     View decorators and utils to assist in the view architecture we have in use here. You shouldn't need to amend anything here.
 """

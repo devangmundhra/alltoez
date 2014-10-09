@@ -14,8 +14,8 @@ DATABASES = {
     }
 }
 
-ADMINS = (('Raw Jam Dev', 'dev@rawjam.co.uk')),
-MANAGERS = ('Raw Jam Dev', 'dev@rawjam.co.uk'),
+ADMINS = (('Alltoez', 'devangmundhra@gmail.com')),
+MANAGERS = ('Alltoez', 'devangmundhra@gmail.com'),
 
 ALLOWED_HOSTS = [
     '.alltoez.com',

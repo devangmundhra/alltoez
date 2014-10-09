@@ -19,8 +19,8 @@ MEDIA_ROOT = os.path.join(SITE_ROOT, "media")
 STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 
-ADMINS = (('Raw Jam Dev', 'dev@rawjam.co.uk')),
-MANAGERS = ('Raw Jam Dev', 'dev@rawjam.co.uk'),
+ADMINS = (('Alltoez', 'devangmundhra@gmail.com')),
+MANAGERS = ('Alltoez', 'devangmundhra@gmail.com'),
 
 # Local time
 TIME_ZONE = "UTC"
@@ -69,6 +69,7 @@ MIDDLEWARE_CLASSES = [
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
 	'pipeline.middleware.MinifyHTMLMiddleware',
+	'apps.alltoez.middleware.RedirectIfIncompleteProfile'
 ]
 TEMPLATE_DIRS = (
 	os.path.join(SITE_ROOT, 'templates'),
