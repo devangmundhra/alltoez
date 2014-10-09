@@ -4,6 +4,22 @@ function resizeHeader() {
 	$("body.home h1").css('margin-top', ($("#above-the-fold").height()/2)-140);
 }
 
+FB.init({
+    appId : '664097797036046', status : true, cookie : true, oauth: true
+});
+
+function sendReqeustViaMultiFriendSelector() {
+        FB.ui({method: 'apprequests', message: 'Hey! Check out Alltoez.com' }, requestCallback);
+}
+
+function requestCallback(request) {
+    
+}
+
+stLight.options({
+		publisher:'30d160e5-ade8-4bce-9178-16fb2e401fcf',
+	});
+
 $(document).ready(function() {
 	resizeHeader();
 
@@ -27,4 +43,15 @@ $(document).ready(function() {
 //                $(".events-list").animate({opacity: 1});
 //            });
     });
+
+    $('.invite').on('click', function(e) {
+        e.preventDefault();
+        sendReqeustViaMultiFriendSelector();
+        return false;
+    });
+
+    $('.share-buttom').on('click', function(e) {
+        e.preventDefault();
+    });
+
 });

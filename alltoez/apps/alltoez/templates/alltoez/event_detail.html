@@ -6,7 +6,7 @@
 {% block body_class %}{% endblock %}
 
 {% block content %}
-    <div class="row">
+<div class="row" xmlns="http://www.w3.org/1999/html">
         <div class="col-xs-12 col-md-7">
             <div class="left-side">
                 <div class="event-title">
@@ -31,7 +31,7 @@
                 <div class="social-actions">
                     <a href="#">Bookmark it</a>
                     <a href="#">Done It</a>
-                    <a href="#">Share</a>
+                    <a href="#" class="st_sharethis_custom share-buttom" st_url="{{ request.get_full_path }}" st_title="{{ object.title }}" displayText="Share">Share</a>
                 </div>
                 <div class="event-location">
                     <div class="event-map">

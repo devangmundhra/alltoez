@@ -1,4 +1,5 @@
 from PIL.XVThumbImagePlugin import r
+from allauth.account import views
 from django.conf.urls import patterns, include, url
 from django.contrib.auth.decorators import login_required, permission_required
 from django.conf import settings
@@ -8,6 +9,7 @@ from forms import UserProfileForm
 from views import UserProfileUpdate, AlltoezSignupView, AlltoezSignupStep2View
 
 urlpatterns = patterns('',
+    url(r"^password/change/$", views.password_change, name="account_change_password"),
 	url(r'^profile/edit/$', UserProfileUpdate.as_view(), {}, name="edit_profile"),
     url(r'^signup/$', AlltoezSignupView.as_view(), {}, name="alltoez_account_signup"),
     #url(r'^signup/step-2/$', UserProfileUpdate.as_view(), name="register_children"),
