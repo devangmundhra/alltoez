@@ -139,7 +139,7 @@ DATABASES = {
 ROOT_URLCONF = 'alltoez.configs.common.urls'
 AUTH_PROFILE_MODULE = 'alltoez_profile.UserProfile'
 
-DEFAULT_FROM_EMAIL = 'server@alltoez.com'
+DEFAULT_FROM_EMAIL = 'postmaster@alltoez.com'
 EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

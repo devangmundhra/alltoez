@@ -28,7 +28,7 @@ def staging():
     """
     env.settings = 'staging'
     env.user = 'alltoez'
-    env.hosts = ['staging.alltoez.co.uk']
+    env.hosts = ['staging.alltoez.com']
     env.path = '/home/alltoez/sites/%(project_name)s' % env
     env.env_path = '%(path)s/env' % env
     env.repo_path = '%(path)s/repository' % env

@@ -36,9 +36,11 @@ class EventAdminForm(forms.ModelForm):
             cur_start_time = self.cleaned_data['start_time']
             cron = croniter(cur_cron_format, datetime.combine(cur_start_date, cur_start_time))
             next_date = cron.get_next(datetime)
-            if next_date.date() == cur_start_date:
+            cron = croniter(cur_cron_format, next_date)
+            next_next_date = cron.get_next(datetime)
+            if next_date.date() == next_next_date.date():
                 raise forms.ValidationError("Cron format is probably incorrect. "
-                "Next occurance of event seems to be on the same day", code="incorrect")
+                "Next occurance of events seems to be on the same day", code="incorrect")
 
         return self.cleaned_data
 
@@ -51,7 +53,7 @@ class EventInline(admin.StackedInline):
     model = Event
     exclude = ('slug',)
     max_num = 1
-    extra = 0
+    extra = 1
     form = EventAdminForm
 
 
