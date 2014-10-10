@@ -42,6 +42,7 @@ class EventAdminForm(forms.ModelForm):
 
         return self.cleaned_data
 
+
 class EventInline(admin.StackedInline):
     """
     Inline model form to edit event information
@@ -50,7 +51,7 @@ class EventInline(admin.StackedInline):
     model = Event
     exclude = ('slug',)
     max_num = 1
-    extra = 1
+    extra = 0
     form = EventAdminForm
 
 
@@ -61,6 +62,7 @@ class DraftEventAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(DraftEventAdminForm, self).__init__(*args, **kwargs)
         self.fields['raw'].widget = SplitJSONWidget()
+
 
 class DraftEventAdmin(admin.ModelAdmin):
     """
@@ -87,9 +89,11 @@ class DraftEventAdmin(admin.ModelAdmin):
 
 admin.site.register(DraftEvent, DraftEventAdmin)
 
+
 class EventRecordAdmin(admin.ModelAdmin):
     pass
 admin.site.register(EventRecord, EventRecordAdmin)
+
 
 class EventAdmin(admin.ModelAdmin):
     """
@@ -103,6 +107,7 @@ class EventAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(Event, EventAdmin)
+
 
 class CategoryAdmin(admin.ModelAdmin):
 
