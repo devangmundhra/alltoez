@@ -17,4 +17,4 @@ cd /home/django/sites/alltoez/repository/alltoez/configs/production
 test -d $LOGDIR || mkdir -p $LOGDIR
 test -d $PIDDIR || mkdir -p $PIDDIR
 sudo chown $USER:$GROUP $PIDDIR
-exec /home/django/sites/alltoez/env/bin/celery beat -A celeryapp --loglevel=INFO
+exec /home/django/sites/alltoez/env/bin/celery beat -A celeryapp --loglevel=INFO --pidfile=$PIDFILE
