@@ -138,6 +138,8 @@ class Event(models.Model):
         if self.pk is None:
             # This is a new object being created
             self.next_date = self.start_date
+        if not self.end_date:
+            self.end_date = self.start_date
         super(Event, self).save(*args, **kwargs)
 
     def __unicode__(self):

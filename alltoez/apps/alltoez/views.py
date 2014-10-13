@@ -55,7 +55,7 @@ class EventRecords(ListView):
         self.category_slug = kwargs.get('slug', None)
 
         self.category_list = Category.objects.filter(parent_category__isnull=False)
-        self.event_records_list = EventRecord.objects.all().order_by('date')
+        self.event_records_list = EventRecord.objects.all().filter(date__gt=timezone.now().date()).order_by('date')
         if self.category_slug:
             self.event_records_list = self.event_records_list.filter(event__category__slug=self.category_slug)
             try:
