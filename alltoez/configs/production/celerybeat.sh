@@ -3,14 +3,18 @@ set -e
 LOGFILE=/home/django/logs/beat.log
 ERRORFILE=/home/django/logs/beat.log
 LOGDIR=$(dirname $LOGFILE)
+PIDFILE=/home/celery/pidfile
+PIDDIR=$(dirname $PIDFILE)
 
 #we don't want to run this as root..
-USER=www-data
-GROUP=www-data
+USER=celery
+GROUP=celery
 
 cd /home/django/sites/alltoez/repository
 source ../env/bin/activate
 export PYTHONPATH=$PYTHONPATH:/home/django/sites/alltoez/repository/alltoez
 cd /home/django/sites/alltoez/repository/alltoez/configs/production
 test -d $LOGDIR || mkdir -p $LOGDIR
+test -d $PIDDIR || mkdir -p $PIDDIR
+sudo chown $USER:$GROUP $PIDDIR
 exec /home/django/sites/alltoez/env/bin/celery beat -A celeryapp --loglevel=INFO

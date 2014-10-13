@@ -4,10 +4,6 @@ LOGFILE=/home/django/logs/worker.log
 ERRORFILE=/home/django/logs/worker.log
 LOGDIR=$(dirname $LOGFILE)
 
-#we don't want to run this as root..
-USER=www-data
-GROUP=www-data
-
 cd /home/django/sites/alltoez/repository
 source ../env/bin/activate
 export PYTHONPATH=$PYTHONPATH:/home/django/sites/alltoez/repository/alltoez

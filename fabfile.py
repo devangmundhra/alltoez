@@ -102,6 +102,8 @@ def setup_directories():
     run('mkdir -p %(env_path)s' % env)
     run('mkdir -p /home/%(user)s/logs/' % env)
     sudo('chown -R %(user)s:%(user)s ~/logs' % env)
+    run('mkdir -p /home/celery/' % env)
+    sudo('chown -R celery:celery /home/celery' % env)
 
 def setup_virtualenv():
     """
