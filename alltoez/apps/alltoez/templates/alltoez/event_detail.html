@@ -100,11 +100,11 @@
         function init_map() {
             var myOptions = {
                 zoom:14,
-                center:new google.maps.LatLng(40.7127837,-74.00594130000002),
+                center:new google.maps.LatLng({{ object.location }}),
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
             map = new google.maps.Map(document.getElementById("gmap_canvas"), myOptions);
-            marker = new google.maps.Marker({map: map,position: new google.maps.LatLng(40.7127837, -74.00594130000002)});
+            marker = new google.maps.Marker({map: map,position: new google.maps.LatLng({{ object.location }})});
             infowindow = new google.maps.InfoWindow({content:"<b>{{ object.title }}</b><br/>{{ object.address|linebreaksbr }}" });
             google.maps.event.addListener(marker, "click", function(){infowindow.open(map,marker);});
             infowindow.open(map,marker);}google.maps.event.addDomListener(window, 'load', init_map);

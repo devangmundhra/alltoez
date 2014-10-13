@@ -44,9 +44,6 @@ class UserProfile(BaseModel):
 
     def profile_complete(self):
         # Returns True if the profile is deemed complete
-        print "------"
-        print self.zip_code
-        print "-------"
         if self.gender == None or self.zip_code == None or self.zip_code == "":
             return False
         else:
