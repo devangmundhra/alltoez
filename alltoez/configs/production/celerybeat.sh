@@ -17,8 +17,8 @@ source ../env/bin/activate
 export PYTHONPATH=$PYTHONPATH:/home/django/sites/alltoez/repository/alltoez
 cd /home/django/sites/alltoez/repository/alltoez/configs/production
 test -d $LOGDIR || mkdir -p $LOGDIR
-test -d $PIDDIR || mkdir -p $PIDDIR
-sudo chown $USER:$GROUP $PIDDIR
-test -d SCHEDDIR || mkdir -p SCHEDDIR
-sudo chown $USER:$GROUP SCHEDDIR
-exec /home/django/sites/alltoez/env/bin/celery beat -A celeryapp --loglevel=INFO --pidfile=$PIDFILE --schedule=$SCHEDFILE
+#test -d $PIDDIR || mkdir -p $PIDDIR
+#sudo chown $USER:$GROUP $PIDDIR
+#test -d SCHEDDIR || mkdir -p SCHEDDIR
+#sudo chown $USER:$GROUP SCHEDDIR
+exec /home/django/sites/alltoez/env/bin/celery beat -A celeryapp --loglevel=INFO #--pidfile=$PIDFILE --schedule=$SCHEDFILE
