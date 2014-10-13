@@ -189,7 +189,7 @@ def deploy():
 
     sudo('supervisorctl restart %(project_name)s' % env)
     sudo('supervisorctl restart celery' % env)
-    sudo('supervisorctl restart celerybeat' % env)
+    #sudo('supervisorctl restart celerybeat' % env)
 
 def reload_webserver():
     """

@@ -9,8 +9,8 @@ SCHEDFILE=/home/celery/celerybeat_sched
 SCHEDDIR=$(dirname $SCHEDFILE)
 
 #we don't want to run this as root..
-USER=celery
-GROUP=celery
+#USER=celery
+#GROUP=celery
 
 cd /home/django/sites/alltoez/repository
 source ../env/bin/activate
