@@ -14,14 +14,9 @@ apps_path = os.path.join(
     os.path.realpath(os.path.dirname(__file__)), '../../'
 )
 
-allauth_path = os.path.join(
-    os.path.realpath(os.path.dirname(__file__)), '../../../allauth'
-)
-
 # we add them first to avoid any collisions
 sys.path.insert(0, python_path)
 sys.path.insert(0, apps_path)
-sys.path.insert(0, allauth_path)
 
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
