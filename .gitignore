@@ -3,6 +3,7 @@
 alltoez/static/*
 .DS_Store
 alltoez/media/*
+node_modules/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

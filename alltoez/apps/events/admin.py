@@ -15,7 +15,7 @@ class EventAdminForm(forms.ModelForm):
     """
     def __init__(self, *args, **kwargs):
         super(EventAdminForm, self).__init__(*args, **kwargs)
-        self.fields['image'].widget = SplitJSONWidget()
+        # self.fields['image'].widget = SplitJSONWidget()
 
     def clean_cron_recurrence_format(self):
         cur_cron_format = self.cleaned_data.get('cron_recurrence_format', None)
@@ -63,7 +63,7 @@ class DraftEventAdminForm(forms.ModelForm):
     """
     def __init__(self, *args, **kwargs):
         super(DraftEventAdminForm, self).__init__(*args, **kwargs)
-        self.fields['raw'].widget = SplitJSONWidget()
+        # self.fields['raw'].widget = SplitJSONWidget()
 
 
 class DraftEventAdmin(admin.ModelAdmin):

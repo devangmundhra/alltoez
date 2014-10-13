@@ -184,6 +184,8 @@ def deploy():
         run('python %(repo_path)s/%(project_name)s/configs/%(settings)s/manage.py migrate;' % env)
 
     sudo('supervisorctl restart %(project_name)s' % env)
+    sudo('supervisorctl restart celery' % env)
+    sudo('supervisorctl restart celerybeat' % env)
 
 def reload_webserver():
     """
