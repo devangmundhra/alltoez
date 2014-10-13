@@ -178,7 +178,7 @@ PIPELINE_CSS = {
 	'theme': {
 		'source_filenames': (
 			'css/chosen.css',
-			'less/theme.less' if not DEBUG else ''
+			# 'less/theme.less' if not DEBUG else ''
 		),
 		'output_filename': 'css/theme.min.css',
 		'variant': 'datauri'

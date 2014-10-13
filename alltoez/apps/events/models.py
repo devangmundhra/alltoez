@@ -150,7 +150,7 @@ class EventRecord(models.Model):
     This class is the actual individual events shown to the user.
     """
     event = models.ForeignKey(Event)
-    date = models.DateTimeField(db_index=True)
+    date = models.DateField(db_index=True)
 
     class Meta:
         unique_together = ('event', 'date')

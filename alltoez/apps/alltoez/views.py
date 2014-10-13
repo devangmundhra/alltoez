@@ -1,9 +1,9 @@
-from alltoez.apps.events.models import Category
+from datetime import datetime, date
+
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-from django.http import Http404, HttpResponseBadRequest
 from django.template.defaulttags import regroup
-from django.http import Http404, HttpResponseServerError
+from django.http import Http404, HttpResponseServerError, HttpResponseBadRequest
 from django.template import loader, RequestContext
 from django.conf import settings
 from django.views.generic import TemplateView, FormView
@@ -14,34 +14,38 @@ from django.views.decorators.csrf import csrf_exempt, requires_csrf_token
 from django.utils import timezone
 
 from apps.alltoez.utils.view_utils import MessageMixin
-from apps.events.models import Event
+from apps.events.models import Event, Category, EventRecord
 
 @requires_csrf_token
 def server_error(request, template_name='500.html'):
-	"""
-	500 error handler.
+    """
+    500 error handler.
 
-	Templates: `500.html`
-	Context: None
-	"""
-	t = loader.get_template(template_name) # You need to create a 500.html template.
-	return HttpResponseServerError(t.render(RequestContext(request, {'request_path': request.path, 'STATIC_URL':settings.STATIC_URL, 'MEDIA_URL':settings.MEDIA_URL})))
+    :param request:
+    :param template_name:
+    :return:
+    """
+    t = loader.get_template(template_name) # TODO: Create a 500.html template.
+    return HttpResponseServerError(t.render(RequestContext(request, {'request_path': request.path,
+                                                                     'STATIC_URL': settings.STATIC_URL,
+                                                                     'MEDIA_URL': settings.MEDIA_URL})))
 
 """
 Base alltoez views
 """
 
+
 class Home(TemplateView):
-	template_name = "alltoez/home.html"
+    template_name = "alltoez/home.html"
 
-	def get_context_data(self, **kwargs):
-		return {}
+    def get_context_data(self, **kwargs):
+        return {}
 
 
-class Events(ListView):
+class EventRecords(ListView):
     template_name = "alltoez/events.html"
-    model = Event
-    events_list = None
+    model = EventRecord
+    event_records_list = None
     category = None
     category_list = None
     category_slug = None
@@ -51,25 +55,23 @@ class Events(ListView):
         self.category_slug = kwargs.get('slug', None)
 
         self.category_list = Category.objects.filter(parent_category__isnull=False)
-        self.events_list = Event.objects.all().order_by('title')
-        if (self.category_slug):
-            self.events_list = self.events_list.filter(category__slug=self.category_slug)
+        self.event_records_list = EventRecord.objects.all().order_by('date')
+        if self.category_slug:
+            self.event_records_list = self.event_records_list.filter(event__category__slug=self.category_slug)
             try:
                 self.category = Category.objects.get(slug=self.category_slug)
             except Category.DoesNotExist:
                 pass
-        if (sort):
-            self.events_list = self.events_list.order_by(sort)
-        return super(Events, self).get(self, request, *args, **kwargs)
+        if sort:
+            self.event_records_list = self.event_records_list.order_by(sort)
+        return super(EventRecords, self).get(self, request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = super(Events, self).get_context_data(**kwargs)
-        context = {
-            'now': timezone.now(),
-            'events_list': self.events_list,
-            'category_list': self.category_list,
-            'category': self.category
-        }
+        context = super(EventRecords, self).get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        context['event_records_list'] = self.event_records_list
+        context['category_list'] = self.category_list
+        context['category'] = self.category
         return context
 
 
@@ -105,10 +107,34 @@ class Events(ListView):
 class EventDetailView(DetailView):
     model = Event
     template_name = 'alltoez/event_detail.html'
+    event_record = None
 
+    def get(self, request, *args, **kwargs):
+        datestr = self.request.GET.get('date')
+        event = self.get_object()
+        if datestr:
+            ev_date = datetime.strptime(datestr, "%b%d %y").date()
+            try:
+                self.event_record = EventRecord.objects.get(event=event, date=ev_date)
+            except EventRecord.DoesNotExist:
+                self.event_record = None
+
+        if not self.event_record:
+            # Get the first event record for this object
+            self.event_record = EventRecord.objects.filter(event=event, date__gt=datetime.now().date()).first()
+
+        if not self.event_record:
+            raise Http404(u"We don't have this event scheduled in the near future. Please check back later.")
+
+        return super(EventDetailView, self).get(self, request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(EventDetailView, self).get_context_data(**kwargs)
+        context['event_record'] = self.event_record
+        return context
 
 class Contact(TemplateView):
-	template_name = "alltoez/contact.html"
+    template_name = "alltoez/contact.html"
 
-	def get_context_data(self, **kwargs):
-		return {}
+    def get_context_data(self, **kwargs):
+        return {}

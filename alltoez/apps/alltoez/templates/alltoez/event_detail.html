@@ -56,7 +56,7 @@
                 <div class="open-hours">
                     <dl class="dl-horizontal">
                         <dt>Date:</dt>
-                        <dd>{{ object.start_date|date }}</dd>
+                        <dd>{{ event_record.date|date }}</dd>
                         <dt>Start time:</dt>
                         <dd>{{ object.start_time }}</dd>
                         <dt>End time:</dt>
@@ -78,8 +78,13 @@
                 </div>
                 <div class="cost">
                     <dl class="dl-horizontal">
-                        <dt>Cost:</dt>
-                        <dd>${{ object.cost }}</dd>
+                        {% if object.cost == 0 %}
+                            <dt>Cost:</dt>
+                            <dd>Free</dd>
+                        {% else %}
+                            <dt>Cost:</dt>
+                            <dd>${{ object.cost }}</dd>
+                        {% endif %}
                     </dl>
                 </div>
             </div>
