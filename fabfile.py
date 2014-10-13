@@ -141,6 +141,8 @@ def install_supervisor_conf():
     sudo('rm -fr /etc/supervisor/conf.d/%(project_name)s.conf' % env)
     sudo('ln -s %(repo_path)s/%(project_name)s/configs/%(settings)s/supervisor.conf /etc/supervisor/conf.d/%(project_name)s.conf' % env)
     sudo('chmod a+x %(repo_path)s/%(project_name)s/configs/%(settings)s/server.sh' % env)
+    sudo('chmod a+x %(repo_path)s/%(project_name)s/configs/%(settings)s/celery.sh' % env)
+    sudo('chmod a+x %(repo_path)s/%(project_name)s/configs/%(settings)s/celerybeat.sh' % env)
     sudo('sudo supervisorctl reread')
     sudo('sudo supervisorctl update')
 
