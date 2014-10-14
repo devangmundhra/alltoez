@@ -63,6 +63,7 @@ class EventRecords(ListView):
             except Category.DoesNotExist:
                 pass
         if sort:
+            sort = 'event__'+sort
             self.event_records_list = self.event_records_list.order_by(sort)
         return super(EventRecords, self).get(self, request, *args, **kwargs)
 
