@@ -257,8 +257,12 @@ CELERY_SEND_TASK_ERROR_EMAILS = False
 CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
 
 CELERYBEAT_SCHEDULE = {
-    'parse-events-every-day': {
-        'task': 'events.tasks.scrape_events_look_ahead',
+    'parse-events-everyday': {
+        'task': 'apps.events.tasks.scrape_events_look_ahead',
+        'schedule': timedelta(days=1),
+    },
+    'create-event-records-everyday': {
+        'task': 'apps.events.tasks.create_event_records',
         'schedule': timedelta(days=1),
     },
 }
