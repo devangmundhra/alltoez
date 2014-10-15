@@ -32,3 +32,5 @@ PIPELINE_CSS = {
         'variant': 'datauri'
     },
 }
+
+GOOGLE_ANALYTICS_CODE = "UA-55773544-1"
