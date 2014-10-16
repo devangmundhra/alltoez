@@ -14,8 +14,8 @@ DATABASES = {
     }
 }
 
-ADMINS = (('Devang', 'devangmundhra@gmail.com')),
-MANAGERS = ('Devang', 'devangmundhra@gmail.com'),
+ADMINS = (('Devang Mundhra', 'devangmundhra@gmail.com')),
+MANAGERS = ('Devang Mundhra', 'devangmundhra@gmail.com'),
 
 ALLOWED_HOSTS = [
     '.alltoez.com',
@@ -34,3 +34,17 @@ PIPELINE_CSS = {
 }
 
 GOOGLE_ANALYTICS_CODE = "UA-55773544-1"
+
+# logging
+import os
+import logging.config
+LOG_FILENAME = os.path.join(os.path.dirname(__file__), 'logging.conf')
+logging.config.fileConfig(LOG_FILENAME)
+
+#email config
+DEFAULT_FROM_EMAIL = 'postmaster@alltoez.com'
+EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'postmaster@alltoez.com'
+EMAIL_HOST_PASSWORD = 'f23194b06f816adc5b5e6f235ed33ff1'

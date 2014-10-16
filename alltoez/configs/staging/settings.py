@@ -26,7 +26,7 @@ INTERNAL_IPS = ('0.0.0.0')
 
 # Email addresses
 MANAGERS = (
-    ('Benjamin Dell', 'ben@alltoez.co.uk'),
+    ('Devang Mundhra', 'devangmundhra@gmail.com'),
 )
 
 # logging
