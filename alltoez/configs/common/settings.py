@@ -25,7 +25,7 @@ MANAGERS = ('Alltoez', 'devangmundhra@gmail.com'),
 # Local time
 TIME_ZONE = "UTC"
 LANGUAGE_CODE = "en-us"
-SITE_ID = 1
+SITE_ID = 2
 USE_I18N = False
 DATE_INPUT_FORMATS = ('%d-%m-%Y','%Y-%m-%d')
 USE_TZ = True
@@ -139,13 +139,12 @@ DATABASES = {
 ROOT_URLCONF = 'alltoez.configs.common.urls'
 AUTH_PROFILE_MODULE = 'alltoez_profile.UserProfile'
 
-DEFAULT_FROM_EMAIL = 'postmaster@alltoez.com'
+DEFAULT_FROM_EMAIL = 'postmaster@sandboxe9f734d40d854192ac1344226e7b5125.mailgun.org'
 EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'postmaster@alltoez.com'
-EMAIL_HOST_PASSWORD = 'f23194b06f816adc5b5e6f235ed33ff1'
-
+EMAIL_HOST_USER = 'postmaster@sandboxe9f734d40d854192ac1344226e7b5125.mailgun.org'
+EMAIL_HOST_PASSWORD = '3c8af3c9310cbde4d2e43b3e66e07948'
 
 #-------------------------------------------------------------------------------
 #	CACHE SETTINGS
