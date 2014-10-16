@@ -178,7 +178,7 @@ PIPELINE_CSS = {
 	'theme': {
 		'source_filenames': (
 			'css/chosen.css',
-			# 'less/theme.less' if not DEBUG else ''
+			#'less/theme.less' if not DEBUG else '' #This line is giving error in collectstatic with DEBUG = True
 		),
 		'output_filename': 'css/theme.min.css',
 		'variant': 'datauri'
@@ -203,22 +203,23 @@ PIPELINE_JS = {
 #	ALLAUTH SETTINGS
 #-------------------------------------------------------------------------------
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/events"
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = False
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_VERIFICATION = "optional"
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_LOGOUT_ON_GET = True
 SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_AVATAR_SUPPORT = False
-EMAIL_CONFIRMATION_DAYS = 99
+EMAIL_CONFIRMATION_DAYS = 5
 FACEBOOK_ENABLED = True
 TWITTER_ENABLED = True
 OPENID_ENABLED = False
 SOCIALACCOUNT_ENABLED = True
 SOCIALACCOUNT_PROVIDERS = {}
-
+ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = False
 
 #-------------------------------------------------------------------------------
 #	FILEBROWSER SETTINGS

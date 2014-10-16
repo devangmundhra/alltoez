@@ -68,14 +68,14 @@ body {
 	&.home {
 		background: url(../img/img-background.jpg) center top no-repeat;
 		background-size: 100%;
+		color: #FFFFFF;
 
 		#above-the-fold {
 			text-align: center;
-
+			background-color:rgba(255,255,255,0);
 			h1 {
-				color: #FFFFFF;
 				font-weight: 600;
-				margin-top: 300px;
+				margin-top: 60px;
 				margin-bottom: 0px;
 				font-size: 70px;
 			}
@@ -87,6 +87,25 @@ body {
 				margin-bottom: 30px;
 			}
 		}
+
+        .social-login {
+            margin-top: 3em;
+        }
+
+        .social-login-row {
+            .make-row();
+
+            > div {
+                .make-sm-column(4);
+                > a {
+                    .btn;
+                    .btn-default;
+                    .btn-lg;
+                    display: block;
+                    width: 100%;
+                }
+            }
+        }
 	}
 
 	// Event specific classes

@@ -8,7 +8,7 @@
 		<meta charset="utf-8">
 		<title>{% block title_outer %}Alltoez | {% block head_title %}{% block title %}{% endblock %}{% endblock %}{% endblock %}</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="{% block site-meta-description %}Alltoez helps parents and kids find activities they love to do.{% endblock %}" />
+		<meta name="description" content="{% block site-meta-description %}Alltoez helps parents and kids find activities they love.{% endblock %}" />
 		<meta name="author" content="">
 		<meta name="robots" content="{% if settings.DEBUG %}nofollow{% else %}index, follow{% endif %}" />
 
@@ -30,6 +30,9 @@
 		{% if settings.DEBUG %}
 		<link rel="stylesheet/less" type="text/css" href="{{STATIC_URL}}less/theme.less">
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 		{% endif %}
 
 		<!--[if IE 7]>
