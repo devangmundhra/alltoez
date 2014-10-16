@@ -42,10 +42,9 @@ LOG_FILENAME = os.path.join(os.path.dirname(__file__), 'logging.conf')
 logging.config.fileConfig(LOG_FILENAME)
 
 #email config
-DEFAULT_FROM_EMAIL = 'postmaster@alltoez.com'
+DEFAULT_FROM_EMAIL = 'Postmaster <postmaster@alltoez.com>'
 EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'postmaster@alltoez.com'
 EMAIL_HOST_PASSWORD = 'f23194b06f816adc5b5e6f235ed33ff1'
-DEFAULT_FROM_EMAIL = 'Postmaster <postmaster@alltoez.com.'
