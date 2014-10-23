@@ -17,8 +17,8 @@ function requestCallback(request) {
 }
 
 stLight.options({
-		publisher:'30d160e5-ade8-4bce-9178-16fb2e401fcf',
-	});
+    publisher:'30d160e5-ade8-4bce-9178-16fb2e401fcf',
+});
 
 $(document).ready(function() {
 	resizeHeader();

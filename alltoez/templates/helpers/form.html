@@ -33,7 +33,8 @@
 	$(document).ready(function() {
 		$('.datepicker').datepicker({dateFormat: '{{settings.JQUERY_DATEPICKER_DATE_FORMAT}}', autoclose:true});
 
-		// For standard selects
+           setTimeout(function(){
+             // For standard selects
 		$("select:not([multiple]):not(.create_options, .prevent_chosen, .dob)").chosen({
 			search_contains: true,
 			disable_search_threshold: 10,
@@ -64,6 +65,7 @@
 			search_contains: true,
 			inherit_select_classes: true
 		});
+           }, 500)
 
 		// Color Picker
 		try {
