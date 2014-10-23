@@ -12,7 +12,7 @@ from django.utils import timezone
 from django.db import IntegrityError
 
 from apps.events.models import DraftEvent, Event, EventRecord
-from apps.events.eventparsers import sfkids, redtri
+from apps.events.eventparsers import redtri
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -31,44 +31,22 @@ def scrape_events_look_ahead():
     """
     today = datetime.today()
     event_date = today + timedelta(days=EVENTS_NUM_DAYS_SCRAPE_LOOK_AHEAD)
-    sfkids_events = sfkids.get_events(EVENTS_NUM_DAYS_SCRAPE_LOOK_AHEAD)
-    sfkids_count = 0
-    for parsed_event in sfkids_events:
-        title = parsed_event.get('title', None)
-        url = parsed_event.get('orig_link', None)
-        try:
-            draft_event, created = DraftEvent.objects.get_or_create(title=title,
-                                                                    raw=json.dumps(parsed_event, ensure_ascii=True),
-                                                                    source=DraftEvent.SFKIDS, source_url=url)
-            if created:
-                sfkids_count += 1
-        except IntegrityError:
-            pass
+    body = ""
 
     redtri_events = redtri.get_events(EVENTS_NUM_DAYS_SCRAPE_LOOK_AHEAD)
-    redtri_count = 0
+    body = body + "{} RedTri Events\n".format(len(redtri_events), )
     for parsed_event in redtri_events:
         title = parsed_event.get('title', None)
         url = parsed_event.get('orig_link', None)
-        try:
-            draft_event, created = DraftEvent.objects.get_or_create(title=title,
-                                                                    raw=json.dumps(parsed_event, ensure_ascii=True),
-                                                                    source=DraftEvent.REDTRI, source_url=url)
-            if created:
-                redtri_count += 1
-        except IntegrityError:
-            pass
+        body = body + "{}\n{}\n\n".format(title.encode('ascii', 'ignore'), url.encode('ascii', 'ignore'))
 
-    subject = "Alltoez draft events | {}".format(today.strftime("%A, %d. %B %Y"))
-    body = "New unprocessed events on {} for date {}\n{} through SFKids\n{} through Redtri".format(
-        today.strftime("%A, %d. %B %Y"),
-        event_date.strftime("%A, %d. %B %Y"),
-        sfkids_count, redtri_count)
+    subject = "Alltoez Parsed Events | SF | {}".format(today.strftime("%A, %d. %B"))
+    body = "For date {}\n\n".format(event_date.strftime("%A, %d. %B %Y")) + body
 
     msg = MIMEText(body)
     msg['Subject'] = subject
     msg['From'] = "noreply@alltoez.com"
-    msg['To'] = "devangmundhra@gmail.com, ruchikadamani90@gmail.com"
+    msg['To'] = ["devangmundhra@gmail.com", "ruchikadamani90@gmail.com"]
 
     s = smtplib.SMTP('smtp.mailgun.org', 587)
 

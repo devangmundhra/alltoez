@@ -1,15 +1,13 @@
+import json, urllib
+
 from django.db import models
-from django.template.defaultfilters import slugify, truncatechars
+from django.conf import settings
 
 from jsonfield import JSONField
-from location_field.models import PlainLocationField
+from location_field.models.plain import PlainLocationField
 
-
-from apps.alltoez.utils.abstract_models import BaseModel
 from apps.alltoez.utils.model_utils import unique_slugify
 
-
-import json, urllib
 
 class Category(models.Model):
     """
@@ -99,9 +97,6 @@ class Event(models.Model):
     """
     Event class
     This class describes the details of an event.
-    The class also contains information about recurring events.
-    Recurring events implemented through cron job format
-    Another way of implementing recurring events- http://stackoverflow.com/q/5183630/712476
     """
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -112,35 +107,49 @@ class Event(models.Model):
     category = models.ManyToManyField(Category, db_index=True)
     address = models.TextField()
     location = PlainLocationField(based_fields=[address], zoom=16)
+    neighborhood = models.CharField(max_length=200, blank=True, null=True,
+                                    help_text="Neigborhood of activity. Leave blank for auto-fill")
     image = JSONField(default="{\"url\":\"\",\"source_name\":\"\",\"source_url\":\"\"}")
     min_age = models.PositiveSmallIntegerField(default=0)
     max_age = models.PositiveSmallIntegerField(default=100)
     cost = models.PositiveSmallIntegerField(default=0)
+    cost_detail = models.CharField(max_length=500, blank=True, null=True,
+                                   help_text="Enter if there is more than one cost value")
     # Currently we expect an event to occur atmost once per day (so only one start time/end time)
     start_date = models.DateField()
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-    end_date = models.DateField(blank=True, null=True)
-    next_date = models.DateField(null=True, blank=True)
-    cron_recurrence_format = models.CharField(max_length=50, null=True, blank=True,
-                                              help_text="Repeating event? Use cron format "
-                                                        "\'min hour day month day_of_week\' "
-                                                        "\nMore details: http://en.wikipedia.org/wiki/Cron")
+    end_date = models.DateField(blank=True, null=True, help_text="End date of the event, if applicable")
+    recurrence_detail = models.CharField(max_length=500, blank=True, null=True,
+                                         help_text="Enter a line about when this event is till, if it is recurring")
+    time_detail = models.CharField(max_length=500, help_text="Enter time for different days, in different rows")
     url = models.URLField(blank=True, null=True, unique=True)
     additional_info = models.TextField(blank=True, null=True)
 
     class Meta:
-        ordering = ['next_date', 'start_time']
+        ordering = ['-start_date', 'end_date']
 
     def save(self, *args, **kwargs):
+        if not self.neighborhood:
+            self.neighborhood = Event.get_location_neighborhood(self.location)
         if not self.slug:
             unique_slugify(self, self.title)
-        if self.pk is None:
-            # This is a new object being created
-            self.next_date = self.start_date
-        if not self.end_date:
-            self.end_date = self.start_date
         super(Event, self).save(*args, **kwargs)
+
+    @classmethod
+    def get_location_neighborhood(cls, latlng):
+        google_maps_api_key = getattr(settings, 'GOOGLE_MAPS_V3_APIKEY', None)
+        qt_latlng = urllib.quote_plus(latlng)
+        result_type = 'neighborhood'
+        geo = urllib.urlopen("https://maps.googleapis.com/maps/api/geocode/json?latlng={0}&key={1}&result_type={2}".format(qt_latlng,
+                             google_maps_api_key,result_type))
+        res = json.loads(geo.read())
+        if res['status'] != 'OK':
+            return None
+        # Example https://maps.googleapis.com/maps/api/geocodhttps://maps.googleapis.com/maps/api/geocode/json?latlng=37.7628848%2C-122.428514&key=AIzaSyDOtkrcR4QFGYTMdR71WkkUYsMQ735c_EU&result_type=neighborhood
+        try:
+            address = res['results'][0]['address_components'][0]['short_name']
+            return address
+        except:
+            return None
 
     def __unicode__(self):
         return unicode(self.title)

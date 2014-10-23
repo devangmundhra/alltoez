@@ -45,13 +45,12 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12 col-sm-12">
-					<span class="qty-events">{{ event_records_list|length }} events</span>
+					<span class="qty-events">{{ events_list|length }} events</span>
 					<select class="sort-events">
                         <option value="">All Events</option>
-                        <option value="start_date" {% if request.GET.sort == 'start_date' %}SELECTED{% endif %}>New on Alltoez</option>
-                        <option value="next_date" {% if request.GET.sort == 'next_date' %}SELECTED{% endif %}>Upcoming</option>
-                        <option value="min_age" {% if request.GET.sort == 'min_age' %}SELECTED{% endif %}>Min. Age</option>
+                        <option value="-start_date" {% if request.GET.sort == '-start_date' or not request.GET.sort %}SELECTED{% endif %}>New on Alltoez</option>
                         <option value="cost" {% if request.GET.sort == 'cost' %}SELECTED{% endif %}>Cost</option>
+                        <option value="end_date" {% if request.GET.sort == 'end_date' %}SELECTED{% endif %}>Ending Soon</option>
 					</select>
 				</div>
 			</div>
@@ -61,32 +60,34 @@
 	<div class="strip white">
         <div class="container events-list">
             <div class="row">
-                {% paginate 9 event_records_list %}
-                {% for event_record in event_records_list %}
+                {% paginate 9 events_list %}
+                {% for event in events_list %}
                 <div class="col-xs-12 col-sm-4">
                     <div class="event-item">
-                        <a href='{% url "event_detail" event_record.event.slug %}?date={{ event_record.date|date:"bd y" }}'>
+                        <a href='{% url "event_detail" event.slug %}'>
                             <div class="event-image">
-                                <img src="{{ event_record.event.image.url }}" width="100%">
+                                <img src="{{ event.image.url }}" width="100%">
                             </div>
                             <div class="event-info">
-                                <h4>{{ event_record.event.title|truncatechars:'62' }}</h4>
-                                <p>{{ event_record.event.address }}</p>
+                                <h4>{{ event.title|truncatechars:'62' }}</h4>
+                                <p>{{ event.address }}</p>
                             </div>
-                            <span class="event-date">{{ event_record.date|date }}</span>
+                            {% if not event.recurrence_detail %}
+                                <span class="event-date">{{ event.start_date|date }}</span>
+                            {% endif %}
                             <div class="event-age-cost">
                                 <div class="age">
-                                    {% if event_record.event.min_age == 0 %}
+                                    {% if event.min_age == 0 %}
                                         <span>Family Event</span>
                                     {% else %}
-                                        <span>Min. Age: {{ event_record.event.min_age }} </span>
+                                        <span>Min. Age: {{ event.min_age }} </span>
                                     {% endif %}
                                 </div>
                                 <div class="cost">
-                                    {% if event_record.event.cost == 0 %}
+                                    {% if event.cost == 0 %}
                                         <span>Cost: Free</span>
                                     {% else %}
-                                        <span>Cost: ${{ event_record.event.cost }}</span>
+                                        <span>Cost: ${{ event.cost }}</span>
                                     {% endif %}
                                 </div>
                             </div>
@@ -94,7 +95,7 @@
                     </div>
                     <div class="event-meta">
                         <span></span>
-                        <!--<span>Posted {{ event_record.event.created_at|timesince }} ago</span>-->
+                        <!--<span>Posted {{ event.created_at|timesince }} ago</span>-->
                     </div>
                 </div>
                 {% endfor %}

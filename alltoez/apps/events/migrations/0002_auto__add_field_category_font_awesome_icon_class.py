@@ -54,7 +54,7 @@ class Migration(SchemaMigration):
             'end_time': ('django.db.models.fields.TimeField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('jsonfield.fields.JSONField', [], {'default': '\'{"url":"","source_name":"","source_url":""}\''}),
-            'location': ('location_field.models.PlainLocationField', [], {'max_length': '63'}),
+            'location': ('location_field.models.plain.PlainLocationField', [], {'max_length': '63'}),
             'max_age': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '100'}),
             'min_age': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
             'next_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),

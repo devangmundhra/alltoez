@@ -1,11 +1,9 @@
-from django.conf.urls import url, patterns
+from django.conf.urls import url, patterns, include
 
-from views import Home, EventRecords, Contact, EventDetailView
+from views import Home, Contact
 
 urlpatterns = patterns('',
     url(r"^$", Home.as_view(),  name="home"),
-    url(r"^events/$", EventRecords.as_view(), {'slug': None}, name="events"),
-    url(r"^events/(?P<slug>[\w-]+)/$", EventRecords.as_view(), name="events"),
-    url(r"^event/(?P<slug>[\w-]+)/$", EventDetailView.as_view(), name="event_detail"),
+    url(r"^events/", include('apps.events.urls')),
     url(r"^contact/$", Contact.as_view(),  name="contact"),
 )

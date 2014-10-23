@@ -22,17 +22,17 @@
                     <img src="{{ object.image.url }}">
                 </div>
                 <div class="event-description">
-                    <p>{{ object.description}}</p>
+                    <p>{{ object.description|safe }}</p>
                 </div>
             </div>
         </div>
         <div class="col-xs-12 col-md-5">
             <div class="right-side">
-                <div class="social-actions">
-                    <a href="#">Bookmark it</a>
-                    <a href="#">Done It</a>
-                    <a href="#" class="st_sharethis_custom share-buttom" st_url="{{ request.get_full_path }}" st_title="{{ object.title }}" displayText="Share">Share</a>
-                </div>
+                <!--<div class="social-actions">-->
+                    <!--<a href="#">Bookmark it</a>-->
+                    <!--<a href="#">Done It</a>-->
+                    <!--<a href="#" class="st_sharethis_custom share-buttom" st_url="{{ request.get_full_path }}" st_title="{{ object.title }}" displayText="Share">Share</a>-->
+                <!--</div>-->
                 <div class="event-location">
                     <div class="event-map">
                         <div id="gmap_canvas" style="height:250px;width:100%;"></div>
@@ -48,19 +48,20 @@
                         <div class="site">
                             <a href="{{ object.url }}" target="_blank">Website</a>
                         </div>
-                        <div class="facebook">
-                            <a href="{{ object.url }}" target="_blank">Facebook</a>
-                        </div>
+                        <!--<div class="facebook">-->
+                            <!--<a href="{{ object.url }}" target="_blank">Facebook</a>-->
+                        <!--</div>-->
                     </div>
                 </div>
                 <div class="open-hours">
                     <dl class="dl-horizontal">
-                        <dt>Date:</dt>
-                        <dd>{{ event_record.date|date }}</dd>
-                        <dt>Start time:</dt>
-                        <dd>{{ object.start_time }}</dd>
-                        <dt>End time:</dt>
-                        <dd>{{ object.end_time }}</dd>
+                        <dt>When:</dt>
+                        {% if not event.recurrence_detail %}
+                            <span>{{ object.start_date|date }}</span>
+                        {% else %}
+                            <span>{{ object.recurrence_detail }}</span>
+                        {% endif %}
+                        <span>{{ object.time_detail|safe }}</span>
                     </dl>
                 </div>
                 <div class="age-allowed">

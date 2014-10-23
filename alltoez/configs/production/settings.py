@@ -4,6 +4,8 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 PROJECT_DOMAIN = "http://alltoez.com"
 
+SITE_ID = 2
+
 # Database
 DATABASES = {
     'default': {
@@ -40,6 +42,62 @@ import os
 import logging.config
 LOG_FILENAME = os.path.join(os.path.dirname(__file__), 'logging.conf')
 logging.config.fileConfig(LOG_FILENAME)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+        },
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
+         'console':{
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.security.DisallowedHost': {
+            'handlers': ['null'],
+            'propagate': False,
+        },
+    # Might as well log any errors anywhere else in Django
+        'django': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'apps.alltoez': {
+            'handlers': ['mail_admins', 'console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'apps.alltoez_profile': {
+            'handlers': ['mail_admins', 'console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'apps.events': {
+            'handlers': ['mail_admins', 'console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    }
+}
 
 #email config
 DEFAULT_FROM_EMAIL = 'Postmaster <postmaster@alltoez.com>'

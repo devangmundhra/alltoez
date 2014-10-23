@@ -25,7 +25,7 @@ MANAGERS = ('Alltoez', 'devangmundhra@gmail.com'),
 # Local time
 TIME_ZONE = "UTC"
 LANGUAGE_CODE = "en-us"
-SITE_ID = 2
+SITE_ID = 1
 USE_I18N = False
 DATE_INPUT_FORMATS = ('%d-%m-%Y','%Y-%m-%d')
 USE_TZ = True
@@ -88,7 +88,6 @@ INSTALLED_APPS = [
 	'django.contrib.admin',
 	'django.contrib.sitemaps',
 	'django.contrib.humanize',
-	'location_field',
 
 	# Utilities & Helper Apps
 	'south',
@@ -96,6 +95,8 @@ INSTALLED_APPS = [
 	'django_extensions',
 	'endless_pagination',
 	'pipeline',
+    'location_field',
+    'django_summernote',
 
 	# Registration, Signin and Account Management
 	'allauth',
@@ -123,6 +124,7 @@ if USE_I18N:
 #-------------------------------------------------------------------------------
 DEFAULT_PROFILE_IMAGE = os.path.join(MEDIA_ROOT, 'uploads/alltoez_defaults/profile_portrait_default.png')
 GOOGLE_ANALYTICS_CODE = None
+GOOGLE_MAPS_V3_APIKEY = "AIzaSyDOtkrcR4QFGYTMdR71WkkUYsMQ735c_EU"
 LANGUAGES = (
     ('en', _('English')),
 )
@@ -261,10 +263,6 @@ CELERYBEAT_SCHEDULE = {
         'task': 'apps.events.tasks.scrape_events_look_ahead',
         'schedule': timedelta(days=1),
     },
-    'create-event-records-everyday': {
-        'task': 'apps.events.tasks.create_event_records',
-        'schedule': timedelta(days=1),
-    },
 }
 
 
@@ -301,6 +299,18 @@ ADMIN_SHORTCUTS = [
 ADMIN_SHORTCUTS_SETTINGS = {
 	'hide_app_list': False,
 	'open_new_window': False,
+}
+
+#-------------------------------------------------------------------------------
+#	SUMMERNOTE CONFIG
+#-------------------------------------------------------------------------------
+SUMMERNOTE_CONFIG = {
+    'toolbar' : [
+        ['insert', ['link', 'hr']],
+        ['style', ['bold']],
+        ['layout', ['paragraph', 'ul']],
+        ['misc', ['undo', 'redo']],
+    ]
 }
 
 try:
