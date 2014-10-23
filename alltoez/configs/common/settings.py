@@ -308,7 +308,6 @@ ADMIN_SHORTCUTS_SETTINGS = {
 #	SUMMERNOTE CONFIG
 #-------------------------------------------------------------------------------
 SUMMERNOTE_CONFIG = {
-    'lang': 'en-US',
     'toolbar' : [
         ['insert', ['link', 'hr']],
         ['style', ['bold']],
