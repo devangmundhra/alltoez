@@ -70,7 +70,11 @@
                             </div>
                             <div class="event-info">
                                 <h4>{{ event.title|truncatechars:'62' }}</h4>
-                                <p>{{ event.address }}</p>
+                                {% if event.neigborhood %}
+                                    <p>{{ event.neigborhood }}</p>
+                                {% else %}
+                                    <p>{{ event.address }}</p>
+                                {% endif %}
                             </div>
                             {% if not event.recurrence_detail %}
                                 <span class="event-date">{{ event.start_date|date }}</span>
