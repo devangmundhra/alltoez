@@ -38,10 +38,10 @@ PIPELINE_CSS = {
 GOOGLE_ANALYTICS_CODE = "UA-55773544-1"
 
 # logging
-import os
-import logging.config
-LOG_FILENAME = os.path.join(os.path.dirname(__file__), 'logging.conf')
-logging.config.fileConfig(LOG_FILENAME)
+# import os
+# import logging.config
+# LOG_FILENAME = os.path.join(os.path.dirname(__file__), 'logging.conf')
+# logging.config.fileConfig(LOG_FILENAME)
 
 LOGGING = {
     'version': 1,
@@ -69,31 +69,10 @@ LOGGING = {
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
-            'propagate': False,
+            'propagate': True,
         },
         'django.security.DisallowedHost': {
             'handlers': ['null'],
-            'propagate': False,
-        },
-    # Might as well log any errors anywhere else in Django
-        'django': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
-        'apps.alltoez': {
-            'handlers': ['mail_admins', 'console'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
-        'apps.alltoez_profile': {
-            'handlers': ['mail_admins', 'console'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
-        'apps.events': {
-            'handlers': ['mail_admins', 'console'],
-            'level': 'ERROR',
             'propagate': False,
         },
     }
@@ -106,3 +85,4 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'postmaster@alltoez.com'
 EMAIL_HOST_PASSWORD = 'f23194b06f816adc5b5e6f235ed33ff1'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

@@ -147,6 +147,9 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'postmaster@sandboxe9f734d40d854192ac1344226e7b5125.mailgun.org'
 EMAIL_HOST_PASSWORD = '3c8af3c9310cbde4d2e43b3e66e07948'
+EMAIL_SUBJECT_PREFIX = "[Alltoez Server]"
+SERVER_EMAIL = 'server@alltoez.com'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 #-------------------------------------------------------------------------------
 #	CACHE SETTINGS
