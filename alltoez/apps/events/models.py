@@ -5,6 +5,7 @@ from django.conf import settings
 
 from jsonfield import JSONField
 from location_field.models.plain import PlainLocationField
+from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.alltoez.utils.model_utils import unique_slugify
 
@@ -109,11 +110,12 @@ class Event(models.Model):
     location = PlainLocationField(based_fields=[address], zoom=16)
     neighborhood = models.CharField(max_length=200, blank=True, null=True,
                                     help_text="Neigborhood of activity. Leave blank for auto-fill")
+    phone_number = PhoneNumberField(blank=True, help_text="Phone number, if available")
     image = JSONField(default="{\"url\":\"\",\"source_name\":\"\",\"source_url\":\"\"}")
     min_age = models.PositiveSmallIntegerField(default=0)
     max_age = models.PositiveSmallIntegerField(default=100)
     cost = models.PositiveSmallIntegerField(default=0)
-    cost_detail = models.CharField(max_length=500, blank=True, null=True,
+    cost_detail = models.CharField(max_length=500, blank=True,
                                    help_text="Enter if there is more than one cost value")
     # Currently we expect an event to occur atmost once per day (so only one start time/end time)
     start_date = models.DateField()
@@ -125,7 +127,7 @@ class Event(models.Model):
     additional_info = models.TextField(blank=True, null=True)
 
     class Meta:
-        ordering = ['-start_date', 'end_date']
+        ordering = ['-created_at', '-start_date', 'end_date']
 
     def save(self, *args, **kwargs):
         if not self.neighborhood:
@@ -136,20 +138,19 @@ class Event(models.Model):
 
     @classmethod
     def get_location_neighborhood(cls, latlng):
+
         google_maps_api_key = getattr(settings, 'GOOGLE_MAPS_V3_APIKEY', None)
         qt_latlng = urllib.quote_plus(latlng)
         result_type = 'neighborhood'
-        geo = urllib.urlopen("https://maps.googleapis.com/maps/api/geocode/json?latlng={0}&key={1}&result_type={2}".format(qt_latlng,
+        geo = urllib.urlopen("https://maps.googleapis.com/maps/api/geocode/json?latlng={0}&key={1}&result_type={2}".
+                             format(qt_latlng,
                              google_maps_api_key,result_type))
         res = json.loads(geo.read())
         if res['status'] != 'OK':
-            return None
+            return ""
         # Example https://maps.googleapis.com/maps/api/geocodhttps://maps.googleapis.com/maps/api/geocode/json?latlng=37.7628848%2C-122.428514&key=AIzaSyDOtkrcR4QFGYTMdR71WkkUYsMQ735c_EU&result_type=neighborhood
-        try:
-            address = res['results'][0]['address_components'][0]['short_name']
-            return address
-        except:
-            return None
+        address = res['results'][0]['address_components'][0]['short_name']
+        return address
 
     def __unicode__(self):
         return unicode(self.title)

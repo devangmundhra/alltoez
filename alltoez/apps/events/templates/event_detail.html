@@ -43,6 +43,9 @@
                     <div class="event-detail">
                         <h4>{{ object.title}}</h4>
                         <p>{{ object.address }}</p>
+                        {% if object.phone_number %}
+                            <p>{{ object.phone_number.as_national }}</p>
+                        {% endif %}
                     </div>
                     <div class="event-web">
                         <div class="site">

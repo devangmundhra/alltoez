@@ -74,6 +74,7 @@ class EventAdmin(admin.ModelAdmin):
     Note: This is similar to EventInline above
     """
     prepopulated_fields = {'slug': ('title',), }
+    ordering = ['-created_at']
     search_fields = ['title', 'description']
     form = EventAdminForm
     pass

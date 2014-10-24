@@ -97,6 +97,7 @@ INSTALLED_APPS = [
 	'pipeline',
     'location_field',
     'django_summernote',
+    'phonenumber_field',
 
 	# Registration, Signin and Account Management
 	'allauth',
@@ -310,7 +311,7 @@ ADMIN_SHORTCUTS_SETTINGS = {
 SUMMERNOTE_CONFIG = {
     'toolbar' : [
         ['insert', ['link', 'hr']],
-        ['style', ['bold']],
+        ['style', ['bold', 'clear']],
         ['layout', ['paragraph', 'ul']],
         ['misc', ['undo', 'redo']],
     ]

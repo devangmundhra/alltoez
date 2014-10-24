@@ -24,8 +24,8 @@ class Events(ListView):
         self.category_slug = kwargs.get('slug', None)
 
         self.category_list = Category.objects.filter(parent_category__isnull=False)
-        # Note: -start_date is also the default option for sorting in events.html template
-        self.events_list = Event.objects.filter(Q(end_date__lt=timezone.now().date()) | Q(end_date=None)).order_by('-start_date')
+        # Note: -created_at is also the default option for sorting in events.html template
+        self.events_list = Event.objects.filter(Q(end_date__gte=timezone.now().date()) | Q(end_date=None)).order_by('-created_at')
         if self.category_slug:
             self.events_list = self.events_list.filter(category__slug=self.category_slug)
             try:
