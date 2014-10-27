@@ -78,6 +78,9 @@ LOGGING = {
     }
 }
 
+# celery config
+CELERY_SEND_TASK_ERROR_EMAILS = True
+
 #email config
 DEFAULT_FROM_EMAIL = 'Postmaster <postmaster@alltoez.com>'
 EMAIL_HOST = 'smtp.mailgun.org'

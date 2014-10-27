@@ -289,6 +289,10 @@ ADMIN_SHORTCUTS = [
 				'open_new_window': True,
 			},
 			{
+				'url': '/admin/events/event/?end_date=unexpired',
+				'title': 'Unexpired events',
+			},
+			{
 				'url': '/admin/filebrowser/browse/',
 				'title': 'Files',
 				'class': 'folder'
