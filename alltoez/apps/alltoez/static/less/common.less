@@ -515,7 +515,7 @@ body {
       letter-spacing: 1px;
     }
     dd {
-      argin-top: 5px;
+      margin-top: 5px;
       font-size: 16px;
       color: #494949;
       letter-spacing: 0;
@@ -535,7 +535,26 @@ body {
       font-size: 20px;
       color: #6d6d6d;
       line-height: 1.3em;
+      text-align: justify;
     }
+
+  .event-additional-info {
+    dt {
+      text-transform: uppercase;
+      font-size: 11px;
+      color: #93a7b2;
+      letter-spacing: 1px;
+    }
+    dd {
+      margin-top: 5px;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      color: #494949;
+      text-align: justify;
+    }
+  }
+
   }
 }
 .right-side {
@@ -651,39 +670,4 @@ body {
       }
     }
   }
-}
-
-// ENDLESS
-.endless_page_current, .endless_page_link {
-  padding: 7px 0px 0px 0px;
-  border-radius: 8px;
-  color: #ffffff;
-  height: 35px;
-  width: 35px;
-  float: left;
-  displaY: block;
-  margin-right: 8px;
-  margin-top: 60px;
-  text-align: center;
-  font-size: 16px;
-  font-weight: 600;
-}
-.endless_page_current {
-  background: #333333;
-}
-.endless_page_link {
-  text-decoration: none;
-  background: #6d6d6d;
-  &:last-child {
-    margin-right: 0;
-  }
-  &:hover {
-    text-decoration: none;
-    color: #ffffff;
-    background: darken(#333333, 5%);
-  }
-}
-.endless_separator {
-  font-size: 20px;
-  font-weight: bold;
 }

@@ -1,5 +1,3 @@
-from datetime import datetime, date
-
 from django.shortcuts import render
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -8,11 +6,15 @@ from django.http import Http404
 from django.utils import timezone
 from django.db.models import Q
 
+from endless_pagination.views import AjaxListView
+from endless_pagination.decorators import page_template
+
 from apps.events.models import Event, Category
 
 
-class Events(ListView):
+class Events(AjaxListView):
     template_name = "events.html"
+    page_template_name = "event_list_page.html"
     model = Event
     events_list = None
     category = None

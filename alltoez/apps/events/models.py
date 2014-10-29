@@ -99,7 +99,7 @@ class Event(models.Model):
     Event class
     This class describes the details of an event.
     """
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
     draft = models.ForeignKey(DraftEvent, blank=True, null=True)
     title = models.CharField(max_length=200)
@@ -112,18 +112,19 @@ class Event(models.Model):
                                     help_text="Neigborhood of activity. Leave blank for auto-fill")
     phone_number = PhoneNumberField(blank=True, help_text="Phone number, if available")
     image = JSONField(default="{\"url\":\"\",\"source_name\":\"\",\"source_url\":\"\"}")
-    min_age = models.PositiveSmallIntegerField(default=0)
-    max_age = models.PositiveSmallIntegerField(default=100)
-    cost = models.PositiveSmallIntegerField(default=0)
+    min_age = models.PositiveSmallIntegerField(default=0, db_index=True)
+    max_age = models.PositiveSmallIntegerField(default=100, db_index=True)
+    cost = models.PositiveSmallIntegerField(default=0, db_index=True)
     cost_detail = models.CharField(max_length=500, blank=True,
                                    help_text="Enter if there is more than one cost value")
     # Currently we expect an event to occur atmost once per day (so only one start time/end time)
-    start_date = models.DateField()
-    end_date = models.DateField(blank=True, null=True, help_text="End date of the event, if applicable")
+    start_date = models.DateField(db_index=True)
+    end_date = models.DateField(blank=True, null=True, db_index=True,
+                                help_text="End date of the event, if applicable")
     recurrence_detail = models.CharField(max_length=500, blank=True, null=True,
                                          help_text="Enter a line about when this event is till, if it is recurring")
     time_detail = models.CharField(max_length=500, help_text="Enter time for different days, in different rows")
-    url = models.URLField(blank=True, null=True, unique=True)
+    url = models.URLField(blank=True, null=True)
     additional_info = models.TextField(blank=True, null=True)
 
     class Meta:

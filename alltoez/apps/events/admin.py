@@ -1,10 +1,50 @@
 from django.contrib import admin
 from django import forms
+from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
+from django.db.models import Q
 
 from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 
 from apps.events.models import DraftEvent, Event, EventRecord, Category
 
+
+class ExpiredEventListFilter(admin.SimpleListFilter):
+    # Human-readable title which will be displayed in the
+    # right admin sidebar just above the filter options.
+    title = _('Event Expiry')
+
+    # Parameter for the filter that will be used in the URL query.
+    parameter_name = 'end_date'
+
+    def lookups(self, request, model_admin):
+        """
+        Returns a list of tuples. The first element in each
+        tuple is the coded value for the option that will
+        appear in the URL query. The second element is the
+        human-readable name for the option that will appear
+        in the right sidebar.
+        """
+        return (
+            ('unexpired', _('non-expired events')),
+            ('expired', _('expired events')),
+            ('no_expiry', _('events with no end date'))
+        )
+
+    def queryset(self, request, queryset):
+        """
+        Returns the filtered queryset based on the value
+        provided in the query string and retrievable via
+        `self.value()`.
+        """
+        # Compare the requested value (either '80s' or '90s')
+        # to decide how to filter the queryset.
+        if self.value() == 'unexpired':
+            return queryset.filter(Q(end_date__gte=timezone.now().date()) | Q(end_date=None))
+        if self.value() == 'expired':
+            return queryset.filter(end_date__lt=timezone.now().date())
+        if self.value() == 'no_expiry':
+            return queryset.filter(Q(end_date=None))
 
 class EventAdminForm(forms.ModelForm):
     """
@@ -75,6 +115,7 @@ class EventAdmin(admin.ModelAdmin):
     """
     prepopulated_fields = {'slug': ('title',), }
     ordering = ['-created_at']
+    list_filter = (ExpiredEventListFilter,)
     search_fields = ['title', 'description']
     form = EventAdminForm
     pass

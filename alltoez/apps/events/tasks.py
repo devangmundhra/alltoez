@@ -46,7 +46,7 @@ def scrape_events_look_ahead():
     msg = MIMEText(body)
     msg['Subject'] = subject
     msg['From'] = "noreply@alltoez.com"
-    msg['To'] = ["devangmundhra@gmail.com", "ruchikadamani90@gmail.com"]
+    msg['To'] = ", ".join([ "ruchikadamani90@gmail.com", "devangmundhra@gmail.com"])
 
     s = smtplib.SMTP('smtp.mailgun.org', 587)
 
