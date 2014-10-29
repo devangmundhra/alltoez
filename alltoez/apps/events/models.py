@@ -124,7 +124,7 @@ class Event(models.Model):
     recurrence_detail = models.CharField(max_length=500, blank=True, null=True,
                                          help_text="Enter a line about when this event is till, if it is recurring")
     time_detail = models.CharField(max_length=500, help_text="Enter time for different days, in different rows")
-    url = models.URLField(blank=True, null=True, unique=True)
+    url = models.URLField(blank=True, null=True)
     additional_info = models.TextField(blank=True, null=True)
 
     class Meta:
