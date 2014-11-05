@@ -4,21 +4,13 @@ function resizeHeader() {
 	$("body.home h1").css('margin-top', ($("#above-the-fold").height()/2)-140);
 }
 
-FB.init({
-    appId : '436853689787509', status : true, cookie : true, oauth: true
-});
-
 function sendReqeustViaMultiFriendSelector() {
-        FB.ui({method: 'apprequests', message: 'Hey! Check out Alltoez.com' }, requestCallback);
+        FB.ui({method: 'apprequests', message: 'Events for kids and parents at alltoez.com' }, requestCallback);
 }
 
 function requestCallback(request) {
     
 }
-
-stLight.options({
-    publisher:'30d160e5-ade8-4bce-9178-16fb2e401fcf',
-});
 
 $(document).ready(function() {
 	resizeHeader();
