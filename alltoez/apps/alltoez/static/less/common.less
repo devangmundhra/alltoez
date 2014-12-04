@@ -559,9 +559,7 @@ body {
 }
 .right-side {
   .social-actions {
-    background: #ffffff;
     margin-bottom: 30px;
-    height: 75px;
     border-radius: 6px;
     a {
       text-decoration: none;
@@ -670,4 +668,14 @@ body {
       }
     }
   }
+}
+
+// Remove button shadow
+.btn:active,
+.btn:focus,
+.btn.active:focus {
+  background-image: none;
+  outline: 0;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }

@@ -1,6 +1,6 @@
 import json
 from allauth.account.views import SignupView
-from alltoez.apps.alltoez.utils.view_utils import LoginRequiredMixin, MessageMixin
+from apps.alltoez.utils.view_utils import LoginRequiredMixin, MessageMixin
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -29,7 +29,6 @@ class UserProfileDetail(LoginRequiredMixin, DetailView):
         return context
 
 
-
 class UserProfileUpdate(MessageMixin, UpdateView):
     model = UserProfile
     form_class = UserProfileForm
@@ -37,7 +36,7 @@ class UserProfileUpdate(MessageMixin, UpdateView):
 
     def get_success_url(self):
         try:
-            self.success_url = reverse('profile')
+            self.success_url = reverse('show_profile')
         except:
             self.success_url = '/'
 
@@ -49,25 +48,26 @@ class UserProfileUpdate(MessageMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user.profile
-#
-#     def form_valid(self, form):
-#         context = self.get_context_data()
-#         children_form = context['children_formset']
-#         if children_form.is_valid():
-#             self.object = form.save()
-#             children_form.instance = self.object.user
-#             children_form.save()
-#             return HttpResponseRedirect('thanks/')
-#         else:
-#             return self.render_to_response(self.get_context_data(form=form))
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(UserProfileUpdate, self).get_context_data(**kwargs)
-#         if self.request.POST:
-#             context['children_form'] = ChildrenFormset(self.request.POST)
-#         else:
-#             context['children_form'] = ChildrenFormset()
-#         return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        children_form = context['children_formset']
+        if children_form.is_valid():
+            self.object = form.save()
+            children_form.instance = self.object.user
+            children_form.save()
+            return HttpResponseRedirect('thanks/')
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+
+    def get_context_data(self, **kwargs):
+        context = super(UserProfileUpdate, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context['children_form'] = ChildrenFormset(self.request.POST)
+        else:
+            context['children_form'] = ChildrenFormset()
+        return context
+
 
 class AlltoezSignupView(SignupView):
     success_url = '/accounts/signup/step-2/'

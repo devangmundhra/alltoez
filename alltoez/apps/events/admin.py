@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.db.models import Q
 
-from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
+from pagedown.widgets import AdminPagedownWidget
 
 from apps.events.models import DraftEvent, Event, EventRecord, Category
 
@@ -52,9 +52,9 @@ class EventAdminForm(forms.ModelForm):
     """
     def __init__(self, *args, **kwargs):
         super(EventAdminForm, self).__init__(*args, **kwargs)
-        self.fields['description'].widget = SummernoteWidget()
-        self.fields['time_detail'].widget = SummernoteWidget()
-        self.fields['additional_info'].widget = SummernoteWidget()
+        self.fields['description'].widget = AdminPagedownWidget()
+        self.fields['time_detail'].widget = AdminPagedownWidget()
+        self.fields['additional_info'].widget = AdminPagedownWidget()
 
 
 class EventInline(admin.StackedInline):

@@ -1,4 +1,5 @@
-from alltoez.apps.alltoez.utils.model_utils import get_namedtuple_choices
+import re, unicodedata, os, random, string
+
 from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -8,10 +9,11 @@ from django.db.models.signals import pre_delete, post_save, pre_save
 from django.dispatch import receiver
 
 from filebrowser.fields import FileBrowseField
+
 from apps.alltoez.utils.fields import AutoOneToOneField
 from apps.alltoez.utils.abstract_models import BaseModel
+from apps.alltoez.utils.model_utils import get_namedtuple_choices
 
-import re, unicodedata, os, random, string
 
 GENDER_CHOICES = get_namedtuple_choices('GENDER_CHOICES', (
     (0, 'MALE', 'Male'),
@@ -44,7 +46,7 @@ class UserProfile(BaseModel):
 
     def profile_complete(self):
         # Returns True if the profile is deemed complete
-        if self.gender == None or self.zip_code == None or self.zip_code == "":
+        if self.gender is None or not self.zip_code:
             return False
         else:
             return True
@@ -70,6 +72,10 @@ class UserProfile(BaseModel):
 
 
 class Child(models.Model):
+    """
+    Profile to add children to a user's profile
+    """
     user = models.ForeignKey(User, related_name="children")
-    gender = models.PositiveSmallIntegerField(choices=CHILD_GENDER_CHOICES.get_choices(), db_index=True, blank=True, null=True)
+    gender = models.PositiveSmallIntegerField(choices=CHILD_GENDER_CHOICES.get_choices(), db_index=True,
+                                              blank=True, null=True)
     age = models.PositiveSmallIntegerField(blank=True, null=True)

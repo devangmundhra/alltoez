@@ -1,0 +1,160 @@
+{% extends "alltoez/ui/layouts/base.html" %}
+{% load common_tags %}
+{% load cache compressed %}
+{% load markdown_deux_tags %}
+
+{% block title %}{{ event.title }}{% endblock %}
+{% block page_title %}{% endblock %}
+{% block body_class %}{% endblock %}
+
+{% block content %}
+<div class="row" xmlns="http://www.w3.org/1999/html">
+    <div class="col-xs-12 col-md-7">
+        <div class="left-side">
+            {{ context }}
+            <div class="event-title">
+                <h1>{{ event.title }}</h1>
+            </div>
+            <div class="event-address">
+                <dl>
+                    <dt>WHERE</dt>
+                    <dd>{{ event.address }}</dd>
+                </dl>
+            </div>
+            <div class="event-image">
+                <img src="{{ event.image.url }}">
+            </div>
+            <div class="event-description">
+                <p>{{ event.description|markdown }}</p>
+            </div>
+            {% if event.additional_info %}
+            <div class="event-additional-info">
+                <dl>
+                    <dt>TIPS</dt>
+                    <dd>{{ event.additional_info|markdown }}</dd>
+                </dl>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-xs-12 col-md-5">
+        <div class="right-side">
+            <div class="social-actions">
+                <div class="btn-group btn-group-lg" role="group" aria-label="user-event-actions">
+                    <button type="button" class="btn btn-primary {% if event.bookmark %}active{% endif %}"
+                            data-toggle="button" aria-pressed="{% if event.bookmark %}true{%else%}false{% endif %}"
+                            id="bookmark-action">
+                        <span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Bookmark
+                    </button>
+                    <button type="button" class="btn btn-primary {% if event.done %}active{% endif %}"
+                            data-toggle="button" aria-pressed="{% if event.bookmark %}true{%else%}false{% endif %}"
+                            id="done-action">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Done
+                    </button>
+                </div>
+                <button type="button" class="btn btn-primary btn-lg pull-right" id="share-action">
+                    <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span> Share
+                </button>
+            </div>
+            <div class="event-location">
+                <div class="event-map">
+                    <div id="gmap_canvas" style="height:250px;width:100%;"></div>
+                    <style>#gmap_canvas img{max-width:none!important;background:none!important}</style>
+                    <!--div style="overflow:hidden;height:500px;width:600px;">
+                    </div-->
+                </div>
+                <div class="event-detail">
+                    <h4>{{ event.title}}</h4>
+                    <p>{{ event.address }}</p>
+                    {% if event.phone_number %}
+                    <p>
+                        <i class="fa fa-phone"></i>
+                        {{   event.phone_number }}
+                    </p>
+                    {% endif %}
+                </div>
+                {% if event.url %}
+                <div class="event-web">
+                    <div class="site">
+                        <a href="{{ event.url }}" target="_blank">Website</a>
+                    </div>
+                    <!--<div class="facebook">-->
+                    <!--<a href="{{ event.url }}" target="_blank">Facebook</a>-->
+                    <!--</div>-->
+                </div>
+                {% endif %}
+            </div>
+            <div class="open-hours">
+                <dl class="dl">
+                    <dt>When:</dt>
+                    {% if not event.recurrence_detail %}
+                    <p>{{ event.start_date|date }}</p>
+                    {% else %}
+                    <p>{{ event.recurrence_detail }}</p>
+                    {% endif %}
+                    <p>{{ event.time_detail|markdown }}</p>
+                </dl>
+            </div>
+            <div class="age-allowed">
+                <dl class="dl-horizontal">
+                    {% if event.min_age == 0 and event.max_age == 100 %}
+                    <dt>Age: </dt>
+                    <dd>Family Event</dd>
+                    {% else %}
+                    <dt>Min. age:</dt>
+                    <dd>{{ event.min_age }}</dd>
+                    <dt>Max. age:</dt>
+                    <dd>{{ event.max_age }}</dd>
+                    {% endif %}
+                </dl>
+            </div>
+            <div class="cost">
+                <dl class="dl-horizontal">
+                    {% if event.cost == 0 %}
+                    <dt>Cost:</dt>
+                    <dd>Free</dd>
+                    {% else %}
+                    <dt>Cost:</dt>
+                    <dd>${{ event.cost }}</dd>
+                    {% endif %}
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-md-4">
+
+    </div>
+</div>
+
+<script type="text/javascript">
+        function init_map() {
+            var myOptions = {
+                zoom:14,
+                center:new google.maps.LatLng({{ event.location }}),
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            var map = new google.maps.Map(document.getElementById("gmap_canvas"), myOptions);
+            var marker = new google.maps.Marker({map: map,
+                                                position: new google.maps.LatLng({{ event.location }}),
+                                                title:"{ event.title }}"
+                                                });
+            marker.setMap(map);
+            //infowindow = new google.maps.InfoWindow({content:"<b>{{ event.title }}</b><br/>{{ event.address|linebreaksbr }}" });
+            //google.maps.event.addListener(marker, "click", function(){infowindow.open(map,marker);});
+            //infowindow.open(map,marker);
+        }
+        google.maps.event.addDomListener(window, 'load', init_map);
+    </script>
+{% endblock %}
+{% block extra_js %}
+    {% url 'api_dispatch_list' resource_name="bookmark" api_name="v1" as bookmark_url %}
+    {% url 'api_dispatch_list' resource_name="done" api_name="v1" as done_url %}
+    <script type="text/javascript">
+        var bookmark_url = "{{ bookmark_url }}?format=json"
+        var done_url = "{{ done_url }}?format=json"
+        var myevent = JSON.parse('{{ event_json|escapejs }}')
+    </script>
+    {% compressed_js 'events_detail' %}
+{% endblock %}

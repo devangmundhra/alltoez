@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 #-------------------------------------------------------------------------------
 #	BASE SETTINGS
 #-------------------------------------------------------------------------------
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 INTERNAL_IPS = ('127.0.0.1',)
 SECRET_KEY = '-x83)5-^cugn@*t6gh%76j@cb)zj)q7l_rm!%3=)@sw&v&d_ww'
@@ -96,8 +96,10 @@ INSTALLED_APPS = [
 	'endless_pagination',
 	'pipeline',
     'location_field',
-    'django_summernote',
     'phonenumber_field',
+    'tastypie',
+    'pagedown',
+    'markdown_deux',
 
 	# Registration, Signin and Account Management
 	'allauth',
@@ -109,6 +111,7 @@ INSTALLED_APPS = [
 	'apps.alltoez_profile',
 	'apps.alltoez',
 	'apps.events',
+    'apps.user_actions',
 ]
 
 #if DEBUG:
@@ -174,9 +177,11 @@ STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_YUGLIFY_BINARY = os.path.join(SITE_ROOT, "../node_modules/yuglify/bin/yuglify")
+PIPELINE_COFFEE_SCRIPT_BINARY = os.path.join(SITE_ROOT, "../node_modules/coffee-script/bin/coffee")
 PIPELINE_DISABLE_WRAPPER = True
 PIPELINE_COMPILERS = (
 'pipeline.compilers.less.LessCompiler',
+'pipeline.compilers.coffee.CoffeeScriptCompiler',
 )
 PIPELINE_LESS_BINARY = 'lessc'
 PIPELINE_CSS = {
@@ -200,6 +205,12 @@ PIPELINE_JS = {
 			'js/lib/chosen.jquery.min.js',
 		),
 		'output_filename': 'js/base.min.js',
+	},
+	'events_detail': {
+		'source_filenames': (
+			'js/events_ajax.coffee',
+		),
+		'output_filename': 'js/events_detail.min.js',
 	},
 }
 
@@ -225,6 +236,7 @@ OPENID_ENABLED = False
 SOCIALACCOUNT_ENABLED = True
 SOCIALACCOUNT_PROVIDERS = {}
 ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = False
+ACCOUNT_USER_DISPLAY = lambda user: user.get_full_name()
 
 #-------------------------------------------------------------------------------
 #	FILEBROWSER SETTINGS
@@ -310,15 +322,15 @@ ADMIN_SHORTCUTS_SETTINGS = {
 }
 
 #-------------------------------------------------------------------------------
-#	SUMMERNOTE CONFIG
+#	MARKDOWN_DEUX CONFIG
 #-------------------------------------------------------------------------------
-SUMMERNOTE_CONFIG = {
-    'toolbar' : [
-        ['insert', ['link', 'hr']],
-        ['style', ['bold', 'clear']],
-        ['layout', ['paragraph', 'ul']],
-        ['misc', ['undo', 'redo']],
-    ]
+MARKDOWN_DEUX_STYLES = {
+    "default": {
+        "extras": {
+            "code-friendly": None,
+        },
+        "safe_mode": False,
+    },
 }
 
 try:
