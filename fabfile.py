@@ -135,6 +135,7 @@ def install_requirements():
         run('pip install -r %(repo_path)s/requirements.txt' % env)
         run('npm install less')
         run('npm install yuglify')
+        run('npm install coffeescript')
 
 def install_supervisor_conf():
     """
