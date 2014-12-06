@@ -1,4 +1,4 @@
-from alltoez.configs.common.settings import *
+from configs.common.settings import *
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -77,6 +77,9 @@ LOGGING = {
         },
     }
 }
+
+# social auth config
+SOCIAL_AUTH_FACEBOOK_KEY = '869081253104828'
 
 # celery config
 CELERY_SEND_TASK_ERROR_EMAILS = True

@@ -41,9 +41,4 @@ $(document).ready(function() {
         sendReqeustViaMultiFriendSelector();
         return false;
     });
-
-    $('.share-buttom').on('click', function(e) {
-        e.preventDefault();
-    });
-
 });
