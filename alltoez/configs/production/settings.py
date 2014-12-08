@@ -2,7 +2,7 @@ from configs.common.settings import *
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
-PROJECT_DOMAIN = "http://alltoez.com"
+PROJECT_DOMAIN = "http://www.alltoez.com"
 
 SITE_ID = 2
 
@@ -24,18 +24,9 @@ ALLOWED_HOSTS = [
 ]
 
 PIPELINE_ENABLED = not DEBUG
-PIPELINE_CSS = {
-    'theme': {
-        'source_filenames': (
-            'css/chosen.css',
-            'less/theme.less' if not DEBUG else ''
-        ),
-        'output_filename': 'css/theme.min.css',
-        'variant': 'datauri'
-    },
-}
 
 GOOGLE_ANALYTICS_CODE = "UA-55773544-1"
+FACEBOOK_APP_ID = '869081253104828'
 
 # logging
 # import os
@@ -77,9 +68,6 @@ LOGGING = {
         },
     }
 }
-
-# social auth config
-SOCIAL_AUTH_FACEBOOK_KEY = '869081253104828'
 
 # celery config
 CELERY_SEND_TASK_ERROR_EMAILS = True

@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 #-------------------------------------------------------------------------------
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
-INTERNAL_IPS = ('127.0.0.1',)
+INTERNAL_IPS = ('127.0.0.1', 'localhost')
 SECRET_KEY = '-x83)5-^cugn@*t6gh%76j@cb)zj)q7l_rm!%3=)@sw&v&d_ww'
 
 DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
@@ -188,7 +188,7 @@ PIPELINE_CSS = {
 	'theme': {
 		'source_filenames': (
 			'css/chosen.css',
-			#'less/theme.less' if not DEBUG else '' #This line is giving error in collectstatic with DEBUG = True
+			'less/theme.less' if not DEBUG else '' #This line is giving error in collectstatic with DEBUG = True
 		),
 		'output_filename': 'css/theme.min.css',
 		'variant': 'datauri'

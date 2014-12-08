@@ -1,6 +1,7 @@
 from django.views.debug import get_safe_settings
 from django.contrib.sites.models import Site
 
+
 class SafeSettings:
     def __init__(self):
         self._settings = None
@@ -20,6 +21,7 @@ class SafeSettings:
             raise AttributeError
 
 settings = SafeSettings()
+
 
 def app_wide_vars(request):
     return {
