@@ -3,7 +3,7 @@ import json
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.template.defaulttags import regroup
-from django.http import HttpResponseServerError
+from django.http import HttpResponseServerError, HttpResponseRedirect
 from django.template import loader, RequestContext
 from django.conf import settings
 from django.views.generic import TemplateView, DetailView
@@ -13,6 +13,7 @@ from django.http import Http404
 from django.views.decorators.csrf import csrf_exempt, requires_csrf_token
 from django.utils import timezone
 from django.db.models import Q
+from django.shortcuts import render, redirect
 
 from endless_pagination.views import AjaxListView
 
@@ -38,6 +39,18 @@ Base alltoez views
 """
 
 
+def home(request):
+    """
+    View to handle the default action when a user lands on a home page
+    :param request: Request
+    :return: relevant view depending on logged in status of user
+    """
+    if request.user.is_authenticated():
+        return redirect('events')
+    else:
+        return render(request, "alltoez/home.html")
+
+
 class Home(TemplateView):
     template_name = "alltoez/home.html"
 
@@ -59,7 +72,7 @@ Alltoez feed views
 
 class Events(AjaxListView):
     template_name = 'alltoez/events/events.html'
-    page_template_name = 'alltoez/events/event_list_page.html'
+    page_template="alltoez/events/event_list_page.html"
     model = Event
     events_list = None
     category = None
