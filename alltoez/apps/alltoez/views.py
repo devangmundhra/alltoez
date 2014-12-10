@@ -12,7 +12,6 @@ from django.views.generic.list import ListView
 from django.http import Http404
 from django.views.decorators.csrf import csrf_exempt, requires_csrf_token
 from django.utils import timezone
-from django.db.models import Q
 from django.shortcuts import render, redirect
 
 from endless_pagination.views import AjaxListView
@@ -82,18 +81,28 @@ class Events(AjaxListView):
     def get(self, request, *args, **kwargs):
         sort = self.request.GET.get('sort')
         self.category_slug = kwargs.get('cat_slug', None)
-
         self.category_list = Category.objects.filter(parent_category__isnull=False)
+
+        er = EventsResource()
+        request_bundle = er.build_bundle(request=request)
+        queryset = er.obj_get_list(request_bundle)
+
         # Note: -created_at is also the default option for sorting in events.html template
-        self.events_list = Event.objects.filter(Q(end_date__gte=timezone.now().date()) | Q(end_date=None)).order_by('-created_at')
         if self.category_slug:
-            self.events_list = self.events_list.filter(category__slug=self.category_slug)
+            queryset = queryset.filter(category__slug=self.category_slug)
             try:
                 self.category = Category.objects.get(slug=self.category_slug)
             except Category.DoesNotExist:
                 pass
         if sort:
-            self.events_list = self.events_list.order_by(sort)
+            queryset = queryset.order_by(sort)
+        bundles = []
+        for obj in queryset:
+            bundle = er.build_bundle(obj=obj, request=request)
+            bundles.append(er.full_dehydrate(bundle, for_list=True))
+
+        list_json = er.serialize(None, bundles, "application/json")
+        self.events_list = json.loads(list_json)
         return super(Events, self).get(self, request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):

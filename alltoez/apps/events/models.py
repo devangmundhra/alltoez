@@ -112,8 +112,10 @@ class Event(models.Model):
                                     help_text="Neigborhood of activity. Leave blank for auto-fill")
     phone_number = PhoneNumberField(blank=True, help_text="Phone number, if available")
     image = JSONField(default="{\"url\":\"\",\"source_name\":\"\",\"source_url\":\"\"}")
-    min_age = models.PositiveSmallIntegerField(default=0, db_index=True)
-    max_age = models.PositiveSmallIntegerField(default=100, db_index=True)
+    DEFAULT_MIN_AGE_EVENT = 0
+    min_age = models.PositiveSmallIntegerField(default=DEFAULT_MIN_AGE_EVENT, db_index=True)
+    DEFAULT_MAX_AGE_EVENT = 100
+    max_age = models.PositiveSmallIntegerField(default=DEFAULT_MAX_AGE_EVENT, db_index=True)
     cost = models.PositiveSmallIntegerField(default=0, db_index=True)
     cost_detail = models.CharField(max_length=500, blank=True,
                                    help_text="Enter if there is more than one cost value")

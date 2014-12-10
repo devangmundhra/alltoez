@@ -219,7 +219,7 @@ PIPELINE_JS = {
 #	ALLAUTH SETTINGS
 #-------------------------------------------------------------------------------
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = "/events"
+LOGIN_REDIRECT_URL = "/"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_VERIFICATION = "optional"
