@@ -1,6 +1,5 @@
 import json
-from allauth.account.views import SignupView
-from apps.alltoez.utils.view_utils import LoginRequiredMixin, MessageMixin
+
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -12,9 +11,13 @@ from django.views.generic import TemplateView, FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import Http404, HttpResponseRedirect
+from django.core.urlresolvers import NoReverseMatch
 
-from forms import UserProfileForm, ChildrenFormset
-from models import UserProfile, GENDER_CHOICES, Child, CHILD_GENDER_CHOICES
+from allauth.account.views import SignupView
+
+from apps.alltoez.utils.view_utils import LoginRequiredMixin, MessageMixin
+from apps.alltoez_profile.forms import UserProfileForm, ChildrenFormset
+from apps.alltoez_profile.models import UserProfile, GENDER_CHOICES, Child, CHILD_GENDER_CHOICES
 
 
 class UserProfileDetail(LoginRequiredMixin, DetailView):
@@ -34,10 +37,14 @@ class UserProfileUpdate(MessageMixin, UpdateView):
     form_class = UserProfileForm
     template_name = "profile/userprofile_form.html"
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(UserProfileUpdate, self).dispatch(*args, **kwargs)
+
     def get_success_url(self):
         try:
-            self.success_url = reverse('show_profile')
-        except:
+            self.success_url = reverse('show_profile', args=[self.object.username])
+        except NoReverseMatch:
             self.success_url = '/'
 
         return self.success_url
@@ -50,30 +57,34 @@ class UserProfileUpdate(MessageMixin, UpdateView):
         return self.request.user.profile
 
     def form_valid(self, form):
+        """
+        This form is valid. Check to see if the children form is valid as well and then save them
+        :param form:
+        :return:
+        """
         context = self.get_context_data()
-        children_form = context['children_formset']
-        if children_form.is_valid():
+        children_formset = context['children_formset']
+        if children_formset.is_valid():
+            # TODO: Check if these saves needs to be called explicitly
             self.object = form.save()
-            children_form.instance = self.object.user
-            children_form.save()
-            return HttpResponseRedirect('thanks/')
+            children_formset.save()
+            return HttpResponseRedirect(self.get_success_url())
         else:
             return self.render_to_response(self.get_context_data(form=form))
 
     def get_context_data(self, **kwargs):
         context = super(UserProfileUpdate, self).get_context_data(**kwargs)
+        user = self.object.user
+
         if self.request.POST:
-            context['children_form'] = ChildrenFormset(self.request.POST)
+            context['children_formset'] = ChildrenFormset(self.request.POST, instance=user)
         else:
-            context['children_form'] = ChildrenFormset()
+            context['children_formset'] = ChildrenFormset(instance=user)
         return context
 
 
 class AlltoezSignupView(SignupView):
     success_url = '/accounts/signup/step-2/'
-
-# class RegisterChild(FormView):
-#     template_name = "alltoez_profile/signup-step-2.html"
 
 
 class AlltoezSignupStep2View(UpdateView):
@@ -108,4 +119,4 @@ class AlltoezSignupStep2View(UpdateView):
                 new_child.save()
         except ValueError:
             return HttpResponseBadRequest
-        return HttpResponseRedirect('/events')
+        return HttpResponseRedirect('/')

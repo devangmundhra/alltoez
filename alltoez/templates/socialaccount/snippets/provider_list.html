@@ -12,10 +12,11 @@
 {% endfor %}
 {% endif %}
 <!--<li>-->
-  <a title="{{provider.name}}" class="socialaccount_provider {{provider.id}}" 
+  <a title="{{provider.name}}" class="btn btn-social btn-lg socialaccount_provider btn-{{provider.id}}"
      href="{% provider_login_url provider.id process=process %}">
       <!--{{provider.name}}-->
-      <i class="fa fa-facebook"></i>
+      <i class="fa fa-{{provider.id}}"></i>
+       Login with {{ provider.id|title }}
   </a>
 <!--</li>-->
 {% endfor %}

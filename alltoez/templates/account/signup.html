@@ -4,22 +4,21 @@
 {% load i18n common_tags %}
 
 {% block head_title %}{% trans "Signup" %}{% endblock %}
-{% block page_title %}{% trans "Sign Up" %}{% endblock %}
+{% block page_title %}{% trans "Sign up with Alltoez" %}{% endblock %}
 {% block content %}
 
 <div class="row">
     <div class="col-xs-12 col-sm-6 col-sm-offset-3">
-        <div class="socialaccount-ballot">
-            <!--<h1>{% trans "Sign Up" %}</h1>-->
-
+        <div class="signup-div">
+            <div class="alltoez-snippet">
+                <h3>Alltoez helps parents and kids find activities they love to do.</h3>
+            </div>
             {% if socialaccount.providers  %}
-
             <div class="socialaccount_ballot">
-
-                <div class="row">
+                <div class="socialaccount_providers">
                     {% include "socialaccount/snippets/provider_list.html" with process="login" %}
                 </div>
-                <div class="login-or">{% trans 'or'|upper %}</div>
+                <div class="login-or">{% trans 'or' %}</div>
 
             </div>
 
@@ -38,7 +37,10 @@
                 {% if redirect_field_value %}
                 <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
                 {% endif %}
-                <button type="submit" class="btn btn-default btn-lg">{% trans "Sign Up" %}</button>
+                <button type="submit" class="primaryAction btn btn-lg btn-success">
+                    {% trans "Next " %}
+                    <i class="fa fa-arrow-right"></i>
+                </button>
 
 
                 <!--input id="id_email" class="form-control" name="email" placeholder="Your email:" type="text" autocomplete="off">

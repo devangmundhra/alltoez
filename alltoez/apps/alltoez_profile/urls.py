@@ -13,6 +13,6 @@ urlpatterns = patterns('',
 	url(r'^profile/edit/$', UserProfileUpdate.as_view(), {}, name="edit_profile"),
     url(r"^profile/(?P<username>[\w-]+)/$", UserProfileDetail.as_view(), name="show_profile"),
     url(r'^signup/$', AlltoezSignupView.as_view(), {}, name="alltoez_account_signup"),
-    #url(r'^signup/step-2/$', UserProfileUpdate.as_view(), name="register_children"),
-    url(r'^signup/step-2/$', AlltoezSignupStep2View.as_view(), name="register_children"),
+    url(r'^signup/step-2/$', UserProfileUpdate.as_view(), name="register_children"),
+    # url(r'^signup/step-2/$', AlltoezSignupStep2View.as_view(), name="register_children"),
 )

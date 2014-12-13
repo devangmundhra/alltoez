@@ -5,9 +5,31 @@
 {% block page_title %}{{object}}{% endblock %}
 
 {% block content %}
-	Username: {{object.user.username}}<br/>
-	Email: {{object.user.email}}<br/>
-
-    {% if object.user == user %}<a href="{% url 'edit_profile' %}" class="btn">Edit Profile</a>{% endif %}
+<div class="row">
+    <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+        <div class="show-profile-div">
+            <h4>
+                <div class="user-info">
+                    <dl class="dl-horizontal parent-information">
+                        <dt class="email">Email</dt>
+                        <dd>{{ object.user.email }}</dd>
+                        <dt class="zipcode">Zipcode</dt>
+                        <dd>{{ object.zip_code }}</dd>
+                    </dl>
+                </div>
+                <div class="children-info well">
+                    <h3 class="text-center"><u>Children Information</u></h3>
+                    <ul class="list-unstyled children-list">
+                    {% for child in object.user.children.all %}
+                        <li><strong>{{ child.name }} </strong>{{ child.get_gender_display }}, {{ child.current_age }} years old</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </h4>
+            <br/>
+            {% if object.user == user %}<a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>{% endif %}
+        </div>
+    </div>
+</div>
 
 {% endblock %}

@@ -4,7 +4,9 @@
 {% block extra-custom-fields %}
 
 	{% if field.field.widget|field_type in 'CheckboxInput,SelectMultiple' %}
-		{{field}}
+		{{field|add_class:'input-lg'}}
+    {% elif field.field.widget|field_type in 'RadioSelect' %}
+        {{field|add_class:'input-lg radio-inline'}}
 	{% else %}
 		{{field|add_class:'form-control input-lg'}}
 	{% endif %}

@@ -13,6 +13,7 @@ from PIL import Image
 
 import os
 
+
 class CustomCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
 
    items_per_row = 4 # Number of items per row
@@ -42,6 +43,7 @@ class CustomCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
            output.append('<td nowrap><label%s>%s %s</label></td>' % (label_for, rendered_cb, option_label))
        output.append('</tr></table>')
        return mark_safe('\n'.join(output))
+
 
 class FileBrowserFrontendWidget(forms.FileInput):
     def __init__(self, attrs=None):

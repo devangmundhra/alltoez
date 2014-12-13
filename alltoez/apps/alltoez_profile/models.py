@@ -1,5 +1,6 @@
 import re, unicodedata, os, random, string
 
+from django.utils import timezone
 from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -71,11 +72,19 @@ class UserProfile(BaseModel):
             return user.username
 
 
-class Child(models.Model):
+class Child(BaseModel):
     """
     Profile to add children to a user's profile
     """
     user = models.ForeignKey(User, related_name="children")
-    gender = models.PositiveSmallIntegerField(choices=CHILD_GENDER_CHOICES.get_choices(), db_index=True,
-                                              blank=True, null=True)
+    name = models.CharField(_('name'), max_length=60, blank=True)
+    first_name = models.CharField(_('first name'), max_length=30, blank=True)
+    last_name = models.CharField(_('last name'), max_length=30, blank=True)
+    gender = models.PositiveSmallIntegerField(choices=CHILD_GENDER_CHOICES.get_choices(), db_index=True, default='')
     age = models.PositiveSmallIntegerField(blank=True, null=True)
+
+    @property
+    def current_age(self):
+        time_since_updated = timezone.now() - self.updated
+        print
+        return self.age + int(time_since_updated.days/365.2425)

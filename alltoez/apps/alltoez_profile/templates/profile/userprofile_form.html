@@ -1,17 +1,30 @@
 {% extends "alltoez/ui/layouts/base.html" %}
 {% load common_tags %}
 
-{% block title %}Editing Your Profile{% endblock %}
-{% block page_title %}Editing Your Profile{% endblock %}
+{% block title %}Update Profile{% endblock %}
+{% block page_title %}Update Your Profile{% endblock %}
 
 {% block content %}
-	<p class="lead">To update your profile complete the form below and click the 'Save' button.</p>
-
-	<form enctype="multipart/form-data" action="" id="submit-profile" method="post" class="form-horizontal">{% csrf_token %}
-		{% render_form form %}
-		<div class="form-actions">
-			<button type="submit" class="btn btn-primary">Save</button>
-		</div>
-	</form>
-
+<div class="row">
+    <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+        <div class="update-profile-div">
+            <p class="lead">Please update your profile.</p>
+            <p class="lead"> This will help us make much better recommendations for your family and you :)</p>
+            <br>
+            <form enctype="multipart/form-data" action="" id="submit-profile" method="post" class="form-horizontal">{% csrf_token %}
+                <h3>Parent Information</h3>
+                {% with hide_labels=1 %}
+                {% render_form form %}
+                <div class="div_add_children">
+                    <h3>Children Information</h3>
+                    {% include "forms/children_formset.html" with formset=children_formset add_another=True%}
+                </div>
+                {% endwith %}
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-lg btn-success">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

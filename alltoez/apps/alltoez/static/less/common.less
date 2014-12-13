@@ -5,8 +5,6 @@
 p { margin-bottom: 20px; }
 body {
 	padding-top: 51px;
-    background: rgba(0, 0, 0, 0.8);
-    //background-color: #f4f4f4;
 }
 .form-horizontal .form-group { margin-left: 0px; margin-right: 0px;  }
 
@@ -33,7 +31,7 @@ header {
 }
 
 footer {
-	color: #FFFFFF; font-weight: 300;
+	color: #000000; font-weight: 300;
 	padding-top: 60px; padding-bottom: 60px;
 	a { color: #FFFFFF; }
 	p { margin-bottom: 0px; }
@@ -54,8 +52,8 @@ body {
 	.strip {
 		padding-top: 60px; padding-bottom: 60px;
 		&.white {
-			//background: #FFFFFF;
-            background: #f4f4f4;
+			background: #FFFFFF;
+            //background: #f4f4f4;
 		}
 		&.light-grey {
 			background: #EEEEEE;
@@ -264,159 +262,78 @@ body {
 	}
 }
 
-
 // SIGNUP PAGE
-.socialaccount-ballot {
-  margin-top: 25px;
-  text-align: center;
-  list-style: none;
-  padding-left: 0px;
-  h1 {
-    margin-bottom: 50px;
-  }
-  a {
-    .fa {
-        background-color: #428bca;
-        color: #ffffff;
-        padding: 10px;
-        width: 50%;
-        font-size: 45px;
-        border-radius: 10px;
-      &:hover {
-        background-color: darken(#428bca, 5%);
-      }
-    }
-  }
- }
-.login-or {
-  margin-top: 30px;
-  font-size: 25px;
-  font-style: italic;
-  font-weight: 600;
-  color: #999999;
-}
-.signup {
-  input {
-    position: relative;
-    width: 100%;
-    height: 65px;
-    margin-top: 30px;
-    padding: 0 24px;
-    font-size: 25px;
-    font-weight: 600;
-    border-radius: 8px;
-    border-width: 3px;
-    border-color: #e5e5e5;
-
-  }
-  .btn {
-    position: relative;
-    width: 50%;
-    margin: 50px 0 70px 0;
-    background: #4584b2;
-    color: #ffffff;
-    font-size: 35px;
-    height: 70px;
-    border-radius: 10px;
-  }
-  .btn:hover {
-    background: darken(#4584b2, -5%);
-  }
-}
-.signup-step2 {
-  margin-top: 35px;
-  #div_id_gender {
-    #id_gender_chosen {
-      width: 100% !important;
-      .chosen-single {
-        font-size: 18px;
-        height: 46px;
-        span, div b {
-          position: relative;
-          top: 10px;
-        }
-        span {
-          padding-left: 10px;
-        }
-      }
-    }
-  }
-  .div_add_children {
-    .lead {
-      margin-bottom: 20px;
-      margin-top: 20px;
-    }
-    ul {
-      list-style: none;
-      padding-left: 0px;
-      .child-age {
-        width: 26%;
-        height: 46px;
-        float: left;
-        margin-right: 4px;
-        font-size: 18px;
-      }
-      .child-gender {
-        width: 111px;
-        height: 46px;
-        float: left;
-        margin-right: 4px;
-        .chosen-single {
-          height: 46px;
-          span {
-            position: relative;
-            top: 10px;
+.signup2-div, .update-profile-div {
+    text-align: center;
+      margin-top: 35px;
+      #div_id_gender {
+        #id_gender_chosen {
+          width: 100% !important;
+          .chosen-single {
             font-size: 18px;
-            padding-left: 5px;
-          }
-          div {
-            b {
-              top: 13px;
+            height: 46px;
+            span, div b {
               position: relative;
+              top: 10px;
+            }
+            span {
+              padding-left: 10px;
             }
           }
         }
-        .chosen-drop {
-          .chosen-results {
-            font-size: 16px;
+      }
+      .div_add_children {
+        margin-top: 35px;
+        p {
+            margin: 0px;
+        }
+        .lead {
+          margin-bottom: 20px;
+          margin-top: 20px;
+        }
+        ul {
+          list-style: none;
+          padding-left: 0px;
+          .child-age {
+            width: 26%;
+            height: 46px;
+            float: left;
+            margin-right: 4px;
+            font-size: 18px;
+          }
+          .radio-inline {
+            padding-top: 0px;
+          }
+          .add-child {
+            font-size: 18px;
+            height: 46px;
+            padding: 11px;
           }
         }
       }
-      .add-child {
-        font-size: 18px;
-        height: 46px;
-        padding: 11px;
+    .chosen-with-drop {
+      .chosen-drop {
+        left: -1px;
       }
     }
-    .children-list {
-      li {
-        font-size: 18px;
-        background-color: #e7e7e7;
-        border-radius: 6px;
-        padding: 10px;
-        margin-bottom: 3px;
-        color: #777777;
-        span {
-          float: right;
-        }
-      }
-    }
-  }
-  button {
-    width: 100%;
-    height: 46px;
-    font-size: 25px;
-  }
 }
-.chosen-with-drop {
-  .chosen-drop {
 
-    left: -1px;
+.children-list {
+  li {
+    font-size: 18px;
+    background-color: #e7e7e7;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 3px;
+    color: #777777;
+    span {
+      float: right;
+    }
   }
 }
 
-// LOGIN PAGE
-.login-div {
+// LOGIN/SINGUP COMMON PAGE
+.login-div, .signup-div {
   text-align: center;
   h1 {
     margin-bottom: 30px;
@@ -429,57 +346,23 @@ body {
     padding-left: 0px;
     margin-top: 40px;
   }
-  a {
-    .fa {
-        background-color: #428bca;
-        color: #ffffff;
-        padding: 10px;
-        width: 50%;
-        font-size: 45px;
-        border-radius: 10px;
-      &:hover {
-        background-color: darken(#428bca, 5%);
-      }
-    }
-  }
   .login-or {
     margin-top: 30px;
     margin-bottom: 30px;
-    font-size: 25px;
     font-style: italic;
-    font-weight: 600;
-    color: #999999;
+    font-size: 25px;
   }
   #div_id_remember {
     display: none;
   }
   .primaryAction {
     position: relative;
-    width: 50%;
-    margin: 50px 0 70px 0;
-    background: #4584b2;
-    color: #ffffff;
-    font-size: 35px;
-    height: 70px;
-    border-radius: 10px;
-    border: 0px;
-    display: block;
-    width: 100%;
+    margin: 20px 0 70px 0;
+    display: inline;
   }
-  .primaryAction:hover {
-    background: darken(#4584b2, -5%);
-  }
-  input {
-    position: relative;
-    width: 100%;
-    height: 65px;
-    margin-top: 30px;
-    padding: 0 24px;
-    font-size: 25px;
-    font-weight: 600;
-    border-radius: 8px;
-    border-width: 3px;
-    border-color: #e5e5e5;
+  .alltoez-snippet {
+    font-style: italic;
+    color: #999999;
   }
 }
 .password-reset {
@@ -668,14 +551,13 @@ body {
       }
     }
   }
-}
-
-// Remove button shadow
-.btn:active,
-.btn:focus,
-.btn.active:focus {
-  background-image: none;
-  outline: 0;
-  -webkit-box-shadow: none;
-          box-shadow: none;
+    // Remove button shadow
+    .btn:active,
+    .btn:focus,
+    .btn.active:focus {
+      background-image: none;
+      outline: 0;
+      -webkit-box-shadow: none;
+              box-shadow: none;
+    }
 }
