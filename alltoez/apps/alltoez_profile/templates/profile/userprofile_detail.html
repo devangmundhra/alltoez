@@ -17,6 +17,7 @@
                         <dd>{{ object.zip_code }}</dd>
                     </dl>
                 </div>
+                {% if object.user.children.count %}
                 <div class="children-info well">
                     <h3 class="text-center"><u>Children Information</u></h3>
                     <ul class="list-unstyled children-list">
@@ -25,6 +26,7 @@
                     {% endfor %}
                     </ul>
                 </div>
+                {% endif %}
             </h4>
             <br/>
             {% if object.user == user %}<a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>{% endif %}
