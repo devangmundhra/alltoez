@@ -1,7 +1,9 @@
 # Project related settings
 .idea/
-local_settings.py
-alltoez/site_media/static/*
+alltoez/static/*
+.DS_Store
+alltoez/media/*
+node_modules/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -59,3 +61,9 @@ docs/_build/
 target/
 
 celerybeat-schedule
+
+alltoez/configs/common/local_settings.py
+
+fixtures/fixtures.json
+
+alltoez/apps/events/static/js/events_ajax.js

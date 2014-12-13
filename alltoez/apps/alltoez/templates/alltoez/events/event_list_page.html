@@ -1,0 +1,42 @@
+{% for event in events_list %}
+<div class="col-xs-12 col-sm-4">
+    <div class="event-item">
+        <a href='{% url "event_detail" event.slug %}'>
+            <div class="event-image">
+                <img src="{{ event.image.url }}" width="100%">
+            </div>
+            <div class="event-info">
+                <h4>{{ event.title|truncatechars:'62' }}</h4>
+                {% if event.neighborhood %}
+                    <p>{{ event.neighborhood }}</p>
+                {% else %}
+                    <p>{{ event.address }}</p>
+                {% endif %}
+            </div>
+            {% if not event.recurrence_detail %}
+                <span class="event-date">{{ event.start_date|date }}</span>
+            {% endif %}
+            <div class="event-age-cost">
+                <div class="age">
+                    {% if event.min_age == 0 %}
+                        <span>Family Event</span>
+                    {% else %}
+                        <span>Min. Age: {{ event.min_age }} </span>
+                    {% endif %}
+                </div>
+                <div class="cost">
+                    {% if event.cost == 0 %}
+                        <span>Cost: Free</span>
+                    {% else %}
+                        <span>Cost: ${{ event.cost }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="event-meta">
+        <span></span>
+        <!--<span>Posted {{ event.created_at }} ago</span>-->
+    </div>
+</div>
+{% endfor %}
