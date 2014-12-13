@@ -1,0 +1,12 @@
+{% extends "alltoez/ui/layouts/base.html" %}
+
+{% block title%}Server error (500){% endblock %}
+{% block page_title %}Server error (500){% endblock %}
+
+{% block content %}
+    <p>There's been an error. It's been reported to the site administrators via e-mail and should be fixed shortly. Thank you for your patience.</p>
+
+    {% if request.sentry.id %}
+        <p>If you need assistance, you may reference this error as <strong>{{ request.sentry.id }}</strong>.</p>
+    {% endif %}
+{% endblock %}

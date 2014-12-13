@@ -1,0 +1,74 @@
+{% extends "alltoez/ui/layouts/base.html" %}
+{% load common_tags endless %}
+
+{% block title %}Events{% endblock %}
+{% block body_class %}events{% endblock %}
+
+{% block content_full_width %}
+	<div class="strip white">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12">
+					<div class="page-header">
+						<h1>Events</h1>
+						<p class="lead">I'm looking for <a href="#" id="filter-category" class="filter-category">{% firstof category.name 'all events' %}</a></p>
+
+						<div id="filter-header" class="filter-header">
+							<div class="category-selection clearfix">
+								<a href="{% url 'events' %}" class="all-events">All Events</a>
+
+								{% regroup category_list by parent as parent_list %}
+								<ul>
+									{% for parent_category in parent_list %}
+										<li>
+											<a href="#"><i class="fa {{ parent_category.grouper.font_awesome_icon_class }}"></i></a>
+											<h4>{{ parent_category.grouper }}</h4>
+											<ul>
+												{% for child_list in parent_category.list %}
+												<li>
+													<a href="{% url 'events' child_list.slug %}">{{ child_list.name }}</a>
+												</li>
+												{% endfor %}
+											</ul>
+										</li>
+									{% endfor %}
+								</ul>
+                            </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="strip narrow light-grey">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12">
+					<span class="qty-events">{{ events_list|length }} events</span>
+					<select class="sort-events">
+                        <option value="-created_at" {% if request.GET.sort == '-created_at' or not request.GET.sort %}SELECTED{% endif %}>New on Alltoez</option>
+                        <option value="cost" {% if request.GET.sort == 'cost' %}SELECTED{% endif %}>Cost</option>
+                        <option value="end_date" {% if request.GET.sort == 'end_date' %}SELECTED{% endif %}>Ending Soon</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="strip white">
+        <div class="container events-list">
+            <div class="row">
+                {% include page_template %}
+
+            </div>
+        </div>
+	</div>
+{% endblock %}
+
+    {% block extra_js %}
+        {{ block.super }}
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script src="{{ STATIC_URL }}endless_pagination/js/endless-pagination.js"></script>
+        <script>$.endlessPaginate({paginateOnScroll: true});</script>
+    {% endblock %}

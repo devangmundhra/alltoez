@@ -1,0 +1,19 @@
+{% load common_tags %}
+
+<div id="div_id_{{ field.html_name }}" class="control-group {% if field.errors %}error{% endif %}">
+	{% if field.field.widget|field_type == "DateInput" %}
+		<div class="input-append date datepicker" data-date="{% if field.value %}{{field.value|date:'d-m-Y'}}{% else %}{% now "d-m-Y" %}{% endif %}" data-date-format="dd-mm-yyyy">
+			<input class="span2 {{field.field.widget.attrs.class}}" size="16" type="text" value="{% if field.value %}{{field.value|date:'d-m-Y'}}{% else %}{% now "d-m-Y" %}{% endif %}" id="id_{{field.html_name}}" name="{{field.html_name}}">
+			<span class="add-on"><i class="icon-calendar"></i></span>
+		</div>
+	{% else %}
+		{% if field.field.widget|field_type == "TimeInput" %}
+			<div class="input-append time timepicker" data-date="{% if field.value %}{{field.value|time:'H:i'}}{% else %}{% now "H:i" %}{% endif %}" data-date-format="hh:mm">
+				<input class="span2 {{field.field.widget.attrs.class}}" size="16" type="text" value="{% if field.value %}{{field.value|time:'H:i'}}{% else %}{% now "H:i" %}{% endif %}" id="id_{{field.html_name}}" name="{{field.html_name}}">
+				<span class="add-on"><i class="icon-time"></i></span>
+			</div>
+		{% else %}
+			{{field}}
+		{% endif %}
+	{% endif %}
+</div>

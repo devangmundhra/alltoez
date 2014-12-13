@@ -1,0 +1,6 @@
+{% load common_tags fb_versions %}
+
+<div class="input-append date datepicker" data-date="{% if field.value %}{{field.value|date:'Y-m-d'}}{% else %}{% now "Y-m-d" %}{% endif %}" data-date-format="yy-mm-dd">
+	<input class="{{field.field.widget.attrs.class}} form-control" size="16" type="text" value="{{field.value|date:'Y-m-d'}}" id="id_{{field.html_name}}" name="{{field.html_name}}">
+	<span class="add-on"><i class="icon-calendar"></i></span>
+</div>

@@ -1,0 +1,94 @@
+{% extends "alltoez/ui/layouts/base.html" %}
+{% load common_tags %}
+
+{% block title %}Sign up - Profile{% endblock %}
+{% block page_title %}...and done{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+        <div class="signup2-div">
+            <div class="page-header step2-help-text">
+                <!--<h1>Editing Your Profile</h1>-->
+            </div>
+            <p class="lead">Let us know you and your family a little bit better.</p>
+            <form enctype="multipart/form-data" action="." id="submit-profile" class="signup-step2 form-horizontal" method="post">{% csrf_token %}
+                <!--<input type="hidden" name="csrfmiddlewaretoken" value="XLGiczykYQhAKFkL16OU4Ope1eR1oiXm">-->
+                <!--<input type="hidden" name="children" value="" />-->
+
+                {% with hide_labels=1 %}
+                    {% render_form form %}
+                {% endwith %}
+                <div class="div_add_children">
+                    <p class="lead">This will help us make much better recommendations for your family and you :)</p>
+                    <div>
+                        <span class="btn btn-primary btn-lg add-child">Add Child</span>
+                    </div>
+                    <ul>
+                        <li>
+                            <input type="number" class="form-control child-age" name="child_age" placeholder="Age" min="0">
+                        </li>
+                        <li>
+                            <select class="child-gender  chosen-select" name="child_gender" data-placeholder="Gender">
+                            <!--<option value="">Child Gender:</option>-->
+                                {% for gender in CHILD_GENDER_CHOICES %}
+                                <option value="{{ gender.0 }}">{{ gender.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </li>
+                    </ul>
+                    <ul class="children-list"></ul>
+                </div>
+                {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+                <br>
+                <div class="form-actions">
+                <button type="submit" class="btn btn-lg btn-success">Done</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="application/javascript">
+    var children = [];
+
+    $(document).ready(function(){
+
+        function addChild() {
+            // Add a child to the children array
+            var childAge = $("input[name=child_age]").val();
+            var childGender = $("select[name=child_gender]").val();
+            var child = {'age':childAge, 'gender':childGender};
+            children.push(child);
+            addChildHtml(child);
+
+            // Clear the inputs for next addition
+            $("input[name=child_age]").val("");
+            $("select[name=child_gender]").val("");
+        }
+
+        function addChildHtml(child) {
+            // Adds the recently added child to the table html
+            var childHtml =
+                '<li>' + (child.gender==0?'Boy':'Girl') + ': <span>'+child.age+' years old</span></li>';
+            $(".children-list").append(childHtml);
+        }
+
+        // Called when the form is submitted, this will prepare the
+        // form data (i.e. hidden fields) for submission to the view
+        function preSubmitForm() {
+            $("input[name=children]").val(JSON.stringify(children));
+            console.log("AAQQUUII!");
+        }
+
+        $(".add-child").click(function(e){
+            e.preventDefault();
+            addChild();
+         })
+        $("form").submit(function(){
+            preSubmitForm()
+        })
+    });
+</script>
+{% endblock %}

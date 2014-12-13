@@ -1,0 +1,115 @@
+{% load common_tags %}
+
+{{formset.management_form}}
+
+{% if formset.errors %}
+<div class="alert alert-error">
+	<strong>Oops!</strong> It looks like there is a problem with this form. Please review the error(s) below and then try again.
+</div>
+{% endif %}
+
+{% for form in formset %}
+{% if forloop.first %}
+<table class="table table-striped tabular-formset tabular-formset-{{formset.prefix}}">
+	<thead><tr>
+		{% for field in form.visible_fields %}
+			<th>{{field.label}} {% if field.field.required %}<span class="required">*</span>{% endif %}</th>
+		{% endfor %}
+	</tr></thead>
+	<tbody>
+{% endif %}	
+	<tr class="tabular-formset-item">
+		{% for hidden in form.hidden_fields %}
+			{{ hidden }}
+		{% endfor %}
+		{% for field in form.visible_fields %}
+			<td>{% include "helpers/tabular_form_field.html" %}</td>
+		{% endfor %}
+	</tr>
+{% if forloop.last %}
+	{% if add_another %}
+	<tr>
+		<td colspan="99">
+			<a class="btn btn-small" href="javascript:;" 
+					onclick="formset_add_other_row('table.tabular-formset-{{formset.prefix}} tr.tabular-formset-item:last', '{{formset.prefix}}');">
+				<i class="icon icon-plus"></i> Add another row
+			</a>
+		</td>
+	</tr>
+	{% endif %}
+	</tbody></table>
+{% endif %}
+{% endfor %}
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.datepicker').datepicker({format: 'dd-mm-yyyy', autoclose:true});
+		
+		// For standard selects
+		$("select:not([multiple]):not(.create_options, .prevent_chosen)").chosen({ search_contains: true, disable_search_threshold: 10 });
+		$("select:not([multiple]).create_options").chosen({ persistent_create_option: true, create_option: true, search_contains: true });
+		
+		// For multiple selects
+		$("select[multiple]:not(.create_options, .prevent_chosen)").chosen({
+			create_option: false,
+			search_contains: true,
+			disable_search_threshold: 10
+		});
+		$("select[multiple].create_options").chosen({
+			create_option_text: 'Add',
+			create_option: true,
+			persistent_create_option: true,
+			search_contains: true
+		});
+	});
+	
+	function formset_add_other_row(selector, type) {
+	    var newElement = $(selector).clone(true);
+	    var total = $('#id_' + type + '-TOTAL_FORMS').val();
+
+	    newElement.find('.chzn-container').remove();
+	    newElement.find('.chzn-done').removeClass('chzn-done');
+
+	    newElement.find(':input').each(function() {
+	    	var old_name = $(this).attr('name');
+	    	
+	    	if (old_name) {
+		        var name = old_name.replace('-' + (total-1) + '-','-' + total + '-');
+		        var id = 'id_' + name;
+		        $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+	    	}
+	    });
+	    newElement.find('label').each(function() {
+	        var newFor = $(this).attr('for').replace('-' + (total-1) + '-','-' + total + '-');
+	        $(this).attr('for', newFor);
+	    });
+	    newElement.find('div.control-group').each(function() {
+	        var child_input = $(this).find('input');
+	    	
+	    	if (child_input.length > 0) {
+	    		var child_input_id = child_input.attr('id');
+		        $(this).attr({'id': 'div_'+child_input_id});
+	    	}
+	    });
+	    total++;
+	    $('#id_' + type + '-TOTAL_FORMS').val(total);
+	    $(selector).after(newElement);
+
+	    // For standard selects
+		$("select:not([multiple]):not(.create_options, .prevent_chosen)").chosen({ search_contains: true, disable_search_threshold: 10 });
+		$("select:not([multiple]).create_options").chosen({ persistent_create_option: true, create_option: true, search_contains: true });
+		
+		// For multiple selects
+		$("select[multiple]:not(.create_options, .prevent_chosen)").chosen({
+			create_option: false,
+			search_contains: true,
+			disable_search_threshold: 10
+		});
+		$("select[multiple].create_options").chosen({
+			create_option_text: 'Add',
+			create_option: true,
+			persistent_create_option: true,
+			search_contains: true
+		});
+	}
+</script>

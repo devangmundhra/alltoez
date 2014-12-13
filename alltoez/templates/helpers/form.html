@@ -1,0 +1,84 @@
+{% load common_tags %}
+
+{% if form.errors %}
+<div class="alert alert-error">
+	<strong>Oops!</strong> It looks like there is a problem with this form. Please review the error(s) below and then try again.
+</div>
+{% endif %}
+
+{% for hidden in form.hidden_fields %}
+	{{ hidden }}
+{% endfor %}
+
+{% if form.fieldsets %}
+	{% for fieldset in form.fieldsets %}
+		<fieldset>
+			{% if fieldset.title %}<legend><b>{{fieldset.title}}</b></legend>{% endif %}
+			{% for field in fieldset.fields %}
+				{% if not field.is_hidden and hide_fields %}
+					{% if field.html_name not in hide_fields %}
+						{% include "helpers/form_field.html" %}
+					{% endif %}
+				{% else %}
+					{% if not field.is_hidden %}
+						{% include "helpers/form_field.html" %}
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+		</fieldset>
+	{% endfor %}
+{% else %}
+	{% for field in form.visible_fields %}
+		{% if not hide_fields or field.html_name not in hide_fields %}
+			{% include "helpers/form_field.html" %}
+		{% endif %}
+	{% endfor %}
+{% endif %}
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.datepicker').datepicker({dateFormat: '{{settings.JQUERY_DATEPICKER_DATE_FORMAT}}', autoclose:true});
+
+           setTimeout(function(){
+             // For standard selects
+		$("select:not([multiple]):not(.create_options, .prevent_chosen, .dob)").chosen({
+			search_contains: true,
+			disable_search_threshold: 10,
+			inherit_select_classes: true
+		});
+		$("select.dob").chosen({
+			disable_search: true,
+			inherit_select_classes: true
+		});
+		$("select:not([multiple]).create_options").chosen({
+			persistent_create_option: true,
+			create_option: true,
+			search_contains: true,
+			inherit_select_classes: true
+		});
+
+		// For multiple selects
+		$("select[multiple]:not(.create_options, .prevent_chosen)").chosen({
+			create_option: false,
+			search_contains: true,
+			disable_search_threshold: 10,
+			inherit_select_classes: true
+		});
+		$("select[multiple].create_options").chosen({
+			create_option_text: 'Add',
+			create_option: true,
+			persistent_create_option: true,
+			search_contains: true,
+			inherit_select_classes: true
+		});
+           }, 500)
+
+		// Color Picker
+		try {
+			$(".minicolors").minicolors();
+		}
+		catch (err) {
+
+		}
+	});
+</script>

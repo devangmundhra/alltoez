@@ -1,0 +1,158 @@
+{% load cache compressed %}
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html class="not-ie" lang="en" xmlns:fb="http://ogp.me/ns/fb#"> <!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<title>{% block title_outer %}Alltoez | {% block head_title %}{% block title %}{% endblock %}{% endblock %}{% endblock %}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="{% block site-meta-description %}Alltoez helps parents and kids find activities they love.{% endblock %}" />
+		<meta name="author" content="">
+		<meta name="robots" content="{% if settings.DEBUG %}nofollow{% else %}index, follow{% endif %}" />
+
+		{% block fb_meta %}
+			<meta property="og:title"       content="Alltoez" />
+			<meta property="og:description" content="Alltoez helps parents and kids find activities they love to do." />
+			<meta property="og:type"        content="website" />
+			<meta property="og:image"       content="http://alltoez.com/static/img/logo-square.png" />
+			<meta property="og:url"         content="http://www.facebook.com/alltoez" />
+			<meta property="og:site_name"   content="alltoez" />
+		{% endblock %}
+
+		<link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        {% if settings.DEBUG %}
+        <!--Needed because in debug mode base.js is not getting added -->
+		<link rel="stylesheet/less" type="text/css" href="{{STATIC_URL}}less/theme.less">
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+		{% endif %}
+
+		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+
+		<!--[if IE 7]>
+			<link href="css/font-awesome-ie7.min.css" rel="stylesheet">
+		<![endif]-->
+
+		<link rel="canonical" href="http://{{request.META.HTTP_HOST}}{{request.path}}" />
+
+		<!-- IE6-8 support of HTML5 elements -->
+		<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+
+		{% block extracss %}{% endblock %}
+		<!-- fav and touch icons -->
+		<link rel="shortcut icon" href="{{STATIC_URL}}ico/favicon.ico">
+		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{STATIC_URL}}ico/apple-touch-icon-114-precomposed.png">
+		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{STATIC_URL}}ico/apple-touch-icon-72-precomposed.png">
+		<link rel="apple-touch-icon-precomposed" href="{{STATIC_URL}}ico/apple-touch-icon-57-precomposed.png">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+		{% block extra_head %}{% endblock %}
+
+		<script type="text/javascript">var csrftoken = "{{ csrf_token }}";</script>
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+        <script src="http://connect.facebook.net/en_US/all.js"></script>
+        {% compressed_css 'theme' %}
+	</head>
+
+	<body class="{% block body_class %}{% endblock %}">
+		{% include "alltoez/ui/fragments/header.html" %}
+
+		{% block content_full_width %}
+			<div class="strip white">
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12">
+							{% block page_title_outer %}
+							<div class="page-header">
+								<h1>{% block page_title %}{% endblock %}</h1>
+							</div>
+							{% endblock %}
+							{% block content %}{% endblock %}
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endblock %}
+
+		{% include "alltoez/ui/fragments/footer.html" %}
+
+		{% compressed_js 'base' %}
+
+		{% if not settings.DEBUG and not request.user.is_staff and settings.GOOGLE_ANALYTICS_CODE %}
+			<!-- asynchronous google analytics -->
+			<script>
+              (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+              })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+              ga('create', '{{settings.GOOGLE_ANALYTICS_CODE}}', 'auto');
+              ga('send', 'pageview');
+			</script>
+		{% endif %}
+        <script>
+          window.fbAsyncInit = function() {
+            FB.init({
+              appId      : '{{settings.FACEBOOK_APP_ID}}',
+              xfbml      : true,
+              version    : 'v2.1'
+            });
+          };
+
+          (function(d, s, id){
+             var js, fjs = d.getElementsByTagName(s)[0];
+             if (d.getElementById(id)) {return;}
+             js = d.createElement(s); js.id = id;
+             js.src = "//connect.facebook.net/en_US/sdk.js";
+             fjs.parentNode.insertBefore(js, fjs);
+           }(document, 'script', 'facebook-jssdk'));
+        </script>
+		{% block extra_js %}{% endblock %}
+		{% block extra_body %}
+        <script src="http://harvesthq.github.io/chosen/chosen.jquery.js"></script>
+        <script>
+        // Include the UserVoice JavaScript SDK (only needed once on a page)
+        UserVoice=window.UserVoice||[];(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/DmFOThCqD6S8YCSSZHXQkg.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})();
+
+        //
+        // UserVoice Javascript SDK developer documentation:
+        // https://www.uservoice.com/o/javascript-sdk
+        //
+
+        // Set colors
+        UserVoice.push(['set', {
+          accent_color: '#448dd6',
+          trigger_color: 'white',
+          trigger_background_color: 'rgba(46, 49, 51, 0.6)'
+        }]);
+
+        // Identify the user and pass traits
+        // To enable, replace sample data with actual user traits and uncomment the line
+        UserVoice.push(['identify', {
+          email:    "{{ user.email }}", // User’s email address
+          name:       "{{ user.first_name }} {{ user.last_name }}", // User’s real name
+          id:         "{{ user.id }}", // Optional: Unique id of the user (if set, this should not change)
+        }]);
+
+        // Add default trigger to the bottom-right corner of the window:
+        UserVoice.push(['addTrigger', { mode: 'contact', trigger_position: 'bottom-right' }]);
+
+        // Or, use your own custom trigger:
+        //UserVoice.push(['addTrigger', '#id', { mode: 'contact' }]);
+
+        // Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
+        UserVoice.push(['autoprompt', {}]);
+        </script>
+        {% endblock %}
+	</body>
+</html>

@@ -1,0 +1,11 @@
+{% load common_tags fb_versions %}
+
+<div class="fileinput">
+	{% if form.instance.pk and field.value %}<img src="{% version field.value 'thumb' %}" style="margin-bottom: 10px;" class="img-rounded" /><br/>{% endif %}
+
+	<input type="file" name="{{field.html_name}}" id="id_{{field.html_name}}" />
+	{% if form.instance.pk and field.value %}
+		<label for="{{field.html_name}}-clear_id" style="float: left; margin-right: 10px;">Clear: </label> <input type="checkbox" name="{{field.html_name}}-clear" id="{{field.html_name}}-clear_id">
+	{% endif %}
+	<div style="clear: both;"></div>
+</div>
