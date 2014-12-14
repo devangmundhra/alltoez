@@ -133,9 +133,9 @@ def install_requirements():
     """
     with prefix('source %(env_path)s/bin/activate' % env):
         run('pip install -r %(repo_path)s/requirements.txt' % env)
-        run('npm install --prefix %(repo_path)s less')
-        run('npm install --prefix %(repo_path)s yuglify')
-        run('npm install --prefix %(repo_path)s coffee-script')
+        run('npm install --prefix %(repo_path)s less' % env)
+        run('npm install --prefix %(repo_path)s yuglify' % env)
+        run('npm install --prefix %(repo_path)s coffee-script' % env)
 
 def install_supervisor_conf():
     """
