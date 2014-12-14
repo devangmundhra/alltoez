@@ -26,6 +26,14 @@ class UserProfileDetail(LoginRequiredMixin, DetailView):
     slug_url_kwarg = 'username'
     template_name = "profile/userprofile_detail.html"
 
+    def get_object(self, queryset=None):
+        if self.kwargs.get(self.slug_url_kwarg, None):
+            # If a username is given, use that to get the object of interest
+            return super(UserProfileDetail, self).get_object(queryset)
+        else:
+            # Else use the current user
+            return self.request.user.profile
+
     def get_context_data(self, **kwargs):
         context = super(UserProfileDetail, self).get_context_data(**kwargs)
         context['profile_user'] = self.object.user
