@@ -42,10 +42,10 @@ class UserProfileUpdate(MessageMixin, UpdateView):
         return super(UserProfileUpdate, self).dispatch(*args, **kwargs)
 
     def get_success_url(self):
-        try:
+        if self.kwargs.get("source", "") is "step2":
+            self.success_url = reverse('home')
+        else:
             self.success_url = reverse('show_profile', args=[self.object.username])
-        except NoReverseMatch:
-            self.success_url = '/'
 
         return self.success_url
 

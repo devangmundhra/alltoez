@@ -11,10 +11,14 @@
             <h4>
                 <div class="user-info">
                     <dl class="dl-horizontal parent-information">
+                        {% if object.user.email %}
                         <dt class="email">Email</dt>
                         <dd>{{ object.user.email }}</dd>
+                        {% endif %}
+                        {% if object.zip_code %}
                         <dt class="zipcode">Zipcode</dt>
                         <dd>{{ object.zip_code }}</dd>
+                        {% endif %}
                     </dl>
                 </div>
                 {% if object.user.children.count %}

@@ -2,6 +2,7 @@
 {% load common_tags %}
 {% load cache compressed %}
 {% load markdown_deux_tags %}
+{% load admin_urls %}
 
 {% block title %}{{ event.title }}{% endblock %}
 {% block page_title_outer %}{% endblock %}
@@ -128,7 +129,9 @@
 </div>
 <div class="row">
     <div class="col-xs-12 col-md-4">
-
+        {% if request.user.is_superuser %}
+        <a href="{% url 'admin:events_event_change' object.pk %}" class="event-admin btn btn-lg btn-primary">Edit Event</a>
+        {% endif %}
     </div>
 </div>
 
