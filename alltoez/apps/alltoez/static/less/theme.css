@@ -6910,6 +6910,8 @@ p {
 }
 body {
   padding-top: 51px;
+  background: rgba(0, 0, 0, 0.8);
+  background-color: #f4f4f4;
 }
 .form-horizontal .form-group {
   margin-left: 0px;
@@ -6959,11 +6961,11 @@ body .lead {
   margin-bottom: 0px;
 }
 body .strip {
-  padding-top: 60px;
-  padding-bottom: 60px;
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 body .strip.white {
-  background: #FFFFFF;
+  background: #f4f4f4;
 }
 body .strip.light-grey {
   background: #EEEEEE;
@@ -7452,9 +7454,14 @@ body.events .event-meta {
   color: #494949;
   text-align: justify;
 }
+.right-side {
+  padding: 20px;
+}
 .right-side .social-actions {
-  margin-bottom: 30px;
+  background: #ffffff;
   border-radius: 6px;
+  padding: 20px;
+  margin-bottom: 30px;
 }
 .right-side .social-actions a {
   text-decoration: none;
@@ -7511,7 +7518,6 @@ body.events .event-meta {
   text-align: center;
 }
 .right-side .event-location .event-web .site {
-  border-right: 1px solid #ebebeb;
   height: 100%;
 }
 .right-side .event-location .event-web .site a {
