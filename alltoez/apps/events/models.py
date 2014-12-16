@@ -8,7 +8,7 @@ from location_field.models.plain import PlainLocationField
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.alltoez.utils.model_utils import unique_slugify
-
+from apps.venues.models import Venue
 
 class Category(models.Model):
     """
@@ -99,9 +99,13 @@ class Event(models.Model):
     Event class
     This class describes the details of an event.
     """
+    DEFAULT_MIN_AGE_EVENT = 0
+    DEFAULT_MAX_AGE_EVENT = 100
+
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
     draft = models.ForeignKey(DraftEvent, blank=True, null=True)
+    venue = models.ForeignKey(Venue, blank=True, null=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=50)
     description = models.TextField()
@@ -112,9 +116,7 @@ class Event(models.Model):
                                     help_text="Neigborhood of activity. Leave blank for auto-fill")
     phone_number = PhoneNumberField(blank=True, help_text="Phone number, if available")
     image = JSONField(default="{\"url\":\"\",\"source_name\":\"\",\"source_url\":\"\"}")
-    DEFAULT_MIN_AGE_EVENT = 0
     min_age = models.PositiveSmallIntegerField(default=DEFAULT_MIN_AGE_EVENT, db_index=True)
-    DEFAULT_MAX_AGE_EVENT = 100
     max_age = models.PositiveSmallIntegerField(default=DEFAULT_MAX_AGE_EVENT, db_index=True)
     cost = models.PositiveSmallIntegerField(default=0, db_index=True)
     cost_detail = models.CharField(max_length=500, blank=True,

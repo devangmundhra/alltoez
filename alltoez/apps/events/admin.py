@@ -7,6 +7,7 @@ from django.db.models import Q
 from pagedown.widgets import AdminPagedownWidget
 
 from apps.events.models import DraftEvent, Event, EventRecord, Category
+from apps.venues.admin import VenueInline
 
 
 class ExpiredEventListFilter(admin.SimpleListFilter):
@@ -45,6 +46,7 @@ class ExpiredEventListFilter(admin.SimpleListFilter):
             return queryset.filter(end_date__lt=timezone.now().date())
         if self.value() == 'no_expiry':
             return queryset.filter(Q(end_date=None))
+
 
 class EventAdminForm(forms.ModelForm):
     """

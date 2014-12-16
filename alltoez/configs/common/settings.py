@@ -110,6 +110,7 @@ INSTALLED_APPS = [
 	# Local Project Apps
 	'apps.alltoez_profile',
 	'apps.alltoez',
+    'apps.venues',
 	'apps.events',
     'apps.user_actions',
 ]

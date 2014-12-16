@@ -20,7 +20,7 @@
             <div class="event-address">
                 <dl>
                     <dt>WHERE</dt>
-                    <dd>{{ event.address }}</dd>
+                        <dd>{{ event.venue.name }}</dd>
                 </dl>
             </div>
             <div class="event-image">
@@ -70,11 +70,11 @@
                 </div>
                 <div class="event-detail">
                     <h4>{{ event.title}}</h4>
-                    <p>{{ event.address }}</p>
-                    {% if event.phone_number %}
+                    <p>{{ event.venue.address }}</p>
+                    {% if event.venue.phone_number %}
                     <p>
                         <i class="fa fa-phone"></i>
-                        {{   event.phone_number }}
+                        {{   event.venue.phone_number }}
                     </p>
                     {% endif %}
                 </div>
@@ -139,12 +139,12 @@
         function init_map() {
             var myOptions = {
                 zoom:14,
-                center:new google.maps.LatLng({{ event.location }}),
+                center:new google.maps.LatLng({{ event.venue.latitude|add:','|add:event.venue.longitude }}),
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
             var map = new google.maps.Map(document.getElementById("gmap_canvas"), myOptions);
             var marker = new google.maps.Marker({map: map,
-                                                position: new google.maps.LatLng({{ event.location }}),
+                                                position: new google.maps.LatLng({{ event.venue.latitude|add:','|add:event.venue.longitude }}),
                                                 title:"{ event.title }}"
                                                 });
             marker.setMap(map);

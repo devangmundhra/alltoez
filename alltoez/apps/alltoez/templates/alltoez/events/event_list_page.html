@@ -7,10 +7,10 @@
             </div>
             <div class="event-info">
                 <h4>{{ event.title|truncatechars:'62' }}</h4>
-                {% if event.neighborhood %}
-                    <p>{{ event.neighborhood }}</p>
+                {% if event.venue.neighborhood %}
+                    <p>{{ event.venue.neighborhood }}</p>
                 {% else %}
-                    <p>{{ event.address }}</p>
+                    <p>{{ event.venue.address }}</p>
                 {% endif %}
             </div>
             {% if not event.recurrence_detail %}

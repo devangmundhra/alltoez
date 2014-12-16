@@ -3,6 +3,7 @@ from math import *
 
 import urllib, json
 
+
 def calc_bounding_box(lat, lon, radius, use_miles = True):
     """ retval -> lat_min, lat_max, lon_min, lon_max
         Calculates the max and min lat and lon for an area.
@@ -39,10 +40,35 @@ def calc_bounding_box(lat, lon, radius, use_miles = True):
 
     return lat_min, lat_max, lon_min, lon_max
 
+
+def rev_geocode_location_component(lat, lng, result_type=""):
+    google_maps_api_key = getattr(settings, 'GOOGLE_MAPS_V3_APIKEY', None)
+    qt_latlng = urllib.quote_plus("{},{}".format(lat, lng))
+    geo = urllib.urlopen("https://maps.googleapis.com/maps/api/geocode/json?latlng={0}&key={1}&result_type={2}".
+                         format(qt_latlng,
+                         google_maps_api_key, result_type))
+    res = json.loads(geo.read())
+    if res['status'] != 'OK':
+        return ""
+    # Example https://maps.googleapis.com/maps/api/geocodhttps://maps.googleapis.com/maps/api/geocode/json?latlng=37.7628848%2C-122.428514&key=AIzaSyDOtkrcR4QFGYTMdR71WkkUYsMQ735c_EU&result_type=neighborhood
+    try:
+        address = res['results'][0]['address_components'][0]['short_name']
+        import pdb
+
+        if result_type == 'political' and not address:
+            pdb.set_trace()
+        return address
+    except ValueError:
+        return ""
+
+
 def geocode_location(location, full=False):
-    key = settings.GOOGLE_MAPS_API_KEY
+    key = getattr(settings, 'GOOGLE_MAPS_V3_APIKEY', None)
     location = urllib.quote_plus(location)
-    request = "http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false" % (location)
+    if key:
+        request = "https://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false&key=%s" % (location, key)
+    else:
+        request = "https://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false" % (location)
 
     data = urllib.urlopen(request).read()
     dlist = json.loads(data)
@@ -64,6 +90,7 @@ def geocode_location(location, full=False):
         if full:
             return {}
         return (0, 0)
+
 
 def _get_location_address_parameter(dlist, types):
     address_components = dlist['results'][0]['address_components']

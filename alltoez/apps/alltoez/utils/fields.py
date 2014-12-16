@@ -1,7 +1,6 @@
 from django.utils.translation import ugettext as _
 from django.db import models, connection
 from django.utils.text import capfirst
-from itertools import chain
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 from django.utils.encoding import force_unicode, smart_unicode
@@ -13,9 +12,12 @@ from django.utils.html import escape
 from django.forms.fields import EMPTY_VALUES, Field
 from django.forms import ValidationError
 from django.db.models.signals import post_delete, post_save
-from south.modelsinspector import add_introspection_rules
 from django.db.models import OneToOneField
 from django.db.models.fields.related import SingleRelatedObjectDescriptor
+
+from itertools import chain
+
+from south.modelsinspector import add_introspection_rules
 
 qn = connection.ops.quote_name
 
@@ -24,13 +26,10 @@ import re
 from apps.alltoez.utils.form_fields import MultiSelectFormField
 from apps.alltoez.utils.widgets import CustomCheckboxSelectMultiple
 
-uk_landline_re = re.compile(r'^[0]{1}[1-9]{1}[0-9]{9}$')
-uk_landline_no08or09_re = re.compile(r'^[0]{1}[1-7]{1}[0-9]{9}$')
-uk_mobile_re = re.compile(r'^(07)[0-9]{9}')
-international_number_re = re.compile(r'^[+]?([0-9]*[\.\s\-\(\)]|[0-9]+){3,24}$')
-
 from django.db.models import OneToOneField
 from django.db.models.fields.related import SingleRelatedObjectDescriptor
+
+add_introspection_rules([], ["^apps.alltoez.utils.fields.CountryField"])
 
 
 class AutoSingleRelatedObjectDescriptor(SingleRelatedObjectDescriptor):
@@ -65,69 +64,6 @@ class AutoOneToOneField(OneToOneField):
         args, kwargs = introspector(self)
         return (field_class, args, kwargs)
 
-class InternationalTelNumberField(Field):
-    " A InternationalTelNumberField that accepts a wide variety of valid phone number patterns. "
-    default_error_messages = {
-        'invalid': u'The phone number is invalid. Please ensure you have entered it in the international format.',
-    }
-
-    def clean(self, value):
-        super(InternationalTelNumberField, self).clean(value)
-        if value in EMPTY_VALUES:
-            return u''
-
-        m = international_number_re.match(smart_unicode(value))
-        if m:
-            return u'%s' % (value)
-        raise ValidationError(self.error_messages['invalid'])
-
-class UKLandlineField(Field):
-    " A UKLandlineField that accepts a wide variety of valid phone number patterns. "
-    default_error_messages = {
-        'invalid': u'The phone number is invalid. Please ensure you have no spaces or dashes.',
-    }
-
-    def clean(self, value):
-        super(UKLandlineField, self).clean(value)
-        if value in EMPTY_VALUES:
-            return u''
-
-        m = uk_landline_re.match(smart_unicode(value))
-        if m:
-            return u'%s' % (value)
-        raise ValidationError(self.error_messages['invalid'])
-
-class UKLandlineNo08or09Field(Field):
-    " A UKLandlineNo08or09Field that accepts a wide variety of valid phone number patterns. Except for those starting with 08 or 09"
-    default_error_messages = {
-        'invalid': u'The phone number is invalid. Please ensure you have no spaces or dashes and that the number cannot start with 08 or 09.',
-    }
-
-    def clean(self, value):
-        super(UKLandlineNo08or09Field, self).clean(value)
-        if value in EMPTY_VALUES:
-            return u''
-
-        m = uk_landline_no08or09_re.match(smart_unicode(value))
-        if m:
-            return u'%s' % (value)
-        raise ValidationError(self.error_messages['invalid'])
-
-class UKMobileField(Field):
-    " A UKMobileField that accepts a wide variety of valid phone number patterns."
-    default_error_messages = {
-        'invalid': u'The mobile number is invalid. Please ensure you have no spaces or dashes.',
-    }
-
-    def clean(self, value):
-        super(UKMobileField, self).clean(value)
-        if value in EMPTY_VALUES:
-            return u''
-
-        m = uk_mobile_re.match(smart_unicode(value))
-        if m:
-            return u'%s' % (value)
-        raise ValidationError(self.error_messages['invalid'])
 
 class MultiSelectField(models.Field):
     __metaclass__ = models.SubfieldBase
@@ -415,6 +351,7 @@ COUNTRIES = [
     ('ZW', _('Zimbabwe')),
 ]
 
+
 class CountryField(models.CharField):
 
     def __init__(self, *args, **kwargs):
@@ -425,6 +362,8 @@ class CountryField(models.CharField):
 
     def get_internal_type(self):
         return "CharField"
+
+
 
 class PositionField(models.IntegerField):
     """A model field to manage the position of an item within a collection.
