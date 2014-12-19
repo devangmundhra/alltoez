@@ -15,9 +15,19 @@
                         <dt class="email">Email</dt>
                         <dd>{{ object.user.email }}</dd>
                         {% endif %}
-                        {% if object.zip_code %}
-                        <dt class="zipcode">Zipcode</dt>
-                        <dd>{{ object.zip_code }}</dd>
+                        {% if object.city or object.state or object.zipcode %}
+                        <dt class="location">Location</dt>
+                        <dd>
+                            {% if object.city %}
+                            <span class="city">{{ object.city }}</span>
+                            {% endif %}
+                            {% if object.state %}
+                            <span class="state">, {{ object.state }}</span>
+                            {% endif %}
+                            {% if object.zipcode %}
+                            <span class="zipcode"> {{ object.zipcode }}</span>
+                            {% endif %}
+                        </dd>
                         {% endif %}
                     </dl>
                 </div>

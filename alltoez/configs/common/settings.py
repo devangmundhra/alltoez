@@ -88,6 +88,7 @@ INSTALLED_APPS = [
 	'django.contrib.admin',
 	'django.contrib.sitemaps',
 	'django.contrib.humanize',
+    'django.contrib.gis',
 
 	# Utilities & Helper Apps
 	'south',
@@ -333,6 +334,11 @@ MARKDOWN_DEUX_STYLES = {
         "safe_mode": False,
     },
 }
+
+#-------------------------------------------------------------------------------
+#	GEOIP CONFIG
+#-------------------------------------------------------------------------------
+GEOIP_PATH = os.path.join(SITE_ROOT, "data/geoip_data")
 
 try:
 	from local_settings import *

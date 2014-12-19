@@ -257,9 +257,12 @@ def echo_host():
     """
     run('echo %(settings)s; echo %(hosts)s' % env)
 
-def onetime_venues_update():
-
+def manage_command(command):
+    """
+    Execute management commands
+    """
+    env.command = command
     require('settings', provided_by=[production, staging])
     require('branch', provided_by=[stable, master, branch])
     with prefix('source %(env_path)s/bin/activate' % env):
-        run('python %(repo_path)s/%(project_name)s/configs/%(settings)s/manage.py onetimevenues;' % env)
+        run('python %(repo_path)s/%(project_name)s/configs/%(settings)s/manage.py %(command)s;' % env)

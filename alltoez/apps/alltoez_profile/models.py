@@ -12,7 +12,7 @@ from django.dispatch import receiver
 from filebrowser.fields import FileBrowseField
 
 from apps.alltoez.utils.fields import AutoOneToOneField
-from apps.alltoez.utils.abstract_models import BaseModel
+from apps.alltoez.utils.abstract_models import BaseModel, AddressMixin
 from apps.alltoez.utils.model_utils import get_namedtuple_choices
 
 
@@ -26,7 +26,7 @@ CHILD_GENDER_CHOICES = get_namedtuple_choices('CHILD_GENDER_CHOICES', (
 ))
 
 
-class UserProfile(BaseModel):
+class UserProfile(BaseModel, AddressMixin):
     """
     Profile and configurations for a user
     """
@@ -40,14 +40,13 @@ class UserProfile(BaseModel):
     user = AutoOneToOneField(User, related_name="profile", editable=False)
     profile_image = models.ImageField(upload_to=get_upload_to, null=True, blank=True)
     gender = models.PositiveSmallIntegerField(choices=GENDER_CHOICES.get_choices(), db_index=True, default=0)
-    zip_code = models.CharField(max_length=10)
 
     def get_absolute_url(self):
         return reverse('profile', args=[self.user.username])
 
     def profile_complete(self):
         # Returns True if the profile is deemed complete
-        if self.gender is None or not self.zip_code:
+        if self.gender is None or not self.zipcode:
             return False
         else:
             return True
@@ -86,5 +85,4 @@ class Child(BaseModel):
     @property
     def current_age(self):
         time_since_updated = timezone.now() - self.updated
-        print
         return self.age + int(time_since_updated.days/365.2425)

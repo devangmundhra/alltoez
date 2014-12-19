@@ -21,3 +21,16 @@ def monthdelta(date, delta):
 	d = min(date.day, [31,
 		29 if y%4==0 and not y%400==0 else 28,31,30,31,30,31,31,30,31,30,31][m-1])
 	return date.replace(day=d,month=m, year=y)
+
+def get_client_ip(request):
+    """
+    Extract ip address of client from request
+    :param request:
+    :return:
+    """
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip

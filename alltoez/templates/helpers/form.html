@@ -38,10 +38,15 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('.datepicker').datepicker({dateFormat: '{{settings.JQUERY_DATEPICKER_DATE_FORMAT}}', autoclose:true});
+		try {
+			$(".datepicker").datepicker({dateFormat: "{{settings.JQUERY_DATEPICKER_DATE_FORMAT}}", autoclose:true});
+		}
+		catch (err) {
 
-           setTimeout(function(){
-             // For standard selects
+		}
+
+       setTimeout(function(){
+         // For standard selects
 		$("select:not([multiple]):not(.create_options, .prevent_chosen, .dob)").chosen({
 			search_contains: true,
 			disable_search_threshold: 10,
@@ -72,7 +77,7 @@
 			search_contains: true,
 			inherit_select_classes: true
 		});
-           }, 500)
+       }, 500)
 
 		// Color Picker
 		try {
@@ -81,5 +86,112 @@
 		catch (err) {
 
 		}
+
+		// If there is a zipcode field (a model having AddressMixin), then autofill city and state
+        var requests = {};
+        var zipValid = {
+            us: /[0-9]{5}(-[0-9]{4})?/
+        };
+
+        $.ziptastic = function(country, zip, callback){
+            // If only zip and callback are given default to US
+            if (arguments.length == 2 && typeof arguments[1] == 'function') {
+                callback = arguments[1];
+                zip = arguments[0];
+                country = 'US';
+            }
+
+            country = country.toUpperCase();
+            // Only make unique requests
+            if(!requests[country]) {
+                requests[country] = {};
+            }
+            if(!requests[country][zip]) {
+                requests[country][zip] = $.getJSON('http://zip.getziptastic.com/v2/' + country + '/' + zip);
+            }
+
+            // Bind to the finished request
+            requests[country][zip]
+                .done(function(data) {
+                    if (typeof callback == 'function') {
+                        callback(data.country, data.state, data.state_short, data.city, zip, data.zip === zip);
+                    }
+                })
+                .fail(function( jqxhr, textStatus, error ) {
+                    var err = textStatus + ", " + error;
+                    console.log( "Request Failed: " + err );
+                    if (typeof callback == 'function') {
+                        callback("", "", "", "", "",  zip, false);
+                    }
+                });
+
+            // Allow for binding to the deferred object
+            return requests[country][zip];
+        };
+
+        $.fn.ziptastic = function( options ) {
+            return this.each(function() {
+                var ele = $(this);
+
+                ele.on('keyup', function() {
+                    var zip = ele.val();
+
+                    // TODO Non-US zip codes?
+                    if(zipValid.us.test(zip)) {
+                        $.ziptastic(zip, function(country, state, state_short, city, valid) {
+                            // Trigger the updated information
+                            ele.trigger('zipChange', [country, state, state_short, city, zip, valid]);
+                        });
+                    } else {
+                        ele.trigger('zipChange', ["", "", "", "", "", false]);
+                    }
+                });
+            });
+        };
+
+        var duration = 500;
+
+        var elements = {
+            state: $('#id_state'),
+            city: $('#id_city'),
+            zip: $('#id_zipcode')
+        }
+
+        function hideCityState() {
+            elements.state.val("").parent().hide();
+            elements.city.val("").parent().hide();
+        };
+
+        function showCityState(country, state, state_short, city, zip) {
+            elements.state.val(state).parent().show(duration);
+            elements.city.val(city).parent().show(duration);
+        };
+
+        function clearZipError() {
+            elements.zip.parent().removeClass("has-error");
+        }
+
+        function showZipError() {
+            elements.zip.parent().addClass("has-error");
+        }
+
+        // If there is no zipcode in the form, or if the zipcode is not valid
+        // Hide the fields
+        if (!elements.zip.val() || !zipValid.us.test(elements.zip.val())) {
+            // Initially hide the city/state/zip
+            hideCityState();
+        }
+
+        // Initialize the ziptastic and bind to the change of zip code
+        elements.zip.ziptastic()
+            .on('zipChange', function(evt, country, state, state_short, city, zip, valid) {
+                if (valid) {
+                    showCityState(country, state, state_short, city);
+                    clearZipError();
+                } else {
+                    hideCityState();
+                    showZipError();
+                }
+            });
 	});
 </script>

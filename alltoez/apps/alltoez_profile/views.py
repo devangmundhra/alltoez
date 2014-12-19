@@ -12,10 +12,12 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import Http404, HttpResponseRedirect
 from django.core.urlresolvers import NoReverseMatch
+from django.contrib.gis.geoip import GeoIP
 
 from allauth.account.views import SignupView
 
 from apps.alltoez.utils.view_utils import LoginRequiredMixin, MessageMixin
+from apps.alltoez.utils.misc import get_client_ip
 from apps.alltoez_profile.forms import UserProfileForm, ChildrenFormset
 from apps.alltoez_profile.models import UserProfile, GENDER_CHOICES, Child, CHILD_GENDER_CHOICES
 
@@ -53,7 +55,7 @@ class UserProfileUpdate(MessageMixin, UpdateView):
         if self.kwargs.get("source", "") is "step2":
             self.success_url = reverse('home')
         else:
-            self.success_url = reverse('show_profile', args=[self.object.username])
+            self.success_url = reverse('show_profile')
 
         return self.success_url
 
@@ -82,6 +84,10 @@ class UserProfileUpdate(MessageMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(UserProfileUpdate, self).get_context_data(**kwargs)
+        client_ip = get_client_ip(self.request)
+        g = GeoIP()
+        country_code = g.country_code(client_ip)
+        context['client_country_code'] = country_code if country_code else 'US'
         user = self.object.user
 
         if self.request.POST:

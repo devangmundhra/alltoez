@@ -1,5 +1,3 @@
-import json, urllib
-
 from django.db import models
 
 from phonenumber_field.modelfields import PhoneNumberField
@@ -21,7 +19,6 @@ class Venue(BaseModel, AddressMixin):
     neighborhood = models.CharField(max_length=200, blank=True, null=True,
                                     help_text="Neigborhood/rough area of venue. Leave blank for auto-fill")
     phone_number = PhoneNumberField(blank=True, help_text="Phone number, if available")
-    location = models.CharField(max_length=63, blank=True, null=True)
 
     def __init__(self, *args, **kwargs):
         super(Venue, self).__init__(*args, **kwargs)

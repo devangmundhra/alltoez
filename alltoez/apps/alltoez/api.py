@@ -60,6 +60,7 @@ class EventsResource(EventInternalResource):
         if not request.user.is_authenticated():
             return orig_events_list
         else:
+            # TODO: Use the current_age property instead of age here
             age_range = request.user.children.aggregate(Min('age'), Max('age'))
             min_age = age_range['age__min'] if age_range['age__min'] else Event.DEFAULT_MAX_AGE_EVENT #Yes, DEFAULT_MAX!
             max_age = age_range['age__max'] if age_range['age__max'] else Event.DEFAULT_MIN_AGE_EVENT #Yes, DEFAULT_MIN!

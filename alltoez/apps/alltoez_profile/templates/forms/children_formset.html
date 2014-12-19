@@ -39,7 +39,12 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('.datepicker').datepicker({format: 'dd-mm-yyyy', autoclose:true});
+		try {
+			$(".datepicker").datepicker({dateFormat: "{{settings.JQUERY_DATEPICKER_DATE_FORMAT}}", autoclose:true});
+		}
+		catch (err) {
+
+		}
 
 		// For standard selects
 		$("select:not([multiple]):not(.create_options, .prevent_chosen)").chosen({ search_contains: true, disable_search_threshold: 10 });
