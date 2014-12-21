@@ -77,9 +77,25 @@ class Events(AjaxListView):
     category = None
     category_list = None
     category_slug = None
+    sort = None
+    radius = None
 
     def get(self, request, *args, **kwargs):
-        sort = self.request.GET.get('sort')
+        # default sort is "-created_at"
+        self.sort = self.request.GET.get('sort')
+        if not self.sort:
+            self.sort = self.request.session.get('event_sort', '-created_at')
+        else:
+            self.request.session['event_sort'] = self.sort
+
+        # radius in miles. default is 10m
+        self.radius = self.request.GET.get('radius')
+        if not self.radius:
+            self.radius = self.request.session.get('venue_radius', 10)
+        else:
+            self.request.session['venue_radius'] = self.radius
+
+
         self.category_slug = kwargs.get('cat_slug', None)
         self.category_list = Category.objects.filter(parent_category__isnull=False)
 
@@ -87,15 +103,18 @@ class Events(AjaxListView):
         request_bundle = er.build_bundle(request=request)
         queryset = er.obj_get_list(request_bundle)
 
-        # Note: -created_at is also the default option for sorting in events.html template
         if self.category_slug:
             queryset = queryset.filter(category__slug=self.category_slug)
             try:
                 self.category = Category.objects.get(slug=self.category_slug)
             except Category.DoesNotExist:
                 pass
-        if sort:
-            queryset = queryset.order_by(sort)
+
+        # TODO: Filter the queryset for venue radius using http://janmatuschek.de/LatitudeLongitudeBoundingCoordinates and alltoez.utils.geo
+
+        # Sort by the sort key
+        queryset = queryset.order_by(self.sort)
+
         bundles = []
         for obj in queryset:
             bundle = er.build_bundle(obj=obj, request=request)
@@ -111,6 +130,8 @@ class Events(AjaxListView):
         context['events_list'] = self.events_list
         context['category_list'] = self.category_list
         context['category'] = self.category
+        context['event_sort'] = self.sort
+        context['venue_radius'] = self.radius
         return context
 
 

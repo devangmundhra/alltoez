@@ -1,10 +1,10 @@
-from django.conf import settings
-from math import *
-
+import math
 import urllib, json
 
+from django.conf import settings
 
-def calc_bounding_box(lat, lon, radius, use_miles = True):
+
+def calc_bounding_box(lat, lon, radius, use_miles=True):
     """ retval -> lat_min, lat_max, lon_min, lon_max
         Calculates the max and min lat and lon for an area.
         It approximates a search area of radius r by using a box
@@ -21,22 +21,22 @@ def calc_bounding_box(lat, lon, radius, use_miles = True):
     R_MILES = 3963.1676
     R_KM    = 6378.1
 
-    lat = float(radians(lat))
-    lon = float(radians(lon))
+    lat = float(math.radians(lat))
+    lon = float(math.radians(lon))
     radius = float(radius)
 
     R = use_miles and R_MILES or R_KM
 
     r = radius / R
 
-    lat_T = asin( sin(lat) / cos(r) )
-    delta_lon = asin( sin(r) / cos(lat) )
+    lat_T = math.asin( math.sin(lat) / math.cos(r) )
+    delta_lon = math.asin( math.sin(r) / math.cos(lat) )
 
-    lon_min = degrees(lon - delta_lon)
-    lon_max = degrees(lon + delta_lon)
+    lon_min = math.degrees(lon - delta_lon)
+    lon_max = math.degrees(lon + delta_lon)
 
-    lat_min = degrees(lat - r)
-    lat_max = degrees(lat + r)
+    lat_min = math.degrees(lat - r)
+    lat_max = math.degrees(lat + r)
 
     return lat_min, lat_max, lon_min, lon_max
 
