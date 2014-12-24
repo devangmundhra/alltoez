@@ -2,7 +2,6 @@ from __future__ import absolute_import
 
 import logging
 from datetime import datetime, timedelta
-import json
 import smtplib
 from email.mime.text import MIMEText
 from croniter import croniter
@@ -11,7 +10,7 @@ from celery import shared_task
 from django.utils import timezone
 from django.db import IntegrityError
 
-from apps.events.models import DraftEvent, Event, EventRecord
+from apps.events.models import Event, EventRecord
 from apps.events.eventparsers import redtri
 
 # Get an instance of a logger

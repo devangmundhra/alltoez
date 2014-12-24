@@ -27,7 +27,7 @@ TIME_ZONE = "UTC"
 LANGUAGE_CODE = "en-us"
 SITE_ID = 1
 USE_I18N = False
-DATE_INPUT_FORMATS = ('%d-%m-%Y','%Y-%m-%d')
+DATE_INPUT_FORMATS = ('%d-%m-%Y', '%Y-%m-%d')
 USE_TZ = True
 
 TEMPLATE_LOADERS = (
@@ -115,11 +115,6 @@ INSTALLED_APPS = [
 	'apps.events',
     'apps.user_actions',
 ]
-
-#if DEBUG:
-#	TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.debug',)
-#	MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
-#	INSTALLED_APPS += ('debug_toolbar',)
 
 if USE_I18N:
 	TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.i18n',)
@@ -344,3 +339,9 @@ try:
 	from local_settings import *
 except ImportError:
 	pass
+
+# # Add the debug info apps after local settings has been imported
+# if DEBUG:
+# 	TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.debug',)
+# 	MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+# 	INSTALLED_APPS += ('debug_toolbar',)

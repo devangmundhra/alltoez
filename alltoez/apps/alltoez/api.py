@@ -1,6 +1,5 @@
-from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Max, Min, Q
+from django.db.models import Max, Min
 
 from tastypie import fields
 
@@ -55,8 +54,7 @@ class EventsResource(EventInternalResource):
         :return: Queryset of events for the user
         """
         # If user is not authenticated, show all the events
-        orig_events_list = super(EventsResource, self).get_object_list(request).filter(
-            Q(end_date__gte=timezone.now().date()) | Q(end_date=None)).order_by('-created_at')
+        orig_events_list = super(EventsResource, self).get_object_list(request)
         if not request.user.is_authenticated():
             return orig_events_list
         else:

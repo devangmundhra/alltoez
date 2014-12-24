@@ -95,7 +95,6 @@ class Events(AjaxListView):
         else:
             self.request.session['venue_radius'] = self.radius
 
-
         self.category_slug = kwargs.get('cat_slug', None)
         self.category_list = Category.objects.filter(parent_category__isnull=False)
 
@@ -110,7 +109,8 @@ class Events(AjaxListView):
             except Category.DoesNotExist:
                 pass
 
-        # TODO: Filter the queryset for venue radius using http://janmatuschek.de/LatitudeLongitudeBoundingCoordinates and alltoez.utils.geo
+        # TODO: Filter the queryset for venue radius using http://janmatuschek.de/LatitudeLongitudeBoundingCoordinates
+        # TODO: and alltoez.utils.geo
 
         # Sort by the sort key
         queryset = queryset.order_by(self.sort)

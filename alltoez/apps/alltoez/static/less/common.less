@@ -1,12 +1,13 @@
 // MAIN CONTENT
 // --------------------------------------------------
+@alltoez-background-color: #f4f4f4;
 
 // Standard elements
 p { margin-bottom: 20px; }
 body {
 	padding-top: 51px;
 	background: rgba(0, 0, 0, 0.8);
-    background-color: #f4f4f4;
+    background-color: @alltoez-background-color;
 }
 .form-horizontal .form-group { margin-left: 0px; margin-right: 0px;  }
 
@@ -58,7 +59,7 @@ body {
 		padding-top: 30px; padding-bottom: 30px;
 		&.white {
 			//background: #FFFFFF;
-            background: #f4f4f4;
+            background: @alltoez-background-color;
 		}
 		&.light-grey {
 			background: #EEEEEE;
@@ -187,15 +188,21 @@ body {
 		 }
 
 		.event-item {
-			a {
-				&:hover { text-decoration: none; }
-			}
 			//height: 379px;
 			//margin-right: 30px;
 			margin-bottom: 5px;
-			border: 1px solid #ebebeb;
+			border: 3px solid darken(@alltoez-background-color, 5%);
 			background: #ffffff;
 			position: relative;
+			&:hover {
+				border: 3px solid @brand-primary;
+				h4 {
+				color:#4583b1;
+				}
+			}
+			a {
+				&:hover { text-decoration: none; }
+			}
 			&:last-child {
 				margin-right: 0px;
 			}
@@ -253,19 +260,13 @@ body {
 				font-size: 12px;
 				color: #333;
 			}
-			&:hover {
-				border: 1px solid #4583b1;
-				h4 {
-				color:#4583b1;
-				}
-			}
 		}
         .event-meta {
             margin-bottom: 40px;
             margin-top: 5px;
+            margin-left: 3px;
             color: #999999;
             font-size: 12px;
-			text-align: center;
         }
 
 	}
@@ -476,6 +477,19 @@ body {
 		background: darken(@brand-primary, 5%);
 	  }
     }
+    // TODO: Temporary, change when brand colors are decided
+    .btn-primary:not(.active) {
+      background-color: lighten(@brand-primary, 5%);
+    }
+    // Remove button shadow
+    .btn:active,
+    .btn:focus,
+    .btn.active:focus {
+      background-image: none;
+      outline: 0;
+      -webkit-box-shadow: none;
+              box-shadow: none;
+    }
   }
   .event-location {
     background: #ffffff;
@@ -571,13 +585,4 @@ body {
       margin-bottom: 5px;
     }
   }
-    // Remove button shadow
-    .btn:active,
-    .btn:focus,
-    .btn.active:focus {
-      background-image: none;
-      outline: 0;
-      -webkit-box-shadow: none;
-              box-shadow: none;
-    }
 }

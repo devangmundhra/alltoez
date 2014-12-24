@@ -1,3 +1,4 @@
+{% load event_filters %}
 {% for event in events_list %}
 <div class="col-xs-12 col-sm-4">
     <div class="event-item">
@@ -14,7 +15,7 @@
                 {% endif %}
             </div>
             {% if not event.recurrence_detail %}
-                <span class="event-date">{{ event.start_date|date }}</span>
+                <span class="event-date">{{ event.start_date|local_day_date }}</span>
             {% endif %}
             <div class="event-age-cost">
                 <div class="age">
@@ -36,7 +37,7 @@
     </div>
     <div class="event-meta">
         <span></span>
-        <!--<span>Posted {{ event.created_at }} ago</span>-->
+        <span>Posted {{ event.created_at|naturaldatetime }} ago</span>
     </div>
 </div>
 {% endfor %}
