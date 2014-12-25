@@ -6,9 +6,14 @@ from django.contrib.auth.models import User
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import RedirectView
 
+import autocomplete_light
 from filebrowser.sites import site
 
 handler500 = 'apps.alltoez.views.server_error'
+
+# import every app/autocomplete_light_registry.py
+autocomplete_light.autodiscover()
+
 admin.autodiscover()
 
 # Pluggable / django apps / inernal apps
@@ -39,3 +44,6 @@ if settings.DEBUG:
 	)
 
 urlpatterns += staticfiles_urlpatterns()
+urlpatterns += patterns('',
+    url(r'^autocomplete/', include('autocomplete_light.urls')),
+)

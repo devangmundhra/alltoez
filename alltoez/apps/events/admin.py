@@ -5,9 +5,10 @@ from django.utils import timezone
 from django.db.models import Q
 
 from pagedown.widgets import AdminPagedownWidget
+import autocomplete_light
 
+from apps.venues.models import Venue
 from apps.events.models import DraftEvent, Event, EventRecord, Category
-from apps.venues.admin import VenueInline
 
 
 class ExpiredEventListFilter(admin.SimpleListFilter):
@@ -48,10 +49,13 @@ class ExpiredEventListFilter(admin.SimpleListFilter):
             return queryset.filter(Q(end_date=None))
 
 
-class EventAdminForm(forms.ModelForm):
+class EventAdminForm(autocomplete_light.ModelForm):
     """
     Custom form for event admin form
     """
+    venue = forms.ModelChoiceField(Venue.objects.all(),
+                                   widget=autocomplete_light.ChoiceWidget('VenueAutocomplete'))
+
     def __init__(self, *args, **kwargs):
         super(EventAdminForm, self).__init__(*args, **kwargs)
         self.fields['description'].widget = AdminPagedownWidget()
@@ -102,12 +106,12 @@ class DraftEventAdmin(admin.ModelAdmin):
         self.message_user(request, "%s draft event(s) successfully marked as unprocessed." % rows_updated)
     mark_unprocessed.short_description = "Mark selected draft events as unprocessed"
 
-admin.site.register(DraftEvent, DraftEventAdmin)
+# admin.site.register(DraftEvent, DraftEventAdmin)
 
 
 class EventRecordAdmin(admin.ModelAdmin):
     pass
-admin.site.register(EventRecord, EventRecordAdmin)
+# admin.site.register(EventRecord, EventRecordAdmin)
 
 
 class EventAdmin(admin.ModelAdmin):

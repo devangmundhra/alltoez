@@ -83,8 +83,11 @@ INSTALLED_APPS = [
 	'django.contrib.sites',
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
+    # Helpful methods for admin
 	'djangocms_admin_style',
 	'admin_shortcuts',
+    'autocomplete_light',
+
 	'django.contrib.admin',
 	'django.contrib.sitemaps',
 	'django.contrib.humanize',
