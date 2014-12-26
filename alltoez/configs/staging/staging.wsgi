@@ -1,11 +1,11 @@
 import os, sys
 
 # put the Django project on sys.path
-sys.path.insert(0, '/home/alltoez/sites/projectname/repository')
-sys.path.insert(0, '/home/alltoez/sites/projectname/repository/allauth')
-sys.path.insert(0, '/home/alltoez/sites/projectname/repository/projectname')
+sys.path.insert(0, '/home/alltoez/sites/alltoez/repository')
+sys.path.insert(0, '/home/alltoez/sites/alltoez/repository/allauth')
+sys.path.insert(0, '/home/alltoez/sites/alltoez/repository/alltoez')
 
-os.environ["DJANGO_SETTINGS_MODULE"] = "projectname.configs.staging.settings"
+os.environ["DJANGO_SETTINGS_MODULE"] = "alltoez.configs.staging.settings"
 
-from django.core.handlers.wsgi import WSGIHandler
-application = WSGIHandler()
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()

@@ -5,9 +5,8 @@ from django.utils import timezone
 from django.db.models import Q
 
 from pagedown.widgets import AdminPagedownWidget
-import autocomplete_light
+from django_extensions.admin import ForeignKeyAutocompleteAdmin
 
-from apps.venues.models import Venue
 from apps.events.models import DraftEvent, Event, EventRecord, Category
 
 
@@ -49,12 +48,10 @@ class ExpiredEventListFilter(admin.SimpleListFilter):
             return queryset.filter(Q(end_date=None))
 
 
-class EventAdminForm(autocomplete_light.ModelForm):
+class EventAdminForm(forms.ModelForm):
     """
     Custom form for event admin form
     """
-    venue = forms.ModelChoiceField(Venue.objects.all(),
-                                   widget=autocomplete_light.ChoiceWidget('VenueAutocomplete'))
 
     def __init__(self, *args, **kwargs):
         super(EventAdminForm, self).__init__(*args, **kwargs)
@@ -72,6 +69,9 @@ class EventInline(admin.StackedInline):
     exclude = ('slug',)
     max_num = 1
     extra = 1
+    related_search_fields = {
+        'venue': ('name', 'address'),
+    }
     form = EventAdminForm
 
 
@@ -114,7 +114,7 @@ class EventRecordAdmin(admin.ModelAdmin):
 # admin.site.register(EventRecord, EventRecordAdmin)
 
 
-class EventAdmin(admin.ModelAdmin):
+class EventAdmin(ForeignKeyAutocompleteAdmin):
     """
     Model admin for Event Model
     Note: This is similar to EventInline above
@@ -123,6 +123,9 @@ class EventAdmin(admin.ModelAdmin):
     ordering = ['-created_at']
     list_filter = (ExpiredEventListFilter,)
     search_fields = ['title', 'description']
+    related_search_fields = {
+        'venue': ('name', 'address'),
+    }
     form = EventAdminForm
     pass
 
