@@ -1,3 +1,6 @@
+import re
+from itertools import chain
+
 from django.utils.translation import ugettext as _
 from django.db import models, connection
 from django.utils.text import capfirst
@@ -14,22 +17,13 @@ from django.forms import ValidationError
 from django.db.models.signals import post_delete, post_save
 from django.db.models import OneToOneField
 from django.db.models.fields.related import SingleRelatedObjectDescriptor
-
-from itertools import chain
-
-from south.modelsinspector import add_introspection_rules
-
-qn = connection.ops.quote_name
-
-import re
+from django.db.models import OneToOneField
+from django.db.models.fields.related import SingleRelatedObjectDescriptor
 
 from apps.alltoez.utils.form_fields import MultiSelectFormField
 from apps.alltoez.utils.widgets import CustomCheckboxSelectMultiple
 
-from django.db.models import OneToOneField
-from django.db.models.fields.related import SingleRelatedObjectDescriptor
-
-add_introspection_rules([], ["^apps.alltoez.utils.fields.CountryField"])
+qn = connection.ops.quote_name
 
 
 class AutoSingleRelatedObjectDescriptor(SingleRelatedObjectDescriptor):
@@ -56,13 +50,6 @@ class AutoOneToOneField(OneToOneField):
     '''
     def contribute_to_related_class(self, cls, related):
         setattr(cls, related.get_accessor_name(), AutoSingleRelatedObjectDescriptor(related))
-
-    def south_field_triple(self):
-        "Returns a suitable description of this field for South."
-        from south.modelsinspector import introspector
-        field_class = OneToOneField.__module__ + "." + OneToOneField.__name__
-        args, kwargs = introspector(self)
-        return (field_class, args, kwargs)
 
 
 class MultiSelectField(models.Field):
