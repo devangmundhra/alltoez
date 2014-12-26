@@ -15,7 +15,7 @@ DATABASES = {
 }
 
 # Project settings and active names
-PROJECT_SITE_DOMAIN = 'alltoez.alltoez.co.uk'
+PROJECT_SITE_DOMAIN = 'alltoez.com'
 GOOGLE_MAPS_API_KEY = "AIzaSyBg7rZjToQyi9izk13QfLegTueVEuWxfa0"
 
 # Caching
