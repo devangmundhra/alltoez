@@ -13,8 +13,9 @@ cd /home/django/sites/alltoez/repository
 source ../env/bin/activate
 export PYTHONPATH=$PYTHONPATH:/home/django/sites/alltoez/repository/alltoez
 test -d $LOGDIR || mkdir -p $LOGDIR
-exec gunicorn_django -w $NUM_WORKERS \
-	--log-level=debug \
-	--log-file=$LOGFILE 2>>$LOGFILE  1>>$ERRORFILE \
-	--settings=alltoez.configs.production.settings \
-	--user=$USER --group=$GROUP
+exec gunicorn -w $NUM_WORKERS \
+	--log-level debug \
+	--access-logfile $LOGFILE \
+	--log-file $ERRORFILE \
+	--env DJANGO_SETTINGS_MODULE=alltoez.configs.production.settings \
+	--user $USER --group $GROUP alltoez.configs.production.wsgi

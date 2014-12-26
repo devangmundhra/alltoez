@@ -6,7 +6,7 @@ PROJECT_DOMAIN = "http://www.alltoez.com"
 
 SITE_ID = 2
 
-WSGI_APPLICATION = 'production.wsgi.application'
+WSGI_APPLICATION = 'alltoez.configs.production.wsgi.application'
 # Database
 DATABASES = {
     'default': {
