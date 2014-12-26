@@ -1,12 +1,16 @@
 {% extends "alltoez/ui/layouts/base.html" %}
-{% load common_tags %}
+{% load common_tags account %}
 
 {% block title %}{{object}}{% endblock %}
-{% block page_title %}{{object}}{% endblock %}
+{% block page_title %}
+    {{object}}
+
+    {% if object.user == user %}<br/><a href="{% url 'edit_profile' %}" class="btn btn-primary edit-profile-action">Edit Profile</a>{% endif %}
+{% endblock %}
 
 {% block content %}
 <div class="row">
-    <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+    <div class="col-xs-12 col-md-7">
         <div class="show-profile-div">
             <h4>
                 <div class="user-info">
@@ -42,9 +46,10 @@
                 </div>
                 {% endif %}
             </h4>
-            <br/>
-            {% if object.user == user %}<a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>{% endif %}
         </div>
+    </div>
+    <div class="col-xs-12 col-md-5">
+        <a href="{% url 'socialaccount_connections' %}" class="btn btn-default">Manage Social Accounts</a>
     </div>
 </div>
 

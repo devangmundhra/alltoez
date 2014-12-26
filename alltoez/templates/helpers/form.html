@@ -1,7 +1,7 @@
 {% load common_tags %}
 
 {% if form.errors %}
-<div class="alert alert-error has-error">
+<div class="alert alert-danger has-error">
 	There seems to be some problem. Please review the error(s) below and then try again.
     {{ form.non_field_errors|add_class:"help-block" }}
 </div>

@@ -106,10 +106,14 @@
                     <dt>Age: </dt>
                     <dd>Family Event</dd>
                     {% else %}
+                    {% if event.min_age != 0 %}
                     <dt>Min. age:</dt>
                     <dd>{{ event.min_age }}</dd>
+                    {% endif %}
+                    {% if event.max_age != 100 %}
                     <dt>Max. age:</dt>
                     <dd>{{ event.max_age }}</dd>
+                    {% endif %}
                     {% endif %}
                 </dl>
             </div>

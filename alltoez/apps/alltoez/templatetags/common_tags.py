@@ -249,7 +249,7 @@ def do_dir(object):
 
 @register.filter
 def lookup(l, key):
-	return l[key]
+    return l[key]
 
 @register.filter
 def url_target_blank(text):
@@ -329,3 +329,7 @@ def urlize_html(html):
 			textNode.replaceWith(urlizedText)
 
 		return str(soup).replace('&lt;', '<').replace('&gt;', '>')
+
+@register.filter()
+def get_keys(dict):
+    return dict.keys()
