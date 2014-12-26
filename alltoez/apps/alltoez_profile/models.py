@@ -1,4 +1,5 @@
 import re, unicodedata, os, random, string
+from uuid import uuid4
 
 from django.utils import timezone
 from django.db import models
@@ -6,8 +7,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from django.db.models.signals import pre_delete, post_save, pre_save
-from django.dispatch import receiver
+from django.utils.deconstruct import deconstructible
 
 from filebrowser.fields import FileBrowseField
 
@@ -26,16 +26,25 @@ CHILD_GENDER_CHOICES = get_namedtuple_choices('CHILD_GENDER_CHOICES', (
 ))
 
 
+@deconstructible
+class UploadToProfileImages(object):
+
+    def __init__(self, sub_path):
+        self.path = sub_path
+
+    def __call__(self, instance, filename):
+        filename, ext = os.path.splitext(filename)
+        # set filename as random string
+        filename = '{}.{}'.format(uuid4().hex, ext)
+        # return the whole path to the file
+        return os.path.join(self.path, filename)
+get_upload_to = UploadToProfileImages('uploads/users/profile/images')
+
+
 class UserProfile(BaseModel, AddressMixin):
     """
     Profile and configurations for a user
     """
-    def get_upload_to(instance, filename):
-        name, ext = os.path.splitext(filename)
-        name = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(20))
-        new_filename = '%s%s' % (name, ext.lower())
-
-        return os.path.join('uploads/users/profile/images', new_filename)
 
     user = AutoOneToOneField(User, related_name="profile", editable=False)
     profile_image = models.ImageField(upload_to=get_upload_to, null=True, blank=True)

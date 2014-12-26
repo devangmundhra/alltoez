@@ -93,7 +93,6 @@ INSTALLED_APPS = [
     'django.contrib.gis',
 
 	# Utilities & Helper Apps
-	'south',
 	'filebrowser',
 	'django_extensions',
 	'endless_pagination',
@@ -112,10 +111,10 @@ INSTALLED_APPS = [
 
 	# Local Project Apps
 	'apps.alltoez_profile',
-	'apps.alltoez',
     'apps.venues',
 	'apps.events',
     'apps.user_actions',
+	'apps.alltoez',
 ]
 
 if USE_I18N:
@@ -336,6 +335,8 @@ MARKDOWN_DEUX_STYLES = {
 #	GEOIP CONFIG
 #-------------------------------------------------------------------------------
 GEOIP_PATH = os.path.join(SITE_ROOT, "data/geoip_data")
+
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 try:
 	from local_settings import *

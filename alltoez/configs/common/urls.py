@@ -10,8 +10,6 @@ from filebrowser.sites import site
 
 handler500 = 'apps.alltoez.views.server_error'
 
-admin.autodiscover()
-
 # Pluggable / django apps / inernal apps
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),

@@ -174,7 +174,7 @@ Commands - deployment
 
 def deploy():
     """
-    Deploy the latest version of the site to the server and restart gunicor.
+    Deploy the latest version of the site to the server and restart gunicorn.
 
     Does not perform the functions of load_new_data().
     """
@@ -184,7 +184,7 @@ def deploy():
     checkout_latest()
     setup_symlinks()
 
-    # Run any South migrations
+    # Run any migrations
     with prefix('source %(env_path)s/bin/activate' % env):
         run('python %(repo_path)s/%(project_name)s/configs/%(settings)s/manage.py migrate;' % env)
 
