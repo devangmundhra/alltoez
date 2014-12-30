@@ -1,6 +1,7 @@
 // MAIN CONTENT
 // --------------------------------------------------
 @alltoez-background-color: #f4f4f4;
+@alltoez-event-detail-color: #6d6d6d;
 
 // Standard elements
 p { margin-bottom: 20px; }
@@ -238,7 +239,7 @@ body {
                       font-size: 14px;
                       position: relative;
                       top: 15px;
-                      color: #6d6d6d;
+                      color: @alltoez-event-detail-color;
                     }
                 }
                 .cost {
@@ -246,7 +247,7 @@ body {
                       font-size: 14px;
                       position: relative;
                       top: 15px;
-                      color: #6d6d6d;
+                      color: @alltoez-event-detail-color;
                     }
                 }
             }
@@ -416,7 +417,7 @@ body {
     dd {
       margin-top: 5px;
       font-size: 16px;
-      color: #494949;
+      color: @alltoez-event-detail-color;
       letter-spacing: 0;
     }
   }
@@ -430,9 +431,9 @@ body {
     p {
       margin-top: 30px;
       font-style: normal;
-      font-weight: 300;
-      font-size: 20px;
-      color: #6d6d6d;
+      font-weight: normal;
+      font-size: 18px;
+      color: @alltoez-event-detail-color;
       line-height: 1.3em;
       text-align: justify;
     }
@@ -448,9 +449,9 @@ body {
       margin-top: 5px;
       font-style: normal;
       font-weight: normal;
-      font-size: 14px;
-      color: #494949;
-      text-align: justify;
+      font-size: 16px;
+      color: lighten(@alltoez-event-detail-color, 5%);
+      letter-spacing: 0;
     }
   }
 }
@@ -520,7 +521,7 @@ body {
         margin-top: 0px;
         font-size: 15px;
         font-weight: normal;
-        color: #6d6d6d;
+        color: @alltoez-event-detail-color;
         line-height: 1.2em;
         //white-space: nowrap;
       }
@@ -540,7 +541,7 @@ body {
             font-size: 16px;
             position: relative;
             height: 50px;
-            color: #6d6d6d;
+            color: @alltoez-event-detail-color;
             &:hover {
                 color: #409cab;
             }
@@ -567,7 +568,7 @@ body {
       //font-size: 20px;
       //color: #5a9aa8;
       font-size: 15px;
-      color: #6d6d6d;
+      color: @alltoez-event-detail-color;
       margin-bottom: 25px;
       &:last-child {
         margin-bottom: 0px;
@@ -577,7 +578,7 @@ body {
       //font-size: 20px;
       //color: #5a9aa8;
       font-size: 15px;
-      color: #6d6d6d;
+      color: @alltoez-event-detail-color;
       margin-bottom: 5px;
     }
   }

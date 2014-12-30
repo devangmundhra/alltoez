@@ -80,7 +80,7 @@
                 </div>
                 {% if event.url %}
                 <div class="event-web">
-                    <a href="{{ event.url }}" target="_blank" class="site"><i class="fa fa-link"></i> Site</a>
+                    <a href="{{ event.url }}" target="_blank" class="site"><i class="fa fa-link"></i> Webite</a>
                     {% if event.venue.yelp_url %}
                     <a href="{{ event.venue.yelp_url }}" target="_blank" class="yelp"><i class="fa fa-yelp"></i> Yelp</a>
                     {% endif %}
@@ -132,6 +132,8 @@
 <div class="row">
     <div class="col-xs-12 col-md-4">
         {% if request.user.is_superuser %}
+        <br/>
+        <br/>
         <a href="{% url 'admin:events_event_change' object.pk %}" class="event-admin btn btn-lg btn-primary">Edit Event</a>
         {% endif %}
     </div>
