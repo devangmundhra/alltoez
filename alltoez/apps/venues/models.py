@@ -12,13 +12,14 @@ class Venue(BaseModel, AddressMixin):
     Model to store information about venues
     """
     __original_name = None
-    name = models.CharField(max_length=200, default='Unspecified', help_text='Venue name')
+    name = models.CharField(max_length=200, verbose_name='Venue name')
     slug = models.SlugField(null=True, blank=True,
                             help_text="The part of the name (if provided) that is used in the url. \
                             Leave this blank if you want the system to generate one for you.")
     neighborhood = models.CharField(max_length=200, blank=True, null=True,
                                     help_text="Neigborhood/rough area of venue. Leave blank for auto-fill")
-    phone_number = PhoneNumberField(blank=True, help_text="Phone number, if available")
+    phone_number = PhoneNumberField(blank=True, verbose_name="Phone number", help_text="Phone number, if available")
+    yelp_url = models.URLField(blank=True, null=True, verbose_name='Yelp Url')
 
     def __init__(self, *args, **kwargs):
         super(Venue, self).__init__(*args, **kwargs)

@@ -528,36 +528,28 @@ body {
       }
     }
     .event-web {
-      border-top: 1px solid #ebebeb;
-      height: 50px;
-      text-align: center;
-      .site {
-        //float: left;
-        height: 100%;
-        //width: 50%;
+        border-top: 1px solid #ebebeb;
+        height: 50px;
+        text-align: center;
+        display: table;
+        table-layout: fixed;
+        width: 100%;
         a {
-          text-decoration: none;
-          font-size: 16px;
-          position: relative;
-          top: 15px;
-          color: #6d6d6d;
-          &:hover {
-            color: #409cab;
-          }
+            vertical-align: middle;
+            text-align: center;
+            display: table-cell;
+            text-decoration: none;
+            font-size: 16px;
+            position: relative;
+            height: 50px;
+            color: #6d6d6d;
+            &:hover {
+                color: #409cab;
+            }
         }
-      }
-      .facebook {
-        a {
-          text-decoration: none;
-          font-size: 16px;
-          position: relative;
-          top: 15px;
-          color: #6d6d6d;
-          &:hover {
-            color: #409cab;
-          }
+        a:not(:first-child) {
+            border-left: 1px solid #ebebeb;
         }
-      }
     }
   }
   .open-hours, .age-allowed, .cost {

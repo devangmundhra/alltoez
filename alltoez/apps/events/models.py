@@ -130,9 +130,9 @@ class Event(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     draft = models.ForeignKey(DraftEvent, blank=True, null=True)
     venue = models.ForeignKey(Venue, blank=True, null=True, on_delete=models.SET_NULL)
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, verbose_name='Event name')
     slug = models.SlugField(max_length=50)
-    description = models.TextField()
+    description = models.TextField(verbose_name='Event description')
     category = models.ManyToManyField(Category, db_index=True)
     image = JSONField(default="{\"url\":\"\",\"source_name\":\"\",\"source_url\":\"\"}")
     min_age = models.PositiveSmallIntegerField(default=DEFAULT_MIN_AGE_EVENT, db_index=True)
@@ -147,7 +147,7 @@ class Event(models.Model):
     recurrence_detail = models.CharField(max_length=500, blank=True, null=True,
                                          help_text="Enter a line about when this event is till, if it is recurring")
     time_detail = models.CharField(max_length=500, help_text="Enter time for different days, in different rows")
-    url = models.URLField(blank=True, null=True)
+    url = models.URLField(blank=True, null=True, verbose_name='Event link')
     additional_info = models.TextField(blank=True, null=True)
 
     class Meta:

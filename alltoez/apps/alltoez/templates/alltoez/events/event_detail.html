@@ -80,12 +80,10 @@
                 </div>
                 {% if event.url %}
                 <div class="event-web">
-                    <div class="site">
-                        <a href="{{ event.url }}" target="_blank">Website</a>
-                    </div>
-                    <!--<div class="facebook">-->
-                    <!--<a href="{{ event.url }}" target="_blank">Facebook</a>-->
-                    <!--</div>-->
+                    <a href="{{ event.url }}" target="_blank" class="site"><i class="fa fa-link"></i> Site</a>
+                    {% if event.venue.yelp_url %}
+                    <a href="{{ event.venue.yelp_url }}" target="_blank" class="yelp"><i class="fa fa-yelp"></i> Yelp</a>
+                    {% endif %}
                 </div>
                 {% endif %}
             </div>
@@ -95,7 +93,7 @@
                     {% if not event.recurrence_detail %}
                     <p>{{ event.start_date|date }}</p>
                     {% else %}
-                    <p>{{ event.recurrence_detail }}</p>
+                    <!--<p>{{ event.recurrence_detail }}</p>-->
                     {% endif %}
                     <p>{{ event.time_detail|markdown }}</p>
                 </dl>
