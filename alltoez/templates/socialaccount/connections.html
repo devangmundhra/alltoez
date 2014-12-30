@@ -6,6 +6,11 @@
 {% block head_title %}{% trans "Account Connections" %}{% endblock %}
 
 {% block content %}
+<nav>
+  <ul class="pager">
+    <li class="previous"><a href="{% url 'show_profile' %}"><span aria-hidden="true">&larr;</span> Profile</a></li>
+  </ul>
+</nav>
 <h1>{% trans "Account Connections" %}</h1>
 
 {% if form.accounts %}
