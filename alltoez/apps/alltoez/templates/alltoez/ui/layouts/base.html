@@ -102,8 +102,9 @@
         <script>
           window.fbAsyncInit = function() {
             FB.init({
-              appid      : '{{settings.FACEBOOK_APP_ID}}',
+              appId      : '{{settings.FACEBOOK_APP_ID}}',
               xfbml      : true,
+              frictionlessRequests : true,
               version    : 'v2.1'
             });
           };

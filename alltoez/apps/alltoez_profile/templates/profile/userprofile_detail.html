@@ -42,22 +42,23 @@
                         {% endif %}
                     </dl>
                 </div>
-                {% if object.user.children.count %}
-                <div class="children-info well">
-                    <h3 class="text-center"><u>Children Information</u></h3>
-                    <ul class="list-unstyled children-list">
-                    {% for child in object.user.children.all %}
-                        <li><strong>{{ child.name }} </strong>{{ child.get_gender_display }}, {{ child.current_age }} years old</li>
-                    {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
             </h4>
         </div>
     </div>
     <div class="col-xs-12 col-md-5">
         <a href="{% url 'socialaccount_connections' %}" class="btn btn-default">Manage Social Accounts</a>
     </div>
+    <div class="clearfix"></div>
+     {% if object.user.children.count %}
+        <div class="children-info well">
+            <h3 class="text-center"><u>Children Information</u></h3>
+            <ul class="list-unstyled children-list">
+            {% for child in object.user.children.all %}
+                <li><strong>{{ child.name }} </strong>{{ child.get_gender_display }}, {{ child.current_age }} years old</li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
 </div>
 
 {% endblock %}
