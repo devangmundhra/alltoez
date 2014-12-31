@@ -88,7 +88,7 @@ class Child(BaseModel):
     name = models.CharField(_('name'), max_length=60, blank=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
-    gender = models.PositiveSmallIntegerField(choices=CHILD_GENDER_CHOICES.get_choices(), db_index=True, default='')
+    gender = models.PositiveSmallIntegerField(default=0, choices=CHILD_GENDER_CHOICES.get_choices(), db_index=True)
     age = models.PositiveSmallIntegerField(blank=True, null=True)
 
     @property

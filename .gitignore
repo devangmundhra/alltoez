@@ -64,8 +64,9 @@ celerybeat-schedule
 
 alltoez/configs/common/local_settings.py
 
-fixtures/fixtures.json
+fixtures/*
 
 alltoez/apps/events/static/js/events_ajax.js
 
 alltoez/apps/alltoez/static/less/theme.css
+

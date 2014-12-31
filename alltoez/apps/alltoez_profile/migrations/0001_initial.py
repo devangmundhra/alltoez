@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=60, verbose_name='name', blank=True)),
                 ('first_name', models.CharField(max_length=30, verbose_name='first name', blank=True)),
                 ('last_name', models.CharField(max_length=30, verbose_name='last name', blank=True)),
-                ('gender', models.PositiveSmallIntegerField(default=b'', db_index=True, choices=[(0, b'Boy'), (1, b'Girl')])),
+                ('gender', models.PositiveSmallIntegerField(default=0, db_index=True, choices=[(0, b'Boy'), (1, b'Girl')])),
                 ('age', models.PositiveSmallIntegerField(null=True, blank=True)),
                 ('user', models.ForeignKey(related_name='children', to=settings.AUTH_USER_MODEL)),
             ],
