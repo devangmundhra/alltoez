@@ -50,7 +50,8 @@
     </div>
     <div class="clearfix"></div>
      {% if object.user.children.count %}
-        <div class="children-info well">
+        <br/>
+        <div class="children-info well col-lg-1">
             <h3 class="text-center"><u>Children Information</u></h3>
             <ul class="list-unstyled children-list">
             {% for child in object.user.children.all %}
