@@ -486,6 +486,7 @@ body {
     .btn-primary:not(.active) {
       background-color: lighten(@brand-primary, 5%);
     }
+
     // Remove button shadow
     .btn:active,
     .btn:focus,
@@ -494,6 +495,38 @@ body {
       outline: 0;
       -webkit-box-shadow: none;
               box-shadow: none;
+    }
+
+    #share-info-dropdown {
+        margin-top: 20px;
+        -webkit-transition: opacity 500ms ease-out;
+        opacity: 0;
+        height: 0;
+        overflow: hidden;
+        .share-text {
+            text-transform: uppercase;
+            font-size: 11px;
+            color: #93a7b2;
+            letter-spacing: 1px;
+            display: inline-block;
+            padding-right: 5px;
+            height: 100%;
+        }
+        #share-event-link {
+            display: inline-block;
+            cursor: pointer;
+            font-size: 14px;
+            color: @alltoez-event-detail-color;
+            height: 100%;
+        }
+        &.visible {
+            opacity: 1;
+            height: 30px;;
+        }
+
+        .share-social {
+            display: inline-block;
+        }
     }
   }
   .event-location {

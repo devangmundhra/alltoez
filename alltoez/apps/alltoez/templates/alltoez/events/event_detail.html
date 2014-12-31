@@ -43,7 +43,7 @@
         <div class="right-side">
             <div class="social-actions">
                 {% if user.is_authenticated %}
-                <div class="btn-group btn-group-lg" role="group" aria-label="user-event-actions">
+                <div class="btn-group btn-group-lg" role="group" aria-label="user-event-actions" id="done-or-bookmark">
 
                     <button type="button" class="btn btn-primary {% if event.bookmark %}active{% endif %}"
                             data-toggle="button" aria-pressed="{% if event.bookmark %}true{%else%}false{% endif %}"
@@ -57,9 +57,22 @@
                     </button>
                 </div>
                 {% endif %}
-                <button type="button" class="btn btn-primary btn-lg {% if not user.is_authenticated %} btn-block {% else %} pull-right {% endif %} " id="share-action">
+                <button type="button" class="btn btn-primary btn-lg {% if not user.is_authenticated %} btn-block {% else %} pull-right {% endif %} "
+                        data-toggle="button" id="share-action">
                     <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span> Share
                 </button>
+                <div id="share-info-dropdown">
+                    <div class="share-text">SHARE</div>
+                    <input id="share-event-link" type="text" value="{{ request.build_absolute_uri }}" onClick="this.select();" readonly aria-readonly="true">
+                    <div class="share-social pull-right">
+                        <div id="share-fb" class="btn btn-default btn-sm" onclick="shareLinkOnFb('{{ request.build_absolute_uri }}')">
+                            <i class="fa fa-facebook"></i>
+                        </div>
+                        <div id="share-email" class="btn btn-default btn-sm" onclick="shareEventLinkViaEmail('{{ event.title }}', '{{ request.build_absolute_uri }}')">
+                            <i class="fa fa-envelope"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="event-location">
                 <div class="event-map">

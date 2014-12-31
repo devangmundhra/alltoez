@@ -60,4 +60,7 @@ $(document).ready ->
           myevent.done = done.resource_uri
 
   $('#share-action').on "click", (e)->
-    e.preventDefault
+    if not $( e.target ).hasClass "active"
+      $('#share-info-dropdown').addClass "visible"
+    else
+      $('#share-info-dropdown').removeClass "visible"
