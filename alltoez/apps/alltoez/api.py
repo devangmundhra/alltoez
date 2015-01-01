@@ -1,9 +1,12 @@
+import json
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, Min
 
 from tastypie import fields
 
 from apps.events.api import EventInternalResource
+from apps.alltoez_profile.api import AlltoezProfileInternalResource
 from apps.user_actions.models import Bookmark, Done
 from apps.user_actions.api import BookmarkResource, DoneResource
 from apps.events.models import Event
@@ -65,3 +68,43 @@ class EventsResource(EventInternalResource):
             # The above defaults are set in such a way so that no events are filtered unnecessarily
             return orig_events_list.filter(min_age__lte=min_age, max_age__gte=max_age)
 
+
+class AlltoezProfileResource(AlltoezProfileInternalResource):
+    """
+    AlltoezProfileResource
+    This is the actual resource that is exposed by the API
+    """
+    bookmarked_events = fields.ToManyField(EventsResource, 'bookmarked_events', blank=True, null=True)
+    done_events = fields.ToManyField(EventsResource, 'done_events', blank=True, null=True)
+
+    class Meta(AlltoezProfileInternalResource.Meta):
+        # resource_name = 'users'
+        pass
+
+    def dehydrate_bookmarked_events(self, bundle):
+        profile = bundle.obj
+        user = profile.user
+        bookmarked_event_ids = Bookmark.objects.filter(user=user).prefetch_related('event').\
+            values_list('event__id', flat=True)
+        bookmarked_events = Event.objects.filter(pk__in=bookmarked_event_ids)
+        dehydrated_events = []
+        for event in bookmarked_events:
+            er = EventsResource()
+            er_bundle = er.build_bundle(obj=event, request=bundle.request)
+            event_dict = er.full_dehydrate(er_bundle).data
+            dehydrated_events.append(event_dict)
+        return dehydrated_events
+
+    def dehydrate_done_events(self, bundle):
+        profile = bundle.obj
+        user = profile.user
+        done_event_ids = Done.objects.filter(user=user).prefetch_related('event').\
+            values_list('event__id', flat=True)
+        done_events = Event.objects.filter(pk__in=done_event_ids)
+        dehydrated_events = []
+        for event in done_events:
+            er = EventsResource()
+            er_bundle = er.build_bundle(obj=event, request=bundle.request)
+            event_dict = er.full_dehydrate(er_bundle).data
+            dehydrated_events.append(event_dict)
+        return dehydrated_events

@@ -11,7 +11,7 @@ from apps.venues.api import VenueInternalResource
 class EventInternalResource(ModelResource):
     """
     Internal resource not directly exposed by the api
-    This resource is exposed via the EventResource in apps.user_actions.api
+    This resource is exposed via the EventResource in apps.alltoez.api
     """
     image = fields.DictField(attribute='image')
     venue = fields.ForeignKey(VenueInternalResource, 'venue', full=True)

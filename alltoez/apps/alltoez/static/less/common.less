@@ -188,89 +188,90 @@ body {
 		    width: auto;
 		 }
 
-		.event-item {
-			//height: 379px;
-			//margin-right: 30px;
-			margin-bottom: 5px;
-			border: 3px solid darken(@alltoez-background-color, 5%);
-			background: #ffffff;
-			position: relative;
-			&:hover {
-				border: 3px solid @brand-primary;
-				h4 {
-				color:#4583b1;
-				}
-			}
-			a {
-				&:hover { text-decoration: none; }
-			}
-			&:last-child {
-				margin-right: 0px;
-			}
-			.event-image {
-				height: 230px;
-				overflow: hidden;
-			}
-			.event-info {
-              height: 107px;
-			  padding: 0px 10px;
-				h4 {
-					font-size: 20px;
-					padding-top: 10px;
-					color: #030303;
-					margin-bottom: 0px;
-					font-weight: 600;
-				}
-				p {
-					color: #8f8f8f;
-				}
-			}
-            .event-age-cost {
-                background: #ffffff;
-                border-top: 1px solid #ebebeb;
-                height: 50px;
-                text-align: center;
-                .age {
-                    border-right: 1px solid #ebebeb;
-                    float: left;
-                    height: 100%;
-                    width: 50%;
-                    span {
-                      font-size: 14px;
-                      position: relative;
-                      top: 15px;
-                      color: @alltoez-event-detail-color;
-                    }
-                }
-                .cost {
-                    span {
-                      font-size: 14px;
-                      position: relative;
-                      top: 15px;
-                      color: @alltoez-event-detail-color;
-                    }
-                }
-            }
-			.event-date {
-				position: absolute;
-				top: 10px;
-				right: 10px;
-				background: rgba(255,255,255,0.7);
-				padding: 6px 8px;
-				border-radius: 5px;
-				font-size: 12px;
-				color: #333;
-			}
-		}
-        .event-meta {
-            margin-bottom: 40px;
-            margin-top: 5px;
-            margin-left: 3px;
-            color: #999999;
-            font-size: 12px;
-        }
-
 	}
+}
+
+// EVENT LIST FORMAT
+.event-item {
+    //height: 379px;
+    //margin-right: 30px;
+    margin-bottom: 5px;
+    border: 3px solid darken(@alltoez-background-color, 5%);
+    background: #ffffff;
+    position: relative;
+    &:hover {
+        border: 3px solid @brand-primary;
+        h4 {
+        color:#4583b1;
+        }
+    }
+    a {
+        &:hover { text-decoration: none; }
+    }
+    &:last-child {
+        margin-right: 0px;
+    }
+    .event-image {
+        height: 230px;
+        overflow: hidden;
+    }
+    .event-info {
+      height: 107px;
+      padding: 0px 10px;
+        h4 {
+            font-size: 20px;
+            padding-top: 10px;
+            color: #030303;
+            margin-bottom: 0px;
+            font-weight: 600;
+        }
+        p {
+            color: #8f8f8f;
+        }
+    }
+    .event-age-cost {
+        background: #ffffff;
+        border-top: 1px solid #ebebeb;
+        height: 50px;
+        text-align: center;
+        .age {
+            border-right: 1px solid #ebebeb;
+            float: left;
+            height: 100%;
+            width: 50%;
+            span {
+              font-size: 14px;
+              position: relative;
+              top: 15px;
+              color: @alltoez-event-detail-color;
+            }
+        }
+        .cost {
+            span {
+              font-size: 14px;
+              position: relative;
+              top: 15px;
+              color: @alltoez-event-detail-color;
+            }
+        }
+    }
+    .event-date {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255,255,255,0.7);
+        padding: 6px 8px;
+        border-radius: 5px;
+        font-size: 12px;
+        color: #333;
+    }
+}
+.event-meta {
+    margin-bottom: 40px;
+    margin-top: 5px;
+    margin-left: 3px;
+    color: #999999;
+    font-size: 12px;
 }
 
 // SIGNUP PAGE
@@ -620,4 +621,10 @@ body {
       margin-bottom: 5px;
     }
   }
+}
+
+.bookmark-events-list, .done-events-list {
+    h3 {
+        text-align: center;
+    }
 }

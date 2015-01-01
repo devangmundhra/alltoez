@@ -27,6 +27,27 @@ class UserProfileDetail(LoginRequiredMixin, DetailView):
     slug_field = 'user__username'
     slug_url_kwarg = 'username'
     template_name = "profile/userprofile_detail.html"
+    object = None
+    kwargs = None
+    request = None
+
+    def get(self, request, *args, **kwargs):
+        from apps.alltoez.api import AlltoezProfileResource
+        """
+        This method has been copied from django/views/generic/detail.py
+        :param request:
+        :param args:
+        :param kwargs:
+        :return: HttpResponse
+        """
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        res = AlltoezProfileResource()
+        res_bundle = res.build_bundle(obj=self.object, request=request)
+        profile_json = res.serialize(None, res.full_dehydrate(res_bundle), 'application/json')
+        profile = json.loads(profile_json)
+        context['profile'] = profile
+        return self.render_to_response(context)
 
     def get_object(self, queryset=None):
         if self.kwargs.get(self.slug_url_kwarg, None):
@@ -38,7 +59,6 @@ class UserProfileDetail(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(UserProfileDetail, self).get_context_data(**kwargs)
-        context['profile_user'] = self.object.user
         return context
 
 
@@ -46,6 +66,8 @@ class UserProfileUpdate(MessageMixin, UpdateView):
     model = UserProfile
     form_class = UserProfileForm
     template_name = "profile/userprofile_form.html"
+    kwargs = None
+    request = None
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -104,6 +126,7 @@ class AlltoezSignupView(SignupView):
 class AlltoezSignupStep2View(UpdateView):
     template_name = 'alltoez_profile/signup_step2.html'
     form_class = UserProfileForm
+    request = None
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
