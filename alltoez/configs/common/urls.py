@@ -14,6 +14,7 @@ handler500 = 'apps.alltoez.views.server_error'
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('apps.alltoez.urls')),
+    url(r'^events/', include('apps.events.urls')),
     url(r'^accounts/', include('apps.alltoez_profile.urls')),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^admin/filebrowser/', include(site.urls)),

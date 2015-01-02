@@ -50,11 +50,11 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12 col-sm-12">
-					<span class="qty-events">{{ events_list|length }} events</span>
+					<span class="qty-events">{{ events_list|length }} events </span>
 					<select class="sort-events form-control">
                         <option value="-created_at" {% if event_sort == '-created_at' %}SELECTED{% endif %}>New on Alltoez</option>
                         <option value="cost" {% if event_sort == 'cost' %}SELECTED{% endif %}>Cost</option>
-                        <option value="end_date" {% if event_sortt == 'end_date' %}SELECTED{% endif %}>Ending Soon</option>
+                        <option value="end_date" {% if event_sort == 'end_date' %}SELECTED{% endif %}>Ending Soon</option>
 					</select>
 				</div>
 			</div>

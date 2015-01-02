@@ -1,3 +1,108 @@
+import json
 
+from django.utils import timezone
+from django.views.generic import DetailView
+
+from endless_pagination.views import AjaxListView
+
+from apps.events.models import Event, Category
+
+"""
+Alltoez event views
+"""
+
+
+class Events(AjaxListView):
+    template_name = 'events.html'
+    page_template = "event_list_page.html"
+    model = Event
+    events_list = None
+    category = None
+    category_list = None
+    category_slug = None
+    sort = None
+    radius = None
+    request = None
+
+    def get(self, request, *args, **kwargs):
+        from apps.alltoez.api import EventsResource
+
+        # default sort is "-created_at"
+        self.sort = self.request.GET.get('sort')
+        if not self.sort:
+            self.sort = self.request.session.get('event_sort', '-created_at')
+        else:
+            self.request.session['event_sort'] = self.sort
+
+        # radius in miles. default is 10m
+        self.radius = self.request.GET.get('radius')
+        if not self.radius:
+            self.radius = self.request.session.get('venue_radius', 10)
+        else:
+            self.request.session['venue_radius'] = self.radius
+
+        self.category_slug = kwargs.get('cat_slug', None)
+        self.category_list = Category.objects.filter(parent_category__isnull=False)
+
+        er = EventsResource()
+        request_bundle = er.build_bundle(request=request)
+        queryset = er.obj_get_list(request_bundle)
+
+        if self.category_slug:
+            queryset = queryset.filter(category__slug=self.category_slug)
+            try:
+                self.category = Category.objects.get(slug=self.category_slug)
+            except Category.DoesNotExist:
+                pass
+
+        # TODO: Filter the queryset for venue radius using http://janmatuschek.de/LatitudeLongitudeBoundingCoordinates
+        # TODO: and alltoez.utils.geo
+
+        # Sort by the sort key
+        queryset = queryset.order_by(self.sort)
+
+        bundles = []
+        for obj in queryset:
+            bundle = er.build_bundle(obj=obj, request=request)
+            bundles.append(er.full_dehydrate(bundle, for_list=True))
+
+        list_json = er.serialize(None, bundles, "application/json")
+        self.events_list = json.loads(list_json)
+        return super(Events, self).get(self, request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(Events, self).get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        context['events_list'] = self.events_list
+        context['category_list'] = self.category_list
+        context['category'] = self.category
+        context['event_sort'] = self.sort
+        context['venue_radius'] = self.radius
+        return context
+
+
+class EventDetailView(DetailView):
+    model = Event
+    template_name = 'event_detail.html'
+    object = None
+
+    def get(self, request, *args, **kwargs):
+        """
+        This method has been copied from django/views/generic/detail.py
+        :param request:
+        :param args:
+        :param kwargs:
+        :return: HttpResponse
+        """
+        from apps.alltoez.api import EventsResource
+
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        er = EventsResource()
+        er_bundle = er.build_bundle(obj=self.object, request=request)
+        event_json = er.serialize(None, er.full_dehydrate(er_bundle), 'application/json')
+        event = json.loads(event_json)
+        context['event'] = event
+        return self.render_to_response(context)
 
 
