@@ -109,6 +109,7 @@
                 </div>
                 {% endif %}
             </div>
+            {% if event.start_date or event.time_detail %}
             <div class="open-hours">
                 <dl class="dl">
                     <dt>When:</dt>
@@ -117,9 +118,12 @@
                     {% else %}
                     <!--<p>{{ event.recurrence_detail }}</p>-->
                     {% endif %}
+                    {% if event.time_detail %}
                     <p>{{ event.time_detail|markdown }}</p>
+                    {% endif %}
                 </dl>
             </div>
+            {% endif %}
             <div class="age-allowed">
                 <dl class="dl-horizontal">
                     {% if event.min_age == 0 and event.max_age == 100 %}

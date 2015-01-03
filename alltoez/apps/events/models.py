@@ -146,7 +146,8 @@ class Event(models.Model):
                                 help_text="End date of the event, if applicable")
     recurrence_detail = models.CharField(max_length=500, blank=True, null=True,
                                          help_text="Enter a line about when this event is till, if it is recurring")
-    time_detail = models.CharField(max_length=500, help_text="Enter time for different days, in different rows")
+    time_detail = models.CharField(max_length=500, blank=True, null=True,
+                                   help_text="Enter time for different days, in different rows")
     url = models.URLField(blank=True, null=True, verbose_name='Event link')
     additional_info = models.TextField(blank=True, null=True)
 

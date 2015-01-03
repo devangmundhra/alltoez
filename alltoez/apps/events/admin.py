@@ -119,6 +119,7 @@ class EventAdmin(ForeignKeyAutocompleteAdmin):
     Model admin for Event Model
     Note: This is similar to EventInline above
     """
+    view_on_site = True
     prepopulated_fields = {'slug': ('title',), }
     ordering = ['-created_at']
     list_filter = (ExpiredEventListFilter,)
