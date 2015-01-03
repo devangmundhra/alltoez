@@ -1,6 +1,6 @@
 {% load event_filters %}
 {% for event in events_list %}
-<div class="col-xs-12 {{ col_class }}">
+<div class="col-xs-12 col-sm-4">
     <div class="event-item">
         <a href='{% url "event_detail" event.slug %}'>
             <div class="event-image">

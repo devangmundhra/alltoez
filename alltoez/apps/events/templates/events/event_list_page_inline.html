@@ -1,0 +1,22 @@
+{% load event_filters %}
+{% for event in events_list %}
+<div class="col-xs-12 col-sm-12">
+    <div class="event-item">
+        <a href='{% url "event_detail" event.slug %}'>
+            <div class="media">
+              <div class="media-left media-middle event-image">
+                  <img src="{{ event.image.url }}">
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading">{{ event.title|truncatechars:'62' }}</h4>
+                {% if event.venue.neighborhood %}
+                    {{ event.venue.neighborhood }}
+                {% else %}
+                    {{ event.venue.address }}
+                {% endif %}
+              </div>
+            </div>
+        </a>
+    </div>
+</div>
+{% endfor %}

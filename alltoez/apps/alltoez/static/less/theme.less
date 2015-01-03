@@ -1,11 +1,8 @@
 /*!
- * Bootstrap v3.1.1
+ * Bootstrap v3.3.1
  *
- * Copyright 2012 Twitter, Inc
- * Licensed under the Apache License v2.0
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Designed and built with all the love in the world @twitter by @mdo and @fat.
+ * Copied from bootstrap/bootstrap.less with a couple of imports in the middle
+ * for project specific settings
  */
 
  // Core variables and mixins
@@ -13,9 +10,10 @@
  @import "variables.less"; // Any locally overridden variables
  @import "bootstrap/mixins.less";
 
- // Reset
+ // Reset and dependencies
  @import "bootstrap/normalize.less";
  @import "bootstrap/print.less";
+ @import "bootstrap/glyphicons.less";
 
  // Core CSS
  @import "bootstrap/scaffolding.less";
@@ -28,7 +26,6 @@
 
  // Components
  @import "bootstrap/component-animations.less";
- @import "bootstrap/glyphicons.less";
  @import "bootstrap/dropdowns.less";
  @import "bootstrap/button-groups.less";
  @import "bootstrap/input-groups.less";
@@ -46,6 +43,7 @@
  @import "bootstrap/media.less";
  @import "bootstrap/list-group.less";
  @import "bootstrap/panels.less";
+ @import "bootstrap/responsive-embed.less";
  @import "bootstrap/wells.less";
  @import "bootstrap/close.less";
 
@@ -58,6 +56,8 @@
  // Utility classes
  @import "bootstrap/utilities.less";
  @import "bootstrap/responsive-utilities.less";
+
+ // Other third party components
  @import "bootstrap-social.less";
 
 // Project Specific Imports

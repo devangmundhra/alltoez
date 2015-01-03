@@ -13,8 +13,8 @@ Alltoez event views
 
 
 class Events(AjaxListView):
-    template_name = 'events.html'
-    page_template = "event_list_page.html"
+    template_name = 'events/events.html'
+    page_template = "events/event_list_page.html"
     model = Event
     events_list = None
     category = None
@@ -83,7 +83,7 @@ class Events(AjaxListView):
 
 class EventDetailView(DetailView):
     model = Event
-    template_name = 'event_detail.html'
+    template_name = 'events/event_detail.html'
     object = None
 
     def get(self, request, *args, **kwargs):

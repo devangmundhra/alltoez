@@ -27,6 +27,7 @@ class UserProfileDetail(LoginRequiredMixin, DetailView):
     slug_field = 'user__username'
     slug_url_kwarg = 'username'
     template_name = "profile/userprofile_detail.html"
+    events_list_template = "events/event_list_page_inline.html"
     object = None
     kwargs = None
     request = None
@@ -59,6 +60,7 @@ class UserProfileDetail(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(UserProfileDetail, self).get_context_data(**kwargs)
+        context['events_list_template'] = self.events_list_template
         return context
 
 
