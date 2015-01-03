@@ -2,13 +2,11 @@ from __future__ import absolute_import
 
 import logging
 from datetime import datetime, timedelta
-import smtplib
-from email.mime.text import MIMEText
 from croniter import croniter
 from celery import shared_task
 
 from django.utils import timezone
-from django.db import IntegrityError
+from django.core.mail import send_mail
 
 from apps.events.models import Event, EventRecord
 from apps.events.eventparsers import redtri
@@ -42,16 +40,7 @@ def scrape_events_look_ahead():
     subject = "Alltoez Parsed Events | SF | {}".format(today.strftime("%A, %d. %B"))
     body = "For date {}\n\n".format(event_date.strftime("%A, %d. %B %Y")) + body
 
-    msg = MIMEText(body)
-    msg['Subject'] = subject
-    msg['From'] = "noreply@alltoez.com"
-    msg['To'] = ", ".join([ "ruchikadamani90@gmail.com", "devangmundhra@gmail.com"])
-
-    s = smtplib.SMTP('smtp.mailgun.org', 587)
-
-    s.login('postmaster@alltoez.com', 'f23194b06f816adc5b5e6f235ed33ff1')
-    s.sendmail(msg['From'], msg['To'], msg.as_string())
-    s.quit()
+    send_mail(subject, body, "noreply@alltoez.com", ["ruchikadamani90@gmail.com", "devangmundhra@gmail.com"])
 
 """
 Number of days before which an event for the date should be created

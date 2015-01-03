@@ -34,7 +34,7 @@ def check_invalid_venues():
     for venue in invalid_venues:
         body = body + "{} [{}{}]\n".format(venue, Site.objects.get_current(),
                                            urlresolvers.reverse('admin:venues_venue_change', args=(venue.id,)))
-        body_html = body_html + "<a href={}{}>{}</a>".format(Site.objects.get_current(),
+        body_html = body_html + "<a href={}{}>{}</a><br/>".format(Site.objects.get_current(),
                                                              urlresolvers.reverse('admin:venues_venue_change',
                                                                                   args=(venue.id,)),
                                                              venue)
