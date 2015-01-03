@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.urlresolvers import reverse
 
 from jsonfield import JSONField
 
@@ -158,6 +159,9 @@ class Event(models.Model):
         if not self.slug:
             unique_slugify(self, self.title)
         super(Event, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('event_detail', args=[self.slug])
 
     def __unicode__(self):
         return unicode(self.title)

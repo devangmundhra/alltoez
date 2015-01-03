@@ -3,6 +3,8 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.db.models import Q
+from django.core import urlresolvers
+from django.contrib.sites.models import Site
 
 from pagedown.widgets import AdminPagedownWidget
 from django_extensions.admin import ForeignKeyAutocompleteAdmin
@@ -119,6 +121,7 @@ class EventAdmin(ForeignKeyAutocompleteAdmin):
     Model admin for Event Model
     Note: This is similar to EventInline above
     """
+    filter_horizontal = ['category']
     view_on_site = True
     prepopulated_fields = {'slug': ('title',), }
     ordering = ['-created_at']
@@ -128,6 +131,20 @@ class EventAdmin(ForeignKeyAutocompleteAdmin):
         'venue': ('name', 'address'),
     }
     form = EventAdminForm
+    readonly_fields = ('venue_admin_url',)
+    fields = ('draft', 'title', 'slug', ('venue', 'venue_admin_url',),
+              'description', 'category', 'image', ('min_age', 'max_age',),
+              ('cost', 'cost_detail',), ('start_date', 'end_date',),
+              'recurrence_detail', 'time_detail', 'url', 'additional_info')
+
+    def venue_admin_url(self, obj):
+        return "<a href={}{} target=\"_blank\">{}{}</a>".format(Site.objects.get_current(),
+                                                                urlresolvers.reverse('admin:venues_venue_change',
+                                                                                     args=(obj.venue.id,)),
+                                                                Site.objects.get_current(),
+                                                                urlresolvers.reverse('admin:venues_venue_change',
+                                                                                     args=(obj.venue.id,)),)
+    venue_admin_url.short_description = 'Edit Venue Link'
     pass
 
 admin.site.register(Event, EventAdmin)
