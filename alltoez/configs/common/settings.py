@@ -281,6 +281,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'apps.events.tasks.scrape_events_look_ahead',
         'schedule': timedelta(days=1),
     },
+    'parse-venues-everyday': {
+        'task': 'apps.venues.tasks.check_invalid_venues',
+        'schedule': timedelta(days=1),
+    },
 }
 
 
