@@ -31,13 +31,31 @@ class Venue(BaseModel, AddressMixin):
         super(Venue, self).save(*args, **kwargs)
         # This is a bit hacky, need to do this twice because latitude/longitude are plugged in during
         # call to super's save
-        if self.latitude and self.longitude and not self.neighborhood:
+        if self.latitude and self.longitude:
+            changed = False
             if not self.neighborhood:
                 self.neighborhood = rev_geocode_location_component(self.latitude, self.longitude, 'neighborhood')
+                changed = True
             if not self.neighborhood:
                 #If not succeed in first try, try again (with a bigger net)
                 self.neighborhood = rev_geocode_location_component(self.latitude, self.longitude, 'political')
-            super(Venue, self).save(*args, **kwargs)
+                changed = True
+            if not self.city:
+                self.city = rev_geocode_location_component(self.latitude, self.longitude, 'locality')
+                changed = True
+            if not self.state:
+                self.state = rev_geocode_location_component(self.latitude, self.longitude,
+                                                            'administrative_area_level_1')
+                changed = True
+            if not self.country:
+                self.country = rev_geocode_location_component(self.latitude, self.longitude, 'country')
+                changed = True
+            if not self.zipcode:
+                self.zipcode = rev_geocode_location_component(self.latitude, self.longitude, 'postal_code')
+                changed = True
+            # If any of the parameters were changed, save the model again
+            if changed:
+                super(Venue, self).save(*args, **kwargs)
         self.__original_name = self.name
 
     def __unicode__(self):

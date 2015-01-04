@@ -50,7 +50,7 @@ def rev_geocode_location_component(lat, lng, result_type=""):
     res = json.loads(geo.read())
     if res['status'] != 'OK':
         return ""
-    # Example https://maps.googleapis.com/maps/api/geocodhttps://maps.googleapis.com/maps/api/geocode/json?latlng=37.7628848%2C-122.428514&key=AIzaSyDOtkrcR4QFGYTMdR71WkkUYsMQ735c_EU&result_type=neighborhood
+    # Example https://maps.googleapis.com/maps/api/geocode/json?latlng=37.7628848%2C-122.428514&key=AIzaSyDOtkrcR4QFGYTMdR71WkkUYsMQ735c_EU&result_type=neighborhood
     try:
         address = res['results'][0]['address_components'][0]['short_name']
         import pdb
