@@ -138,10 +138,10 @@ class EventAdmin(ForeignKeyAutocompleteAdmin):
               'recurrence_detail', 'time_detail', 'url', 'additional_info')
 
     def venue_admin_url(self, obj):
-        return "<a href={}{} target=\"_blank\">{}{}</a>".format(Site.objects.get_current(),
+        return "<a href={}{} target=\"_blank\">{}{}</a>".format(Site.objects.get_current().domain,
                                                                 urlresolvers.reverse('admin:venues_venue_change',
                                                                                      args=(obj.venue.id,)),
-                                                                Site.objects.get_current(),
+                                                                Site.objects.get_current().domain,
                                                                 urlresolvers.reverse('admin:venues_venue_change',
                                                                                      args=(obj.venue.id,)),)
     venue_admin_url.short_description = 'Edit Venue Link'
