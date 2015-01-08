@@ -639,3 +639,54 @@ body {
         height: 45px;
     }
 }
+
+.searched-events-list {
+    .searched-event-item {
+        background: #ffffff;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 30px;
+        border: 1px solid darken(@alltoez-background-color, 5%);
+        &:hover {
+            border: 1px solid @brand-primary;
+            h4 {
+            color:#4583b1;
+            }
+        }
+        a {
+            &:hover { text-decoration: none; }
+        }
+        &:last-child {
+            margin-right: 0px;
+        }
+
+        .event-info {
+          padding: 0px 10px;
+            h4 {
+                font-size: 20px;
+                padding-top: 10px;
+                color: #030303;
+                margin-bottom: 0px;
+                font-weight: 600;
+            }
+            .event-venue {
+                color: #8f8f8f;
+                margin-bottom: 5px;
+            }
+            .event-desc {
+                height: 100px;
+                color: black;
+                overflow: hidden;
+                text-align: justify;
+            }
+        }
+    }
+
+    .category-drilldown {
+        a {
+            text-decoration: none;
+            color: #030303;
+            &:hover { text-decoration: none; }
+        }
+    }
+}

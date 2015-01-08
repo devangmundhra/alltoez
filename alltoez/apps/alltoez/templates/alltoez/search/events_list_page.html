@@ -1,0 +1,42 @@
+{% load common_tags %}
+{% load markdown_deux_tags %}
+
+{% if query %}
+    <!-- Begin faceting. -->
+    <div class="category-drilldown">
+        <dl>
+            {% if facets.fields.categories %}
+                <dt>Categories</dt>
+                <dd>
+                    <ul class="list-inline">
+                {# Provide only the top 5 categories #}
+                {% for category in facets.fields.categories|slice:":5" %}
+                        <li><a href="{{ request.get_full_path }}&amp;selected_facets=categories:{{ category.0|urlencode }}">{{ category.0 }}</a> ({{ category.1 }})</li>
+                {% endfor %}
+                    </ul>
+                </dd>
+            {% endif %}
+        </dl>
+    </div>
+    <!-- End faceting -->
+
+{% for searched_event in page.object_list %}
+{% with event=searched_event.object %}
+<div class="col-xs-12 col-sm-6">
+    <div class="searched-event-item">
+        <a href='{% url "event_detail" event.slug %}'>
+            <div class="event-info">
+                <h4>{{ event.title|truncatechars:'62' }}</h4>
+                {% if event.venue.neighborhood %}
+                    <p class="event-venue"><em>{{ event.venue.neighborhood }}</em></p>
+                {% endif %}
+                <div class="event-desc">
+                {{ event.description|markdown }}
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+{% endwith %}
+{% endfor %}
+{% endif %}

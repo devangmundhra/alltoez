@@ -1,4 +1,3 @@
-
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.template.defaulttags import regroup
@@ -11,6 +10,7 @@ from django.http import Http404
 from django.views.decorators.csrf import csrf_exempt, requires_csrf_token
 from django.shortcuts import render, redirect
 
+from haystack.views import FacetedSearchView
 
 
 @requires_csrf_token
@@ -56,3 +56,15 @@ class Contact(TemplateView):
 
     def get_context_data(self, **kwargs):
         return {}
+
+
+class AlltoezSearchView(FacetedSearchView):
+    page_template = "alltoez/search/events_list_page.html"
+    """
+    AlltoezSearchView
+    Search view for Alltoez
+    """
+    def extra_context(self):
+        extra = super(AlltoezSearchView, self).extra_context()
+        extra['page_template'] = self.page_template
+        return extra

@@ -1,4 +1,4 @@
-{% load cache compressed %}
+{% load future cache compressed %}
 <!DOCTYPE html>
 <!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
 <!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
@@ -64,7 +64,9 @@
 	</head>
 
 	<body class="{% block body_class %}{% endblock %}">
-		{% include "alltoez/ui/fragments/header.html" %}
+        {% block site_header %}
+		{% include "alltoez/ui/fragments/header_base.html" %}
+        {% endblock %}
 
 		{% block content_full_width %}
 			<div class="strip white">

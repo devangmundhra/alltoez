@@ -16,6 +16,9 @@
 {% block title %}{{ event.title }}{% endblock %}
 {% block page_title_outer %}{% endblock %}
 {% block page_title %}{% endblock %}
+{% block site_header %}
+{% include "events/fragments/header_events.html" %}
+{% endblock %}
 {% block body_class %}{% endblock %}
 
 {% block content %}

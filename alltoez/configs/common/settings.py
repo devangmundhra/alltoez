@@ -99,6 +99,8 @@ INSTALLED_APPS = [
 	'pipeline',
     'location_field',
     'phonenumber_field',
+    'haystack',
+    'celery_haystack',
     'tastypie',
     'pagedown',
     'markdown_deux',
@@ -345,6 +347,11 @@ MARKDOWN_DEUX_STYLES = {
 GEOIP_PATH = os.path.join(SITE_ROOT, "data/geoip_data")
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+#-------------------------------------------------------------------------------
+#	HAYSTACK CONFIG
+#-------------------------------------------------------------------------------
+HAYSTACK_SIGNAL_PROCESSOR = 'celery_haystack.signals.CelerySignalProcessor'
 
 try:
 	from local_settings import *

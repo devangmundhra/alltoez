@@ -266,3 +266,11 @@ def manage_command(command):
     require('branch', provided_by=[stable, master, branch])
     with prefix('source %(env_path)s/bin/activate' % env):
         run('python %(repo_path)s/%(project_name)s/configs/%(settings)s/manage.py %(command)s;' % env)
+
+def rebuild_index():
+    """
+    Rebuild haystack indexes
+    """
+    with prefix('source %(env_path)s/bin/activate' % env):
+        run('python %(repo_path)s/%(project_name)s/configs/%(settings)s/manage.py rebuild_index;' % env)
+
