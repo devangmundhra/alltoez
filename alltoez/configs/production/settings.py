@@ -21,7 +21,7 @@ DATABASES = {
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-        'URL': 'http://127.0.0.1:9200/',
+        'URL': 'https://k0995adg9h:fjrnpz1k2k@alltoez-7040390127.us-west-2.bonsai.io',
         'INDEX_NAME': 'haystack',
     },
 }
