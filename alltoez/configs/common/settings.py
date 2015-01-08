@@ -277,6 +277,7 @@ BROKER_URL = 'redis://'
 CELERY_RESULT_BACKEND = BROKER_URL
 CELERY_SEND_TASK_ERROR_EMAILS = False
 CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
+CELERY_TASK_SERIALIZER = 'json'
 
 CELERYBEAT_SCHEDULE = {
     'parse-events-everyday': {
