@@ -1,2 +1,5 @@
 {{ object.title }}
 {{ object.description }}
+{% for category in object.category.all %}
+  {{ category.name }}
+{% endfor %}

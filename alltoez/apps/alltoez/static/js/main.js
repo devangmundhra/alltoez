@@ -4,7 +4,7 @@ function resizeHeader() {
 	$("body.home h1").css('margin-top', ($("#above-the-fold").height()/2)-140);
 }
 
-function sendReqeustViaMultiFriendSelector() {
+function sendRequestViaMultiFriendSelector() {
         FB.ui({method: 'apprequests', message: 'Events for kids and parents at alltoez.com' }, requestCallback);
 }
 
@@ -18,6 +18,10 @@ function shareEventLinkViaEmail(title, link) {
 
 function requestCallback(request) {
     
+}
+
+function filterAutoCompleteResults(parsedResponse) {
+    return parsedResponse.results;
 }
 
 $(document).ready(function() {
@@ -46,7 +50,30 @@ $(document).ready(function() {
 
     $('.invite').on('click', function(e) {
         e.preventDefault();
-        sendReqeustViaMultiFriendSelector();
+        sendRequestViaMultiFriendSelector();
         return false;
+    });
+
+    var eventsAutocompleteEngine = new Bloodhound({
+        name: 'events',
+        remote: {url: 'http://localhost:8000/search/autocomplete/?q=%QUERY', filter: filterAutoCompleteResults},
+        datumTokenizer: function(d) {
+            return Bloodhound.tokenizers.whitespace(d.val);
+        },
+        queryTokenizer: Bloodhound.tokenizers.whitespace
+    });
+
+    var promise = eventsAutocompleteEngine.initialize();
+
+    promise
+    .fail(function() { console.log('Typeahead init error!'); });
+
+    $('.search-input .typeahead').typeahead({
+        minLength: 3,
+        highlight: true,
+    }, {
+        name: 'events',
+        displayKey: 'value',
+        source: eventsAutocompleteEngine.ttAdapter()
     });
 });

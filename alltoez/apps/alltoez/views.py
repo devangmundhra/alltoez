@@ -1,7 +1,9 @@
+import json
+
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.template.defaulttags import regroup
-from django.http import HttpResponseServerError, HttpResponseRedirect
+from django.http import HttpResponseServerError, HttpResponseRedirect, HttpResponse
 from django.template import loader, RequestContext
 from django.conf import settings
 from django.views.generic import TemplateView
@@ -9,9 +11,10 @@ from django.views.generic.list import ListView
 from django.http import Http404
 from django.views.decorators.csrf import csrf_exempt, requires_csrf_token
 from django.shortcuts import render, redirect
+from django.utils import timezone
 
 from haystack.views import FacetedSearchView
-
+from haystack.query import SearchQuerySet
 
 @requires_csrf_token
 def server_error(request, template_name='500.html'):
@@ -57,6 +60,10 @@ class Contact(TemplateView):
     def get_context_data(self, **kwargs):
         return {}
 
+"""
+Alltoez search views
+"""
+
 
 class AlltoezSearchView(FacetedSearchView):
     page_template = "alltoez/search/events_list_page.html"
@@ -68,3 +75,15 @@ class AlltoezSearchView(FacetedSearchView):
         extra = super(AlltoezSearchView, self).extra_context()
         extra['page_template'] = self.page_template
         return extra
+
+
+def autocomplete(request):
+    my_query = request.GET.get('q', '')
+    sqs = SearchQuerySet().filter(end_date__gte=timezone.now().date()).autocomplete(title_auto=my_query)[:8]
+    suggestions = [{'value': result.title} for result in sqs]
+    # Make sure you return a JSON object, not a bare list.
+    # Otherwise, you could be vulnerable to an XSS attack.
+    the_data = json.dumps({
+        'results': suggestions
+    })
+    return HttpResponse(the_data, content_type='application/json')

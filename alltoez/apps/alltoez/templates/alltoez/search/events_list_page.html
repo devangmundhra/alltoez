@@ -25,6 +25,9 @@
 <div class="col-xs-12 col-sm-6">
     <div class="searched-event-item">
         <a href='{% url "event_detail" event.slug %}'>
+            <div class="event-image">
+                <img src="{{ event.image.url }}" width="100%">
+            </div>
             <div class="event-info">
                 <h4>{{ event.title|truncatechars:'62' }}</h4>
                 {% if event.venue.neighborhood %}

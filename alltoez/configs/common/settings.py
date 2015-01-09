@@ -197,6 +197,7 @@ PIPELINE_CSS = {
 PIPELINE_JS = {
 	'base': {
 		'source_filenames': (
+            'js/typeahead.bundle.min.js',
 			'js/main.js',
 			'js/ajax_request.js',
 			'js/lib/jquery.class.js',

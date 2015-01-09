@@ -1,5 +1,7 @@
 __author__ = 'devangmundhra'
 
+from datetime import datetime, timedelta
+
 from haystack import indexes
 from celery_haystack.indexes import CelerySearchIndex
 from apps.events.models import Event
@@ -8,8 +10,11 @@ from apps.events.models import Event
 class EventIndex(CelerySearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     categories = indexes.FacetMultiValueField()
+    title = indexes.CharField(model_attr='title')
+    end_date = indexes.DateField(model_attr='end_date', default=lambda: datetime.now()+timedelta(days=(30*365)))
+                                                                            # If no expiry, expire after 30 years
     # We add this for autocomplete.
-    content_auto = indexes.EdgeNgramField(use_template=True)
+    title_auto = indexes.EdgeNgramField(use_template=True)
 
     def get_model(self):
         return Event
