@@ -9,11 +9,16 @@ NUM_WORKERS=3  #recommended formula here is 1 + 2 * NUM_CORES
 USER=www-data
 GROUP=www-data
 
+NEW_RELIC_CONFIG_FILE=/home/django/sites/alltoez/repository/alltoez/configs/production/newrelic.ini
+export NEW_RELIC_CONFIG_FILE
+NEW_RELIC_ENVIRONMENT=production
+export NEW_RELIC_ENVIRONMENT
+
 cd /home/django/sites/alltoez/repository
 source ../env/bin/activate
 export PYTHONPATH=$PYTHONPATH:/home/django/sites/alltoez/repository/alltoez
 test -d $LOGDIR || mkdir -p $LOGDIR
-exec gunicorn -w $NUM_WORKERS \
+newrelic-admin run-program gunicorn -w $NUM_WORKERS \
 	--log-level debug \
 	--access-logfile $LOGFILE \
 	--log-file $ERRORFILE \
