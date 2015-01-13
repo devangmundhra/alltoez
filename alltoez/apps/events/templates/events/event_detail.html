@@ -32,7 +32,7 @@
             </div>
             <div class="event-categories">
                 {% for category in event.category %}
-                <a href="{% url 'events' cat_slug=category.slug %}" class="btn btn-info btn-sm">{{ category.name }}</a>
+                <a href="{% url 'events' cat_slug=category.slug %}" class="btn btn-default btn-sm">{{ category.name }}</a>
                 {% endfor %}
             </div>
             <div class="event-address">
