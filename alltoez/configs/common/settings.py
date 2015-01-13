@@ -100,7 +100,6 @@ INSTALLED_APPS = [
     'location_field',
     'phonenumber_field',
     'haystack',
-    'celery_haystack',
     'tastypie',
     'pagedown',
     'markdown_deux',
@@ -337,7 +336,7 @@ ADMIN_SHORTCUTS_SETTINGS = {
 MARKDOWN_DEUX_STYLES = {
     "default": {
         "extras": {
-            "code-friendly": None,
+            "tables": None,
         },
         "safe_mode": False,
     },
@@ -353,7 +352,7 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 #-------------------------------------------------------------------------------
 #	HAYSTACK CONFIG
 #-------------------------------------------------------------------------------
-HAYSTACK_SIGNAL_PROCESSOR = 'celery_haystack.signals.CelerySignalProcessor'
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 try:
 	from local_settings import *

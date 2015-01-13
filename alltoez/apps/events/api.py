@@ -4,8 +4,15 @@ from django.utils import timezone
 from tastypie.resources import ModelResource
 from tastypie import fields
 
-from apps.events.models import Event
+from apps.events.models import Event, Category
 from apps.venues.api import VenueInternalResource
+
+
+class CategoryResource(ModelResource):
+    class Meta:
+        queryset = Category.objects.all()
+        resource_name = 'category'
+        fields = ['name', 'slug', 'description']
 
 
 class EventInternalResource(ModelResource):
@@ -15,6 +22,7 @@ class EventInternalResource(ModelResource):
     """
     image = fields.DictField(attribute='image')
     venue = fields.ForeignKey(VenueInternalResource, 'venue', full=True)
+    category = fields.ToManyField(CategoryResource, attribute='category', full=True)
 
     class Meta:
         queryset = Event.objects.all()

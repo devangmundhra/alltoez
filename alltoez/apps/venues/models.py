@@ -20,6 +20,7 @@ class Venue(BaseModel, AddressMixin):
                                     help_text="Neigborhood/rough area of venue. Leave blank for auto-fill")
     phone_number = PhoneNumberField(blank=True, verbose_name="Phone number", help_text="Phone number, if available")
     yelp_url = models.URLField(blank=True, null=True, verbose_name='Yelp Url')
+    facebook_url = models.URLField(blank=True, null=True, verbose_name='Facebook Url')
 
     def __init__(self, *args, **kwargs):
         super(Venue, self).__init__(*args, **kwargs)

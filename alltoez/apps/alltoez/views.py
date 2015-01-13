@@ -73,6 +73,8 @@ class AlltoezSearchView(FacetedSearchView):
     """
     def extra_context(self):
         extra = super(AlltoezSearchView, self).extra_context()
+        if hasattr(self.results, 'query') and self.results.query.backend.include_spelling:
+            extra['suggestion'] = self.form.get_suggestion()
         extra['page_template'] = self.page_template
         return extra
 

@@ -414,7 +414,12 @@ body {
       color: #282828;
     }
   }
-  .event-address {
+  .event-categories {
+    padding-bottom: 10px;
+  }
+  .event-address, .event-neighborhood {
+    display: inline-block;
+    padding-right: 10px;
     dt {
       text-transform: uppercase;
       font-size: 11px;
@@ -621,6 +626,22 @@ body {
       color: @alltoez-event-detail-color;
       margin-bottom: 5px;
     }
+    table {
+        width: 100%;
+        color: @alltoez-event-detail-color;
+        font-size: 15px;
+        tr {
+            margin-bottom: 5px;
+            &:last-child {
+                margin-bottom: 0px;
+            }
+            td {
+                &:first-child {
+                    font-weight: 500;
+                }
+            }
+        }
+    }
   }
 }
 
@@ -660,7 +681,7 @@ body {
             margin-right: 0px;
         }
         .event-image {
-            height: 300px;
+            max-height: 300px;
             overflow: hidden;
         }
         .event-info {
@@ -686,9 +707,5 @@ body {
     }
 
     .category-drilldown {
-        a {
-            color: #030303;
-            &:hover { text-decoration: none; }
-        }
     }
 }

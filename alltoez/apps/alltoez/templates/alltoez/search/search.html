@@ -9,6 +9,7 @@
 {% block body_class %}events{% endblock %}
 
 {% block content_full_width %}
+    {% if query %}
     <nav class="container">
       <ul class="pager">
         <li class="previous"><a href="{% url 'events' %}"><span aria-hidden="true">&larr;</span> All Events</a></li>
@@ -21,6 +22,9 @@
                     <h4>
                         <span class="qty-events">{{ paginator.count }} events for <em>{{ query }}</em> </span>
                     </h4>
+                    {% if suggestion %}
+                    <p>Did you mean <a href="{% url 'search' %}?q={{ suggestion }}"><em>{{ suggestion }}?</em></a></p>
+                    {% endif %}
 				</div>
 			</div>
 		</div>
@@ -33,6 +37,14 @@
             </div>
         </div>
 	</div>
+    {% else %}
+	<div class="strip narrow light-grey">
+		<div class="container">
+			<div class="row">
+				No query found to search. Please use the search bar above.
+		</div>
+	</div>
+    {% endif %}
 {% endblock %}
 
 {% block extra_js %}

@@ -3,6 +3,7 @@
 {% load cache compressed %}
 {% load markdown_deux_tags %}
 {% load admin_urls %}
+{% load event_filters %}
 
 {% block fb_meta %}
     <meta property="og:title"       content="{{ event.title }}" />
@@ -29,10 +30,21 @@
             <div class="event-title">
                 <h1>{{ event.title }}</h1>
             </div>
+            <div class="event-categories">
+                {% for category in event.category %}
+                <a href="{% url 'events' cat_slug=category.slug %}" class="btn btn-info btn-sm">{{ category.name }}</a>
+                {% endfor %}
+            </div>
             <div class="event-address">
                 <dl>
                     <dt>WHERE</dt>
-                        <dd>{{ event.venue.name }}</dd>
+                    <dd>{{ event.venue.name }}</dd>
+                </dl>
+            </div>
+            <div class="event-neighborhood">
+                <dl>
+                    <dt>NEIGHBORHOOD</dt>
+                    <dd>{{ event.venue.neighborhood }}</dd>
                 </dl>
             </div>
             <div class="event-image">
@@ -108,7 +120,10 @@
                 </div>
                 {% if event.url %}
                 <div class="event-web">
-                    <a href="{{ event.url }}" target="_blank" class="site"><i class="fa fa-link"></i> Webite</a>
+                    <a href="{{ event.url }}" target="_blank" class="site"><i class="fa fa-link"></i> Website</a>
+                    {% if event.venue.facebook_url %}
+                    <a href="{{ event.venue.facebook_url }}" target="_blank" class="facebook"><i class="fa fa-facebook"></i> Facebook</a>
+                    {% endif %}
                     {% if event.venue.yelp_url %}
                     <a href="{{ event.venue.yelp_url }}" target="_blank" class="yelp"><i class="fa fa-yelp"></i> Yelp</a>
                     {% endif %}
@@ -121,11 +136,9 @@
                     <dt>When:</dt>
                     {% if not event.recurrence_detail %}
                     <p>{{ event.start_date|date }}</p>
-                    {% else %}
-                    <!--<p>{{ event.recurrence_detail }}</p>-->
                     {% endif %}
                     {% if event.time_detail %}
-                    <p>{{ event.time_detail|markdown }}</p>
+                    <p>{{ event.time_detail|format_event_datetime|markdown }}</p>
                     {% endif %}
                 </dl>
             </div>
@@ -138,11 +151,11 @@
                     {% else %}
                     {% if event.min_age != 0 %}
                     <dt>Min. age:</dt>
-                    <dd>{{ event.min_age }}</dd>
+                    <dd>{{ event.min_age }} years old</dd>
                     {% endif %}
                     {% if event.max_age != 100 %}
                     <dt>Max. age:</dt>
-                    <dd>{{ event.max_age }}</dd>
+                    <dd>{{ event.max_age }} years old</dd>
                     {% endif %}
                     {% endif %}
                 </dl>

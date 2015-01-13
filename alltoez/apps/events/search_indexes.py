@@ -3,11 +3,10 @@ __author__ = 'devangmundhra'
 from datetime import datetime, timedelta
 
 from haystack import indexes
-from celery_haystack.indexes import CelerySearchIndex
 from apps.events.models import Event
 
 
-class EventIndex(CelerySearchIndex, indexes.Indexable):
+class EventIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     categories = indexes.FacetMultiValueField()
     title = indexes.CharField(model_attr='title')

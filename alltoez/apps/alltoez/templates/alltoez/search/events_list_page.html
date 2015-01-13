@@ -4,19 +4,18 @@
 {% if query %}
     <!-- Begin faceting. -->
     <div class="category-drilldown">
-        <dl>
-            {% if facets.fields.categories %}
-                <dt>Categories</dt>
-                <dd>
-                    <ul class="list-inline">
-                {# Provide only the top 5 categories #}
-                {% for category in facets.fields.categories|slice:":5" %}
-                        <li><a href="{{ request.get_full_path }}&amp;selected_facets=categories:{{ category.0|urlencode }}">{{ category.0 }}</a> ({{ category.1 }})</li>
-                {% endfor %}
-                    </ul>
-                </dd>
-            {% endif %}
-        </dl>
+        {% if facets.fields.categories %}
+        <ul class="list-inline">
+        {# Provide only the top 5 categories #}
+        {% for category in facets.fields.categories|slice:":5" %}
+                <li><a href="{{ request.get_full_path }}&amp;selected_facets=categories:{{ category.0|urlencode }}" class="btn btn-default">
+                        {{ category.0 }} <span class="badge">{{ category.1 }}</span>
+                    </a>
+                </li>
+        {% endfor %}
+        </ul>
+        <br/>
+        {% endif %}
     </div>
     <!-- End faceting -->
 

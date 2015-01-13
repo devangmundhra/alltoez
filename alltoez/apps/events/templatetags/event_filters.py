@@ -39,3 +39,28 @@ def naturaldatetime(datetime_value):
     datetime = parse_datetime(datetime_value)
     delta = timezone.now().date() - datetime.date()
     return format_timedelta(delta, granularity='day', locale=to_locale(get_language()))
+
+@register.filter
+def format_event_datetime(value):
+    """
+    Convert the event datetime into GFM format of tables
+    https://help.github.com/articles/github-flavored-markdown/#tables
+    :param value: event days and time persisted in the db
+    :return: tabular format of event days and time
+    """
+    if value.find(': ') == -1:
+        # No point converting this into table form since this is not in the Days: Time format
+        return value
+    split_string = '\r\n'
+    value = value.replace(split_string+split_string, split_string)
+    in_lines = value.split(split_string)
+    out_lines = ['|', '-|-']
+    for line in in_lines:
+        split_line = line.split(': ')
+        if len(split_line) == 1:
+            out_lines.append('{}|'.format(split_line[0]))
+        else:
+            out_lines.append('|'.join(split_line))
+
+    output = split_string.join(out_lines)
+    return output

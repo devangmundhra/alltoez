@@ -22,7 +22,7 @@ class VenueAdmin(admin.ModelAdmin):
     fields = ('name', 'phone_number', 'address', 'neighborhood',
               #('address', 'address_line_2', 'address_line_3'),
               #('city', 'state', 'country', 'postcode'),
-              'yelp_url', ('latitude', 'longitude'))
+              'yelp_url', 'facebook_url', ('latitude', 'longitude'))
     search_fields = ['name', 'address']
     pass
 
