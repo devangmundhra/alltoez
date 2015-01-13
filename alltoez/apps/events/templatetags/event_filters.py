@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.utils.dateparse import parse_date, parse_datetime
 from django.utils.translation import to_locale, get_language
 from django import template
+from django.template.defaultfilters import stringfilter
 
 from babel.dates import format_date, format_timedelta
 
@@ -12,7 +13,7 @@ from babel.dates import format_date, format_timedelta
 logger = logging.getLogger(__name__)
 register = template.Library()
 
-@register.filter
+@register.filter(expects_localtime=True)
 def time_range(start_time, end_time):
     """Make time ranges like 7-9 p.m."""
     if start_time is None:
@@ -41,6 +42,7 @@ def naturaldatetime(datetime_value):
     return format_timedelta(delta, granularity='day', locale=to_locale(get_language()))
 
 @register.filter
+@stringfilter
 def format_event_datetime(value):
     """
     Convert the event datetime into GFM format of tables
