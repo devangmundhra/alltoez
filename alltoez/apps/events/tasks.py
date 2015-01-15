@@ -28,19 +28,41 @@ def scrape_events_look_ahead():
     """
     today = datetime.today()
     event_date = today + timedelta(days=EVENTS_NUM_DAYS_SCRAPE_LOOK_AHEAD)
-    body = ""
 
-    redtri_events = redtri.get_events(EVENTS_NUM_DAYS_SCRAPE_LOOK_AHEAD)
-    body = body + "{} RedTri Events\n".format(len(redtri_events), )
-    for parsed_event in redtri_events:
-        title = parsed_event.get('title', None)
-        url = parsed_event.get('orig_link', None)
-        body = body + "{}\n{}\n\n".format(title.encode('ascii', 'ignore'), url.encode('ascii', 'ignore'))
-
-    subject = "Alltoez Parsed Events | SF | {}".format(today.strftime("%A, %d. %B"))
-    body = "For date {}\n\n".format(event_date.strftime("%A, %d. %B %Y")) + body
+    subject = "Alltoez Events Summary | {}".format(today.strftime("%A, %d. %B"))
+    body = "For date {}\n\n".format(event_date.strftime("%A, %d. %B %Y")) + get_redtri_events_body() \
+           + get_expired_events_body
 
     send_mail(subject, body, "noreply@alltoez.com", ["ruchikadamani90@gmail.com", "devangmundhra@gmail.com"])
+
+
+def get_redtri_events_body():
+    body = "\n"
+
+    try:
+        redtri_events = redtri.get_events(EVENTS_NUM_DAYS_SCRAPE_LOOK_AHEAD)
+        body = body + "{} RedTri Events\n".format(len(redtri_events), )
+        for parsed_event in redtri_events:
+            title = parsed_event.get('title', None)
+            url = parsed_event.get('orig_link', None)
+            body = body + "<a href={}>{}</a>\n".format(url.encode('ascii', 'ignore'), title.encode('ascii', 'ignore'))
+    except:
+        pass
+
+    return body
+
+
+def get_expired_events_body():
+    body = "\n"
+
+    expired_events = Event.objects.filter(end_date=datetime.today())
+    if expired_events:
+        body = body + "{} Expired Events\n".format(len(expired_events), )
+    for event in expired_events:
+        body = body + "<a href={}>{}</a>\n".format(event.url.encode('ascii', 'ignore'),
+                                                   event.title.encode('ascii', 'ignore'))
+
+    return body
 
 """
 Number of days before which an event for the date should be created

@@ -130,7 +130,12 @@
                 </div>
                 {% endif %}
             </div>
-            {% if event.start_date or event.time_detail %}
+            {% comment %}
+            If there is an event.time_detail, always show the When info.
+            However, if there is no recurrence_detail, then that means that the event is only on some specific days,
+            so in that case show the "When" info too.
+            {% endcomment %}
+            {% if event.time_detail or not event.recurrence_detail %}
             <div class="open-hours">
                 <dl class="dl">
                     <dt>When:</dt>

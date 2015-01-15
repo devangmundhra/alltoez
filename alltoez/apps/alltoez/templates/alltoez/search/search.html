@@ -22,7 +22,7 @@
                     <h4>
                         <span class="qty-events">{{ paginator.count }} events for <em>{{ query }}</em> </span>
                     </h4>
-                    {% if suggestion %}
+                    {% if suggestion and suggestion != query %}
                     <p>Did you mean <a href="{% url 'search' %}?q={{ suggestion }}"><em>{{ suggestion }}?</em></a></p>
                     {% endif %}
 				</div>
