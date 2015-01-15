@@ -31,7 +31,7 @@ def scrape_events_look_ahead():
 
     subject = "Alltoez Events Summary | {}".format(today.strftime("%A, %d. %B"))
     body = "For date {}\n\n".format(event_date.strftime("%A, %d. %B %Y")) + get_redtri_events_body() \
-           + get_expired_events_body
+           + get_expired_events_body()
 
     send_mail(subject, body, "noreply@alltoez.com", ["ruchikadamani90@gmail.com", "devangmundhra@gmail.com"])
 
