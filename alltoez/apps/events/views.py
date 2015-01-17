@@ -103,6 +103,7 @@ class EventDetailView(DetailView):
         event_json = er.serialize(None, er.full_dehydrate(er_bundle), 'application/json')
         event = json.loads(event_json)
         context['event'] = event
+        context['event_json'] = event_json # Needed for parsing bookmark info in event_detail template
         return self.render_to_response(context)
 
 
