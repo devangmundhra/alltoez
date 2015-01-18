@@ -36,6 +36,16 @@ def local_day_date(date_value):
     return format_date(date, "EEE, MMM d", locale=to_locale(get_language()))
 
 @register.filter
+def get_datetime_date(date_value):
+    date = parse_date(date_value)
+    return date
+
+@register.filter
+def format_date_filter(date_value, format_type='medium'):
+    date = parse_date(date_value)
+    return format_date(date, format=format_type, locale=to_locale(get_language()))
+
+@register.filter
 def naturaldatetime(datetime_value):
     datetime = parse_datetime(datetime_value)
     delta = timezone.now().date() - datetime.date()

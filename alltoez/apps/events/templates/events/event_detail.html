@@ -140,7 +140,7 @@
                 <dl class="dl">
                     <dt>When:</dt>
                     {% if not event.recurrence_detail %}
-                    <p>{{ event.start_date|date }}</p>
+                    <p>{{ event.start_date|format_date_filter:"long" }} - {{ event.end_date|format_date_filter:"long" }}</p>
                     {% endif %}
                     {% if event.time_detail %}
                     <p>{{ event.time_detail|format_event_datetime|markdown }}</p>

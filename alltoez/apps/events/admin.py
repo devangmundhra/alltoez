@@ -61,6 +61,16 @@ class EventAdminForm(forms.ModelForm):
         self.fields['time_detail'].widget = AdminPagedownWidget()
         self.fields['additional_info'].widget = AdminPagedownWidget()
 
+    def clean(self):
+        end_date = self.cleaned_data.get('end_date', None)
+        recurrence_detail = self.cleaned_data.get('recurrence_detail', None)
+
+        if not end_date and not recurrence_detail:
+            raise forms.ValidationError("Please add either an end date or recurrence detail for the event",
+                                        code="incorrect")
+
+        return self.cleaned_data
+
 
 class EventInline(admin.StackedInline):
     """
