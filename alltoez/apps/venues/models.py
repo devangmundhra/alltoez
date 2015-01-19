@@ -13,7 +13,7 @@ class Venue(BaseModel, AddressMixin):
     """
     __original_name = None
     name = models.CharField(max_length=200, verbose_name='Venue name')
-    slug = models.SlugField(null=True, blank=True,
+    slug = models.SlugField(null=True, blank=True, unique=True,
                             help_text="The part of the name (if provided) that is used in the url. \
                             Leave this blank if you want the system to generate one for you.")
     neighborhood = models.CharField(max_length=200, blank=True, null=True,

@@ -41,10 +41,11 @@ class Category(models.Model):
         - Christmas
     """
     parent_category = models.ForeignKey('self', null=True, blank=True, related_name="children")
-    name = models.CharField(max_length=200, db_index=True)
-    slug = models.SlugField(null=True, blank=True, help_text="The part of the title that is used in the url. "
-                                                             "Leave this blank if you want the system to generate one "
-                                                             "for you.")
+    name = models.CharField(max_length=200, db_index=True, unique=True)
+    slug = models.SlugField(null=True, blank=True, unique=True,
+                            help_text="The part of the title that is used in the url. "
+                                      "Leave this blank if you want the system to generate one "
+                                      "for you.")
     description = models.CharField(max_length=200)
     font_awesome_icon_class = models.CharField(max_length=50, null=True, blank=True)
 
@@ -132,7 +133,7 @@ class Event(models.Model):
     draft = models.ForeignKey(DraftEvent, blank=True, null=True)
     venue = models.ForeignKey(Venue, blank=True, null=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=200, verbose_name='Event name')
-    slug = models.SlugField(max_length=50)
+    slug = models.SlugField(max_length=50, unique=True)
     description = models.TextField(verbose_name='Event description')
     category = models.ManyToManyField(Category, db_index=True)
     image = JSONField(default="{\"url\":\"\",\"source_name\":\"\",\"source_url\":\"\"}")
