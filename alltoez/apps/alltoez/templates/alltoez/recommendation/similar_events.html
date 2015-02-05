@@ -1,0 +1,27 @@
+{% load event_filters %}
+{% if events_list %}
+<div class="div-heading"> Other similar events</div>
+{% endif %}
+{% load event_filters %}
+{% for event in events_list %}
+<div class="col-xs-12 col-sm-4">
+    <div class="event-item">
+        <a href='{% url "event_detail" event.slug %}'>
+            <div class="event-image">
+                <img src="{{ event.image.url }}" width="100%">
+            </div>
+            <div class="event-info">
+                <h4>{{ event.title|truncatechars:'62' }}</h4>
+                {% if event.venue.neighborhood %}
+                    <p>{{ event.venue.neighborhood }}</p>
+                {% else %}
+                    <p>{{ event.venue.address }}</p>
+                {% endif %}
+            </div>
+            {% if not event.recurrence_detail %}
+                <span class="event-date">{{ event.start_date|local_day_date }}</span>
+            {% endif %}
+        </a>
+    </div>
+</div>
+{% endfor %}

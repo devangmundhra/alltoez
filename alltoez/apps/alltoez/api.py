@@ -1,15 +1,21 @@
 import json
 
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db.models import Max, Min
+from django.conf.urls import url
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 
+from tastypie.utils import trailing_slash
 from tastypie import fields
+from tastypie.http import HttpGone, HttpMultipleChoices, HttpBadRequest
 
 from apps.events.api import EventInternalResource
 from apps.alltoez_profile.api import AlltoezProfileInternalResource
 from apps.user_actions.models import Bookmark, Done
 from apps.user_actions.api import BookmarkResource, DoneResource
 from apps.events.models import Event
+from apps.alltoez.ml.pio_data import get_similar_events
 
 
 class EventsResource(EventInternalResource):
@@ -29,6 +35,48 @@ class EventsResource(EventInternalResource):
         # EventInternalResource. This is a small hack so that both EventsResource and EventsInternalResource have
         # the same resource_uri, but only one of them is exposed.
         pass
+
+    def prepend_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/similar/(?P<pk>\w[\w/-]*)%s$" % (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('get_recommendations'), name="api_get_recommendations"),
+        ]
+
+    def get_recommendations(self, request, **kwargs):
+        template = "alltoez/recommendation/similar_events.html"
+
+        if not request.is_ajax():
+            return HttpBadRequest("This is not an ajax request")
+
+        self.method_check(request, allowed=['get'])
+        self.is_authenticated(request)
+        self.throttle_check(request)
+
+        try:
+            bundle = self.build_bundle(data={'pk': kwargs['pk']}, request=request)
+            event = self.cached_obj_get(bundle=bundle, **self.remove_api_resource_names(kwargs))
+        except ObjectDoesNotExist:
+            return HttpGone()
+        except MultipleObjectsReturned:
+            return HttpMultipleChoices("More than one resource is found at this URI.")
+
+        object_ids = get_similar_events(event)
+
+        er = EventsResource()
+        queryset = Event.objects.filter(pk__in=object_ids)
+
+        bundles = []
+        for obj in queryset:
+            bundle = er.build_bundle(obj=obj, request=request)
+            bundles.append(er.full_dehydrate(bundle, for_list=True))
+
+        list_json = er.serialize(None, bundles, "application/json")
+        objects = json.loads(list_json)
+
+        self.log_throttled_access(request)
+        return render_to_response(template,
+                                  {"events_list": objects},
+                                  context_instance=RequestContext(request))
 
     def dehydrate_bookmark(self, bundle):
         if not bundle.request.user.is_authenticated():

@@ -1,4 +1,15 @@
 $(document).ready ->
+  $.ajax
+    type: "GET"
+    url: "#{similar_events_url}"
+    contentType: "application/html"
+    dataType: "html"
+    processData: false
+    error: (jqXHR, textStatus, errorThrown) ->
+      console.log "#{textStatus} in getting similar events #{errorThrown}"
+    success: (data, textStatus, jqXHR) ->
+      $(".similar-events-list").append data
+
   $('#bookmark-action').on "click", (e) ->
     if myevent.bookmark
       $.ajax

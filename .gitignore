@@ -70,3 +70,5 @@ alltoez/apps/events/static/js/events_ajax.js
 
 alltoez/apps/alltoez/static/less/theme.css
 
+
+start_dep_processes.sh

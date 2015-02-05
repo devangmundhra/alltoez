@@ -179,6 +179,9 @@
         </div>
     </div>
 </div>
+<hr>
+<div class="row"><div class="similar-events-list clearfix"></div></div>
+
 <div class="row">
     <div class="col-xs-12 col-md-4">
         {% if request.user.is_superuser %}
@@ -189,7 +192,7 @@
     </div>
 </div>
 
-<script type="text/javascript">
+    <script type="text/javascript">
         function init_map() {
             var myOptions = {
                 zoom:14,
@@ -212,9 +215,11 @@
 {% block extra_js %}
     {% url 'api_dispatch_list' resource_name="bookmark" api_name="v1" as bookmark_url %}
     {% url 'api_dispatch_list' resource_name="done" api_name="v1" as done_url %}
+    {% url 'api_get_recommendations' resource_name="events" api_name="v1" pk=event.id as similar_events_url %}
     <script type="text/javascript">
         var bookmark_url = "{{ bookmark_url }}?format=json"
         var done_url = "{{ done_url }}?format=json"
+        var similar_events_url = "{{ similar_events_url }}?format=json"
         var myevent = JSON.parse('{{ event_json|escapejs }}')
     </script>
     {% compressed_js 'events_detail' %}
