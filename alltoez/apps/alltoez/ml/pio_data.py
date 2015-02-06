@@ -1,6 +1,7 @@
 __author__ = 'devangmundhra'
 
 from django.contrib.auth.models import User
+from django.conf import settings
 
 import predictionio
 
@@ -13,9 +14,16 @@ def import_events():
     Reads data from the database about different user_events and sends user_action events to PredictionIO
     :return: Nothing
     """
+    pio_access_key = getattr(settings, 'PIO_ACCESS_KEY', None)
+    pio_eventserver = getattr(settings, 'PIO_EVENT_SERVER_ENDPOINT', None)
+
+    if not pio_access_key or not pio_eventserver:
+        print "PredictionIO not configured"
+        return
+
     event_client = predictionio.EventClient(
-        access_key="KQJk2aYAaKzIayZVBqSEC4NmdxMUXGxN3RsUQ4IxsbC8qGW2aHBQSZakT8eIoCzW",
-        url="http://localhost:7070",
+        access_key=pio_access_key,
+        url=pio_eventserver,
         threads=5,
         qsize=500)
 
@@ -56,7 +64,9 @@ def _send_query(events_list):
     :param events_list: Items which are liked by the user
     :return: Event ids recommended by the engine
     """
-    engine_client = predictionio.EngineClient(url="http://localhost:8001")
+    pio_engine = getattr(settings, 'PIO_ENGINE_ENDPOINT', None)
+
+    engine_client = predictionio.EngineClient(url=pio_engine)
     items_set = set()
     categories_set = set()
 

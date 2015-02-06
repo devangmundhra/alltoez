@@ -95,8 +95,12 @@ class EventDetailView(DetailView):
         :return: HttpResponse
         """
         from apps.alltoez.api import EventsResource
+        from apps.user_actions.models import View
 
         self.object = self.get_object()
+        if request.user.is_authenticated():
+            view = View(event=self.object, user=request.user)
+            view.save()
         context = self.get_context_data(object=self.object)
         er = EventsResource()
         er_bundle = er.build_bundle(obj=self.object, request=request)

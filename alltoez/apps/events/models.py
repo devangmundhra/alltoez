@@ -152,6 +152,7 @@ class Event(models.Model):
                                    help_text="Enter time for different days, in different rows")
     url = models.URLField(blank=True, null=True, verbose_name='Event link')
     additional_info = models.TextField(blank=True, null=True)
+    publish = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['-created_at', '-start_date', 'end_date']

@@ -40,14 +40,45 @@ class ExpiredEventListFilter(admin.SimpleListFilter):
         provided in the query string and retrievable via
         `self.value()`.
         """
-        # Compare the requested value (either '80s' or '90s')
-        # to decide how to filter the queryset.
         if self.value() == 'unexpired':
             return queryset.filter(Q(end_date__gte=timezone.now().date()) | Q(end_date=None))
         if self.value() == 'expired':
             return queryset.filter(end_date__lt=timezone.now().date())
         if self.value() == 'no_expiry':
             return queryset.filter(Q(end_date=None))
+
+
+class PublishedEventListFilter(admin.SimpleListFilter):
+    # Human-readable title which will be displayed in the
+    # right admin sidebar just above the filter options.
+    title = _('Event Published')
+
+    # Parameter for the filter that will be used in the URL query.
+    parameter_name = 'publish'
+
+    def lookups(self, request, model_admin):
+        """
+        Returns a list of tuples. The first element in each
+        tuple is the coded value for the option that will
+        appear in the URL query. The second element is the
+        human-readable name for the option that will appear
+        in the right sidebar.
+        """
+        return (
+            ('unpublished', _('unpublished events')),
+            ('published', _('published events'))
+        )
+
+    def queryset(self, request, queryset):
+        """
+        Returns the filtered queryset based on the value
+        provided in the query string and retrievable via
+        `self.value()`.
+        """
+        if self.value() == 'unpublished':
+            return queryset.filter(publish=False)
+        if self.value() == 'published':
+            return queryset.filter(publish=True)
 
 
 class EventAdminForm(forms.ModelForm):
@@ -135,7 +166,7 @@ class EventAdmin(ForeignKeyAutocompleteAdmin):
     view_on_site = True
     prepopulated_fields = {'slug': ('title',), }
     ordering = ['-created_at']
-    list_filter = (ExpiredEventListFilter,)
+    list_filter = (ExpiredEventListFilter, PublishedEventListFilter,)
     search_fields = ['title', 'description']
     related_search_fields = {
         'venue': ('name', 'address'),
@@ -145,7 +176,8 @@ class EventAdmin(ForeignKeyAutocompleteAdmin):
     fields = ('draft', 'title', 'slug', ('venue', 'venue_admin_url',),
               'description', 'category', 'image', ('min_age', 'max_age',),
               ('cost', 'cost_detail',), ('start_date', 'end_date',),
-              'recurrence_detail', 'time_detail', 'url', 'additional_info')
+              'recurrence_detail', 'time_detail', 'url', 'additional_info',
+              'publish')
 
     def venue_admin_url(self, obj):
         return "<a href=http://{}{} target=\"_blank\">{}{}</a>".format(Site.objects.get_current().domain,
