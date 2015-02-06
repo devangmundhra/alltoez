@@ -13,8 +13,8 @@ from apps.user_actions.models import Bookmark, Done, View
 logger = logging.getLogger(__name__)
 
 # Get an instance of prediction io event client
-pio_access_key = getattr(settings, 'PIO_ACCESS_KEY', None)
-pio_eventserver = getattr(settings, 'PIO_EVENT_SERVER_ENDPOINT', None)
+pio_access_key = getattr(settings, 'PIO_ACCESS_KEY', "unknown access key")
+pio_eventserver = getattr(settings, 'PIO_EVENT_SERVER_ENDPOINT', "http://localhost:7070")
 
 event_client = predictionio.EventClient(
     access_key=pio_access_key,
