@@ -23,5 +23,4 @@ newrelic-admin run-program gunicorn -w $NUM_WORKERS \
 	--access-logfile $LOGFILE \
 	--log-file $ERRORFILE \
 	--env DJANGO_SETTINGS_MODULE=alltoez.configs.production.settings \
-	--user $USER --group $GROUP alltoez.configs.production.wsgi \
-	--max-requests 1000
+	--user $USER --group $GROUP alltoez.configs.production.wsgi 
