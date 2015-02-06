@@ -68,7 +68,7 @@ def _send_query(events_list):
 
     if not pio_engine:
         return []
-    
+
     engine_client = predictionio.EngineClient(url=pio_engine)
     items_set = set()
     categories_set = set()
