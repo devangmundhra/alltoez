@@ -14,8 +14,7 @@ from apps.events.api import EventInternalResource
 from apps.alltoez_profile.api import AlltoezProfileInternalResource
 from apps.user_actions.models import Bookmark, Done
 from apps.user_actions.api import BookmarkResource, DoneResource
-from apps.events.models import Event
-from apps.alltoez.ml.pio_data import get_similar_events
+from apps.events.models import Event, SimilarEvents
 
 
 class EventsResource(EventInternalResource):
@@ -60,10 +59,13 @@ class EventsResource(EventInternalResource):
         except MultipleObjectsReturned:
             return HttpMultipleChoices("More than one resource is found at this URI.")
 
-        object_ids = get_similar_events(event)
+        try:
+            similar_event_map = SimilarEvents.objects.get(event=event)
+            queryset = similar_event_map.similar_events.all().order_by('?')[:3]
+        except ObjectDoesNotExist:
+            queryset = Event.objects.none()
 
         er = EventsResource()
-        queryset = Event.objects.filter(pk__in=object_ids)
 
         bundles = []
         for obj in queryset:

@@ -158,7 +158,7 @@ class Event(models.Model):
         ordering = ['-created_at', '-start_date', 'end_date']
 
     def save(self, *args, **kwargs):
-        if not self.slug:
+        if not self.pk:
             unique_slugify(self, self.title)
         super(Event, self).save(*args, **kwargs)
 
@@ -183,3 +183,13 @@ class EventRecord(models.Model):
 
     def __unicode__(self):
         return u'{} on {}'.format(self.event.title, self.date)
+
+
+class SimilarEvents(models.Model):
+    """
+    SimilarEvents class
+    This class stores a temporary mapping of similar events between for a given event
+    """
+    created_at = models.DateTimeField(auto_now_add=True)
+    event = models.ForeignKey(Event, unique=True)
+    similar_events = models.ManyToManyField(Event, related_name="+")

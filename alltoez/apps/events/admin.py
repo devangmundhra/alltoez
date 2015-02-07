@@ -166,7 +166,9 @@ class EventAdmin(ForeignKeyAutocompleteAdmin):
     view_on_site = True
     prepopulated_fields = {'slug': ('title',), }
     ordering = ['-created_at']
+    date_hierarchy = 'end_date'
     list_filter = (ExpiredEventListFilter, PublishedEventListFilter,)
+    list_display = ('__str__', 'start_date', 'end_date')
     search_fields = ['title', 'description']
     related_search_fields = {
         'venue': ('name', 'address'),

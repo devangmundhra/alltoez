@@ -78,7 +78,7 @@ def _send_query(events_list):
         categories_set = categories_set.union(set(event.category.values_list('name', flat=True)))
 
     try:
-        result = engine_client.send_query({"items": list(items_set), "num": 3,
+        result = engine_client.send_query({"items": list(items_set), "num": 10,
                                            "categories": list(categories_set)})
     except predictionio.NotFoundError:
         print "Recommendation engine not found"
