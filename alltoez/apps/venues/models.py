@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from django.db import models
 
 from phonenumber_field.modelfields import PhoneNumberField
@@ -21,6 +22,7 @@ class Venue(BaseModel, AddressMixin):
     phone_number = PhoneNumberField(blank=True, verbose_name="Phone number", help_text="Phone number, if available")
     yelp_url = models.URLField(blank=True, null=True, verbose_name='Yelp Url')
     facebook_url = models.URLField(blank=True, null=True, verbose_name='Facebook Url')
+    raw_address = models.CharField(max_length=250, null=True, blank=True)
 
     def __init__(self, *args, **kwargs):
         super(Venue, self).__init__(*args, **kwargs)
@@ -29,6 +31,9 @@ class Venue(BaseModel, AddressMixin):
     def save(self, *args, **kwargs):
         if not self.slug or self.name != self.__original_name:
             unique_slugify(self, self.name)
+
+        self.raw_address = "{}\r{}, {} {}".format(self.address, self.city, self.state, self.zipcode)
+
         super(Venue, self).save(*args, **kwargs)
         # This is a bit hacky, need to do this twice because latitude/longitude are plugged in during
         # call to super's save
@@ -61,3 +66,15 @@ class Venue(BaseModel, AddressMixin):
 
     def __unicode__(self):
         return unicode(self.name)
+
+    def display_address(self):
+        if not self.raw_address:
+            return self.address
+
+        if self.address_line_3:
+            return "{}\r{}\r{}\r{}, {} {}".format(self.address, self.address_line_2, self.address_line_3,
+                                                  self.city, self.state, self.zipcode)
+        elif self.address_line_2:
+            return "{}\r{}\r{}, {} {}".format(self.address, self.address_line_2, self.city, self.state, self.zipcode)
+        else:
+            return "{}\n{}, {} {}".format(self.address, self.city, self.state, self.zipcode)

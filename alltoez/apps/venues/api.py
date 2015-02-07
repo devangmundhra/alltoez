@@ -19,6 +19,9 @@ class VenueInternalResource(ModelResource):
         detail_allowed_methods = ['get']
         includes = ['name', 'full_address', 'location', 'phone_number', 'neighborhood']
 
+    def dehydrate_address(self, bundle):
+        return bundle.obj.display_address()
+
     def dehydrate_phone_number(self, bundle):
         phone_number = bundle.obj.phone_number
         if phone_number:

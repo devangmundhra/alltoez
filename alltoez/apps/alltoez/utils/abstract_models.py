@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -91,42 +93,35 @@ class AddressMixin(GeoModelMixin):
     address_line_2 = models.CharField(max_length=250, null=True, blank=True)
     address_line_3 = models.CharField(max_length=250, null=True, blank=True)
     city = models.CharField(max_length=150, null=True, blank=True, db_index=True)
-    state = models.CharField(max_length=150, null=True, blank=True, db_index=True)
+    state = models.CharField(max_length=150, null=True, blank=True, default="CA", db_index=True)
     country = CountryField(null=True, blank=True, default="US", db_index=True)
 
     def get_location(self):
-        if self.country == "US":
-            if self.address:
-                return "%s" % self.address
-            elif self.state and self.city and self.zipcode:
-                return "%s, %s, %s" % (self.city, self.zipcode, self.state)
-            elif self.zipcode and self.state:
-                return "%s, %s" % (self.zipcode, self.state)
-            elif self.zipcode and self.city:
-                return "%s, %s" % (self.city, self.zipcode)
-            elif self.city and self.state:
-                return "%s, %s" % (self.city, self.state)
-            elif self.zipcode:
-                return "zipcode %s" % self.zipcode
-            elif self.state:
-                return "%s" % self.state
-            elif self.city:
-                return "%s" % self.city
-        else:
-            if self.city and self.zipcode:
-                return "%s, %s, %s" % (self.city, self.zipcode, self.get_country_display() )
-            elif self.city:
-                return "%s, %s" % (self.city, self.get_country_display() )
-            else:
-                return "%s" % self.get_country_display()
+        address = ""
+        if self.address:
+            address = self.address
+        if self.state and self.city and self.zipcode:
+            return "%s %s, %s, %s, %s" % (address, self.city, self.zipcode, self.state,
+                                          self.get_country_display())
+        elif self.zipcode and self.state:
+            return "%s %s, %s, %s" % (address, self.zipcode, self.state, self.get_country_display())
+        elif self.zipcode and self.city:
+            return "%s %s, %s, %s" % (address, self.city, self.zipcode, self.get_country_display())
+        elif self.city and self.state:
+            return "%s %s, %s, %s" % (address, self.city, self.state, self.get_country_display())
+        elif self.zipcode:
+            return "zipcode %s, %s" % (self.zipcode, self.get_country_display())
+        elif self.state:
+            return "%s, %s" % (self.state, self.get_country_display())
+        elif self.city:
+            return "%s, %s" % (self.city, self.get_country_display())
 
     def get_full_location(self):
         l = self.get_location()
         if not l:
             return ""
-        if self.country == "US":
-            return "%s, %s" % (l, self.get_country_display())
-        return l
+        else:
+            return l
 
     class Meta:
         abstract = True

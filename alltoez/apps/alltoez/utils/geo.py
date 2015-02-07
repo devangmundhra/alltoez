@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import math
 import urllib, json
 
@@ -64,7 +66,7 @@ def rev_geocode_location_component(lat, lng, result_type=""):
 
 def geocode_location(location, full=False):
     key = getattr(settings, 'GOOGLE_MAPS_V3_APIKEY', None)
-    location = urllib.quote_plus(location)
+    location = urllib.quote_plus(location.encode('utf8'))
     if key:
         request = "https://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false&key=%s" % (location, key)
     else:
