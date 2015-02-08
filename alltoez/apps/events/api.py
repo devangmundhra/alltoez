@@ -3,6 +3,7 @@ from django.utils import timezone
 
 from tastypie.resources import ModelResource
 from tastypie import fields
+from tastypie.cache import SimpleCache
 
 from apps.events.models import Event, Category
 from apps.venues.api import VenueInternalResource
@@ -27,6 +28,7 @@ class EventInternalResource(ModelResource):
     class Meta:
         queryset = Event.objects.all()
         resource_name = 'events'
+        cache = SimpleCache(timeout=10)
 
     def get_object_list(self, request):
         """

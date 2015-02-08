@@ -22,8 +22,8 @@ class EventsResource(EventInternalResource):
     EventResource
     This is the actual resource that is exposed by the API
     """
-    bookmark = fields.CharField(attribute='bookmark', null=True, blank=True)
-    done = fields.ToOneField(DoneResource, attribute='done', null=True, blank=True)
+    bookmark = fields.CharField(attribute='bookmark', null=True, blank=True, use_in='detail')
+    done = fields.ToOneField(DoneResource, attribute='done', null=True, blank=True, use_in='detail')
 
     class Meta(EventInternalResource.Meta):
         # resource_name = 'events'

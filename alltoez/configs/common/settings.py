@@ -31,72 +31,72 @@ DATE_INPUT_FORMATS = ('%d-%m-%Y', '%Y-%m-%d')
 USE_TZ = True
 
 TEMPLATE_LOADERS = (
-	'django.template.loaders.filesystem.Loader',
-	'django.template.loaders.app_directories.Loader',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
 )
 
 TEMPLATE_DIRS = (
-	os.path.join(SITE_ROOT, 'templates'),
+    os.path.join(SITE_ROOT, 'templates'),
 )
 
 STATICFILES_FINDERS = (
-	'django.contrib.staticfiles.finders.FileSystemFinder',
-	'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
 AUTHENTICATION_BACKENDS = (
-	'django.contrib.auth.backends.ModelBackend',
-	"allauth.account.auth_backends.AuthenticationBackend",
+    'django.contrib.auth.backends.ModelBackend',
+    "allauth.account.auth_backends.AuthenticationBackend",
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-	"django.contrib.auth.context_processors.auth",
-	"django.core.context_processors.media",
-	'django.core.context_processors.static',
-	"django.core.context_processors.request",
-	"django.contrib.messages.context_processors.messages",
-	"apps.alltoez.context_processors.app_wide_vars",
-	"allauth.account.context_processors.account",
-	"allauth.socialaccount.context_processors.socialaccount",
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.media",
+    'django.core.context_processors.static',
+    "django.core.context_processors.request",
+    "django.contrib.messages.context_processors.messages",
+    "apps.alltoez.context_processors.app_wide_vars",
+    "allauth.account.context_processors.account",
+    "allauth.socialaccount.context_processors.socialaccount",
 )
 
 MIDDLEWARE_CLASSES = [
-	'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
-	'django.contrib.sessions.middleware.SessionMiddleware',
-	'django.middleware.csrf.CsrfViewMiddleware',
-	'django.contrib.auth.middleware.AuthenticationMiddleware',
-	'django.contrib.messages.middleware.MessageMiddleware',
-	'pipeline.middleware.MinifyHTMLMiddleware',
-	'apps.alltoez.middleware.RedirectIfIncompleteProfile'
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'pipeline.middleware.MinifyHTMLMiddleware',
+    'apps.alltoez.middleware.RedirectIfIncompleteProfile'
 ]
 TEMPLATE_DIRS = (
-	os.path.join(SITE_ROOT, 'templates'),
+    os.path.join(SITE_ROOT, 'templates'),
 )
 
 INSTALLED_APPS = [
-	# Base Django Apps
-	'django.contrib.auth',
-	'django.contrib.contenttypes',
-	'django.contrib.sessions',
-	'django.contrib.sites',
-	'django.contrib.messages',
-	'django.contrib.staticfiles',
+    # Base Django Apps
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
     # Helpful methods for admin
-	'djangocms_admin_style',
-	'admin_shortcuts',
+    'djangocms_admin_style',
+    'admin_shortcuts',
 
-	'django.contrib.admin',
-	'django.contrib.sitemaps',
-	'django.contrib.humanize',
+    'django.contrib.admin',
+    'django.contrib.sitemaps',
+    'django.contrib.humanize',
     'django.contrib.gis',
 
-	# Utilities & Helper Apps
-	'filebrowser',
-	'django_extensions',
-	'endless_pagination',
-	'pipeline',
+    # Utilities & Helper Apps
+    'filebrowser',
+    'django_extensions',
+    'endless_pagination',
+    'pipeline',
     'location_field',
     'phonenumber_field',
     'haystack',
@@ -104,22 +104,22 @@ INSTALLED_APPS = [
     'pagedown',
     'markdown_deux',
 
-	# Registration, Signin and Account Management
-	'allauth',
-	'allauth.account',
-	'allauth.socialaccount',
-	'allauth.socialaccount.providers.facebook',
+    # Registration, Signin and Account Management
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
 
-	# Local Project Apps
-	'apps.alltoez_profile',
+    # Local Project Apps
+    'apps.alltoez_profile',
     'apps.venues',
-	'apps.events',
+    'apps.events',
     'apps.user_actions',
-	'apps.alltoez',
+    'apps.alltoez',
 ]
 
 if USE_I18N:
-	TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.i18n',)
+    TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.i18n',)
 
 
 #-------------------------------------------------------------------------------
@@ -133,13 +133,13 @@ LANGUAGES = (
 )
 
 DATABASES = {
-	'default': {
-		'ENGINE': 'django.db.backends.postgresql_psycopg2',
-		'NAME': 'alltoez',
-		# 'USER': 'XXXXX',
-		# 'PASSWORD': 'XXXX',
-		'HOST': 'localhost',
-	}
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'alltoez',
+        # 'USER': 'XXXXX',
+        # 'PASSWORD': 'XXXX',
+        'HOST': 'localhost',
+    }
 }
 ROOT_URLCONF = 'alltoez.configs.common.urls'
 AUTH_PROFILE_MODULE = 'alltoez_profile.UserProfile'
@@ -161,7 +161,7 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
         'LOCATION': '127.0.0.1:11211',
-		'KEY_PREFIX': 'alltoez:'
+        'KEY_PREFIX': 'alltoez:'
     }
 }
 CACHE_MIDDLEWARE_ALIAS = 'default'
@@ -184,34 +184,34 @@ PIPELINE_COMPILERS = (
 )
 PIPELINE_LESS_BINARY = 'lessc'
 PIPELINE_CSS = {
-	'theme': {
-		'source_filenames': (
-			'css/chosen.css',
-			'less/theme.less' if not DEBUG else '' #This line is giving error in collectstatic with DEBUG = True
-		),
-		'output_filename': 'css/theme.min.css',
-		'variant': 'datauri'
-	},
+    'theme': {
+        'source_filenames': (
+            'css/chosen.css',
+            'less/theme.less' if not DEBUG else '' #This line is giving error in collectstatic with DEBUG = True
+        ),
+        'output_filename': 'css/theme.min.css',
+        'variant': 'datauri'
+    },
 }
 PIPELINE_JS = {
-	'base': {
-		'source_filenames': (
+    'base': {
+        'source_filenames': (
             'js/typeahead.bundle.min.js',
-			'js/main.js',
-			'js/ajax_request.js',
-			'js/lib/jquery.class.js',
-			'js/lib/jquery.cookie.js',
-			'js/lib/bootstrap.min.js',
-			'js/lib/chosen.jquery.min.js',
-		),
-		'output_filename': 'js/base.min.js',
-	},
-	'events_detail': {
-		'source_filenames': (
-			'js/events_ajax.coffee',
-		),
-		'output_filename': 'js/events_detail.min.js',
-	},
+            'js/main.js',
+            'js/ajax_request.js',
+            'js/lib/jquery.class.js',
+            'js/lib/jquery.cookie.js',
+            'js/lib/bootstrap.min.js',
+            'js/lib/chosen.jquery.min.js',
+        ),
+        'output_filename': 'js/base.min.js',
+    },
+    'events_detail': {
+        'source_filenames': (
+            'js/events_ajax.coffee',
+        ),
+        'output_filename': 'js/events_detail.min.js',
+    },
 }
 
 
@@ -248,25 +248,25 @@ OPENID_ENABLED = False
 FILEBROWSER_URL_FILEBROWSER_MEDIA = STATIC_URL + "filebrowser/"
 FILEBROWSER_PATH_FILEBROWSER_MEDIA = os.path.join(STATIC_URL, 'filebrowser/')
 FILEBROWSER_EXTENSIONS = {
-	'Folder': [''],
-	'Image': ['.jpg','.jpeg','.gif','.png','.tif','.tiff'],
-	'Video': ['.mov','.wmv','.mpeg','.mpg','.avi','.rm','.swf'],
-	'Document': ['.pdf','.doc','.rtf','.txt','.xls','.csv'],
-	'Sound': ['.mp3','.mp4','.wav','.aiff','.midi','.m4p'],
-	'Code': ['.html','.py','.js','.css'],
+    'Folder': [''],
+    'Image': ['.jpg','.jpeg','.gif','.png','.tif','.tiff'],
+    'Video': ['.mov','.wmv','.mpeg','.mpg','.avi','.rm','.swf'],
+    'Document': ['.pdf','.doc','.rtf','.txt','.xls','.csv'],
+    'Sound': ['.mp3','.mp4','.wav','.aiff','.midi','.m4p'],
+    'Code': ['.html','.py','.js','.css'],
 }
 FILEBROWSER_ADMIN_THUMBNAIL = 'fb_thumb'
 FILEBROWSER_IMAGE_MAXBLOCK = 1024*1024
 FILEBROWSER_MAX_UPLOAD_SIZE = 10485760 # 10485760 bytes = about 10megs
 FILEBROWSER_VERSIONS = {
-	'fb_thumb': {'verbose_name': 'Admin Thumbnail', 'width': 60, 'height': 60, 'opts': 'crop upscale'},
-	'thumb': {'verbose_name': 'Grid Thumb', 'width': 150, 'height': 150, 'opts': 'crop upscale'},
-	'small': {'verbose_name': 'Small (210px)', 'width': 210, 'height': '', 'opts': ''},
-	'medium': {'verbose_name': 'Medium (370px)', 'width': 370, 'height': '', 'opts': ''},
-	'large': {'verbose_name': 'Large (530px)', 'width': 530, 'height': '', 'opts': ''},
+    'fb_thumb': {'verbose_name': 'Admin Thumbnail', 'width': 60, 'height': 60, 'opts': 'crop upscale'},
+    'thumb': {'verbose_name': 'Grid Thumb', 'width': 150, 'height': 150, 'opts': 'crop upscale'},
+    'small': {'verbose_name': 'Small (210px)', 'width': 210, 'height': '', 'opts': ''},
+    'medium': {'verbose_name': 'Medium (370px)', 'width': 370, 'height': '', 'opts': ''},
+    'large': {'verbose_name': 'Large (530px)', 'width': 530, 'height': '', 'opts': ''},
 }
 FILEBROWSER_ADMIN_VERSIONS = [
-	'thumb', 'small','medium','large',
+    'thumb', 'small','medium','large',
 ]
 
 
@@ -278,7 +278,6 @@ CELERY_RESULT_BACKEND = BROKER_URL
 CELERY_SEND_TASK_ERROR_EMAILS = False
 CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
 CELERY_TASK_SERIALIZER = 'json'
-CELERYD_MAX_TASKS_PER_CHILD = 100
 
 CELERYBEAT_SCHEDULE = {
     'parse-events-everyday': {
@@ -304,31 +303,31 @@ CELERY_TASK_PUBLISH_RETRY_POLICY = {
 #	ADMIN SHORTCUT SETTINGS
 #-------------------------------------------------------------------------------
 ADMIN_SHORTCUTS = [
-	{
-		'shortcuts': [
-			{
-				'url': '/',
-				'open_new_window': True,
-			},
-			{
-				'url': '/admin/events/event/?end_date=unexpired',
-				'title': 'Unexpired events',
-			},
-			{
-				'url': '/admin/filebrowser/browse/',
-				'title': 'Files',
-				'class': 'folder'
-			},
-			{
-				'url_name': 'admin:auth_user_changelist',
-				'title': 'Users',
-			},
-		]
-	},
+    {
+        'shortcuts': [
+            {
+                'url': '/',
+                'open_new_window': True,
+            },
+            {
+                'url': '/admin/events/event/?end_date=unexpired',
+                'title': 'Unexpired events',
+            },
+            {
+                'url': '/admin/filebrowser/browse/',
+                'title': 'Files',
+                'class': 'folder'
+            },
+            {
+                'url_name': 'admin:auth_user_changelist',
+                'title': 'Users',
+            },
+        ]
+    },
 ]
 ADMIN_SHORTCUTS_SETTINGS = {
-	'hide_app_list': False,
-	'open_new_window': False,
+    'hide_app_list': False,
+    'open_new_window': False,
 }
 
 #-------------------------------------------------------------------------------
@@ -356,12 +355,28 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 try:
-	from local_settings import *
+    from local_settings import *
 except ImportError:
-	pass
+    pass
 
-# # Add the debug info apps after local settings has been imported
-# if DEBUG:
-# 	TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.debug',)
-# 	MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
-# 	INSTALLED_APPS += ('debug_toolbar',)
+# Add the debug info apps after local settings has been imported
+USE_DEBUG_TOOLBAR = False
+if DEBUG and USE_DEBUG_TOOLBAR:
+    TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.debug',)
+    MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+    INSTALLED_APPS += ('haystack_panel', 'debug_toolbar',)
+    DEBUG_TOOLBAR_PANELS = [
+        'debug_toolbar.panels.versions.VersionsPanel',
+        'debug_toolbar.panels.timer.TimerPanel',
+        'debug_toolbar.panels.settings.SettingsPanel',
+        'debug_toolbar.panels.headers.HeadersPanel',
+        'debug_toolbar.panels.request.RequestPanel',
+        'debug_toolbar.panels.sql.SQLPanel',
+        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+        'debug_toolbar.panels.templates.TemplatesPanel',
+        'debug_toolbar.panels.cache.CachePanel',
+        'debug_toolbar.panels.signals.SignalsPanel',
+        'debug_toolbar.panels.logging.LoggingPanel',
+        'debug_toolbar.panels.redirects.RedirectsPanel',
+        'haystack_panel.panel.HaystackDebugPanel'
+    ]

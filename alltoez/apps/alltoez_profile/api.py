@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from tastypie.authentication import SessionAuthentication
 from tastypie.resources import ModelResource
 from tastypie import fields
+from tastypie.cache import SimpleCache
 
 from apps.alltoez_profile.models import UserProfile, Child
 
@@ -18,6 +19,7 @@ class ChildInternalResource(ModelResource):
         resource_name = "children_internal"
         queryset = Child.objects.all()
         authentication = SessionAuthentication()
+        cache = SimpleCache(timeout=100)
 
 
 class UserInternalResource(ModelResource):
@@ -33,6 +35,7 @@ class UserInternalResource(ModelResource):
         authentication = SessionAuthentication()
         fields = ['username', 'first_name', 'last_name', 'email', 'children']
         allowed_methods = ['get']
+        cache = SimpleCache(timeout=100)
 
 
 class AlltoezProfileInternalResource(ModelResource):
@@ -47,3 +50,4 @@ class AlltoezProfileInternalResource(ModelResource):
         resource_name = 'users'
         authentication = SessionAuthentication()
         excludes = ['latitude', 'longitude', 'address', 'address_line_2', 'address_line_3', 'created', 'updated']
+        cache = SimpleCache(timeout=100)

@@ -2,6 +2,7 @@ __author__ = 'devangmundhra'
 
 from tastypie.resources import ModelResource
 from tastypie import fields
+from tastypie.cache import SimpleCache
 
 from apps.venues.models import Venue
 
@@ -18,6 +19,7 @@ class VenueInternalResource(ModelResource):
         list_allowed_methods = ['get']
         detail_allowed_methods = ['get']
         includes = ['name', 'full_address', 'location', 'phone_number', 'neighborhood']
+        cache = SimpleCache(timeout=10)
 
     def dehydrate_address(self, bundle):
         return bundle.obj.display_address()

@@ -46,7 +46,7 @@ class Events(AjaxListView):
 
         er = EventsResource()
         request_bundle = er.build_bundle(request=request)
-        queryset = er.obj_get_list(request_bundle)
+        queryset = er.obj_get_list(request_bundle).prefetch_related('category')
 
         if self.category_slug:
             queryset = queryset.filter(category__slug=self.category_slug)
@@ -59,7 +59,7 @@ class Events(AjaxListView):
         # TODO: and alltoez.utils.geo
 
         # Sort by the sort key
-        queryset = queryset.order_by(self.sort)
+        queryset = queryset.order_by(self.sort).select_related('venue')
 
         bundles = []
         for obj in queryset:
