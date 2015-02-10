@@ -4,7 +4,7 @@
   "engineFactory": "com.alltoez.similarevents.SimilarProductEngine",
   "datasource": {
     "params": {
-      "appId": 8
+      "appId": 1
     }
   },
   "algorithms": [
