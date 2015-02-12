@@ -103,6 +103,7 @@ INSTALLED_APPS = [
     'tastypie',
     'pagedown',
     'markdown_deux',
+    'bootstrapform',
 
     # Registration, Signin and Account Management
     'allauth',
@@ -230,10 +231,11 @@ ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = False
 ACCOUNT_USER_DISPLAY = lambda user: user.get_full_name()
 ACCOUNT_SESSION_REMEMBER = True
-
+ACCOUNT_ADAPTER = "apps.alltoez_profile.adapter.AlltoezAccountAdapter"
+SOCIALACCOUNT_ADAPTER = "apps.alltoez_profile.adapter.AlltoezSocialAccountAdapter"
 SOCIALACCOUNT_ENABLED = True
 SOCIALACCOUNT_PROVIDERS = {}
-SOCIALACCOUNT_QUERY_EMAIL = True
+SOCIALACCOUNT_QUERY_EMAIL = ACCOUNT_EMAIL_REQUIRED
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_AVATAR_SUPPORT = False
 
