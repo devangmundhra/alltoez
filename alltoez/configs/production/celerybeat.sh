@@ -20,4 +20,4 @@ cd /home/django/sites/alltoez/repository/alltoez/configs/production
 test -d $LOGDIR || mkdir -p $LOGDIR
 test -d $PIDDIR || mkdir -p $PIDDIR
 test -d $SCHEDDIR || mkdir -p $SCHEDDIR
-newrelic-admin run-program /home/django/sites/alltoez/env/bin/celery beat -A celeryapp --loglevel=INFO --pidfile=$PIDFILE --schedule=$SCHEDFILE
+exec /home/django/sites/alltoez/env/bin/celery beat -A celeryapp --loglevel=INFO --pidfile=$PIDFILE --schedule=$SCHEDFILE
