@@ -1,0 +1,15 @@
+{% extends "alltoez/ui/layouts/base.html" %}
+
+{% block title %}Invitation sent{% endblock %}
+{% block page_title_outer %}{% endblock %}
+{% block body_class %}invite-sent{% endblock %}
+
+{% load url from future %}
+
+{% block content %}
+<div class="beta-info">
+  <h1>Invitation sent!</h1>
+  <h3>You are going to make some kids and their parents really happy :D</h3>
+  <p><a href="{% url 'hunger-invite' %}">Send another invite.</a></p>
+</div>
+{% endblock %}

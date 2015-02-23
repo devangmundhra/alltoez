@@ -1,6 +1,8 @@
 from django.views.debug import get_safe_settings
 from django.contrib.sites.models import Site
 
+from hunger.models import InvitationCode
+
 
 class SafeSettings:
     def __init__(self):
@@ -24,7 +26,16 @@ settings = SafeSettings()
 
 
 def app_wide_vars(request):
+    invites_remaining = 0
+    if request.user.is_authenticated():
+        try:
+            valid_code = InvitationCode.objects.get(owner=request.user)
+            invites_remaining = valid_code.num_invites
+        except InvitationCode.DoesNotExist:
+            pass
+
     return {
         'settings': settings,
         'site': Site.objects.get_current(),
+        'invites_remaining': invites_remaining,
     }

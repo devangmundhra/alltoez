@@ -1,0 +1,32 @@
+{% extends "alltoez/ui/layouts/base.html" %}
+
+{% block title %}Invalid code{% endblock %}
+{% block page_title_outer %}{% endblock %}
+{% block body_class %}invalid-beta-code{% endblock %}
+
+{% load url from future %}
+
+{% block content %}
+<div class="beta-info">
+  <h1>You have an invalid invite code</h1>
+  <p>Welcome to Alltoez! You are just a step away from discovering some great activities for your kids and family.</p>
+  <p>If you already have an invitation code, please enter it below.</p>
+  <p>Otherwise, just hang on a bit longer and we'll send you an invite soon. </p>
+
+  <form class="form-inline">
+      <input type="text" class="form-control" id="invitationCode" placeholder="Invitation code">
+      <input type="button" class="btn btn-default" onclick="VerifyInviteCode()" value="Lets go">
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+function VerifyInviteCode() {
+    var code = document.getElementById("invitationCode").value;
+    console.log("{% url 'hunger-verify' 'my_code' %}");
+    var url = "{% url 'hunger-verify' 'my_code' %}".replace("my_code", code);
+    window.location = url;
+}
+</script>
+{% endblock %}

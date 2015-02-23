@@ -7,6 +7,7 @@ from django.dispatch import receiver
 from django.conf import settings
 
 import predictionio
+from hunger.models import InvitationCode
 
 from apps.user_actions.models import Bookmark, Done, View
 # Get an instance of a logger
@@ -29,7 +30,7 @@ def pio_new_event(event_type, user_action):
     except predictionio.NotCreatedError:
         pass
 
-
+## POST_SAVES
 @receiver(post_save, sender=View)
 def view_post_save(sender, **kwargs):
     user_action = kwargs.get('instance')
@@ -41,6 +42,9 @@ def done_post_save(sender, **kwargs):
     user_action = kwargs.get('instance')
     pio_new_event('done', user_action)
 
+    code, created = InvitationCode.objects.get_or_create(owner=user_action.user, max_invites=100)
+    code.num_invites += 1
+    code.save(update_fields=['num_invites'])
 
 @receiver(post_save, sender=Bookmark)
 def bookmark_post_save(sender, **kwargs):
@@ -52,3 +56,12 @@ def bookmark_post_save(sender, **kwargs):
 def bookmark_post_delete(sender, **kwargs):
     # TODO: Need to create a table to map this id to event_id returned by pio event server
     pass
+
+## POST_DELETES
+@receiver(post_delete, sender=Done)
+def done_post_delete(sender, **kwargs):
+    user_action = kwargs.get('instance')
+
+    code, created = InvitationCode.objects.get_or_create(owner=user_action.user, max_invites=100)
+    code.num_invites = max(0, code.num_invites-1)
+    code.save(update_fields=['num_invites'])

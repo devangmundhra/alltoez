@@ -103,6 +103,13 @@ class EventAdminForm(forms.ModelForm):
 
         return self.cleaned_data
 
+    def clean_venue(self):
+        venue = self.cleaned_data.get('venue', None)
+        if not venue:
+            raise forms.ValidationError("An entry for venue is missing", code="incorrect")
+
+        return venue
+
 
 class EventInline(admin.StackedInline):
     """

@@ -172,7 +172,11 @@
                     <dd>Free</dd>
                     {% else %}
                     <dt>Cost:</dt>
-                    <dd>${{ event.cost }}</dd>
+                    {% if event.cost_detail %}
+                        <dd>{{ event.cost_detail }}</dd>
+                    {% else %}
+                        <dd>${{ event.cost }}</dd>
+                    {% endif %}
                     {% endif %}
                 </dl>
             </div>

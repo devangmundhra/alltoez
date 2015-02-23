@@ -48,9 +48,15 @@ $(document).ready(function() {
 //            });
     });
 
-    $('.invite').on('click', function(e) {
+//    $('.invite').on('click', function(e) {
+//        e.preventDefault();
+//        sendRequestViaMultiFriendSelector();
+//        return false;
+//    });
+
+    $('.no-invite').on('click', function(e) {
         e.preventDefault();
-        sendRequestViaMultiFriendSelector();
+        $('#no-more-invites-modal').modal()
         return false;
     });
 

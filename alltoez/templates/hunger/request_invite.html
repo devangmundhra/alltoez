@@ -1,0 +1,21 @@
+{% extends "alltoez/ui/layouts/base.html" %}
+
+{% block title %}Invite to Alltoez{% endblock %}
+{% block page_title_outer %}{% endblock %}
+{% block body_class %}invite-beta{% endblock %}
+
+{% load url from future %}
+{% load bootstrap %}
+
+{% block content %}
+<div class="beta-info">
+    <h1>Spread the love!</h1>
+    <p>Like Alltoez? Invite your friends to the beta!</p>
+    <p>The more events you do on Alltoez, the more invites you get.</p>
+    <form method="post" action="">
+    {% csrf_token %}
+    {{ form|bootstrap }}
+    <input type="submit" class="btn btn-default" value="Send!" />
+    </form>
+</div>
+{% endblock %}

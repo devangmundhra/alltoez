@@ -18,12 +18,12 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('apps.alltoez_profile.urls')),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^admin/filebrowser/', include(site.urls)),
+    url(r'beta-', include('hunger.urls')),
 )
 
 urlpatterns += patterns('',
 	url(r'^favicon\.ico$', RedirectView.as_view(url='/static/img/favicon.ico')),
 	url(r'^apple\-touch\-icon\.png$', RedirectView.as_view(url='/static/img/apple-touch-icon.png')),
-    url(r'^google5359a6c16f1d5513\.html$', RedirectView.as_view(url='/static/google5359a6c16f1d5513.html')),
 	url(r'^robots\.txt$', RedirectView.as_view(url='/static/robots.txt'))
 )
 

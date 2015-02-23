@@ -19,8 +19,8 @@ MEDIA_ROOT = os.path.join(SITE_ROOT, "media")
 STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 
-ADMINS = (('Alltoez', 'devangmundhra@gmail.com')),
-MANAGERS = ('Alltoez', 'devangmundhra@gmail.com'),
+ADMINS = (('Devang Mundhra', 'devangmundhra@gmail.com'), ('Ruchika Damani', 'ruchikadamani90@gmail.com')),
+MANAGERS = ('Devang Mundhra', 'devangmundhra@gmail.com'), ('Ruchika Damani', 'ruchikadamani90@gmail.com'),
 
 # Local time
 TIME_ZONE = "UTC"
@@ -61,19 +61,18 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 MIDDLEWARE_CLASSES = [
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'pipeline.middleware.MinifyHTMLMiddleware',
-    'apps.alltoez.middleware.RedirectIfIncompleteProfile'
+    'hunger.middleware.BetaMiddleware',
+    'apps.alltoez.middleware.RedirectIfIncompleteProfile',
 ]
-TEMPLATE_DIRS = (
-    os.path.join(SITE_ROOT, 'templates'),
-)
 
 INSTALLED_APPS = [
     # Base Django Apps
@@ -110,6 +109,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
+    'hunger',
 
     # Local Project Apps
     'apps.alltoez_profile',
@@ -145,15 +145,8 @@ DATABASES = {
 ROOT_URLCONF = 'alltoez.configs.common.urls'
 AUTH_PROFILE_MODULE = 'alltoez_profile.UserProfile'
 
-DEFAULT_FROM_EMAIL = 'postmaster@sandboxe9f734d40d854192ac1344226e7b5125.mailgun.org'
-EMAIL_HOST = 'smtp.mailgun.org'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'postmaster@sandboxe9f734d40d854192ac1344226e7b5125.mailgun.org'
-EMAIL_HOST_PASSWORD = '3c8af3c9310cbde4d2e43b3e66e07948'
 EMAIL_SUBJECT_PREFIX = "[Alltoez Server]"
 SERVER_EMAIL = 'Alltoez Server <server@alltoez.com>'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 #-------------------------------------------------------------------------------
 #	CACHE SETTINGS
@@ -224,7 +217,7 @@ LOGIN_REDIRECT_URL = "/"
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_LOGOUT_ON_GET = True
@@ -243,6 +236,24 @@ EMAIL_CONFIRMATION_DAYS = 5
 FACEBOOK_ENABLED = True
 TWITTER_ENABLED = False
 OPENID_ENABLED = False
+
+#-------------------------------------------------------------------------------
+#	DJANGO-HUNGER SETTINGS
+#-------------------------------------------------------------------------------
+HUNGER_ALWAYS_ALLOW_VIEWS = [
+    'apps.alltoez_profile.views.AlltoezSignupView',
+    'apps.alltoez.views.home',
+]
+HUNGER_ALWAYS_ALLOW_MODULES = [
+    'allauth.account.views',
+    'allauth.socialaccount.views',
+    'allauth.socialaccount.providers.oauth2.views',
+    # 'apps.events.views',
+    # 'apps.alltoez.views',
+]
+
+from django.core.urlresolvers import reverse_lazy
+HUNGER_VERIFIED_REDIRECT = reverse_lazy('alltoez_account_signup')
 
 #-------------------------------------------------------------------------------
 #	FILEBROWSER SETTINGS

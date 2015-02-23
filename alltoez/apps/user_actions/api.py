@@ -74,7 +74,6 @@ class UserActionAbstractResource(ModelResource):
         authorization = UserActionAuthorization()
         authentication = SessionAuthentication()
         always_return_data = True
-        cache = SimpleCache(timeout=10)
 
     def hydrate_user(self, bundle):
         bundle.data['user'] = bundle.request.user
