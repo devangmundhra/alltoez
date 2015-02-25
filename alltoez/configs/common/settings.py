@@ -169,7 +169,6 @@ CACHE_MIDDLEWARE_KEY_PREFIX = 'alltoez:'
 #-------------------------------------------------------------------------------
 #	PIPELINE SETTINGS
 #-------------------------------------------------------------------------------
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_YUGLIFY_BINARY = os.path.join(SITE_ROOT, "../node_modules/yuglify/bin/yuglify")
