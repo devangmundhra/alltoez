@@ -95,12 +95,8 @@ class EventDetailView(DetailView):
         :return: HttpResponse
         """
         from apps.alltoez.api import EventsResource
-        from apps.user_actions.models import View
-
+        from apps.user_actions.tasks import mark_user_views_event
         self.object = self.get_object()
-        if request.user.is_authenticated():
-            view = View(event=self.object, user=request.user)
-            view.save()
         context = self.get_context_data(object=self.object)
         er = EventsResource()
         er_bundle = er.build_bundle(obj=self.object, request=request)
@@ -108,6 +104,8 @@ class EventDetailView(DetailView):
         event = json.loads(event_json)
         context['event'] = event
         context['event_json'] = event_json # Needed for parsing bookmark info in event_detail template
+        if request.user.is_authenticated():
+            mark_user_views_event.delay(self.object.id, request.user.id)
         return self.render_to_response(context)
 
 
