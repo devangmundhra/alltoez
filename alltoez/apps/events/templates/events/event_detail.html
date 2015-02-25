@@ -1,6 +1,6 @@
 {% extends "alltoez/ui/layouts/base.html" %}
 {% load common_tags %}
-{% load cache compressed %}
+{% load cache pipeline %}
 {% load markdown_deux_tags %}
 {% load admin_urls %}
 {% load event_filters %}
@@ -226,5 +226,5 @@
         var similar_events_url = "{{ similar_events_url }}?format=json"
         var myevent = JSON.parse('{{ event_json|escapejs }}')
     </script>
-    {% compressed_js 'events_detail' %}
+    {% javascript 'events_detail' %}
 {% endblock %}

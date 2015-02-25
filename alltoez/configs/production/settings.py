@@ -34,7 +34,7 @@ ALLOWED_HOSTS = [
     '.alltoez.com',
 ]
 
-PIPELINE_ENABLED = not DEBUG
+PIPELINE_ENABLED = False
 
 STATICFILES_STORAGE = 'apps.alltoez.storage.S3PipelineStorage'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
