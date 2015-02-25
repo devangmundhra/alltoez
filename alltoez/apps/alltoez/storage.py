@@ -10,3 +10,4 @@ from storages.backends.s3boto import S3BotoStorage
 
 class S3PipelineStorage(PipelineMixin, CachedFilesMixin, S3BotoStorage):
     bucket_name = settings.STATIC_FILES_BUCKET
+    custom_domain = settings.STATIC_S3_DOMAIN
