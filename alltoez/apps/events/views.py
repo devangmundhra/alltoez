@@ -62,15 +62,9 @@ class Events(AjaxListView):
         queryset = queryset.order_by(self.sort).select_related('venue')
 
         bundles = []
-        obj0 = queryset[0]
-        bundle0 = er.build_bundle(obj=obj0, request=request)
-        fulldeh0 = er.full_dehydrate(bundle0, for_list=True)
         for obj in queryset:
-            bundles.append(fulldeh0)
-            """
             bundle = er.build_bundle(obj=obj, request=request)
             bundles.append(er.full_dehydrate(bundle, for_list=True))
-            """
 
         list_json = er.serialize(None, bundles, "application/json")
         self.events_list = json.loads(list_json)
