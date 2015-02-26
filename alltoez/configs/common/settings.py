@@ -376,7 +376,7 @@ except ImportError:
     pass
 
 # Add the debug info apps after local settings has been imported
-USE_DEBUG_TOOLBAR = True
+USE_DEBUG_TOOLBAR = False
 if DEBUG and USE_DEBUG_TOOLBAR:
     TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.debug',)
     MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
