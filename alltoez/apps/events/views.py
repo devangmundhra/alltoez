@@ -1,11 +1,9 @@
 import json
-import time
 
 from django.utils import timezone
 from django.views.generic import DetailView
 
 from endless_pagination.views import AjaxListView
-import newrelic.agent
 
 from apps.events.models import Event, Category
 
@@ -29,8 +27,6 @@ class Events(AjaxListView):
     def get(self, request, *args, **kwargs):
         from apps.alltoez.api import EventsResource
 
-        newrelic.agent.record_custom_metric('Custom/Event1', time.time())
-
         # default sort is "-created_at"
         self.sort = self.request.GET.get('sort')
         if not self.sort:
@@ -45,18 +41,13 @@ class Events(AjaxListView):
         else:
             self.request.session['venue_radius'] = self.radius
 
-        newrelic.agent.record_custom_metric('Custom/Event2', time.time())
-
         self.category_slug = kwargs.get('cat_slug', None)
         self.category_list = Category.objects.filter(parent_category__isnull=False)
-
-        newrelic.agent.record_custom_metric('Custom/Event3', time.time())
 
         er = EventsResource()
         request_bundle = er.build_bundle(request=request)
         queryset = er.obj_get_list(request_bundle).prefetch_related('category')
 
-        newrelic.agent.record_custom_metric('Custom/Event4', time.time())
         if self.category_slug:
             queryset = queryset.filter(category__slug=self.category_slug)
             try:
@@ -64,25 +55,25 @@ class Events(AjaxListView):
             except Category.DoesNotExist:
                 pass
 
-        newrelic.agent.record_custom_metric('Custom/Event5', time.time())
         # TODO: Filter the queryset for venue radius using http://janmatuschek.de/LatitudeLongitudeBoundingCoordinates
         # TODO: and alltoez.utils.geo
 
         # Sort by the sort key
         queryset = queryset.order_by(self.sort).select_related('venue')
 
-        newrelic.agent.record_custom_metric('Custom/Event6', time.time())
         bundles = []
+        obj0 = queryset[0]
+        bundle0 = er.build_bundle(obj=obj0, request=request)
+        fulldeh0 = er.full_dehydrate(bundle0, for_list=True)
         for obj in queryset:
+            bundles.append(fulldeh0)
+            """
             bundle = er.build_bundle(obj=obj, request=request)
             bundles.append(er.full_dehydrate(bundle, for_list=True))
-
-        newrelic.agent.record_custom_metric('Custom/Event7', time.time())
+            """
 
         list_json = er.serialize(None, bundles, "application/json")
-        newrelic.agent.record_custom_metric('Custom/Event8', time.time())
         self.events_list = json.loads(list_json)
-        newrelic.agent.record_custom_metric('Custom/Event9', time.time())
         return super(Events, self).get(self, request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
