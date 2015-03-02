@@ -1,3 +1,4 @@
+{% load static from staticfiles %}
 {% if not request.session.premium_access_backdoor %}
 <div class="block">
 	<div class="block-holder">
@@ -15,7 +16,7 @@
 				<h4>Welcome, {{request.user}}</h4>
 				<p>You are now logged in as {{request.user}}. All premium content is accessible.</p>
 				<a class="btn-submit" href="{% url logout %}">Logout</a>
-				<!--input type="image" class="btn-submit" value="logout" src="{{STATIC_URL}}images/bg-logout-submit.png" /-->
+				<!--input type="image" class="btn-submit" value="logout" src="{% static 'images/bg-logout-submit.png' %}" /-->
 			</fieldset>
 		</form>
 		{% endif %}

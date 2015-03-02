@@ -26,9 +26,7 @@ def server_error(request, template_name='500.html'):
     :return:
     """
     t = loader.get_template(template_name) # TODO: Create a 500.html template.
-    return HttpResponseServerError(t.render(RequestContext(request, {'request_path': request.path,
-                                                                     'STATIC_URL': settings.STATIC_URL,
-                                                                     'MEDIA_URL': settings.MEDIA_URL})))
+    return HttpResponseServerError(t.render(RequestContext(request, {'request_path': request.path})))
 
 """
 Base alltoez views

@@ -94,6 +94,8 @@ class EventDetailView(DetailView):
         :param kwargs:
         :return: HttpResponse
         """
+        from apps.events.tasks import scrape_events_look_ahead
+        scrape_events_look_ahead()
         from apps.alltoez.api import EventsResource
         from apps.user_actions.tasks import mark_user_views_event
         self.object = self.get_object()

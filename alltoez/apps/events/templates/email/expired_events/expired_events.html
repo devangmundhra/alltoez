@@ -1,0 +1,10 @@
+{% extends "alltoez/ui/layouts/email_base.html" %}
+
+{% block content %}
+<h2>{{ expired_events|length }} Expired events</h2>
+{% for event in expired_events %}
+<div class="expired_event">
+    <p>{{ forloop.counter }} <a href="{{ event.url }}">{{ event.title }}</a></p>
+</div>
+{% endfor %}
+{% endblock %}

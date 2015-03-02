@@ -1,5 +1,6 @@
 {% extends "alltoez/ui/layouts/base.html" %}
 {% load common_tags endless %}
+{% load static from staticfiles %}
 
 {% block site_header %}
 {% include "events/fragments/header_events.html" %}
@@ -49,6 +50,6 @@
 
 {% block extra_js %}
     {{ block.super }}
-    <script src="{{ STATIC_URL }}endless_pagination/js/endless-pagination.js"></script>
+    <script src="{% static 'endless_pagination/js/endless-pagination.js' %}"></script>
     <script>$.endlessPaginate({paginateOnScroll: true});</script>
 {% endblock %}

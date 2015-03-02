@@ -6,7 +6,9 @@ from croniter import croniter
 from celery import shared_task
 
 from django.utils import timezone
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+from django.template import Context
+from django.template.loader import render_to_string
 
 from apps.events.models import Event, EventRecord
 from apps.events.eventparsers import redtri
@@ -26,43 +28,58 @@ def scrape_events_look_ahead():
     Scraping of websites for kids events
     :return:
     """
+    get_redtri_events()
+    get_expired_events()
+
+
+def get_redtri_events():
     today = datetime.today()
-    event_date = today + timedelta(days=EVENTS_NUM_DAYS_SCRAPE_LOOK_AHEAD)
-
-    subject = "Alltoez Events Summary | {}".format(today.strftime("%A, %d. %B"))
-    body = "For date {}\n\n".format(event_date.strftime("%A, %d. %B %Y")) + get_redtri_events_body() \
-           + get_expired_events_body()
-
-    send_mail(subject, body, "noreply@alltoez.com", ["ruchikadamani90@gmail.com", "devangmundhra@gmail.com"])
-
-
-def get_redtri_events_body():
-    body = "\n"
 
     try:
         redtri_events = redtri.get_events(EVENTS_NUM_DAYS_SCRAPE_LOOK_AHEAD)
-        body = body + "{} RedTri Events\n".format(len(redtri_events), )
+        redtri_events_context = []
         for parsed_event in redtri_events:
             title = parsed_event.get('title', None)
             url = parsed_event.get('orig_link', None)
-            body = body + "<a href={}>{}</a>\n".format(url.encode('ascii', 'ignore'), title.encode('ascii', 'ignore'))
+            redtri_events_context.append({"url": url, "title": title})
+        if redtri_events_context:
+            # Now send mail
+            plaintext_context = Context(autoescape=False)  # HTML escaping not appropriate in plaintext
+            subject = "Alltoez | Redtri events | {}".format(today.strftime("%A, %d. %B"))
+            text_body = render_to_string("email/redtri_scrape/redtri_scrape.txt",
+                                         {"redtri_events": redtri_events_context}, plaintext_context)
+            html_body = render_to_string("email/redtri_scrape/redtri_scrape.html",
+                                         {"redtri_events": redtri_events_context})
+
+            msg = EmailMultiAlternatives(subject=subject, from_email="noreply@alltoez.com",
+                                         to=["devangmundhra@gmail.com", "ruchikadamani90@gmail.com"], body=text_body)
+            msg.attach_alternative(html_body, "text/html")
+            msg.send()
     except:
         pass
 
-    return body
 
+def get_expired_events():
+    today = datetime.today()
+    expired_events_qs = Event.objects.filter(end_date=datetime.today())
+    if expired_events_qs:
+        expired_events = []
+        for event in expired_events_qs:
+            expired_events.append({"url": event.url, "title": event.title})
 
-def get_expired_events_body():
-    body = "\n"
+        # Now send mail
+        plaintext_context = Context(autoescape=False)  # HTML escaping not appropriate in plaintext
+        subject = "Alltoez | Expired Events | {}".format(today.strftime("%A, %d. %B"))
+        text_body = render_to_string("email/expired_events/expired_events.txt",
+                                     {"expired_events": expired_events}, plaintext_context)
+        html_body = render_to_string("email/expired_events/expired_events.html",
+                                     {"expired_events": expired_events})
 
-    expired_events = Event.objects.filter(end_date=datetime.today())
-    if expired_events:
-        body = body + "{} Expired Events\n".format(len(expired_events), )
-    for event in expired_events:
-        body = body + "<a href={}>{}</a>\n".format(event.url.encode('ascii', 'ignore'),
-                                                   event.title.encode('ascii', 'ignore'))
+        msg = EmailMultiAlternatives(subject=subject, from_email="noreply@alltoez.com",
+                                     to=["devangmundhra@gmail.com", "ruchikadamani90@gmail.com"], body=text_body)
+        msg.attach_alternative(html_body, "text/html")
+        msg.send()
 
-    return body
 
 """
 Number of days before which an event for the date should be created
