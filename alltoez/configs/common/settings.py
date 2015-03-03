@@ -106,6 +106,7 @@ INSTALLED_APPS = [
     'markdown_deux',
     'bootstrapform',
     'storages',
+    'cacheops',
 
     # Registration, Signin and Account Management
     'allauth',
@@ -165,6 +166,18 @@ CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 60
 CACHE_MIDDLEWARE_KEY_PREFIX = 'alltoez:'
 
+CACHEOPS_REDIS = {
+    'host': 'localhost', # redis-server is on same machine
+    'port': 6379,        # default redis port
+    'db': 1,             # SELECT non-default redis database
+                         # using separate redis db or redis instance
+                         # is highly recommended
+    'socket_timeout': 3,
+}
+CACHEOPS_DEFAULTS = {
+    'timeout': 60*60
+}
+CACHEOPS_DEGRADE_ON_FAILURE = True
 
 #-------------------------------------------------------------------------------
 #	PIPELINE SETTINGS
@@ -282,7 +295,7 @@ FILEBROWSER_VERSIONS = {
     'large': {'verbose_name': 'Large (530px)', 'width': 530, 'height': '', 'opts': ''},
 }
 FILEBROWSER_ADMIN_VERSIONS = [
-    'thumb', 'small','medium','large',
+    'thumb', 'small', 'medium', 'large',
 ]
 
 

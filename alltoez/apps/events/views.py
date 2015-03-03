@@ -59,7 +59,7 @@ class Events(AjaxListView):
         # TODO: and alltoez.utils.geo
 
         # Sort by the sort key
-        queryset = queryset.order_by(self.sort).select_related('venue')
+        queryset = queryset.order_by(self.sort).select_related('venue').cache()
 
         bundles = []
         for obj in queryset:
@@ -94,8 +94,6 @@ class EventDetailView(DetailView):
         :param kwargs:
         :return: HttpResponse
         """
-        from apps.events.tasks import scrape_events_look_ahead
-        scrape_events_look_ahead()
         from apps.alltoez.api import EventsResource
         from apps.user_actions.tasks import mark_user_views_event
         self.object = self.get_object()
