@@ -27,8 +27,8 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
-ADMINS = (('Devang Mundhra', 'devangmundhra@gmail.com')),
-MANAGERS = ('Devang Mundhra', 'devangmundhra@gmail.com'),
+ADMINS = (('Devang Mundhra', 'devangmundhra@gmail.com'), ('Ruchika Damani', 'ruchikadamani90@gmail.com')),
+MANAGERS = ('Devang Mundhra', 'devangmundhra@gmail.com'), ('Ruchika Damani', 'ruchikadamani90@gmail.com'),
 
 ALLOWED_HOSTS = [
     '.alltoez.com',
@@ -56,6 +56,19 @@ AWS_S3_CUSTOM_DOMAIN = MEDIA_S3_DOMAIN
 
 GOOGLE_ANALYTICS_CODE = "UA-55773544-1"
 FACEBOOK_APP_ID = '869081253104828'
+
+REDIS_ENDPOINT = '127.0.0.1'
+
+#  Caching related parameters
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        "LOCATION": "redis://%s:6379/1" % REDIS_ENDPOINT,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 
 # logging
 # import os
