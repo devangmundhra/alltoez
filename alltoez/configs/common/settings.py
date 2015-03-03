@@ -177,6 +177,12 @@ CACHEOPS_REDIS = {
 CACHEOPS_DEFAULTS = {
     'timeout': 60*60
 }
+CACHEOPS = {
+    'auth.user': {'ops': 'get', 'timeout': 60*15},
+    'auth.*': {'ops': ('fetch', 'get')},
+    'auth.permission': {'ops': 'all'},
+    '*.*': {},
+}
 CACHEOPS_DEGRADE_ON_FAILURE = True
 
 #-------------------------------------------------------------------------------
