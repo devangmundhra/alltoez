@@ -181,7 +181,7 @@ CACHEOPS = {
     'auth.user': {'ops': 'get', 'timeout': 60*15},
     'auth.*': {'ops': ('fetch', 'get')},
     'auth.permission': {'ops': 'all'},
-    '*.*': {},
+    '*.*': {'ops': 'all'},
 }
 CACHEOPS_DEGRADE_ON_FAILURE = True
 

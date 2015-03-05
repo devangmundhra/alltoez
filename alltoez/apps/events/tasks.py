@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.core.mail import EmailMultiAlternatives
 from django.template import Context
 from django.template.loader import render_to_string
+from django.contrib.sites.models import Site
 
 from apps.events.models import Event, EventRecord
 from apps.events.eventparsers import redtri
@@ -49,9 +50,9 @@ def get_redtri_events():
             text_body = render_to_string("email/redtri_scrape/redtri_scrape.txt",
                                          {"redtri_events": redtri_events_context}, plaintext_context)
             html_body = render_to_string("email/redtri_scrape/redtri_scrape.html",
-                                         {"redtri_events": redtri_events_context})
+                                         {"redtri_events": redtri_events_context, "site": Site.objects.get_current()})
 
-            msg = EmailMultiAlternatives(subject=subject, from_email="noreply@alltoez.com",
+            msg = EmailMultiAlternatives(subject=subject, from_email=("No Reply", "noreply@alltoez.com"),
                                          to=["devangmundhra@gmail.com", "ruchikadamani90@gmail.com"], body=text_body)
             msg.attach_alternative(html_body, "text/html")
             msg.send()
@@ -73,7 +74,7 @@ def get_expired_events():
         text_body = render_to_string("email/expired_events/expired_events.txt",
                                      {"expired_events": expired_events}, plaintext_context)
         html_body = render_to_string("email/expired_events/expired_events.html",
-                                     {"expired_events": expired_events})
+                                     {"expired_events": expired_events, "site": Site.objects.get_current()})
 
         msg = EmailMultiAlternatives(subject=subject, from_email="noreply@alltoez.com",
                                      to=["devangmundhra@gmail.com", "ruchikadamani90@gmail.com"], body=text_body)
