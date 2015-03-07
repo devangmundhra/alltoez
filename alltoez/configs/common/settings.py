@@ -239,7 +239,7 @@ LOGIN_REDIRECT_URL = "/"
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_LOGOUT_ON_GET = True
@@ -253,6 +253,7 @@ SOCIALACCOUNT_PROVIDERS = {}
 SOCIALACCOUNT_QUERY_EMAIL = ACCOUNT_EMAIL_REQUIRED
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_AVATAR_SUPPORT = False
+SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
 
 EMAIL_CONFIRMATION_DAYS = 5
 FACEBOOK_ENABLED = True
@@ -262,6 +263,7 @@ OPENID_ENABLED = False
 #-------------------------------------------------------------------------------
 #	DJANGO-HUNGER SETTINGS
 #-------------------------------------------------------------------------------
+HUNGER_ENABLE = False
 HUNGER_ALWAYS_ALLOW_VIEWS = [
     'apps.alltoez_profile.views.AlltoezSignupView',
     'apps.alltoez.views.home',

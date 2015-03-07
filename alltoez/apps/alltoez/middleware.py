@@ -16,6 +16,7 @@ class RedirectIfIncompleteProfile(object):
                         path != redirect_url and \
                         '/admin/' not in path and \
                         '/accounts/social/signup/' not in path and \
+                        '/accounts/social/login/' not in path and \
                         '/accounts/logout/' not in path and \
                         not path.startswith('/beta-'):
             return http.HttpResponseRedirect(redirect_url)

@@ -1,0 +1,14 @@
+{% extends "alltoez/ui/layouts/email_base.html" %}
+
+{% block content %}
+    {% load account %}{% user_display user as user_display %}{% load i18n %}{% autoescape off %}{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}
+
+    <p>We are creating your account at {{ site_name }}!</p>
+    <p>Before that we need to verify your email address so that we can confirm your friend isn't playing a prank on you :)</p>
+    <p>Please click <a href="{{ activate_url }}">here</a> or copy paste the link in your address bar to complete the steps.</p>
+    <p>{{ activate_url }}</p>
+    <p>Almost there!</p>
+    {% endblocktrans %}{% endautoescape %}
+    {% blocktrans with site_name=current_site.name site_domain=current_site.domain %}The {{ site_name }} Team.
+    {% endblocktrans %}
+{% endblock %}

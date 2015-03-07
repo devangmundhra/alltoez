@@ -19,11 +19,10 @@
                     {% include "socialaccount/snippets/provider_list.html" with process="login" %}
                 </div>
                 <div class="login-or">{% trans 'or' %}</div>
-
             </div>
 
             {% include "socialaccount/snippets/login_extra.html" %}
-
+            <h3>Already signed up? <a href="{{ login_url }}">Log in here.</a></h3>
             {% else %}
             <p>{% blocktrans %}If you have not created an account yet, then please
                 <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
@@ -41,19 +40,6 @@
                     {% trans "Next " %}
                     <i class="fa fa-arrow-right"></i>
                 </button>
-
-
-                <!--input id="id_email" class="form-control" name="email" placeholder="Your email:" type="text" autocomplete="off">
-                <input id="id_password1" class="form-control" name="password1" placeholder="New password:" type="password">
-                <input id="id_password2" class="form-control" name="password2" placeholder="Confirm password:" type="password">
-                {% if redirect_field_value %}
-                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                {% endif %}
-                <button type="submit" class="btn btn-default btn-lg">{% trans "Sign Up" %}</button>
-                {% if redirect_field_value %}
-                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" /-->
-                <!--{% endif %}-->
-                <!--<button type="submit">{% trans "Sign Up" %} &raquo;</button>-->
             </form>
         </div>
     </div>
