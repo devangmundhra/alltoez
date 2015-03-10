@@ -114,6 +114,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'hunger',
+    'media_field',
 
     # Local Project Apps
     'apps.alltoez_profile',
@@ -306,6 +307,11 @@ FILEBROWSER_ADMIN_VERSIONS = [
     'thumb', 'small', 'medium', 'large',
 ]
 
+
+#-------------------------------------------------------------------------------
+#	STORAGES SETTINGS
+#-------------------------------------------------------------------------------
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 #-------------------------------------------------------------------------------
 #	CELERY SETTINGS

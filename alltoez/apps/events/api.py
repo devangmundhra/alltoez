@@ -21,7 +21,7 @@ class EventInternalResource(ModelResource):
     Internal resource not directly exposed by the api
     This resource is exposed via the EventResource in apps.alltoez.api
     """
-    image = fields.DictField(attribute='image')
+    image = fields.FileField(attribute='image')
     venue = fields.ForeignKey(VenueInternalResource, 'venue', full=True)
     category = fields.ToManyField(CategoryResource, attribute='category', full=True)
 

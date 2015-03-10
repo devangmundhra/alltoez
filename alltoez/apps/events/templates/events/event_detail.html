@@ -9,7 +9,7 @@
     <meta property="og:title"       content="{{ event.title }}" />
     <meta property="og:description" content="{{ event.description }}" />
     <meta property="og:type"        content="website" />
-    <meta property="og:image"       content="{{ event.image.url }}" />
+    <meta property="og:image"       content="{{ event.image }}" />
     <meta property="og:url"         content="{{ request.build_absolute_uri }}" />
     <meta property="og:site_name"   content="Alltoez" />
 {% endblock %}
@@ -48,7 +48,7 @@
                 </dl>
             </div>
             <div class="event-image">
-                <img src="{{ event.image.url }}">
+                <img src="{{ event.image }}">
             </div>
             <div class="event-description">
                 <p>{{ event.description|markdown }}</p>
