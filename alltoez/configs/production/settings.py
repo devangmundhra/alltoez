@@ -121,6 +121,14 @@ DEFAULT_FROM_EMAIL = 'Postmaster <postmaster@alltoez.com>'
 MANDRILL_API_KEY = 'iA4W9WiP9CT7R3FwyQmc3A'
 EMAIL_BACKEND = 'djrill.mail.backends.djrill.DjrillBackend'
 
+#Temp
+DEFAULT_FROM_EMAIL = 'Postmaster <postmaster@alltoez.com>'
+EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'postmaster@alltoez.com'
+EMAIL_HOST_PASSWORD = 'f23194b06f816adc5b5e6f235ed33ff1'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # PredictionIO settings
 PIO_ACCESS_KEY = 'YW9d0Wq3l7QgzNVisiXXFOFtMDiJR1TJOCp2QFNqVcpcSsvkC38O0TiAefdZq37Z'
 PIO_ENGINE_ENDPOINT = 'http://54.197.245.21:8000'
