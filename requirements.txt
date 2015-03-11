@@ -9,7 +9,7 @@ celery==3.1.17
 croniter==0.3.5
 Django==1.7.4
 django-admin-shortcuts==1.2.5
-django-adv-imagefield==0.0.3
+django-adv-imagefield==0.0.4
 django-allauth==0.19.1
 django-appconf==0.6
 django-bootstrap-form==3.1

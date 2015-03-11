@@ -25,7 +25,7 @@
     <div class="searched-event-item">
         <a href='{% url "event_detail" event.slug %}'>
             <div class="event-image">
-                <img src="{{ event.image }}" width="100%">
+                <img src="{{ settings.MEDIA_URL}}{{ event.image }}" width="100%">
             </div>
             <div class="event-info">
                 <h4>{{ event.title|truncatechars:'62' }}</h4>
