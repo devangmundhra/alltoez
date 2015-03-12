@@ -19,7 +19,6 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('allauth.urls')),
     url(r'^admin/filebrowser/', include(site.urls)),
     url(r'beta-', include('hunger.urls')),
-    url(r'^api/', include('media_field.api')),
 )
 
 urlpatterns += patterns('',

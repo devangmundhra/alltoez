@@ -9,6 +9,7 @@ from django.template import RequestContext
 from tastypie.utils import trailing_slash
 from tastypie import fields
 from tastypie.http import HttpGone, HttpMultipleChoices, HttpBadRequest
+import newrelic.agent
 
 from apps.events.api import EventInternalResource
 from apps.alltoez_profile.api import AlltoezProfileInternalResource
@@ -41,6 +42,7 @@ class EventsResource(EventInternalResource):
                 self.wrap_view('get_recommendations'), name="api_get_recommendations"),
         ]
 
+    @newrelic.agent.function_trace()
     def get_recommendations(self, request, **kwargs):
         template = "alltoez/recommendation/similar_events.html"
 
@@ -80,6 +82,7 @@ class EventsResource(EventInternalResource):
                                   {"events_list": objects},
                                   context_instance=RequestContext(request))
 
+    @newrelic.agent.function_trace()
     def dehydrate_bookmark(self, bundle):
         if not bundle.request.user.is_authenticated():
             return None
@@ -90,6 +93,7 @@ class EventsResource(EventInternalResource):
         except ObjectDoesNotExist:
             return None
 
+    @newrelic.agent.function_trace()
     def dehydrate_done(self, bundle):
         if not bundle.request.user.is_authenticated():
             return None
@@ -100,6 +104,7 @@ class EventsResource(EventInternalResource):
         except ObjectDoesNotExist:
             return None
 
+    @newrelic.agent.function_trace()
     def get_object_list(self, request):
         """
         Filters the object list based on the ages of the user's children
@@ -131,6 +136,7 @@ class AlltoezProfileResource(AlltoezProfileInternalResource):
         # resource_name = 'users'
         pass
 
+    @newrelic.agent.function_trace()
     def dehydrate_bookmarked_events(self, bundle):
         profile = bundle.obj
         user = profile.user
@@ -145,6 +151,7 @@ class AlltoezProfileResource(AlltoezProfileInternalResource):
             dehydrated_events.append(event_dict)
         return dehydrated_events
 
+    @newrelic.agent.function_trace()
     def dehydrate_done_events(self, bundle):
         profile = bundle.obj
         user = profile.user

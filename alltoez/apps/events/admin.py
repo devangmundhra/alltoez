@@ -9,8 +9,6 @@ from django.contrib.sites.models import Site
 
 from pagedown.widgets import AdminPagedownWidget
 from django_extensions.admin import ForeignKeyAutocompleteAdmin
-from media_field.forms import MediaFieldWidget
-from media_field.db import MediaField
 
 from apps.events.models import DraftEvent, Event, EventRecord, Category
 
@@ -186,13 +184,10 @@ class EventAdmin(ForeignKeyAutocompleteAdmin):
     form = EventAdminForm
     readonly_fields = ('venue_admin_url',)
     fields = ('draft', 'title', 'slug', ('venue', 'venue_admin_url',),
-              'description', 'category', 'image_info', 'image', ('min_age', 'max_age',),
+              'description', 'category', 'image', ('min_age', 'max_age',),
               ('cost', 'cost_detail',), ('start_date', 'end_date',),
               'recurrence_detail', 'time_detail', 'url', 'additional_info',
               'publish')
-    formfield_overrides = {
-        MediaField: {'widget': MediaFieldWidget},
-    }
 
     def venue_admin_url(self, obj):
         return "<a href=http://{}{} target=\"_blank\">{}{}</a>".format(Site.objects.get_current().domain,

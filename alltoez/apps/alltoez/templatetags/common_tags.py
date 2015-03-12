@@ -333,3 +333,16 @@ def urlize_html(html):
 @register.filter()
 def get_keys(dict):
     return dict.keys()
+
+@register.simple_tag
+def url_replace(request, field, value):
+    """
+    Replace a get parameter in a url
+    :param request:
+    :param field:
+    :param value:
+    :return:
+    """
+    dict_ = request.GET.copy()
+    dict_[field] = value
+    return dict_.urlencode()

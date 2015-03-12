@@ -20,7 +20,7 @@ STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 
 ADMINS = (('Devang Mundhra', 'devangmundhra@gmail.com'), ('Ruchika Damani', 'ruchikadamani90@gmail.com')),
-MANAGERS = ('Devang Mundhra', 'devangmundhra@gmail.com'), ('Ruchika Damani', 'ruchikadamani90@gmail.com'),
+MANAGERS = ADMINS
 
 # Local time
 TIME_ZONE = "UTC"
@@ -114,7 +114,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'hunger',
-    'media_field',
 
     # Local Project Apps
     'apps.alltoez_profile',
@@ -329,7 +328,7 @@ CELERYBEAT_SCHEDULE = {
     },
     'parse-venues-everyday': {
         'task': 'apps.venues.tasks.check_invalid_venues',
-        'schedule': timedelta(days=1),
+        'schedule': timedelta(days=20),
     },
 }
 

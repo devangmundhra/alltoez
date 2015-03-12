@@ -76,6 +76,12 @@ class AlltoezSearchView(FacetedSearchView):
         extra['page_template'] = self.page_template
         return extra
 
+    def create_response(self):
+        # import pdb
+        # pdb.set_trace()
+        return super(AlltoezSearchView, self).create_response()
+
+
 
 def autocomplete(request):
     my_query = request.GET.get('q', '')

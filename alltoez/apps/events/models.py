@@ -3,7 +3,6 @@ from django.db import models
 from django.core.urlresolvers import reverse
 
 from jsonfield import JSONField
-from media_field.db import MediaField
 
 from apps.alltoez.utils.model_utils import unique_slugify
 from apps.venues.models import Venue
@@ -139,7 +138,7 @@ class Event(models.Model):
     description = models.TextField(verbose_name='Event description')
     category = models.ManyToManyField(Category, db_index=True)
     image_info = JSONField(default="{\"url\":\"\",\"source_name\":\"\",\"source_url\":\"\"}")
-    image = MediaField(upload_to="events_media")
+    image = models.ImageField(upload_to="events_media")
     min_age = models.PositiveSmallIntegerField(default=DEFAULT_MIN_AGE_EVENT, db_index=True)
     max_age = models.PositiveSmallIntegerField(default=DEFAULT_MAX_AGE_EVENT, db_index=True)
     cost = models.PositiveSmallIntegerField(default=0, db_index=True)

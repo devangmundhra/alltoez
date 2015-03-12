@@ -4,6 +4,7 @@ from django.utils import timezone
 from tastypie.resources import ModelResource
 from tastypie import fields
 from tastypie.cache import SimpleCache
+import newrelic.agent
 
 from apps.events.models import Event, Category
 from apps.venues.api import VenueInternalResource
@@ -30,6 +31,7 @@ class EventInternalResource(ModelResource):
         resource_name = 'events'
         cache = SimpleCache(timeout=10)
 
+    @newrelic.agent.function_trace()
     def get_object_list(self, request):
         """
         Filters the object list based on end date
