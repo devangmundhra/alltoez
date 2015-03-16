@@ -1,14 +1,17 @@
 {% load event_filters %}
-{% load thumbnail %}
+<!--{% load thumbnail %}-->
 
 {% for event in events_list %}
 <div class="col-xs-12 col-sm-4">
     <div class="event-item">
         <a href='{% url "event_detail" event.slug %}'>
             <div class="event-image">
-                {% thumbnail event.image "x230" as im %}
-                <img src="{{ im.url }}" width="100%">
-                {% endthumbnail %}
+                {% comment %}
+                <!--{% thumbnail event.image "x230" as im %}-->
+                <!--<img src="{{ im.url }}" width="100%">-->
+                <!--{% endthumbnail %}-->
+                {% endcomment %}
+                <img src="{{ event.image }}" width="100%">
             </div>
             <div class="event-info">
                 <h4>{{ event.title|truncatechars:'62' }}</h4>

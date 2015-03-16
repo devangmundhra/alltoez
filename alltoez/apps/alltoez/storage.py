@@ -21,6 +21,6 @@ class S3PipelineStorage(PipelineMixin, CachedFilesMixin, S3BotoStorage):
 
 class MediaFilesStorage(S3BotoStorage):
     def __init__(self, *args, **kwargs):
-        # kwargs['bucket'] = settings.MEDIA_FILES_BUCKET
-        # kwargs['custom_domain'] = domain(settings.MEDIA_URL)
+        kwargs['bucket'] = settings.MEDIA_FILES_BUCKET
+        kwargs['custom_domain'] = domain(settings.MEDIA_URL)
         super(MediaFilesStorage, self).__init__(*args, **kwargs)

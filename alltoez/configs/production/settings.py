@@ -45,8 +45,8 @@ STATIC_S3_DOMAIN = '%s.s3.amazonaws.com' % STATIC_FILES_BUCKET
 
 MEDIA_FILES_BUCKET = 'alltoez'
 MEDIA_S3_DOMAIN = '%s.s3.amazonaws.com' % MEDIA_FILES_BUCKET
-MEDIA_URL = "https://%s/" % MEDIA_S3_DOMAIN
-# MEDIA_URL = 'http://d1wqe2m0m7wb9o.cloudfront.net/'
+# MEDIA_URL = "https://%s/" % MEDIA_S3_DOMAIN
+MEDIA_URL = 'http://d1wqe2m0m7wb9o.cloudfront.net/'
 
 AWS_STORAGE_BUCKET_NAME = MEDIA_FILES_BUCKET
 AWS_S3_CUSTOM_DOMAIN = MEDIA_S3_DOMAIN
