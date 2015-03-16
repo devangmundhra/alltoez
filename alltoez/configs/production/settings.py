@@ -1,4 +1,6 @@
 from configs.common.settings import *
+import logging
+from sorl.thumbnail.log import ThumbnailLogHandler
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -36,14 +38,15 @@ PIPELINE_ENABLED = not DEBUG
 """
 STATICFILES_STORAGE = 'apps.alltoez.storage.S3PipelineStorage'
 
-STATIC_FILES_BUCKET = 'alltoezstatic'
-STATIC_S3_DOMAIN = '%s.s3.amazonaws.com' % STATIC_FILES_BUCKET
 STATIC_URL = "https://%s/" % STATIC_S3_DOMAIN
 """
+STATIC_FILES_BUCKET = 'alltoezstatic'
+STATIC_S3_DOMAIN = '%s.s3.amazonaws.com' % STATIC_FILES_BUCKET
 
 MEDIA_FILES_BUCKET = 'alltoez'
 MEDIA_S3_DOMAIN = '%s.s3.amazonaws.com' % MEDIA_FILES_BUCKET
-MEDIA_URL = "https://%s/" % MEDIA_S3_DOMAIN
+# MEDIA_URL = "https://%s/" % MEDIA_S3_DOMAIN
+MEDIA_URL = 'http://d1wqe2m0m7wb9o.cloudfront.net/'
 
 AWS_STORAGE_BUCKET_NAME = MEDIA_FILES_BUCKET
 AWS_S3_CUSTOM_DOMAIN = MEDIA_S3_DOMAIN
@@ -55,6 +58,7 @@ GOOGLE_API_KEY = 'AIzaSyDOtkrcR4QFGYTMdR71WkkUYsMQ735c_EU'
 GOOGLE_SENGINE_ID = '015946843765970452323:exjf8xlvrw4'
 AWS_ACCESS_KEY_ID = 'AKIAJRVBYWEHDQIOFG2A'
 AWS_SECRET_ACCESS_KEY = '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'
+AWS_CLOUDFRONT_DOMAIN = 'd1wqe2m0m7wb9o.cloudfront.net'
 
 REDIS_ENDPOINT = '127.0.0.1'
 
@@ -74,6 +78,10 @@ CACHES = {
 # import logging.config
 # LOG_FILENAME = os.path.join(os.path.dirname(__file__), 'logging.conf')
 # logging.config.fileConfig(LOG_FILENAME)
+
+handler = ThumbnailLogHandler()
+handler.setLevel(logging.ERROR)
+logging.getLogger('sorl.thumbnail').addHandler(handler)
 
 LOGGING = {
     'version': 1,

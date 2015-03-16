@@ -17,6 +17,9 @@
 {% block title %}{{ event.title }}{% endblock %}
 {% block page_title_outer %}{% endblock %}
 {% block page_title %}{% endblock %}
+{% block extra_head %}
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+{% endblock %}
 {% block site_header %}
 {% include "events/fragments/header_events.html" %}
 {% endblock %}

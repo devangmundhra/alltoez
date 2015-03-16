@@ -107,6 +107,7 @@ INSTALLED_APPS = [
     'bootstrapform',
     'storages',
     'cacheops',
+    'sorl.thumbnail',
 
     # Registration, Signin and Account Management
     'allauth',
@@ -310,7 +311,7 @@ FILEBROWSER_ADMIN_VERSIONS = [
 #-------------------------------------------------------------------------------
 #	STORAGES SETTINGS
 #-------------------------------------------------------------------------------
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+DEFAULT_FILE_STORAGE = 'apps.alltoez.storage.MediaFilesStorage'
 
 #-------------------------------------------------------------------------------
 #	CELERY SETTINGS
