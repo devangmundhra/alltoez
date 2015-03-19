@@ -11,6 +11,8 @@ import org.apache.spark.SparkContext._
 import org.apache.spark.rdd.RDD
 
 import scala.util.Random
+import scala.collection.mutable.PriorityQueue
+
 import grizzled.slf4j.Logger
 
 class RandomModel(val itemStringIntMap: BiMap[String, Int],
@@ -53,7 +55,7 @@ class RandomAlgorithm()
 
   @transient lazy val logger = Logger[this.type]
 
-  def train(data: PreparedData): RandomModel = {
+  def train(sc: SparkContext, data: PreparedData): RandomModel = {
     val itemStringIntMap = BiMap.stringInt(data.items.keys)
     val items: Map[Int, Item] = data.items.map { case (id, item) =>
       (itemStringIntMap(id), item)
@@ -88,16 +90,45 @@ class RandomAlgorithm()
       )
     }
 
-    val randomScores = Random.shuffle(items).take(query.num)
+//    val randomScores = Random.shuffle(items).take(query.num)
+//    val itemScores = randomScores.map { case (i, item) =>
+//      new ItemScore(
+//        item = model.itemIntStringMap(i),
+//        score = 0
+//      )
+//    }
 
-    val itemScores = randomScores.map { case (i, item) =>
+    val categoryScores = items.map { case (i, item) =>
       new ItemScore(
         item = model.itemIntStringMap(i),
-        score = 0
+        score = item.categories.getOrElse(List.empty).intersect(query.categories.getOrElse(Set.empty).toList).length
       )
+    }.toSeq
+
+    val ord = Ordering.by[ItemScore, Double](_.score).reverse
+    val topScores = getTopN(categoryScores, query.num)(ord)
+
+    new PredictedResult(topScores.toArray)
+  }
+
+  private
+  def getTopN[T](s: Seq[T], n: Int)(implicit ord: Ordering[T]): Seq[T] = {
+
+    val q = PriorityQueue()
+
+    for (x <- s) {
+      if (q.size < n)
+        q.enqueue(x)
+      else {
+        // q is full
+        if (ord.compare(x, q.head) < 0) {
+          q.dequeue()
+          q.enqueue(x)
+        }
+      }
     }
 
-    new PredictedResult(itemScores.toArray)
+    q.dequeueAll.toSeq.reverse
   }
 
   private
