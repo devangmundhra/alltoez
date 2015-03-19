@@ -136,6 +136,6 @@ EMAIL_BACKEND = 'djrill.mail.backends.djrill.DjrillBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # PredictionIO settings
-PIO_ACCESS_KEY = 'YW9d0Wq3l7QgzNVisiXXFOFtMDiJR1TJOCp2QFNqVcpcSsvkC38O0TiAefdZq37Z'
+PIO_ACCESS_KEY = '2IjppJUBIVaMHBfOCYwtpYWyNbW3CJ2SpwfRaDhx1YrV7AykpVyquMHtFHDaK3ro'
 PIO_ENGINE_ENDPOINT = 'http://54.197.245.21:8000'
 PIO_EVENT_SERVER_ENDPOINT = 'http://54.197.245.21:7070'
