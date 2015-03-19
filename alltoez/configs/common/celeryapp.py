@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-import os, sys, django
+import os, sys
 
 from celery import Celery
 
@@ -20,7 +20,6 @@ sys.path.insert(0, apps_path)
 
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
-django.setup()
 app = Celery('common')
 
 # Using a string here means the worker will not have to
