@@ -5,6 +5,8 @@ from django.db.models import Max, Min
 from django.conf.urls import url
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.db.models import Q
+from django.utils import timezone
 
 from tastypie.utils import trailing_slash
 from tastypie import fields
@@ -63,7 +65,8 @@ class EventsResource(EventInternalResource):
 
         try:
             similar_event_map = SimilarEvents.objects.get(event=event)
-            queryset = similar_event_map.similar_events.all().order_by('?')[:3]
+            queryset = similar_event_map.similar_events.all().filter(Q(end_date__gte=timezone.now().date()) |
+                                                                     Q(end_date=None)).order_by('?')[:3]
         except ObjectDoesNotExist:
             queryset = Event.objects.none()
 
