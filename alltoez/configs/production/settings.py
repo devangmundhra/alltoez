@@ -34,6 +34,7 @@ ALLOWED_HOSTS = [
 ]
 
 PIPELINE_ENABLED = not DEBUG
+SECRET_KEY = '-x83)5-^cugn@*t6gh%231@cb)zj)q7l_rm!%3=)@sw&v&d_ww'
 
 """
 STATICFILES_STORAGE = 'apps.alltoez.storage.S3PipelineStorage'
