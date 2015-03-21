@@ -66,7 +66,6 @@ class Events(AjaxListView):
             bundle = er.build_bundle(obj=obj, request=request)
             bundles.append(er.full_dehydrate(bundle, for_list=True))
 
-        print "{} objects in bundle".format(len(bundles))
         list_json = er.serialize(None, bundles, "application/json")
         self.events_list = json.loads(list_json)
         return super(Events, self).get(self, request, *args, **kwargs)

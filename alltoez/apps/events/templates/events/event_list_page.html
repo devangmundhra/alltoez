@@ -6,11 +6,11 @@
     <div class="event-item">
         <a href='{% url "event_detail" event.slug %}'>
             <div class="event-image">
-                {% thumbnail event.image "x300" as im %}
                 {% comment %}
-                <img src="{{ settings.MEDIA_URL }}{{ im.url }}" width="100%">
-                {% endcomment
+                {% thumbnail event.image "x300" as im %}
+                <img src="{{ im.url }}" width="100%">
                 {% endthumbnail %}
+                {% endcomment
                 <img src="{{ event.image }}" width="100%">
             </div>
             <div class="event-info">
