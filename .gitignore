@@ -63,6 +63,7 @@ target/
 celerybeat-schedule
 
 alltoez/configs/common/local_settings.py
+local_settings.py
 
 fixtures/*
 

@@ -1,0 +1,8 @@
+{
+  "name": "alltoez-node",
+  "dependencies": {
+    "less": "",
+    "yuglify": "",
+    "coffee-script": "",
+  },
+}
