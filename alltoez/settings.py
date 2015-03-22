@@ -17,7 +17,8 @@ DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
 SITE_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 ADMIN_MEDIA_PREFIX = "/static/admin/"
-STATIC_ROOT = os.path.join(SITE_ROOT, "static")
+# STATIC_ROOT = os.path.join(SITE_ROOT, "static")
+STATIC_ROOT = 'staticfiles'
 MEDIA_ROOT = os.path.join(SITE_ROOT, "media")
 
 PROJECT_DOMAIN = "http://www.alltoez.com"
