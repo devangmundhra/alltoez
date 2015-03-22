@@ -1,9 +1,6 @@
 # Project related settings
 .idea/
-alltoez/static/*
-staticfiles/*
 .DS_Store
-alltoez/media/*
 node_modules/*
 
 # Byte-compiled / optimized / DLL files
