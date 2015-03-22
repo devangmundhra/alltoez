@@ -224,8 +224,8 @@ CACHEOPS_DEGRADE_ON_FAILURE = True
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
-PIPELINE_YUGLIFY_BINARY = os.path.join(SITE_ROOT, "../node_modules/yuglify/bin/yuglify")
-PIPELINE_COFFEE_SCRIPT_BINARY = os.path.join(SITE_ROOT, "../node_modules/coffee-script/bin/coffee")
+PIPELINE_YUGLIFY_BINARY = os.path.join(SITE_ROOT, "node_modules/yuglify/bin/yuglify")
+PIPELINE_COFFEE_SCRIPT_BINARY = os.path.join(SITE_ROOT, "node_modules/coffee-script/bin/coffee")
 PIPELINE_DISABLE_WRAPPER = True
 PIPELINE_COMPILERS = (
     'pipeline.compilers.less.LessCompiler',
