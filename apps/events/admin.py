@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.core import urlresolvers
 from django.contrib.sites.models import Site
 
-from pagedown.widgets import AdminPagedownWidget
+# from pagedown.widgets import AdminPagedownWidget
 from django_extensions.admin import ForeignKeyAutocompleteAdmin
 
 from apps.events.models import DraftEvent, Event, EventRecord, Category
@@ -89,9 +89,9 @@ class EventAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(EventAdminForm, self).__init__(*args, **kwargs)
-        self.fields['description'].widget = AdminPagedownWidget()
-        self.fields['time_detail'].widget = AdminPagedownWidget()
-        self.fields['additional_info'].widget = AdminPagedownWidget()
+        # self.fields['description'].widget = AdminPagedownWidget()
+        # self.fields['time_detail'].widget = AdminPagedownWidget()
+        # self.fields['additional_info'].widget = AdminPagedownWidget()
 
     def clean(self):
         end_date = self.cleaned_data.get('end_date', None)
