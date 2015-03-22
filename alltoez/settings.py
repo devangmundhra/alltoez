@@ -25,7 +25,6 @@ MEDIA_ROOT = os.path.join(SITE_ROOT, "media")
 PROJECT_DOMAIN = "http://www.alltoez.com"
 
 STATIC_URL = "/static/"
-STATICFILES_STORAGE = "pipeline.storage.PipelineCachedStorage"
 """
 STATICFILES_STORAGE = 'apps.alltoez.storage.S3PipelineStorage'
 
@@ -79,6 +78,8 @@ TEMPLATE_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'pipeline.finders.CachedFileFinder',
+    'pipeline.finders.PipelineFinder',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -229,6 +230,7 @@ CACHEOPS_DEGRADE_ON_FAILURE = True
 #-------------------------------------------------------------------------------
 #	PIPELINE SETTINGS
 #-------------------------------------------------------------------------------
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_YUGLIFY_BINARY = os.path.join(PROJECT_ROOT, "node_modules/yuglify/bin/yuglify")
