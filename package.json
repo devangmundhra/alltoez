@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "yuglify": "^0.1.4",
-    "less": "*"
+    "less": "*",
     "coffee-script": "^1.8.0"
   },
   "devDependencies": {
