@@ -35,6 +35,7 @@ STATIC_FILES_BUCKET = 'alltoezstatic'
 STATIC_S3_DOMAIN = '%s.s3.amazonaws.com' % STATIC_FILES_BUCKET
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
+    os.path.join(PROJECT_ROOT, 'staticfiles')
 )
 
 MEDIA_FILES_BUCKET = 'alltoez'
@@ -55,11 +56,11 @@ ALLOWED_HOSTS = [
 
 ADMINS = (('Devang Mundhra', 'devangmundhra@gmail.com'), ('Ruchika Damani', 'ruchikadamani90@gmail.com')),
 MANAGERS = ADMINS
+SITE_ID = 2
 
 # Local time
 TIME_ZONE = "UTC"
 LANGUAGE_CODE = "en-us"
-SITE_ID = 1
 USE_I18N = False
 DATE_INPUT_FORMATS = ('%d-%m-%Y', '%Y-%m-%d')
 USE_TZ = True
