@@ -66,7 +66,8 @@ TEMPLATE_LOADERS = (
 )
 
 TEMPLATE_DIRS = (
-    os.path.join(SITE_ROOT, 'templates'),
+    os.path.join(PROJECT_ROOT, 'templates'),
+    os.path.join(PROJECT_ROOT, "templates", "banyan")
 )
 
 STATICFILES_FINDERS = (
