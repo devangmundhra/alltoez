@@ -1,6 +1,7 @@
 # Project related settings
 .idea/
 alltoez/static/*
+staticfiles/*
 .DS_Store
 alltoez/media/*
 node_modules/*
