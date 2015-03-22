@@ -184,11 +184,12 @@ if 'REDISCLOUD_URL' in os.environ:
 
     CACHES = {
         'default': {
-            'BACKEND': 'redis_cache.cache.RedisCache',
+            'BACKEND': 'django_redis.cache.RedisCache',
             'LOCATION': '%s:%s:0' % (redis_url.hostname, redis_url.port),
             'OPTIONS': {
                 'PASSWORD': redis_url.password,
                 'DB': 0,
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
             }
         }
     }
