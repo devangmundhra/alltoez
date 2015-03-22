@@ -31,6 +31,10 @@ STATIC_URL = "https://%s/" % STATIC_S3_DOMAIN
 """
 STATIC_FILES_BUCKET = 'alltoezstatic'
 STATIC_S3_DOMAIN = '%s.s3.amazonaws.com' % STATIC_FILES_BUCKET
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+    os.path.join(PROJECT_ROOT, "media/"),
+)
 
 MEDIA_FILES_BUCKET = 'alltoez'
 MEDIA_S3_DOMAIN = '%s.s3.amazonaws.com' % MEDIA_FILES_BUCKET
@@ -40,6 +44,7 @@ MEDIA_URL = 'http://d1wqe2m0m7wb9o.cloudfront.net/'
 AWS_STORAGE_BUCKET_NAME = MEDIA_FILES_BUCKET
 AWS_S3_CUSTOM_DOMAIN = MEDIA_S3_DOMAIN
 AWS_CLOUDFRONT_DOMAIN ='http://d1wqe2m0m7wb9o.cloudfront.net'
+AWS_QUERYSTRING_AUTH = False
 
 WSGI_APPLICATION = 'alltoez.wsgi.application'
 
