@@ -4,5 +4,7 @@
     "less": "*",
     "yuglify": "*",
     "coffee-script": "*",
-  }
+  },
+  "engines": {
+  },
 }
