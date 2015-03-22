@@ -39,7 +39,7 @@ MEDIA_URL = 'http://d1wqe2m0m7wb9o.cloudfront.net/'
 
 AWS_STORAGE_BUCKET_NAME = MEDIA_FILES_BUCKET
 AWS_S3_CUSTOM_DOMAIN = MEDIA_S3_DOMAIN
-AWS_CLOUDFRONT_DOMAIN='http://d1wqe2m0m7wb9o.cloudfront.net'
+AWS_CLOUDFRONT_DOMAIN ='http://d1wqe2m0m7wb9o.cloudfront.net'
 
 WSGI_APPLICATION = 'alltoez.wsgi.application'
 
@@ -67,7 +67,7 @@ TEMPLATE_LOADERS = (
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, 'templates'),
-    os.path.join(PROJECT_ROOT, "templates", "banyan")
+    os.path.join(PROJECT_ROOT, "alltoez", "templates")
 )
 
 STATICFILES_FINDERS = (
