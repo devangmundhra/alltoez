@@ -1,0 +1,1 @@
+This file is to help create a dir for static files 

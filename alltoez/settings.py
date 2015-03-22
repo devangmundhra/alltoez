@@ -16,6 +16,7 @@ SECRET_KEY = '-x83)5-^cugn@*t6gh%76j@cb)zj)q7l_rm!%3=)@sw&v&d_ww'
 DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
 SITE_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+
 ADMIN_MEDIA_PREFIX = "/static/admin/"
 # STATIC_ROOT = os.path.join(SITE_ROOT, "static")
 STATIC_ROOT = 'staticfiles'
@@ -33,7 +34,6 @@ STATIC_FILES_BUCKET = 'alltoezstatic'
 STATIC_S3_DOMAIN = '%s.s3.amazonaws.com' % STATIC_FILES_BUCKET
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
-    os.path.join(PROJECT_ROOT, "media/"),
 )
 
 MEDIA_FILES_BUCKET = 'alltoez'
@@ -228,7 +228,6 @@ CACHEOPS_DEGRADE_ON_FAILURE = True
 #-------------------------------------------------------------------------------
 #	PIPELINE SETTINGS
 #-------------------------------------------------------------------------------
-STATICFILES_STORAGE = 'apps.alltoez.storage.WhiteNoiseStorage'
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_YUGLIFY_BINARY = os.path.join(PROJECT_ROOT, "node_modules/yuglify/bin/yuglify")

@@ -8,15 +8,10 @@ from django.conf import settings
 from pipeline.storage import PipelineMixin
 
 from storages.backends.s3boto import S3BotoStorage
-from whitenoise.django import GzipManifestStaticFilesStorage
 
 
 def domain(url):
     return urlparse.urlparse(url).hostname
-
-
-class WhiteNoiseStorage(PipelineMixin, CachedFilesMixin, GzipManifestStaticFilesStorage):
-    pass
 
 
 class S3PipelineStorage(PipelineMixin, CachedFilesMixin, S3BotoStorage):
