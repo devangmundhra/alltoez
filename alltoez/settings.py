@@ -223,7 +223,7 @@ CACHEOPS_DEGRADE_ON_FAILURE = True
 #-------------------------------------------------------------------------------
 #	PIPELINE SETTINGS
 #-------------------------------------------------------------------------------
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+STATICFILES_STORAGE = 'apps.alltoez.storage.WhiteNoiseStorage'
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_YUGLIFY_BINARY = os.path.join(PROJECT_ROOT, "node_modules/yuglify/bin/yuglify")
