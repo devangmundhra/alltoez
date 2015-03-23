@@ -230,7 +230,7 @@ CACHEOPS_DEGRADE_ON_FAILURE = True
 #-------------------------------------------------------------------------------
 #	PIPELINE SETTINGS
 #-------------------------------------------------------------------------------
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_YUGLIFY_BINARY = os.path.join(PROJECT_ROOT, "node_modules/yuglify/bin/yuglify")
@@ -271,7 +271,6 @@ PIPELINE_JS = {
         'output_filename': 'js/events_detail.min.js',
     },
 }
-
 
 #-------------------------------------------------------------------------------
 #	ALLAUTH SETTINGS
