@@ -18,11 +18,6 @@ logger = logging.getLogger(__name__)
 pio_access_key = getattr(settings, 'PIO_ACCESS_KEY', "unknown access key")
 pio_eventserver = getattr(settings, 'PIO_EVENT_SERVER_ENDPOINT', "http://localhost:7070")
 
-event_client = predictionio.EventClient(
-    access_key=pio_access_key,
-    url=pio_eventserver,
-    threads=5, qsize=500)
-
 @shared_task
 def mark_user_views_event(event_id, user_id=None):
     view = View()
@@ -32,6 +27,11 @@ def mark_user_views_event(event_id, user_id=None):
 
 @shared_task
 def pio_new_event(event_type, user_id, event_id, created):
+    event_client = predictionio.EventClient(
+        access_key=pio_access_key,
+        url=pio_eventserver,
+        threads=5, qsize=500)
+
     try:
         event_client.record_user_action_on_item(event_type, user_id, event_id,
                                                 event_time=created)

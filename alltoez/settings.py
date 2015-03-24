@@ -373,7 +373,7 @@ CELERYBEAT_SCHEDULE = {
     },
     'parse-venues-everyday': {
         'task': 'apps.venues.tasks.check_invalid_venues',
-        'schedule': timedelta(days=20),
+        'schedule': timedelta(days=2),
     },
 }
 
@@ -470,7 +470,6 @@ PIO_ACCESS_KEY = os.environ.get('PIO_ACCESS_KEY', "")
 PIO_ENGINE_ENDPOINT = os.environ.get('PIO_ENGINE_ENDPOINT', "")
 PIO_EVENT_SERVER_ENDPOINT = os.environ.get('PIO_EVENT_SERVER_ENDPOINT', "")
 
-
 #-------------------------------------------------------------------------------
 #	LOGGING
 #-------------------------------------------------------------------------------
@@ -509,6 +508,11 @@ LOGGING = {
         },
         'django.security.DisallowedHost': {
             'handlers': ['null'],
+            'propagate': False,
+        },
+        'django': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
             'propagate': False,
         },
     }
