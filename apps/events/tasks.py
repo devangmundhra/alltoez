@@ -10,6 +10,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template import Context
 from django.template.loader import render_to_string
 from django.contrib.sites.models import Site
+from django.conf import settings
 
 from apps.events.models import Event, EventRecord
 from apps.events.eventparsers import redtri
@@ -43,7 +44,7 @@ def get_redtri_events():
             title = parsed_event.get('title', None)
             url = parsed_event.get('orig_link', None)
             redtri_events_context.append({"url": url, "title": title})
-        if redtri_events_context:
+        if redtri_events_context and not settings.DEBUG:
             # Now send mail
             plaintext_context = Context(autoescape=False)  # HTML escaping not appropriate in plaintext
             subject = "Alltoez | Redtri events | {}".format(today.strftime("%A, %d. %B"))
@@ -68,18 +69,19 @@ def get_expired_events():
         for event in expired_events_qs:
             expired_events.append({"url": event.url, "title": event.title})
 
-        # Now send mail
-        plaintext_context = Context(autoescape=False)  # HTML escaping not appropriate in plaintext
-        subject = "Alltoez | Expired Events | {}".format(today.strftime("%A, %d. %B"))
-        text_body = render_to_string("email/expired_events/expired_events.txt",
-                                     {"expired_events": expired_events}, plaintext_context)
-        html_body = render_to_string("email/expired_events/expired_events.html",
-                                     {"expired_events": expired_events, "site": Site.objects.get_current()})
+        if not settings.DEBUG:
+            # Now send mail
+            plaintext_context = Context(autoescape=False)  # HTML escaping not appropriate in plaintext
+            subject = "Alltoez | Expired Events | {}".format(today.strftime("%A, %d. %B"))
+            text_body = render_to_string("email/expired_events/expired_events.txt",
+                                         {"expired_events": expired_events}, plaintext_context)
+            html_body = render_to_string("email/expired_events/expired_events.html",
+                                         {"expired_events": expired_events, "site": Site.objects.get_current()})
 
-        msg = EmailMultiAlternatives(subject=subject, from_email="noreply@alltoez.com",
-                                     to=["devangmundhra@gmail.com", "ruchikadamani90@gmail.com"], body=text_body)
-        msg.attach_alternative(html_body, "text/html")
-        msg.send()
+            msg = EmailMultiAlternatives(subject=subject, from_email="noreply@alltoez.com",
+                                         to=["devangmundhra@gmail.com", "ruchikadamani90@gmail.com"], body=text_body)
+            msg.attach_alternative(html_body, "text/html")
+            msg.send()
 
 
 """

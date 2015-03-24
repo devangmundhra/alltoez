@@ -52,7 +52,7 @@ ALLOWED_HOSTS = [
     '.alltoez.com',
 ]
 
-ADMINS = (('Devang Mundhra', 'devangmundhra@gmail.com'), ('Ruchika Damani', 'ruchikadamani90@gmail.com')),
+ADMINS = (('Server', 'server@alltoez.com'),),
 MANAGERS = ADMINS
 SITE_ID = 2
 
