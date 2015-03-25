@@ -1,5 +1,5 @@
 {% extends "alltoez/ui/layouts/base.html" %}
-{% load common_tags endless %}
+{% load common_tags %}
 {% load static from staticfiles %}
 
 {% block site_header %}
@@ -55,7 +55,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12 col-sm-12">
-					<span class="qty-events">{{ events_list|length }} events </span>
+					<span class="qty-events">{{ page.object_list.count }} of {{ paginator.object_list.count }} events </span>
 					<select class="sort-events form-control">
                         <option value="-created_at" {% if event_sort == '-created_at' %}SELECTED{% endif %}>New on Alltoez</option>
                         <option value="cost" {% if event_sort == 'cost' %}SELECTED{% endif %}>Cost</option>
@@ -70,14 +70,23 @@
         <div class="container events-list">
             <div class="row">
                 {% include page_template %}
-
             </div>
         </div>
+        <div>
+            <nav>
+                <ul class="pager">
+                    {% if page_obj.has_previous %}
+                    <li><a href="?{% url_replace request 'page' page_obj.previous_page_number %}">Previous</a></li>
+                    {% else %}
+                    <li class="disabled"><a href="#">Previous</a></li>
+                    {% endif %}
+                    {% if page_obj.has_next %}
+                    <li><a href="?{% url_replace request 'page' page_obj.next_page_number %}">Next</a></li>
+                    {% else %}
+                    <li class="disabled"><a href="#">Next</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
 	</div>
-{% endblock %}
-
-{% block extra_js %}
-    {{ block.super }}
-    <script src="{% static 'endless_pagination/js/endless-pagination.js' %}"></script>
-    <script>$.endlessPaginate({paginateOnScroll: true});</script>
 {% endblock %}

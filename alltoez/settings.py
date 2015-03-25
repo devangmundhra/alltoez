@@ -132,7 +132,6 @@ INSTALLED_APPS = [
     # Utilities & Helper Apps
     'filebrowser',
     'django_extensions',
-    'endless_pagination',
     'pipeline',
     'location_field',
     'phonenumber_field',

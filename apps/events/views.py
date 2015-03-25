@@ -1,38 +1,34 @@
 import json
 
 from django.utils import timezone
-from django.views.generic import DetailView
-
-from endless_pagination.views import AjaxListView
+from django.views.generic import DetailView, ListView
 
 from apps.events.models import Event, Category
+from apps.alltoez.api import EventsResource
 
 """
 Alltoez event views
 """
 
 
-class Events(AjaxListView):
+class Events(ListView):
     template_name = 'events/events.html'
     page_template = "events/event_list_page.html"
-    model = Event
-    events_list = None
     category = None
     category_list = None
     category_slug = None
-    sort = None
+    ordering = None
     radius = None
     request = None
+    paginate_by = 20
 
     def get(self, request, *args, **kwargs):
-        from apps.alltoez.api import EventsResource
-
         # default sort is "-created_at"
-        self.sort = self.request.GET.get('sort')
-        if not self.sort:
-            self.sort = self.request.session.get('event_sort', '-created_at')
+        self.ordering = self.request.GET.get('sort')
+        if not self.ordering:
+            self.ordering = self.request.session.get('event_sort', '-created_at')
         else:
-            self.request.session['event_sort'] = self.sort
+            self.request.session['event_sort'] = self.ordering
 
         # radius in miles. default is 10m
         self.radius = self.request.GET.get('radius')
@@ -44,10 +40,12 @@ class Events(AjaxListView):
         self.category_slug = kwargs.get('cat_slug', None)
         self.category_list = Category.objects.filter(parent_category__isnull=False)
 
-        er = EventsResource()
-        request_bundle = er.build_bundle(request=request)
-        queryset = er.obj_get_list(request_bundle).prefetch_related('category')
+        return super(Events, self).get(request, *args, **kwargs)
 
+    def get_queryset(self):
+        er = EventsResource()
+        request_bundle = er.build_bundle(request=self.request)
+        queryset = er.obj_get_list(request_bundle).prefetch_related('category')
         if self.category_slug:
             queryset = queryset.filter(category__slug=self.category_slug)
             try:
@@ -59,25 +57,27 @@ class Events(AjaxListView):
         # TODO: and alltoez.utils.geo
 
         # Sort by the sort key
-        queryset = queryset.order_by(self.sort).select_related('venue').cache()
-
-        bundles = []
-        for obj in queryset:
-            bundle = er.build_bundle(obj=obj, request=request)
-            bundles.append(er.full_dehydrate(bundle, for_list=True))
-
-        list_json = er.serialize(None, bundles, "application/json")
-        self.events_list = json.loads(list_json)
-        return super(Events, self).get(self, request, *args, **kwargs)
+        self.queryset = queryset.select_related('venue')
+        return super(Events, self).get_queryset()
 
     def get_context_data(self, **kwargs):
         context = super(Events, self).get_context_data(**kwargs)
+        events_page = context['page_obj']
+        er = EventsResource()
+        bundles = []
+        for obj in events_page.object_list:
+            bundle = er.build_bundle(obj=obj, request=self.request)
+            bundles.append(er.full_dehydrate(bundle, for_list=True))
+
+        list_json = er.serialize(self.request, bundles, "application/json")
+
         context['now'] = timezone.now()
-        context['events_list'] = self.events_list
+        context['events_list'] = json.loads(list_json)
         context['category_list'] = self.category_list
         context['category'] = self.category
-        context['event_sort'] = self.sort
+        context['event_sort'] = self.ordering
         context['venue_radius'] = self.radius
+        context['page_template'] = self.page_template
         return context
 
 

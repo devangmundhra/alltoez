@@ -59,13 +59,8 @@
 		<div class="container">
 			<div class="row">
 				No query found to search. Please use the search bar above.
+            </div>
 		</div>
 	</div>
     {% endif %}
-{% endblock %}
-
-{% block extra_js %}
-    {{ block.super }}
-    <script src="{% static 'endless_pagination/js/endless-pagination.js' %}"></script>
-    <script>$.endlessPaginate({paginateOnScroll: true});</script>
 {% endblock %}
