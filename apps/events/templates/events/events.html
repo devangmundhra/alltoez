@@ -55,7 +55,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12 col-sm-12">
-					<span class="qty-events">{{ page.object_list.count }} of {{ paginator.object_list.count }} events </span>
+					<span class="qty-events">{{ page_obj.object_list.count }} of {{ paginator.object_list.count }} events </span>
 					<select class="sort-events form-control">
                         <option value="-created_at" {% if event_sort == '-created_at' %}SELECTED{% endif %}>New on Alltoez</option>
                         <option value="cost" {% if event_sort == 'cost' %}SELECTED{% endif %}>Cost</option>
