@@ -20,7 +20,7 @@ class Events(ListView):
     ordering = None
     radius = None
     request = None
-    paginate_by = 20
+    paginate_by = 21
 
     def get(self, request, *args, **kwargs):
         # default sort is "-created_at"
