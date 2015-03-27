@@ -26,15 +26,11 @@
 		<link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
 
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
-        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
 
         {% if settings.DEBUG %}
         <!--Needed because in debug mode base.js is not getting added -->
 		<link rel="stylesheet/less" type="text/css" href="{% static 'less/theme.less' %}">
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js"></script>
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 		{% endif %}
 
 		<!--[if IE 7]>
@@ -42,11 +38,6 @@
 		<![endif]-->
 
 		<link rel="canonical" href="http://{{request.META.HTTP_HOST}}{{request.path}}" />
-
-		<!-- IE6-8 support of HTML5 elements -->
-		<!--[if lt IE 9]>
-		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
 
 		{% block extracss %}{% endblock %}
 		<!-- fav and touch icons -->
@@ -87,8 +78,6 @@
 
 		{% include "alltoez/ui/fragments/footer.html" %}
 
-		{% javascript 'base' %}
-
 		{% if not settings.DEBUG and not request.user.is_staff and settings.GOOGLE_ANALYTICS_CODE %}
 			<!-- asynchronous google analytics -->
 			<script>
@@ -122,7 +111,17 @@
         </script>
 		{% block extra_js %}{% endblock %}
 		{% block extra_body %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+		<!-- IE6-8 support of HTML5 elements -->
+		<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
         <script src="http://harvesthq.github.io/chosen/chosen.jquery.js"></script>
+        <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
+
+		{% javascript 'base' %}
+
         <script>
         // Include the UserVoice JavaScript SDK (only needed once on a page)
         UserVoice=window.UserVoice||[];(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/DmFOThCqD6S8YCSSZHXQkg.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})();

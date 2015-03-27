@@ -35,6 +35,7 @@ STATIC_S3_DOMAIN = '%s.s3.amazonaws.com' % STATIC_FILES_BUCKET
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
 )
+STATICFILES_STORAGE = 'apps.alltoez.storage.GZipPipelineStorage'
 
 MEDIA_FILES_BUCKET = 'alltoez'
 MEDIA_S3_DOMAIN = '%s.s3.amazonaws.com' % MEDIA_FILES_BUCKET
@@ -45,6 +46,10 @@ AWS_STORAGE_BUCKET_NAME = MEDIA_FILES_BUCKET
 AWS_S3_CUSTOM_DOMAIN = MEDIA_S3_DOMAIN
 AWS_CLOUDFRONT_DOMAIN ='http://d1wqe2m0m7wb9o.cloudfront.net'
 AWS_QUERYSTRING_AUTH = False
+AWS_HEADERS = {  # see http://developer.yahoo.com/performance/rules.html#expires
+        'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+        'Cache-Control': 'max-age=94608000',
+    }
 
 WSGI_APPLICATION = 'alltoez.wsgi.application'
 
@@ -229,7 +234,6 @@ CACHEOPS_DEGRADE_ON_FAILURE = True
 #-------------------------------------------------------------------------------
 #	PIPELINE SETTINGS
 #-------------------------------------------------------------------------------
-STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_YUGLIFY_BINARY = os.path.join(PROJECT_ROOT, "node_modules/yuglify/bin/yuglify")

@@ -5,13 +5,17 @@ import urlparse
 from django.contrib.staticfiles.storage import CachedFilesMixin
 from django.conf import settings
 
-from pipeline.storage import PipelineMixin
+from pipeline.storage import PipelineMixin, GZIPMixin, PipelineStorage
 
 from storages.backends.s3boto import S3BotoStorage
 
 
 def domain(url):
     return urlparse.urlparse(url).hostname
+
+
+class GZipPipelineStorage(GZIPMixin, PipelineStorage):
+    pass
 
 
 class S3PipelineStorage(PipelineMixin, CachedFilesMixin, S3BotoStorage):
