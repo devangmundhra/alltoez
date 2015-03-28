@@ -7,12 +7,13 @@
 {% block content_full_width %}
     <div class="jumbotron" id="above-the-fold">
         <div class="container text-center about-alltoez">
-            <h1>Welcome to Alltoez</h1>
+            <h1>Welcome to Alltoez<sup><em>Beta</em></sup></h1>
             <p>
                 Alltoez helps parents and kids find activities they love to do.<br>
                 Using technology to help with the <em>art of parenting</em>.
             </p>
-            <a href="{% url 'events' %}" class="btn btn-success btn">Take it for a spin!</a>
+            <br/>
+            <a href="{% url 'events' %}" class="btn-lg btn-success">Take it for a spin!</a>
             <br/>
             {% if not user.is_authenticated %}
                 {% include "alltoez/ui/fragments/social_login.html" %}
