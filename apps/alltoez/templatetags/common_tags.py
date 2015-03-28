@@ -346,3 +346,12 @@ def url_replace(request, field, value):
     dict_ = request.GET.copy()
     dict_[field] = value
     return dict_.urlencode()
+
+@register.filter(name='times')
+def times(number):
+    """
+    Returns a range of numbers
+    :param number:
+    :return:
+    """
+    return range(number)

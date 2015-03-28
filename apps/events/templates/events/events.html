@@ -55,7 +55,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12 col-sm-12">
-					<span class="qty-events">{{ paginator.object_list.count }} events (Page {{ page_obj.number }} of {{ paginator.num_pages }}) </span>
+					<span class="qty-events">{{ paginator.object_list.count }} events </span>
 					<select class="sort-events form-control">
                         <option value="-created_at" {% if event_sort == '-created_at' %}SELECTED{% endif %}>New on Alltoez</option>
                         <option value="cost" {% if event_sort == 'cost' %}SELECTED{% endif %}>Cost</option>
@@ -72,21 +72,36 @@
                 {% include page_template %}
             </div>
         </div>
-        <div>
-            <nav>
-                <ul class="pager">
-                    {% if page_obj.has_previous %}
-                    <li><a href="?{% url_replace request 'page' page_obj.previous_page_number %}">Previous</a></li>
-                    {% else %}
-                    <li class="disabled"><a href="#">Previous</a></li>
-                    {% endif %}
-                    {% if page_obj.has_next %}
-                    <li><a href="?{% url_replace request 'page' page_obj.next_page_number %}">Next</a></li>
-                    {% else %}
-                    <li class="disabled"><a href="#">Next</a></li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
 	</div>
+   {% if paginator.num_pages > 1 %}
+    <div class="clearfix text-center">
+        <nav>
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li><a href="?{% url_replace request 'page' page_obj.previous_page_number %}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a></li>
+                {% else %}
+                <li class="disabled"><a href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a></li>
+                {% endif %}
+                {% for counter in paginator.num_pages|times %}
+                <li {% if forloop.counter == page_obj.number %}class="active"{% endif %}>
+                    <a href="?{% url_replace request 'page' forloop.counter %}">{{ forloop.counter }}</a>
+                </li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li><a href="?{% url_replace request 'page' page_obj.next_page_number %}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a></li>
+                {% else %}
+                <li class="disabled"><a href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
 {% endblock %}

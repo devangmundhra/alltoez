@@ -54,7 +54,7 @@ paramiko==1.15.1
 phonenumbers==7.0.2
 Pillow==2.7.0
 PredictionIO==0.8.3
-psycopg2==2.5.2
+psycopg2==2.6
 pycrypto==2.6.1
 python-dateutil==2.2
 python-memcached==1.53
