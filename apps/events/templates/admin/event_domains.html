@@ -1,0 +1,33 @@
+{% extends 'admin/base_site.html' %}
+{% load i18n admin_urls admin_static admin_modify %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <div class="breadcrumbs"><a href="/admin/"></a></div>
+{% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+{% endblock %}
+
+{% block content %}
+<table class="table table-condensed">
+    <thead>
+    <tr>
+    <th>#</th>
+    <th>Domain</th>
+    <th>Count</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for url, count in domains %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td><a href="{{ url }}" target="_blank">{{ url }}</a></td>
+        <td>{{ count }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

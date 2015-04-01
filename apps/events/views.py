@@ -1,7 +1,12 @@
 import json
+from urlparse import urlparse
+import operator
 
 from django.utils import timezone
 from django.views.generic import DetailView, ListView
+from django.contrib.admin.views.decorators import staff_member_required
+from django.template import RequestContext
+from django.shortcuts import render_to_response
 
 from apps.events.models import Event, Category
 from apps.alltoez.api import EventsResource
@@ -108,4 +113,21 @@ class EventDetailView(DetailView):
             mark_user_views_event.delay(self.object.id, request.user.id)
         return self.render_to_response(context)
 
-
+@staff_member_required
+def top_level_event_domain_view(request):
+    """
+    Gets all the top level domains for events
+    :param request:
+    :return:
+    """
+    events_url = Event.objects.all().values('url')
+    counts = dict()
+    for event_url in events_url:
+        url = event_url['url']
+        if url:
+            parsed_uri = urlparse(url)
+            uri = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
+            counts[uri] = counts.get(uri, 0) + 1
+    sorted_counts = sorted(counts.items(), key=operator.itemgetter(1), reverse=True)
+    return render_to_response('admin/event_domains.html', {"domains": sorted_counts, "title": "Events domain list"},
+                              context_instance=RequestContext(request))
