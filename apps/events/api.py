@@ -50,5 +50,6 @@ class EventInternalResource(ModelResource):
         origin = bundle.request.user.profile.point
         event = Event.objects.all().filter(id=bundle.obj.id).distance(origin, field_name='venue__point').first()
         dObj = event.distance
-        if dObj:
+        if dObj is not None:
             return dObj.mi
+        return None

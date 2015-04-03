@@ -16,9 +16,9 @@
                 {% if event.venue.neighborhood %}
                     <span class="pull-left">{{ event.venue.neighborhood }}</span>
                 {% else %}
-                    <span class="pull-left">{{ event.venue.address }}</span>
+                    <span class="pull-left">{{ event.venue.city }}</span>
                 {% endif %}
-                {% if event.distance %}
+                {% if event.distance != None %}
                     <span class="pull-right">{{ event.distance|floatformat }} mi</span>
                 {% endif %}
                 </p>
