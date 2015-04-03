@@ -2,14 +2,11 @@ import re, unicodedata, os, random, string
 from uuid import uuid4
 
 from django.utils import timezone
-from django.db import models
-from django.conf import settings
+from django.contrib.gis.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.utils.deconstruct import deconstructible
-
-from filebrowser.fields import FileBrowseField
 
 from apps.alltoez.utils.fields import AutoOneToOneField
 from apps.alltoez.utils.abstract_models import BaseModel, AddressMixin
@@ -49,6 +46,7 @@ class UserProfile(BaseModel, AddressMixin):
     user = AutoOneToOneField(User, related_name="profile", editable=False)
     profile_image = models.ImageField(upload_to=get_upload_to, null=True, blank=True)
     gender = models.PositiveSmallIntegerField(choices=GENDER_CHOICES.get_choices(), db_index=True, default=0)
+    objects = models.GeoManager()
 
     def get_absolute_url(self):
         return reverse('profile', args=[self.user.username])

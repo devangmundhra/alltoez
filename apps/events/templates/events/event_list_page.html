@@ -12,11 +12,16 @@
             </div>
             <div class="event-info">
                 <h4>{{ event.title|truncatechars:'62' }}</h4>
+                <p>
                 {% if event.venue.neighborhood %}
-                    <p>{{ event.venue.neighborhood }}</p>
+                    <span class="pull-left">{{ event.venue.neighborhood }}</span>
                 {% else %}
-                    <p>{{ event.venue.address }}</p>
+                    <span class="pull-left">{{ event.venue.address }}</span>
                 {% endif %}
+                {% if event.distance %}
+                    <span class="pull-right">{{ event.distance|floatformat }} mi</span>
+                {% endif %}
+                </p>
             </div>
             {% if not event.recurrence_detail %}
                 <span class="event-date">{{ event.start_date|local_day_date }}</span>

@@ -2,11 +2,12 @@ import json
 from urlparse import urlparse
 import operator
 
-from django.utils import timezone
+from django.utils import timezone, six
 from django.views.generic import DetailView, ListView
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template import RequestContext
 from django.shortcuts import render_to_response
+from django.contrib.gis.measure import D
 
 from apps.events.models import Event, Category
 from apps.alltoez.api import EventsResource
@@ -23,7 +24,7 @@ class Events(ListView):
     category_list = None
     category_slug = None
     ordering = None
-    radius = None
+    radius_mi = 0
     request = None
     paginate_by = 21
 
@@ -35,13 +36,6 @@ class Events(ListView):
         else:
             self.request.session['event_sort'] = self.ordering
 
-        # radius in miles. default is 10m
-        self.radius = self.request.GET.get('radius')
-        if not self.radius:
-            self.radius = self.request.session.get('venue_radius', 10)
-        else:
-            self.request.session['venue_radius'] = self.radius
-
         self.category_slug = kwargs.get('cat_slug', None)
         self.category_list = Category.objects.filter(parent_category__isnull=False)
 
@@ -50,7 +44,15 @@ class Events(ListView):
     def get_queryset(self):
         er = EventsResource()
         request_bundle = er.build_bundle(request=self.request)
-        queryset = er.obj_get_list(request_bundle).prefetch_related('category')
+        queryset = er.obj_get_list(request_bundle).prefetch_related('category').select_related('venue')
+        if self.ordering == 'distance':
+            if self.request.user.is_authenticated():
+                self.radius_mi = 20
+                origin = self.request.user.profile.point
+                queryset = queryset.filter(venue__point__distance_lte=(origin, D(mi=self.radius_mi))).\
+                    distance(origin, field_name='venue__point')
+            else:
+                self.ordering = ''
         if self.category_slug:
             queryset = queryset.filter(category__slug=self.category_slug)
             try:
@@ -58,11 +60,20 @@ class Events(ListView):
             except Category.DoesNotExist:
                 pass
 
-        # TODO: Filter the queryset for venue radius using http://janmatuschek.de/LatitudeLongitudeBoundingCoordinates
-        # TODO: and alltoez.utils.geo
-
-        # Sort by the sort key
-        self.queryset = queryset.select_related('venue')
+        """
+        TO BE REMOVED WHEN MOVING TO DJANGO 1.8
+        START
+        """
+        ordering = self.ordering
+        if ordering:
+            if isinstance(ordering, six.string_types):
+                ordering = (ordering,)
+            queryset = queryset.order_by(*ordering)
+        """
+        TO BE REMOVED WHEN MOVING TO DJANGO 1.8
+        END
+        """
+        self.queryset = queryset
         return super(Events, self).get_queryset()
 
     def get_context_data(self, **kwargs):
@@ -81,7 +92,7 @@ class Events(ListView):
         context['category_list'] = self.category_list
         context['category'] = self.category
         context['event_sort'] = self.ordering
-        context['venue_radius'] = self.radius
+        context['venue_radius'] = self.radius_mi
         context['page_template'] = self.page_template
         return context
 
@@ -102,6 +113,8 @@ class EventDetailView(DetailView):
         from apps.alltoez.api import EventsResource
         from apps.user_actions.tasks import mark_user_views_event
         self.object = self.get_object()
+        if request.user.is_authenticated():
+            mark_user_views_event.delay(self.object.id, request.user.id)
         context = self.get_context_data(object=self.object)
         er = EventsResource()
         er_bundle = er.build_bundle(obj=self.object, request=request)
@@ -109,8 +122,6 @@ class EventDetailView(DetailView):
         event = json.loads(event_json)
         context['event'] = event
         context['event_json'] = event_json # Needed for parsing bookmark info in event_detail template
-        if request.user.is_authenticated():
-            mark_user_views_event.delay(self.object.id, request.user.id)
         return self.render_to_response(context)
 
 @staff_member_required

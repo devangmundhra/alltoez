@@ -111,6 +111,9 @@
                 <div class="event-detail">
                     <h4>{{ event.title}}</h4>
                     <p>{{event.venue.address|linebreaks}}</p>
+                    {% if request.user.is_authenticated %}
+                    <p>{{ event.distance|floatformat }} mi from {{ request.user.profile.zipcode }}</p>
+                    {% endif %}
                     {% if request.user.is_superuser %}
                     <a href="{% url 'admin:venues_venue_change' object.venue.id %}" class="venue-admin btn btn-sm btn-primary">Edit Venue</a>
                     {% endif %}

@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-from django.db import models
+from django.contrib.gis.db import models
 from django.core.urlresolvers import reverse
 
 from jsonfield import JSONField
@@ -93,34 +93,6 @@ class DraftEvent(models.Model):
         return u'{} from {}'.format(self.title, self.source)
 
 
-class EventManager(models.Manager):
-    def nearby(self, latitude, longitude, proximity):
-        """
-        Return all object which distance to specified coordinates
-        is less than proximity given in kilometers
-        """
-        # TODO This is currently unused. But can be looked into when distances are taken into account as well
-        # Great circle distance formula
-        gcd = """
-              6371 * acos(
-               cos(radians(%s)) * cos(radians(latitude))
-               * cos(radians(longitude) - radians(%s)) +
-               sin(radians(%s)) * sin(radians(latitude))
-              )
-              """
-        gcd_lt = "{} < %s".format(gcd)
-        return self.get_queryset()\
-                   .exclude(latitude=None)\
-                   .exclude(longitude=None)\
-                   .extra(
-                       select={'distance': gcd},
-                       select_params=[latitude, longitude, latitude],
-                       where=[gcd_lt],
-                       params=[latitude, longitude, latitude, proximity],
-                       order_by=['distance']
-                   )
-
-
 class Event(models.Model):
     """
     Event class
@@ -155,6 +127,7 @@ class Event(models.Model):
     url = models.URLField(blank=True, null=True, verbose_name='Event link')
     additional_info = models.TextField(blank=True, null=True)
     publish = models.BooleanField(default=True)
+    objects = models.GeoManager()
 
     class Meta:
         ordering = ['-created_at', '-start_date', 'end_date']

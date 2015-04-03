@@ -1,33 +1,21 @@
 __author__ = 'devangmundhra'
 
 from django.core.management.base import BaseCommand, CommandError
+from django.contrib.gis.geos import GEOSGeometry
 
-from apps.events.models import Event
 from apps.venues.models import Venue
-
+from apps.alltoez_profile.models import UserProfile
 
 class Command(BaseCommand):
-    help = 'Creates venues for events for first time migration'
+    help = 'Update point field in venues'
 
     def handle(self, *args, **options):
-        # Let the first venue created be unknown/generic venue
-        venue, created = Venue.objects.get_or_create(name='Unknown')
-
-        # Now go over each event and associate it with a venue. Use the 'location' field as a key to identifying
-        # the same venue
-        for event in Event.objects.all():
-            venue, created = Venue.objects.get_or_create(location=event.location)
-            if not venue:
-                raise CommandError('Couldn\'t create venue for %s' % event)
-
-            if not event.venue:
-                venue.address = event.address
-                venue.phone_number = event.phone_number
-                venue.neighborhood = event.neighborhood
-                venue.name = str.join(" ", event.address.splitlines())
-                venue.location = event.location
+        for venue in Venue.objects.all():
+            if venue.longitude and venue.latitude:
+                venue.point = GEOSGeometry("POINT(%s %s)" % (venue.longitude, venue.latitude))
                 venue.save()
-                event.venue = venue
-                event.save()
-            else:
-                print 'Repeating venue %s for event %s' % (venue, event)
+
+        for profile in UserProfile.objects.all():
+            if profile.longitude and profile.latitude:
+                profile.point = GEOSGeometry("POINT(%s %s)" % (profile.longitude, profile.latitude))
+                profile.save()

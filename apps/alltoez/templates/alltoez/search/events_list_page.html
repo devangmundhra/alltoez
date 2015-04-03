@@ -30,7 +30,7 @@
             <div class="event-info">
                 <h4>{{ event.title|truncatechars:'62' }}</h4>
                 {% if event.venue.neighborhood %}
-                    <p class="event-venue"><em>{{ event.venue.neighborhood }}</em></p>
+                    <p class="event-venue"><em>{{ event.venue.neighborhood }}</em> - {{ event.distance|floatformat }} mi</p>
                 {% endif %}
                 <div class="event-desc">
                 {{ event.description|markdown }}

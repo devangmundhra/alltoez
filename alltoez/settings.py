@@ -179,6 +179,8 @@ LANGUAGES = (
 )
 
 DATABASES = {'default': dj_database_url.config()}
+DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
+
 ROOT_URLCONF = 'alltoez.urls'
 AUTH_PROFILE_MODULE = 'alltoez_profile.UserProfile'
 
@@ -472,6 +474,11 @@ MANDRILL_API_KEY = os.environ.get('MANDRILL_APIKEY', "")
 PIO_ACCESS_KEY = os.environ.get('PIO_ACCESS_KEY', "")
 PIO_ENGINE_ENDPOINT = os.environ.get('PIO_ENGINE_ENDPOINT', "")
 PIO_EVENT_SERVER_ENDPOINT = os.environ.get('PIO_EVENT_SERVER_ENDPOINT', "")
+
+#-------------------------------------------------------------------------------
+#	SORL THUMBNAIL
+#-------------------------------------------------------------------------------
+THUMBNAIL_QUALITY = 100
 
 #-------------------------------------------------------------------------------
 #	LOGGING

@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-from django.db import models
+from django.contrib.gis.db import models
 
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -22,6 +22,7 @@ class Venue(BaseModel, AddressMixin):
     phone_number = PhoneNumberField(blank=True, verbose_name="Phone number", help_text="Phone number, if available")
     yelp_url = models.URLField(blank=True, null=True, verbose_name='Yelp Url')
     facebook_url = models.URLField(blank=True, null=True, verbose_name='Facebook Url')
+    objects = models.GeoManager()
 
     def __init__(self, *args, **kwargs):
         super(Venue, self).__init__(*args, **kwargs)

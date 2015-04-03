@@ -25,6 +25,7 @@ class EventInternalResource(ModelResource):
     image = fields.FileField(attribute='image')
     venue = fields.ForeignKey(VenueInternalResource, 'venue', full=True)
     category = fields.ToManyField(CategoryResource, attribute='category', full=True)
+    distance = fields.DecimalField(blank=True, null=True)
 
     class Meta:
         queryset = Event.objects.all()
@@ -41,3 +42,13 @@ class EventInternalResource(ModelResource):
         # If user is not authenticated, show all the events
         return super(EventInternalResource, self).get_object_list(request).filter(publish=True).filter(
             Q(end_date__gte=timezone.now().date()) | Q(end_date=None)).order_by('-created_at')
+
+    @newrelic.agent.function_trace()
+    def dehydrate_distance(self, bundle):
+        if not bundle.request.user.is_authenticated():
+            return None
+        origin = bundle.request.user.profile.point
+        event = Event.objects.all().filter(id=bundle.obj.id).distance(origin, field_name='venue__point').first()
+        dObj = event.distance
+        if dObj:
+            return dObj.mi

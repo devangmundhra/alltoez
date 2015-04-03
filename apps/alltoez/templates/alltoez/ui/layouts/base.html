@@ -108,7 +108,6 @@
              fjs.parentNode.insertBefore(js, fjs);
            }(document, 'script', 'facebook-jssdk'));
         </script>
-		{% block extra_js %}{% endblock %}
 		{% block extra_body %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
@@ -121,6 +120,7 @@
         <script src="http://connect.facebook.net/en_US/all.js"></script>
 
 		{% javascript 'base' %}
+		{% block extra_js %}{% endblock %}
 
         <script>
         // Include the UserVoice JavaScript SDK (only needed once on a page)

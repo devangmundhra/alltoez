@@ -10,9 +10,12 @@
               <div class="media-body">
                 <h4 class="media-heading">{{ event.title|truncatechars:'62' }}</h4>
                 {% if event.venue.neighborhood %}
-                    {{ event.venue.neighborhood }}
+                    <span class="pull-left">{{ event.venue.neighborhood }}</span>
                 {% else %}
-                    {{ event.venue.address }}
+                    <span class="pull-left">{{ event.venue.address }}</span>
+                {% endif %}
+                {% if event.distance %}
+                    <span class="pull-right"> - {{ event.distance|floatformat }} mi</span>
                 {% endif %}
               </div>
             </div>

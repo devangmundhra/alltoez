@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
-from django.db import models
+from django.contrib.gis.db import models
+from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.auth.models import User
 
 from filebrowser.fields import FileBrowseField
@@ -59,6 +60,7 @@ class GeoModelMixin(models.Model):
                                     help_text="longitude, leave empty for auto-fill")
     latitude = models.DecimalField(null=True, blank=True, decimal_places=8, max_digits=15, db_index=True,
                                    help_text="latitude, leave empty for auto-fill")
+    point = models.PointField(blank=True, null=True)
 
     class Meta:
         abstract = True
@@ -83,6 +85,8 @@ class GeoModelMixin(models.Model):
             if full_location != self.__location:
                 try:
                     self.latitude, self.longitude = geocode_location(full_location)
+                    if self.latitude and self.longitude:
+                        self.point = GEOSGeometry("POINT(%s %s)" % (self.longitude, self.latitude))
                 except ValueError:
                     pass
         return super(GeoModelMixin, self).save(*args, **kwargs)

@@ -1,4 +1,6 @@
 {% load event_filters %}
+{% load thumbnail %}
+
 {% if events_list %}
 <div class="div-heading"> Other similar events</div>
 {% endif %}
@@ -8,15 +10,22 @@
     <div class="event-item">
         <a href='{% url "event_detail" event.slug %}'>
             <div class="event-image">
-                <img src="{{ event.image }}" width="100%">
+                {% thumbnail event.image "x230" as im %}
+                <img src="{{ im.url }}" width="100%">
+                {% endthumbnail %}
             </div>
             <div class="event-info">
                 <h4>{{ event.title|truncatechars:'62' }}</h4>
+                <p>
                 {% if event.venue.neighborhood %}
-                    <p>{{ event.venue.neighborhood }}</p>
+                    {{ event.venue.neighborhood }}
                 {% else %}
-                    <p>{{ event.venue.address }}</p>
+                    {{ event.venue.address }}
                 {% endif %}
+                {% if event.distance %}
+                    : {{ event.distance|floatformat }} mi
+                {% endif %}
+                </p>
             </div>
             {% if not event.recurrence_detail %}
                 <span class="event-date">{{ event.start_date|local_day_date }}</span>

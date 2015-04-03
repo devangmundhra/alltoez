@@ -55,10 +55,18 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12 col-sm-12">
-					<span class="qty-events">{{ paginator.object_list.count }} events </span>
+					<span class="qty-events">
+                        {{ paginator.object_list.count }} events
+                        {% if venue_radius %}
+                        at {{ venue_radius }} miles from {{ request.user.profile.zipcode }}
+                        {% endif %}
+                    </span>
 					<select class="sort-events form-control">
                         <option value="-created_at" {% if event_sort == '-created_at' %}SELECTED{% endif %}>New on Alltoez</option>
                         <option value="cost" {% if event_sort == 'cost' %}SELECTED{% endif %}>Cost</option>
+                        {% if user.is_authenticated %}
+                        <option value="distance" {% if event_sort == 'distance' %}SELECTED{% endif %}>Proximity</option>
+                        {% endif %}
                         <option value="end_date" {% if event_sort == 'end_date' %}SELECTED{% endif %}>Ending Soon</option>
 					</select>
 				</div>
