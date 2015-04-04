@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.core.mail import send_mail
 from django.core import urlresolvers
 from django.contrib.sites.models import Site
+from django.conf import settings
 
 from celery import shared_task
 
@@ -41,5 +42,6 @@ def check_invalid_venues():
 
     subject = "Alltoez Invalid Venues | SF | {}".format(datetime.today().strftime("%A, %d. %B"))
 
-    send_mail(subject, body, "noreply@alltoez.com", ["ruchikadamani90@gmail.com", "devangmundhra@gmail.com"],
-              html_message=body_html)
+    if not settings.DEBUG:
+        send_mail(subject, body, "noreply@alltoez.com", ["ruchikadamani90@gmail.com", "devangmundhra@gmail.com"],
+                  html_message=body_html)

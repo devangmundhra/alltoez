@@ -106,15 +106,15 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 MIDDLEWARE_CLASSES = [
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.cache.UpdateCacheMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware', # Disable caching since there is some issue with invalidation
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'pipeline.middleware.MinifyHTMLMiddleware',
-    'hunger.middleware.BetaMiddleware',
+    # 'hunger.middleware.BetaMiddleware',
     'apps.alltoez.middleware.RedirectIfIncompleteProfile',
 ]
 
@@ -233,6 +233,7 @@ CACHEOPS = {
     '*.*': {'ops': 'all'},
 }
 CACHEOPS_DEGRADE_ON_FAILURE = True
+DJANGO_REDIS_IGNORE_EXCEPTIONS = True
 
 #-------------------------------------------------------------------------------
 #	PIPELINE SETTINGS
