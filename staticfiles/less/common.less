@@ -92,6 +92,7 @@ body {
 	padding-top: 50px;
 	background: rgba(0, 0, 0, 0.8);
 	background-color: @my-background-color;
+	margin-bottom: 60px;
 }
 .form-horizontal .form-group { margin-left: 0px; margin-right: 0px;  }
 
@@ -102,10 +103,16 @@ header {
 	}
 }
 
-footer {
-	.clearfix;
-	color: #000000;
-	padding-top: 60px; padding-bottom: 60px;
+.footer {
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    background-color: #f5f5f5;
+
+    p {
+        margin-bottom: 5px;
+    }
 }
 
 body {

@@ -1,5 +1,6 @@
 from django.conf.urls import url, patterns, include
 from django.utils import timezone
+from django.views.generic import TemplateView
 
 from tastypie.api import Api
 from haystack.views import search_view_factory
@@ -20,6 +21,7 @@ sqs = SearchQuerySet().filter(end_date__gte=timezone.now().date()).facet('catego
 
 urlpatterns = patterns('',
     url(r"^$", home,  name="home"),
+    url('^about/$', TemplateView.as_view(template_name='alltoez/about.html'), name="about-alltoez"),
     url(r'^search/autocomplete/', autocomplete, name="search_autocomplete"),
     url(r'^search/', search_view_factory(
         view_class=AlltoezSearchView,
@@ -27,6 +29,5 @@ urlpatterns = patterns('',
         template='alltoez/search/search.html',
         searchqueryset=sqs,
         ), name='search'),
-    # url(r"^contact/$", Contact.as_view(),  name="contact"),
     url(r'^api/', include(v1_api.urls)),
 )

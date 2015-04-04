@@ -45,19 +45,6 @@ def home(request):
         return render(request, "alltoez/home.html")
 
 
-class Home(TemplateView):
-    template_name = "alltoez/home.html"
-
-    def get_context_data(self, **kwargs):
-        return {}
-
-
-class Contact(TemplateView):
-    template_name = "alltoez/contact.html"
-
-    def get_context_data(self, **kwargs):
-        return {}
-
 """
 Alltoez search views
 """

@@ -1,7 +1,12 @@
 <div class="clearfix"></div>
-<footer>
+<footer class="footer">
 	<div class="container">
-		<p class="pull-left">&copy; {% now "Y" %} Alltoez</p>
+        <p class="text-center">
+            <a href="{% url 'about-alltoez' %}" class="text-info">About</a>
+            |
+            <a href="mailto:support@alltoez.com" data-uv-trigger class="text-info">Contact us</a>
+        </p>
+		<p class="text-center text-muted">&copy; Alltoez {% now "Y" %} </p>
 		<!--<p class="pull-right"><a href="/">Home</a> | <a href="/">Events</a> | <a href="/">Contact</a></p>-->
 	</div>
 </footer>
