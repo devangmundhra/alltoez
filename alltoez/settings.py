@@ -55,9 +55,10 @@ WSGI_APPLICATION = 'alltoez.wsgi.application'
 
 ALLOWED_HOSTS = [
     '.alltoez.com',
+    '.alltoez.herokuapp.com',
 ]
 
-ADMINS = (('Server', 'server@alltoez.com'),),
+ADMINS = (('Devang', 'devang.mundhra@alltoez.com'), ('Server', 'server@alltoez.com')),
 MANAGERS = ADMINS
 SITE_ID = 2
 
@@ -437,7 +438,7 @@ MARKDOWN_DEUX_STYLES = {
 #-------------------------------------------------------------------------------
 #	GEOIP CONFIG
 #-------------------------------------------------------------------------------
-GEOIP_PATH = os.path.join(SITE_ROOT, "data/geoip_data")
+GEOIP_PATH = os.path.join(PROJECT_ROOT, "alltoez/data/geoip_data")
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
