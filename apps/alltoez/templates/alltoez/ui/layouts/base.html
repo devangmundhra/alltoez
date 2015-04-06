@@ -38,8 +38,6 @@
 		{% block extracss %}{% endblock %}
 		<!-- fav and touch icons -->
 
-		{% block extra_js %}{% endblock %}
-
 		{% block extra_head %}{% endblock %}
 	</head>
 
@@ -82,6 +80,7 @@
         <script src="http://connect.facebook.net/en_US/all.js"></script>
 
 		{% javascript 'base' %}
+		{% block extra_js %}{% endblock %}
 
 		{% if not settings.DEBUG and not request.user.is_staff and settings.GOOGLE_ANALYTICS_CODE %}
 			<!-- asynchronous google analytics -->
