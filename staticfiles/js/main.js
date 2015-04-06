@@ -25,11 +25,11 @@ function filterAutoCompleteResults(parsedResponse) {
 }
 
 $(document).ready(function() {
-	resizeHeader();
+//	resizeHeader();
 
-	$(window).on('resize', function(){
-		resizeHeader();
-	});
+//	$(window).on('resize', function(){
+//		resizeHeader();
+//	});
 
 	$("#filter-category").on('click', function(e) {
 		e.preventDefault();

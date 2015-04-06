@@ -7515,8 +7515,7 @@ header .navbar {
   opacity: 0.9;
 }
 .footer {
-  padding-top: 60px;
-  padding-bottom: 60px;
+  padding-top: 10px;
 }
 .footer p {
   margin-bottom: 5px;
@@ -7714,7 +7713,7 @@ body.events .filter-distance:hover {
 }
 body.events .filter-header {
   position: relative;
-  margin-top: 40px;
+  margin-top: 20px;
   opacity: 0.0;
   height: 0px;
   -webkit-transition: all 250ms ease-out;
@@ -7787,7 +7786,7 @@ body.events .filter-header .category-selection > ul > li > ul > li a:hover {
   color: #FFFFFF;
 }
 body.events .filter-header.visible {
-  height: 280px;
+  height: 100%;
   opacity: 1.0;
 }
 body.events .qty-events {

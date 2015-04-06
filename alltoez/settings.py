@@ -252,10 +252,10 @@ PIPELINE_CSS = {
     'theme': {
         'source_filenames': (
             'css/chosen.css',
-            'less/theme.less' if not DEBUG else '' #This line is giving error in collectstatic with DEBUG = True
+            'less/theme.less'
         ),
         'output_filename': 'css/theme.min.css',
-        'variant': 'datauri'
+        # 'variant': 'datauri'
     },
 }
 PIPELINE_JS = {
