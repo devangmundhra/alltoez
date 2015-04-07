@@ -255,7 +255,7 @@ PIPELINE_CSS = {
             'less/theme.less'
         ),
         'output_filename': 'css/theme.min.css',
-        # 'variant': 'datauri'
+        'variant': 'datauri'
     },
 }
 PIPELINE_JS = {

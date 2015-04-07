@@ -7703,6 +7703,9 @@ body.home .social-login-row > div > a .badge {
   color: #ffffff;
   background-color: #333333;
 }
+body .about-alltoez-beta {
+  font-size: 50px;
+}
 body.events .filter-category,
 body.events .filter-distance {
   border-bottom: dashed 1px #337ab7;
