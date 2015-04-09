@@ -276,13 +276,18 @@ def rebuild_index():
 
 
 def heroku_deploy():
-   local('pip freeze > requirements.txt')
-   local('python manage.py collectstatic --noinput')
-   local('git add .')
-   print("enter your git commit comment: ")
-   comment = raw_input()
-   local('git commit -m "%s"' % comment)
-   local('git push -u origin master')
-   local('heroku maintenance:on')
-   local('git push heroku master')
-   local('heroku maintenance:off')
+    """
+    Deploy to Heroku
+    :return:
+    """
+    local('pip freeze > requirements.txt')
+    local('python manage.py collectstatic --noinput')
+    local('git add .')
+    print("enter your git commit comment: ")
+    comment = raw_input()
+    local('git commit -m "%s"' % comment)
+    local('git push -u origin master')
+    local('heroku maintenance:on')
+    local('git push heroku master')
+    local('heroku run python manage.py migrate')
+    local('heroku maintenance:off')

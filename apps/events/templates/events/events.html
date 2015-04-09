@@ -1,6 +1,7 @@
 {% extends "alltoez/ui/layouts/base.html" %}
 {% load common_tags %}
 {% load static from staticfiles %}
+{% load cache pipeline %}
 
 {% block site_header %}
 {% include "events/fragments/header_events.html" %}
@@ -18,9 +19,6 @@
 						<h1>Events</h1>
 						<p class="lead event-filter">I'm looking for
                             <a href="#" id="filter-category" class="filter-category">{% firstof category.name 'all events' %}</a>
-                             <!--in-->
-                            <!--<a href="#" id="filter-distance" class="filter-distance">{{ venue_radius }}</a>-->
-                             <!--miles radius-->
                         </p>
 
 						<div id="filter-header" class="filter-header">
@@ -57,14 +55,14 @@
 				<div class="col-xs-12 col-sm-12">
 					<span class="qty-events">
                         {{ paginator.object_list.count }} events
-                        {% if venue_radius %}
-                        at {{ venue_radius }} miles from {{ request.user.profile.zipcode }}
+                        {% if event_sort == 'distance' %}
+                        at {{ venue_radius }} miles from {{ location_string }}
                         {% endif %}
                     </span>
 					<select class="sort-events form-control">
                         <option value="-created_at" {% if event_sort == '-created_at' %}SELECTED{% endif %}>New on Alltoez</option>
                         <option value="cost" {% if event_sort == 'cost' %}SELECTED{% endif %}>Cost</option>
-                        {% if user.is_authenticated %}
+                        {% if location_available %}
                         <option value="distance" {% if event_sort == 'distance' %}SELECTED{% endif %}>Proximity</option>
                         {% endif %}
                         <option value="end_date" {% if event_sort == 'end_date' %}SELECTED{% endif %}>Ending Soon</option>
@@ -112,4 +110,8 @@
         </nav>
     </div>
     {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+    {% javascript 'get_location' %}
 {% endblock %}

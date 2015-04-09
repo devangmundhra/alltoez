@@ -111,8 +111,8 @@
                 <div class="event-detail">
                     <h4>{{ event.title}}</h4>
                     <p>{{event.venue.address|linebreaks}}</p>
-                    {% if request.user.is_authenticated and event.distance != None %}
-                    <p>{{ event.distance|floatformat }} mi from {{ request.user.profile.zipcode }}</p>
+                    {% if event.distance != None %}
+                    <p>{{ event.distance|floatformat }} mi from your location</p>
                     {% endif %}
                     {% if request.user.is_superuser %}
                     <a href="{% url 'admin:venues_venue_change' object.venue.id %}" class="venue-admin btn btn-sm btn-primary">Edit Venue</a>
@@ -234,4 +234,5 @@
         var myevent = JSON.parse('{{ event_json|escapejs }}')
     </script>
     {% javascript 'events_detail' %}
+    {% javascript 'get_location' %}
 {% endblock %}

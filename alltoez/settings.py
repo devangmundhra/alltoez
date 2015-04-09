@@ -104,6 +104,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "allauth.socialaccount.context_processors.socialaccount",
 )
 
+"""
+Problem with Caching Middleware:
+With caching middleware enabled, if the zipcode of a user is edited, it does not get reflected in the profile page
+"""
 MIDDLEWARE_CLASSES = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     # 'django.middleware.cache.UpdateCacheMiddleware', # Disable caching since there is some issue with invalidation
@@ -261,13 +265,12 @@ PIPELINE_CSS = {
 PIPELINE_JS = {
     'base': {
         'source_filenames': (
-            'js/typeahead.bundle.min.js',
             'js/main.js',
             'js/ajax_request.js',
             'js/lib/jquery.class.js',
             'js/lib/jquery.cookie.js',
             'js/lib/bootstrap.min.js',
-            'js/lib/chosen.jquery.min.js',
+            'js/lib/chosen.jquery.js',
         ),
         'output_filename': 'js/base.min.js',
     },
@@ -276,6 +279,12 @@ PIPELINE_JS = {
             'js/events_ajax.coffee',
         ),
         'output_filename': 'js/events_detail.min.js',
+    },
+    'get_location': {
+        'source_filenames': (
+            'js/get_location.js',
+        ),
+        'output_filename': 'js/get_location.min.js',
     },
 }
 

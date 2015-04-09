@@ -8,6 +8,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.contrib.gis.measure import D
+from django.contrib.gis.geos import Point
 
 from apps.events.models import Event, Category
 from apps.alltoez.api import EventsResource
@@ -24,9 +25,11 @@ class Events(ListView):
     category_list = None
     category_slug = None
     ordering = None
-    radius_mi = 0
+    radius_mi = 20
     request = None
     paginate_by = 21
+    location_available = False
+    location_string = ""
 
     def get(self, request, *args, **kwargs):
         # default sort is "-created_at"
@@ -46,11 +49,16 @@ class Events(ListView):
         request_bundle = er.build_bundle(request=self.request)
         queryset = er.obj_get_list(request_bundle).prefetch_related('category').select_related('venue')
         if self.ordering == 'distance':
-            if self.request.user.is_authenticated():
-                self.radius_mi = 20
+            if self.request.COOKIES.get('latitude', None) and self.request.COOKIES.get('longitude', None):
+                origin = Point(float(self.request.COOKIES['longitude']), float(self.request.COOKIES['latitude']))
+                queryset = queryset.filter(venue__point__distance_lte=(origin, D(mi=self.radius_mi))).\
+                    distance(origin, field_name='venue__point')
+                self.location_string = "current location"
+            elif self.request.user.is_authenticated():
                 origin = self.request.user.profile.point
                 queryset = queryset.filter(venue__point__distance_lte=(origin, D(mi=self.radius_mi))).\
                     distance(origin, field_name='venue__point')
+                self.location_string = "%s, %s".format(self.request.user.profile.city, self.request.user.profile.zipcode)
             else:
                 self.ordering = ''
         if self.category_slug:
@@ -87,6 +95,10 @@ class Events(ListView):
 
         list_json = er.serialize(self.request, bundles, "application/json")
 
+        if self.request.user.is_authenticated() \
+                or (self.request.COOKIES.get('latitude', None) and self.request.COOKIES.get('longitude', None)):
+            self.location_available = True
+
         context['now'] = timezone.now()
         context['events_list'] = json.loads(list_json)
         context['category_list'] = self.category_list
@@ -94,6 +106,8 @@ class Events(ListView):
         context['event_sort'] = self.ordering
         context['venue_radius'] = self.radius_mi
         context['page_template'] = self.page_template
+        context['location_available'] = self.location_available
+        context['location_string'] = self.location_string
         return context
 
 

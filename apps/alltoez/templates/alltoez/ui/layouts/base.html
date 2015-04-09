@@ -63,7 +63,7 @@
 			</div>
 		{% endblock %}
 
-        		<link rel="shortcut icon" href="{% static 'ico/favicon.ico' %}">
+        <link rel="shortcut icon" href="{% static 'ico/favicon.ico' %}">
 		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="{% static 'ico/apple-touch-icon-114-precomposed.png' %}">
 		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static 'ico/apple-touch-icon-72-precomposed.png' %}">
 		<link rel="apple-touch-icon-precomposed" href="{% static 'ico/apple-touch-icon-57-precomposed.png' %}">
@@ -75,12 +75,10 @@
 		<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
-        <script src="http://harvesthq.github.io/chosen/chosen.jquery.js"></script>
         <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
         <script src="http://connect.facebook.net/en_US/all.js"></script>
 
 		{% javascript 'base' %}
-		{% block extra_js %}{% endblock %}
 
 		{% if not settings.DEBUG and not request.user.is_staff and settings.GOOGLE_ANALYTICS_CODE %}
 			<!-- asynchronous google analytics -->
@@ -113,8 +111,9 @@
              fjs.parentNode.insertBefore(js, fjs);
            }(document, 'script', 'facebook-jssdk'));
         </script>
-		{% block extra_body %}
 
+		{% block extra_body %}
+		{% block extra_js %}{% endblock %}
 
         <script>
         // Include the UserVoice JavaScript SDK (only needed once on a page)

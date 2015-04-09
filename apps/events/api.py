@@ -1,5 +1,6 @@
 from django.db.models import Q
 from django.utils import timezone
+from django.contrib.gis.geos import Point
 
 from tastypie.resources import ModelResource
 from tastypie import fields
@@ -45,9 +46,13 @@ class EventInternalResource(ModelResource):
 
     @newrelic.agent.function_trace()
     def dehydrate_distance(self, bundle):
-        if not bundle.request.user.is_authenticated():
+        origin = None
+        if bundle.request.COOKIES.get('latitude', None) and bundle.request.COOKIES.get('longitude', None):
+            origin = Point(float(bundle.request.COOKIES['longitude']), float(bundle.request.COOKIES['latitude']))
+        elif bundle.request.user.is_authenticated():
+            origin = bundle.request.user.profile.point
+        if not origin:
             return None
-        origin = bundle.request.user.profile.point
         event = Event.objects.all().filter(id=bundle.obj.id).distance(origin, field_name='venue__point').first()
         dObj = event.distance
         if dObj is not None:

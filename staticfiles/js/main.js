@@ -60,26 +60,5 @@ $(document).ready(function() {
         return false;
     });
 
-    var eventsAutocompleteEngine = new Bloodhound({
-        name: 'events',
-        remote: {url: 'http://localhost:8000/search/autocomplete/?q=%QUERY', filter: filterAutoCompleteResults},
-        datumTokenizer: function(d) {
-            return Bloodhound.tokenizers.whitespace(d.val);
-        },
-        queryTokenizer: Bloodhound.tokenizers.whitespace
-    });
-
-    var promise = eventsAutocompleteEngine.initialize();
-
-    promise
-    .fail(function() { console.log('Typeahead init error!'); });
-
-    $('.search-input .typeahead').typeahead({
-        minLength: 3,
-        highlight: true,
-    }, {
-        name: 'events',
-        displayKey: 'value',
-        source: eventsAutocompleteEngine.ttAdapter()
-    });
+    $.cookie.raw = true;
 });
