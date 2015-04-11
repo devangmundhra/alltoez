@@ -7499,10 +7499,10 @@ fieldset[disabled] .btn-yahoo.active {
   color: #720e9e;
   background-color: #ffffff;
 }
-.no-margin-top {
+.no-top-margin {
   margin-top: 0px;
 }
-.no-margin-bottom {
+.no-bottom-margin {
   margin-bottom: 0px;
 }
 p {
@@ -7883,6 +7883,10 @@ body.events .event-meta {
   margin-left: 3px;
   color: #999999;
   font-size: 12px;
+}
+.event-search-form {
+  padding-left: 25px;
+  padding-right: 25px;
 }
 .signup2-div,
 .update-profile-div {
@@ -8460,16 +8464,15 @@ body.events .event-meta {
   .signup-step2 .div_add_children ul .add-child {
     width: 102px;
   }
-  input,
-  button,
-  select,
-  textarea {
+  /*
+  input, button, select, textarea {
     font-size: 18px;
     width: 100%;
     height: 46px;
     padding-left: 10px;
     border-radius: 6px;
   }
+  */
   .right-side .social-actions a {
     padding: 16px 7px;
     font-size: 16px;
@@ -8492,9 +8495,11 @@ body.events .event-meta {
     position: relative;
     margin-bottom: 0px;
   }
+  /*
   body.events .filter-header.visible {
     height: 815px;
   }
+  */
   body.events .filter-header .category-selection > ul > li {
     float: none;
     width: 100%;

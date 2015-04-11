@@ -1,7 +1,7 @@
 {% extends "alltoez/ui/fragments/header_base.html" %}
 
 {% block header_navbar_middle %}
-<form method="get" action="{% url 'search' %}" class="navbar-form navbar-left" role="search">
+<form method="get" action="{% url 'search' %}" class="navbar-form navbar-left event-search-form" role="search">
     <div class="form-group search-input">
         <input type="text" name="q" class="form-control" placeholder="Search for events">
     </div>
