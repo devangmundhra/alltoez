@@ -9,7 +9,7 @@ celery==3.1.17
 croniter==0.3.5
 dj-database-url==0.3.0
 dj-static==0.0.6
-Django==1.7.4
+Django==1.7.7
 django-admin-shortcuts==1.2.5
 django-adv-imagefield==0.0.4
 django-allauth==0.19.1

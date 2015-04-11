@@ -7499,6 +7499,12 @@ fieldset[disabled] .btn-yahoo.active {
   color: #720e9e;
   background-color: #ffffff;
 }
+.no-margin-top {
+  margin-top: 0px;
+}
+.no-margin-bottom {
+  margin-bottom: 0px;
+}
 p {
   margin-bottom: 20px;
 }

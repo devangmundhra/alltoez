@@ -25,11 +25,22 @@
 {% endblock %}
 {% block body_class %}{% endblock %}
 
+{% block post_strip %}
+    <div class="container-fluid">
+        <div class="row no-margin-top">
+            <div class="col-xs-12 col-xs-offset-1 no-margin-top no-margin-bottom">
+                <ul class="pager no-margin-top">
+                    <li class="previous"><a class="back-to-events" href="{% url 'events' %}"><span aria-hidden="true">&larr;</span> All Events</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
 {% block content %}
-<div class="row" xmlns="http://www.w3.org/1999/html">
+<div class="row">
     <div class="col-xs-12 col-md-7">
         <div class="left-side">
-            {{ context }}
             <div class="event-title">
                 <h1>{{ event.title }}</h1>
             </div>
@@ -232,6 +243,14 @@
         var done_url = "{{ done_url }}?format=json"
         var similar_events_url = "{{ similar_events_url }}?format=json"
         var myevent = JSON.parse('{{ event_json|escapejs }}')
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            if (document.referrer.search("/events/") != -1)
+            {
+                $(".back-to-events").attr("href", document.referrer)
+            }
+        });
     </script>
     {% javascript 'events_detail' %}
     {% javascript 'get_location' %}
