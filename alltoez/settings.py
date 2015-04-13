@@ -191,7 +191,7 @@ AUTH_PROFILE_MODULE = 'alltoez_profile.UserProfile'
 
 EMAIL_SUBJECT_PREFIX = "[Alltoez Server]"
 SERVER_EMAIL = 'Alltoez Server <server@alltoez.com>'
-DEFAULT_FROM_EMAIL = 'Postmaster <postmaster@alltoez.com>'
+DEFAULT_FROM_EMAIL = 'Alltoez Postmaster <postmaster@alltoez.com>'
 EMAIL_BACKEND = 'djrill.mail.backends.djrill.DjrillBackend'
 
 #-------------------------------------------------------------------------------
