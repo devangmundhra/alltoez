@@ -1,6 +1,6 @@
 {% load static from staticfiles %}
 {% with site_name='http://www.alltoez.com' %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <!-- This is a simple example template that you can edit to create your own custom templates -->
@@ -313,13 +313,13 @@
 			max-width:160px;
 		}
 </style></head>
-    <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="-webkit-text-size-adjust: none;margin: 0;padding: 0;background-color: #FAFAFA;width: 100% !important;">
+    <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
     	<center>
-        	<table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="backgroundTable" style="margin: 0;padding: 0;height: 100% !important;width: 100% !important;">
+        	<table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="backgroundTable">
             	<tr>
                 	<td align="center" valign="top">
                         <!-- // Begin Template Preheader \\ -->
-                        <table border="0" cellpadding="10" cellspacing="0" width="600" id="templatePreheader" style="background-color: #FAFAFA;">
+                        <table border="0" cellpadding="10" cellspacing="0" width="600" id="templatePreheader">
                             <tr>
                                 <td valign="top" class="preheaderContent">
 
@@ -327,10 +327,10 @@
                                     <table border="0" cellpadding="10" cellspacing="0" width="100%">
                                     	<tr>
                                         	<td valign="top">
-                                            	<div style="color: #505050;font-family: Arial;font-size: 10px;line-height: 100%;text-align: left;">{% block teaser %}{% endblock %}</div>
+                                            	<div>{% block teaser %}{% endblock %}</div>
                                             </td>
                                             <td valign="top" width="180">
-                                            	<div style="color: #505050;font-family: Arial;font-size: 10px;line-height: 100%;text-align: left;"><!-- *|END:IF|* --></div>
+                                            	<div><!-- *|END:IF|* --></div>
                                             </td>
                                         </tr>
                                     </table>
@@ -340,16 +340,16 @@
                             </tr>
                         </table>
                         <!-- // End Template Preheader \\ -->
-                    	<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateContainer" style="border: 1px solid #DDDDDD;background-color: #FDFDFD;">
+                    	<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateContainer">
                         	<tr>
                             	<td align="center" valign="top">
                                     <!-- // Begin Template Header \\ -->
-                                	<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateHeader" style="background-color: #FFFFFF;border-bottom: 0;">
+                                	<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateHeader">
                                         <tr>
-                                            <td class="headerContent" style="color: #202020;font-family: Arial;font-size: 34px;font-weight: bold;line-height: 100%;padding: 0;text-align: center;vertical-align: middle;">
+                                            <td class="headerContent">
 
                                             	<!-- // Begin Module: Standard Header Image \\ -->
-                                            	<img src="{{ site_name }}{% static 'img/alltoez_logo_beta.png' %}" style="max-height: 24px;border: none;font-size: 14px;font-weight: bold;height: auto;line-height: 100%;outline: none;text-decoration: none;text-transform: capitalize;">
+                                            	<img src="{{ site_name }}{% static 'img/alltoez_logo_beta.png' %}" style="max-height:24px;">
                                             	<!-- // End Module: Standard Header Image \\ -->
 
                                             </td>
@@ -363,15 +363,15 @@
                                     <!-- // Begin Template Body \\ -->
                                 	<table border="0" cellpadding="10" cellspacing="0" width="600" id="templateBody">
                                     	<tr>
-                                            <td valign="top" class="bodyContent" style="background-color: #FDFDFD;">
+                                            <td valign="top" class="bodyContent">
 
                                                 <!-- // Begin Module: Standard Content \\ -->
                                                 <table border="0" cellpadding="10" cellspacing="0" width="100%">
                                                     <tr>
                                                         <td valign="top">
-                                                            <div mc:edit="std_content00" style="color: #505050;font-family: Arial;font-size: 14px;line-height: 150%;text-align: left;"><div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 150%;text-align: left;"><span class="h1" style="color: #202020;display: block;font-family: Arial;font-size: 34px;font-weight: bold;line-height: 100%;margin-bottom: 10px;text-align: left;"><span class="h4" style="color: #202020;display: block;font-family: Arial;font-size: 22px;font-weight: bold;line-height: 100%;margin-bottom: 10px;text-align: left;">{% block email_header %} {% endblock %}</span></span></div>
+                                                            <div mc:edit="std_content00"><div><span class="h1"><span class="h4">{% block email_header %} {% endblock %}</span></span></div>
 
-<div style="text-align: center;color: #505050;font-family: Arial;font-size: 14px;line-height: 150%;">{% block email_para %} {% endblock %}</div>
+<div style="text-align: center;">{% block email_para %} {% endblock %}</div>
 </div>
 														</td>
                                                     </tr>
@@ -383,7 +383,7 @@
                                     </table>
 <table border="0" cellpadding="0" cellspacing="0" style="background-color:#0f9d58; border:1px solid #353535; border-radius:5px;">
     <tr>
-        <td align="center" valign="middle" class="bodyButton" style="color: #0f9d58;font-family: Helvetica, Arial, sans-serif;font-size: 16px;line-height: 150%;padding-top: 15px;padding-right: 30px;padding-bottom: 15px;padding-left: 30px;">
+        <td align="center" valign="middle" class="bodyButton">
             {% block button %}{% endblock %}
         </td>
     </tr>
@@ -394,32 +394,32 @@
                         	<tr>
                             	<td align="center" valign="top">
                                     <!-- // Begin Template Footer \\ -->
-                                	<table border="0" cellpadding="10" cellspacing="0" width="600" id="templateFooter" style="background-color: #FDFDFD;border-top: 0;">
+                                	<table border="0" cellpadding="10" cellspacing="0" width="600" id="templateFooter">
                                     	<tr>
                                         	<td valign="top" class="footerContent">
 
                                                 <!-- // Begin Module: Standard Footer \\ -->
                                                 <table border="0" cellpadding="10" cellspacing="0" width="100%">
                                                     <tr>
-                                                        <td colspan="2" valign="middle" id="social" style="background-color: #FAFAFA;border: 1px solid #F5F5F5;">
-                                                            <div mc:edit="std_social" style="color: #707070;font-family: Arial;font-size: 12px;line-height: 125%;text-align: center;">&nbsp;<a href="https://www.twitter.com/alltoez" style="color: #336699;font-weight: normal;text-decoration: underline;">follow on Twitter</a> | <a href="https://www.facebook.com/alltoez" style="color: #336699;font-weight: normal;text-decoration: underline;">friend on Facebook</a></div>
+                                                        <td colspan="2" valign="middle" id="social">
+                                                            <div mc:edit="std_social">&nbsp;<a href="https://www.twitter.com/alltoez">follow on Twitter</a> | <a href="https://www.facebook.com/alltoez">friend on Facebook</a></div>
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td valign="top" width="370">
                                                             <br>
-                                                            <div mc:edit="std_footer" style="color: #707070;font-family: Arial;font-size: 12px;line-height: 125%;text-align: left;">Made with &lt;3 by the Alltoez Team</div>
+                                                            <div mc:edit="std_footer">Made with &lt;3 by the Alltoez Team</div>
                                                             <br>
                                                         </td>
                                                         <td valign="top" width="170" id="monkeyRewards">
                                                             <br>
-                                                            <div mc:edit="monkeyrewards" style="color: #707070;font-family: Arial;font-size: 12px;line-height: 125%;text-align: left;">&copy; Alltoez {% now "Y" %}</div>
+                                                            <div mc:edit="monkeyrewards">&copy; Alltoez {% now "Y" %}</div>
                                                             <br>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td colspan="2" valign="middle" id="utility" style="background-color: #FDFDFD;border-top: 1px solid #F5F5F5;">
-                                                            <div mc:edit="std_utility" style="color: #707070;font-family: Arial;font-size: 12px;line-height: 125%;text-align: center;"></div>
+                                                        <td colspan="2" valign="middle" id="utility">
+                                                            <div mc:edit="std_utility"></div>
                                                         </td>
                                                     </tr>
                                                 </table>
