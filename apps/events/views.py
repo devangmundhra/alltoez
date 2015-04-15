@@ -35,7 +35,7 @@ class Events(ListView):
         # default sort is "-created_at"
         self.ordering = self.request.GET.get('sort')
         if not self.ordering:
-            self.ordering = self.request.session.get('event_sort', '-created_at')
+            self.ordering = self.request.session.get('event_sort', '-published_at')
         else:
             self.request.session['event_sort'] = self.ordering
 

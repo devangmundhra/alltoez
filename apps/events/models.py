@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
+
 from django.contrib.gis.db import models
 from django.core.urlresolvers import reverse
+from django.utils import timezone
 
 from jsonfield import JSONField
 
@@ -127,14 +129,17 @@ class Event(models.Model):
     url = models.URLField(blank=True, null=True, verbose_name='Event link')
     additional_info = models.TextField(blank=True, null=True)
     publish = models.BooleanField(default=True)
+    published_at = models.DateTimeField(db_index=True, null=True, blank=True)
     objects = models.GeoManager()
 
     class Meta:
-        ordering = ['-created_at', '-start_date', 'end_date']
+        ordering = ['-published_at', '-start_date', 'end_date']
 
     def save(self, *args, **kwargs):
         if not self.pk:
             unique_slugify(self, self.title)
+        if not self.published_at and self.publish:
+            self.published_at = timezone.now()
         super(Event, self).save(*args, **kwargs)
 
     def get_absolute_url(self):

@@ -60,7 +60,7 @@
                         {% endif %}
                     </span>
 					<select class="sort-events form-control">
-                        <option value="-created_at" {% if event_sort == '-created_at' %}SELECTED{% endif %}>New on Alltoez</option>
+                        <option value="-published_at" {% if event_sort == '-published_at' %}SELECTED{% endif %}>New on Alltoez</option>
                         <option value="cost" {% if event_sort == 'cost' %}SELECTED{% endif %}>Cost</option>
                         {% if location_available %}
                         <option value="distance" {% if event_sort == 'distance' %}SELECTED{% endif %}>Proximity</option>

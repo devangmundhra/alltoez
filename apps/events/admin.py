@@ -182,12 +182,12 @@ class EventAdmin(ForeignKeyAutocompleteAdmin):
         'venue': ('name', 'address'),
     }
     form = EventAdminForm
-    readonly_fields = ('venue_admin_url',)
+    readonly_fields = ('venue_admin_url', 'published_at',)
     fields = ('draft', 'title', 'slug', ('venue', 'venue_admin_url',),
               'description', 'category', 'image', ('min_age', 'max_age',),
               ('cost', 'cost_detail',), ('start_date', 'end_date',),
               'recurrence_detail', 'time_detail', 'url', 'additional_info',
-              'publish')
+              ('publish', 'published_at'))
 
     def venue_admin_url(self, obj):
         return "<a href=http://{}{} target=\"_blank\">{}{}</a>".format(Site.objects.get_current().domain,
