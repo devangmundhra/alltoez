@@ -80,6 +80,7 @@ def _send_query(events_list):
     try:
         result = engine_client.send_query({"items": list(items_set), "num": 10,
                                            "categories": list(categories_set)})
+        engine_client.close()
     except predictionio.NotFoundError:
         print "Recommendation engine not found"
         return []
