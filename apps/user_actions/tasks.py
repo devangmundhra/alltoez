@@ -27,6 +27,15 @@ def mark_user_views_event(event_id, user_id=None):
 
 @shared_task
 def pio_new_event(event_type, user_id, event_id, created):
+    """
+    Create a new event on pio server
+    :param event_type:
+    :param user_id:
+    :param event_id:
+    :param created:
+    :return:
+    """
+    return
     event_client = predictionio.EventClient(
         access_key=pio_access_key,
         url=pio_eventserver,
@@ -35,5 +44,6 @@ def pio_new_event(event_type, user_id, event_id, created):
     try:
         event_client.record_user_action_on_item(event_type, user_id, event_id,
                                                 event_time=created)
+        event_client.close()
     except predictionio.NotCreatedError:
         pass
