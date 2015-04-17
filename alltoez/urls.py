@@ -25,7 +25,7 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += patterns('',
-	url(r'^favicon\.ico$', RedirectView.as_view(url='/static/img/favicon.ico')),
+	url(r'^favicon\.ico$', RedirectView.as_view(url='/static/ico/favicon.ico')),
 	url(r'^apple\-touch\-icon\.png$', RedirectView.as_view(url='/static/img/apple-touch-icon.png')),
 	url(r'^robots\.txt$', RedirectView.as_view(url='/static/robots.txt'))
 )

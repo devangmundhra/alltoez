@@ -8464,15 +8464,21 @@ body.events .event-meta {
   .signup-step2 .div_add_children ul .add-child {
     width: 102px;
   }
-  /*
-  input, button, select, textarea {
+  .right-side .social-actions button {
     font-size: 18px;
     width: 100%;
     height: 46px;
     padding-left: 10px;
     border-radius: 6px;
   }
-  */
+  .right-side .social-actions input {
+    font-size: 18px;
+    width: 30%%;
+    border-radius: 6px;
+  }
+  .right-side .social-actions #share-info-dropdown {
+    width: 100%;
+  }
   .right-side .social-actions a {
     padding: 16px 7px;
     font-size: 16px;
@@ -8481,7 +8487,7 @@ body.events .event-meta {
   .right-side .open-hours dl,
   .right-side .age-allowed dl,
   .right-side .cost dl {
-    margin-bottom: -28px;
+    margin-bottom: -20px;
   }
   .right-side .open-hours dt,
   .right-side .age-allowed dt,
