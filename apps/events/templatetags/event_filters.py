@@ -52,6 +52,12 @@ def naturaldatetime(datetime_value):
     return format_timedelta(delta, granularity='day', locale=to_locale(get_language()))
 
 @register.filter
+def days_since(datetime_value):
+    datetime = parse_datetime(datetime_value)
+    delta = timezone.now().date() - datetime.date()
+    return delta.days
+
+@register.filter
 @stringfilter
 def format_event_datetime(value):
     """

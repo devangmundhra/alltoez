@@ -25,14 +25,12 @@
             </div>
             <div class="event-overlay">
                 {% if not event.recurrence_detail %}
-                    <span class="event-date">{{ event.start_date|local_day_date }}</span>
-                    {% if event.start_date|naturaldatetime <= 1 %}
-                        <span class="event-freshness today">Happening today</span>
-                    {% elif event.end_date and event.end_date|naturaldatetime <= 1 %}
+                    <span class="event-date">{{ event.start_date|local_day_date }} - {{ event.end_date|local_day_date }}</span>
+                    {% if event.end_date|days_since <= 5 %}
                         <span class="event-freshness expiring">Expiring soon</span>
                     {% endif %}
                 {% endif %}
-                {% if event.published_at|naturaldatetime <= 2 %}
+                {% if event.published_at|days_since <= 2 %}
                     <span class="event-freshness just-in">Just in</span>
                 {% endif %}
             </div>
