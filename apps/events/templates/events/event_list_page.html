@@ -6,7 +6,7 @@
     <div class="event-item">
         <a href='{% url "event_detail" event.slug %}'>
             <div class="event-image">
-                {% thumbnail event.image "x230" as im %}
+                {% thumbnail event.image "384x256" crop="center" as im %}
                 <img src="{{ im.url }}" width="100%">
                 {% endthumbnail %}
             </div>
@@ -46,7 +46,7 @@
                     {% if event.cost == 0 %}
                         <span>Cost: Free</span>
                     {% else %}
-                        <span>Cost: ${{ event.cost }}</span>
+                        <span>Cost: ${{ event.cost|floatformat }}</span>
                     {% endif %}
                 </div>
             </div>

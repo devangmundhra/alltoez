@@ -47,7 +47,7 @@ class Events(ListView):
     def get_queryset(self):
         er = EventsResource()
         request_bundle = er.build_bundle(request=self.request)
-        queryset = er.obj_get_list(request_bundle).prefetch_related('category').select_related('venue')
+        queryset = er.obj_get_list(request_bundle).prefetch_related('category')
         if self.ordering == 'distance':
             if self.request.COOKIES.get('latitude', None) and self.request.COOKIES.get('longitude', None):
                 origin = Point(float(self.request.COOKIES['longitude']), float(self.request.COOKIES['latitude']))

@@ -191,7 +191,7 @@
                     {% if event.cost_detail %}
                         <dd><p>{{ event.cost_detail }}</p></dd>
                     {% else %}
-                        <dd>${{ event.cost }}</dd>
+                        <dd>${{ event.cost|floatformat }}</dd>
                     {% endif %}
                     {% endif %}
                 </dl>

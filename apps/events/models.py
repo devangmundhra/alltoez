@@ -115,7 +115,7 @@ class Event(models.Model):
     image = models.ImageField(upload_to="events_media")
     min_age = models.PositiveSmallIntegerField(default=DEFAULT_MIN_AGE_EVENT, db_index=True)
     max_age = models.PositiveSmallIntegerField(default=DEFAULT_MAX_AGE_EVENT, db_index=True)
-    cost = models.PositiveSmallIntegerField(default=0, db_index=True)
+    cost = models.FloatField(default=0, db_index=True)
     cost_detail = models.CharField(max_length=500, blank=True,
                                    help_text="Enter if there is more than one cost value")
     # Currently we expect an event to occur atmost once per day (so only one start time/end time)
