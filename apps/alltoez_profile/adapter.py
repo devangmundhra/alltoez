@@ -26,13 +26,14 @@ class AlltoezSocialAccountAdapter(DefaultSocialAccountAdapter):
         tackle following issues:
         * https://github.com/pennersr/django-allauth/issues/215
         """
-        email_address = sociallogin.account.extra_data['email']
+        email_address = sociallogin.account.extra_data.get('email', None)
+        if not email_address:
+            return
         try:
             user = get_user_model().objects.get(email=email_address)
-            if user:
-                perform_login(request, user, email_verification=app_settings.EMAIL_VERIFICATION)
-                if not sociallogin.is_existing:
-                    sociallogin.connect(request, user)
-                raise ImmediateHttpResponse(redirect(get_login_redirect_url(request)))
+            perform_login(request, user, email_verification=app_settings.EMAIL_VERIFICATION)
+            if not sociallogin.is_existing:
+                sociallogin.connect(request, user)
+            raise ImmediateHttpResponse(redirect(get_login_redirect_url(request)))
         except get_user_model().DoesNotExist:
             pass
