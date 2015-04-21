@@ -70,7 +70,6 @@
 		{% endblock %}
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
 		<!-- IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -149,6 +148,11 @@
         UserVoice.push(['autoprompt', {}]);
         </script>
         {% endblock %}
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+        <script src="{% static 'login_checker.js' %}" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript" charset="utf-8">
+            window.isLoggedIn = "{{user.is_authenticated}}" == "True";
+        </script>
         {% include "alltoez/ui/fragments/footer.html" %}
 	</body>
 </html>
