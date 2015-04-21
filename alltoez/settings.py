@@ -118,7 +118,6 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'pipeline.middleware.MinifyHTMLMiddleware',
-    # 'hunger.middleware.BetaMiddleware',
     'apps.alltoez.middleware.RedirectIfIncompleteProfile',
 ]
 
@@ -159,7 +158,6 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
-    'hunger',
 
     # Local Project Apps
     'apps.alltoez_profile',

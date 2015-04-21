@@ -54,11 +54,5 @@ $(document).ready(function() {
 //        return false;
 //    });
 
-    $('.no-invite').on('click', function(e) {
-        e.preventDefault();
-        $('#no-more-invites-modal').modal()
-        return false;
-    });
-
     $.cookie.raw = true;
 });

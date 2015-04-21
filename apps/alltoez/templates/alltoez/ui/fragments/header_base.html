@@ -19,14 +19,6 @@
 				<ul class="nav navbar-nav navbar-right">
                     {% block header_navbar_middle %}{% endblock %}
 					{% if user.is_authenticated %}
-                        {% comment %}
-                        {% if invites_remaining > 0 %}
-                            <li><a href="{% url 'hunger-invite' %}" class="beta-invite">Invite Friends [{{ invites_remaining }}]</a></li>
-                        {% else %}
-                            <li><a href="{% url 'hunger-invite' %}" class="no-invite">Invite Friends</a></li>
-                            <li><a href="{% url 'hunger-invite' %}" class="no-invite">Invite Friends</a></li>
-                        {% endif %}
-                        {% endcomment %}
                         {% user_display user as user_display %}
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">{% if user.profile.profile_image %}
@@ -42,61 +34,13 @@
 							</ul>
 						</li>
 					{% else %}
-                    <li><a href="{% url 'account_login' %}">Login</a></li>
+                        <li><a href="{% url 'account_login' %}">Login</a></li>
 					{% endif %}
 				</ul>
 			</div>
 		</div>
 	</nav>
 </header>
-
-<div class="modal fade" id="no-more-invites-modal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">You don't have any invites left :(</h4>
-      </div>
-      <div class="modal-body">
-        <p>The more events do (mark events as <em>Done</em>), the more invites you get.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-{% comment %}
-<div class="header">
-	<div class="navbar navbar-fixed-top">
-		<div class="navbar-inner">
-			<div class="container">
-				<a class="brand" href="/">Alltoez</a>
-
-				{% if user.is_authenticated %}
-                    {% user_display user as user_display %}
-					<ul class="nav pull-right">
-						<li class="divider-vertical"></li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{user_display|truncatechars:'30'}} <b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<li><a href="{% url 'show_profile' %}"><i class="icon-user"></i>  My Profile</a></li>
-								<!--<li><a href="{% url 'account_change_password' %}"><i class="icon-user"></i>  Change Password</a></li>-->
-								<li class="divider"></li>
-								<li><a href="{% url 'account_logout' %}"><i class="icon-remove"></i>  Logout</a></li>
-							</ul>
-						</li>
-					</ul>
-				{% else %}
-					<ul class="nav pull-right">
-                        <li><a href="{% url 'account_login' %}">Login</a></li>
-                    </ul>
-				{% endif %}
-			</div>
-		</div>
-	</div>
-</div>
 
 {% if messages %}
 	<div class="container">
@@ -108,6 +52,3 @@
 		{% endfor %}
 	</div>
 {% endif %}
-
-{% endcomment %}
-

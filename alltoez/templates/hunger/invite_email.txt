@@ -1,4 +1,0 @@
-Lucky you! {{ user.get_full_name }} has invited you to join the Alltoez Private Beta.
-Alltoez helps parents and kids find activities they love to do.
-
-Visit {{ invite_url }} to join the private beta.
