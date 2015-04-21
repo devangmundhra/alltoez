@@ -22,7 +22,6 @@ django-extensions==1.5.0
 django-filebrowser-no-grappelli-nph==3.4.4
 django-haystack==2.3.1
 django-haystack-panel==0.2.1
-django-hunger==2.1.2
 django-jsonfield==0.9.13
 django-location-field==1.5.1
 django-markdown-deux==1.0.5

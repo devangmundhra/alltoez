@@ -125,10 +125,12 @@ class EventDetailView(DetailView):
         :return: HttpResponse
         """
         from apps.alltoez.api import EventsResource
-        from apps.user_actions.tasks import mark_user_views_event
+        from apps.user_actions.tasks import mark_user_views_event, new_action
         self.object = self.get_object()
         if request.user.is_authenticated():
             mark_user_views_event.delay(self.object.id, request.user.id)
+        else:
+            new_action.delay("View", None, self.object.id, request.META['REMOTE_ADDR'])
         context = self.get_context_data(object=self.object)
         er = EventsResource()
         er_bundle = er.build_bundle(obj=self.object, request=request)

@@ -5,11 +5,15 @@ __author__ = 'devangmundhra'
 import logging
 
 from django.conf import settings
+from django.utils import timezone
 
 from celery import shared_task
 import predictionio
+import keen
+from allauth.utils import get_user_model
 
 from apps.user_actions.models import View
+from apps.events.models import Event
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -26,6 +30,60 @@ def mark_user_views_event(event_id, user_id=None):
     view.save()
 
 @shared_task
+def new_action(event_type, user_id, event_id, session_id=None):
+    """
+    Create a new event on pio server
+    :param event_type:
+    :param user_id:
+    :param event_id:
+    :param session_id:
+    :return:
+    """
+
+    staff_status = False
+    if user_id:
+        try:
+            user = get_user_model().objects.get(pk=user_id)
+            staff_status = user.is_staff
+        except get_user_model().DoesNotExist:
+            keen.add_event("Error", {
+                "msg": "User.DoesNotExist",
+                "id": user_id
+            })
+
+    try:
+        event = Event.objects.get(pk=event_id)
+
+        keen.add_event(event_type, {
+            "user": {
+                "user_id": user_id,
+                "staff": staff_status,
+                "session_id": session_id
+            },
+            "event": {
+                "event_id": event_id,
+                "categories": list(event.category.all().values_list('name', flat=True)),
+                "min_age": event.min_age,
+                "max_age": event.max_age,
+                "cost": event.cost,
+                "start_date": event.start_date.isoformat(),
+                "end_date": event.end_date.isoformat() if event.end_date else None,
+                "publish_date": event.published_at.isoformat()
+            },
+            "venue": {
+                "venue_id": event.venue.id,
+                "name": event.venue.name,
+                "city": event.venue.city,
+                "neighborhood": event.venue.neighborhood,
+            }
+        }, timezone.now())
+    except Event.DoesNotExist:
+        keen.add_event("Error", {
+            "msg": "Event.DoesNotExist",
+            "id": event_id
+        })
+
+
 def pio_new_event(event_type, user_id, event_id, created):
     """
     Create a new event on pio server
@@ -35,7 +93,6 @@ def pio_new_event(event_type, user_id, event_id, created):
     :param created:
     :return:
     """
-    return
     event_client = predictionio.EventClient(
         access_key=pio_access_key,
         url=pio_eventserver,
