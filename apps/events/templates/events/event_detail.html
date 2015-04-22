@@ -4,6 +4,7 @@
 {% load markdown_deux_tags %}
 {% load admin_urls %}
 {% load event_filters %}
+{% load static %}
 
 {% block fb_meta %}
     <meta property="og:title"       content="{{ event.title }}" />
@@ -231,6 +232,9 @@
         }
         google.maps.event.addDomListener(window, 'load', init_map);
     </script>
+{% if not user.is_authenticated %}
+    {% include "events/fragments/login_modal.html" %}
+{% endif %}
 {% endblock %}
 {% block extra_js %}
     {% url 'api_dispatch_list' resource_name="bookmark" api_name="v1" as bookmark_url %}
@@ -252,4 +256,10 @@
     </script>
     {% javascript 'events_detail' %}
     {% javascript 'get_location' %}
+    {% if not user.is_authenticated %}
+        <script src="{% static 'js/login_checker.js' %}" type="text/javascript" charset="utf-8"></script>
+    {% endif %}
+    <script type="text/javascript" charset="utf-8">
+        window.isLoggedIn = "{{user.is_authenticated}}" == "True";
+    </script>
 {% endblock %}
