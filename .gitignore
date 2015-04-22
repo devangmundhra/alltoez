@@ -74,3 +74,6 @@ alltoez/apps/alltoez/static/less/theme.css
 start_dep_processes.sh
 
 *.rdb
+
+# Statifiles:
+staticfiles/
