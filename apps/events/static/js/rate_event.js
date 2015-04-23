@@ -8,75 +8,116 @@ var controller = {
         popoverView.init();
         modalView.init();
     },
-    initialRatingSelected: function(value){
-        rating.value = value;
-        modalView.updateStars();
-        modalView.render();
-    },
     getRatingValue: function(){
         return rating.value;
     },
-    renderModalView: function(){
+    setRatingValue: function(value){
+        rating.value = value;
+    },
+    renderModalView: function(value){
+        modalView.render();
     }
 };
 
 var popoverView = {
     elem: $('#done-action'),
+    show: false,
     init: function(){
         var self = this;
-        $('#input-id').rating();
-        var ratingHTML = $('#input-id')[0].outerHTML;
-        //initialize the popover
-        //var ratingHTML = $('#starRating')[0].outerHTML;
+
+        // initializing popover
         this.elem.popover({
-            content: ratingHTML,
-            html: true
+            position: 'left',
+            container: 'body',
+            content: '<span class="rateit"></span>',
+            html: true,
+            show: false
         });
 
-        //bind events
+        // adding event listeners for showing popover
         this.elem.mouseenter(function(){
-            self.popover();
+            if(!self.show) self.render();
         });
-        $('body').on('click', '.rating', function(e){
-            self.initialRatingSelected(e);
+
+        // adding event listeners for hiding popover 
+        // (Esc button, and click outside the popover and the button)
+        $(document).keyup(function (event) {
+            if (event.which === 27) {
+                self.hide();
+            }
+        });
+        $('body').click(function(event){
+            if(event.target.className.indexOf('popover') < 0 &&
+              event.target.id !== 'done-action'){
+                self.hide();
+            }
         });
     },
-    popover: function(){
+    render: function(){
+        var self = this;
         this.elem.popover('show');
-    },
-    initialRatingSelected: function(e){
-        var value = $(e.target).val();
-        controller.initialRatingSelected(value);
-        this.hide();
+
+        // initializing rating stars
+        var rateitElem = $('.rateit');
+        rateitElem.rateit({
+            resetable: false
+        });
+
+        // getting a rating value
+        var value = controller.getRatingValue();
+
+        // setting the rating value
+        rateitElem.rateit('value', value);
+
+        // setting an event listener for 'rated' event
+        rateitElem.bind('rated', function(){
+            var value = $(this).rateit('value');
+            controller.setRatingValue(value);
+            controller.renderModalView();
+            self.hide();
+        });
+        this.show = true;
     },
     hide: function(){
         this.elem.popover('hide');
+        this.show = false;
     }
 };
 
 var modalView = {
     elem: $('#modalRating'),
     init: function(){
+
+        // initializing modal 
         this.elem.modal({
             keyboard: true,
             show: false
         });
     },
-    render: function(value){
+    render: function(){
+        // getting the rating value
+        var value = controller.getRatingValue();
+
         this.elem.modal('show');
+        
+        // initializing rating stars
+        var rateitElem = $('#modalRate');
+        rateitElem.rateit({
+            resetable: false
+        });
+
+        // updating the rating value in the view
+        rateitElem.rateit('value', value);
+        
+        // setting an event listener for 'rated' event
+        // (updating the rating value)
+        rateitElem.bind('rated', function(){
+            var value = $(this).rateit('value');
+            controller.setRatingValue(value);
+        });
     },
     hide: function(){
         this.elem.modal('hide');
-    },
-    updateStars: function(){
-        var value = controller.getRatingValue();
-        console.log(value);
-        if(value){
-            this.elem.find('input[type=radio][value=' + value + ']').attr('checked', true);
-            console.log(1);
-        } else {
-            this.elem.find('input[type=radio]').attr('checked', false);
-        }
     }
 };
 
