@@ -1,6 +1,6 @@
 var model = {
     // wait period in seconds
-    period: 5,
+    period: 30,
     // setting visit time in cookies
     // Note: the cookie is expired in 1 day, i.e. the popup 
     // will be shown only the next day

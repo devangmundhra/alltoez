@@ -8432,8 +8432,11 @@ fieldset[disabled] .social-login-row > div > a.active {
   font-weight: bold;
 }
 .login-prompt-modal {
-  background: url(../img/img-hearts-modal.jpg) center center no-repeat;
-  background-size: 100%;
+  background-color: white;
+  background-image: url(../img/img-hearts-modal.jpg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 @media (min-width: 1200px) {
   .signup-step2 .div_add_children ul .child-age,
