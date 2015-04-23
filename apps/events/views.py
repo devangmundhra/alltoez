@@ -1,12 +1,7 @@
 import json
-from urlparse import urlparse
-import operator
 
 from django.utils import timezone, six
 from django.views.generic import DetailView, ListView
-from django.contrib.admin.views.decorators import staff_member_required
-from django.template import RequestContext
-from django.shortcuts import render_to_response
 from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Point
 
@@ -139,22 +134,3 @@ class EventDetailView(DetailView):
         context['event'] = event
         context['event_json'] = event_json # Needed for parsing bookmark info in event_detail template
         return self.render_to_response(context)
-
-@staff_member_required
-def top_level_event_domain_view(request):
-    """
-    Gets all the top level domains for events
-    :param request:
-    :return:
-    """
-    events_url = Event.objects.all().values('url')
-    counts = dict()
-    for event_url in events_url:
-        url = event_url['url']
-        if url:
-            parsed_uri = urlparse(url)
-            uri = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
-            counts[uri] = counts.get(uri, 0) + 1
-    sorted_counts = sorted(counts.items(), key=operator.itemgetter(1), reverse=True)
-    return render_to_response('admin/event_domains.html', {"domains": sorted_counts, "title": "Events domain list"},
-                              context_instance=RequestContext(request))

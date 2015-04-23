@@ -423,6 +423,10 @@ ADMIN_SHORTCUTS = [
                 'url_name': 'admin:auth_user_changelist',
                 'title': 'Users',
             },
+            {
+                'url': '/admin/events/event/sourcelist/',
+                'title': 'Event Sources',
+            },
         ]
     },
 ]
@@ -474,7 +478,7 @@ GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY', "")
 GOOGLE_SENGINE_ID = os.environ.get('GOOGLE_SENGINE_ID', "")
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', "")
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', "")
-GOOGLE_MAPS_V3_APIKEY = os.environ.get('GOOGLE_MAPS_V3_APIKEY', "")
+GOOGLE_MAPS_V3_APIKEY = os.environ.get('GOOGLE_API_KEY', "")
 MANDRILL_API_KEY = os.environ.get('MANDRILL_APIKEY', "")
 
 #-------------------------------------------------------------------------------

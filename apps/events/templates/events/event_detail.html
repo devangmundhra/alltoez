@@ -222,7 +222,7 @@
             var map = new google.maps.Map(document.getElementById("gmap_canvas"), myOptions);
             var marker = new google.maps.Marker({map: map,
                                                 position: new google.maps.LatLng({{ event.venue.latitude|add:','|add:event.venue.longitude }}),
-                                                title:"{ event.title }}"
+                                                title:"{{ event.title }}"
                                                 });
             marker.setMap(map);
             //infowindow = new google.maps.InfoWindow({content:"<b>{{ event.title }}</b><br/>{{ event.address|linebreaksbr }}" });

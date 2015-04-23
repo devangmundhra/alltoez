@@ -1,20 +1,16 @@
-from django.conf.urls import *
+from django.conf.urls import url, patterns, include
 from django.conf import settings
 from django.contrib import admin
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import RedirectView
 
 from filebrowser.sites import site
 
-from apps.events.views import top_level_event_domain_view
-
 handler500 = 'apps.alltoez.views.server_error'
 
 # Pluggable / django apps / inernal apps
 urlpatterns = patterns('',
-    url(r'^admin/eventslist/$', top_level_event_domain_view, name='top_level_domain'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('apps.alltoez.urls')),
     url(r'^events/', include('apps.events.urls')),

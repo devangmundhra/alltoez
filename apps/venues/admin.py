@@ -26,6 +26,7 @@ class VenueAdmin(admin.ModelAdmin):
               ('city', 'state', 'zipcode', 'country',),
               'neighborhood',
               'yelp_url', 'facebook_url', ('latitude', 'longitude'))
+    list_display = ('__str__', 'neighborhood', 'city')
     search_fields = ['name', 'address']
 
 admin.site.register(Venue, VenueAdmin)

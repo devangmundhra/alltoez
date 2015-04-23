@@ -1,4 +1,8 @@
 from __future__ import unicode_literals
+
+from urlparse import urlparse
+import operator
+
 from django.contrib import admin
 from django import forms
 from django.utils.translation import ugettext_lazy as _
@@ -6,12 +10,15 @@ from django.utils import timezone
 from django.db.models import Q
 from django.core import urlresolvers
 from django.contrib.sites.models import Site
+from django.conf.urls import url, patterns
+from django.template import RequestContext
+from django.shortcuts import render_to_response
 
 from pagedown.widgets import AdminPagedownWidget
 from django_extensions.admin import ForeignKeyAutocompleteAdmin
 
 from apps.events.models import DraftEvent, Event, EventRecord, Category
-
+from apps.venues.models import Venue
 
 class ExpiredEventListFilter(admin.SimpleListFilter):
     # Human-readable title which will be displayed in the
@@ -160,11 +167,6 @@ class DraftEventAdmin(admin.ModelAdmin):
 # admin.site.register(DraftEvent, DraftEventAdmin)
 
 
-class EventRecordAdmin(admin.ModelAdmin):
-    pass
-# admin.site.register(EventRecord, EventRecordAdmin)
-
-
 class EventAdmin(ForeignKeyAutocompleteAdmin):
     """
     Model admin for Event Model
@@ -189,6 +191,12 @@ class EventAdmin(ForeignKeyAutocompleteAdmin):
               'recurrence_detail', 'time_detail', 'url', 'additional_info',
               ('publish', 'published_at'))
 
+    def get_urls(self):
+            urls = super(EventAdmin, self).get_urls()
+            my_urls = patterns('',
+                               (r'^sourcelist/$', self.admin_site.admin_view(self.top_level_event_domain_view)),)
+            return my_urls + urls
+
     def venue_admin_url(self, obj):
         return "<a href=http://{}{} target=\"_blank\">{}{}</a>".format(Site.objects.get_current().domain,
                                                                 urlresolvers.reverse('admin:venues_venue_change',
@@ -197,6 +205,25 @@ class EventAdmin(ForeignKeyAutocompleteAdmin):
                                                                 urlresolvers.reverse('admin:venues_venue_change',
                                                                                      args=(obj.venue.id,)),)
     venue_admin_url.short_description = 'Edit Venue Link'
+
+    def top_level_event_domain_view(self, request):
+        """
+        Gets all the top level domains for events
+        :param request:
+        :return:
+        """
+        events_url = Event.objects.all().values('url')
+        counts = dict()
+        for event_url in events_url:
+            url = event_url['url']
+            if url:
+                parsed_uri = urlparse(url)
+                uri = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
+                counts[uri] = counts.get(uri, 0) + 1
+        sorted_counts = sorted(counts.items(), key=operator.itemgetter(1), reverse=True)
+        return render_to_response('admin/event_domains.html', {"domains": sorted_counts, "title": "Events domain list"},
+                                  context_instance=RequestContext(request, current_app=self.admin_site.name))
+
     pass
 
 admin.site.register(Event, EventAdmin)
