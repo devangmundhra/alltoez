@@ -1,14 +1,10 @@
 {% load socialaccount %}
 <div class="social-login">
-    <p class="text-center">or</p>
-    <br>
-    <div class="social-login-row">
-        <div></div>
+    <div class="social-login-row text-center">
         <div>
-            <a href="{% provider_login_url "facebook" process="login" %}">
+            <a href='{% provider_login_url "facebook" process="login" %}'>
                 <i class="fa fa-facebook-square"></i> Log in using Facebook
             </a>
         </div>
-        <div></div>
     </div>
 </div>

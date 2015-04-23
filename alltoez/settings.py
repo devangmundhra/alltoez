@@ -284,6 +284,12 @@ PIPELINE_JS = {
         ),
         'output_filename': 'js/get_location.min.js',
     },
+    'login_prompt': {
+        'source_filenames': (
+            'js/login_checker.js',
+        ),
+        'output_filename': 'js/login_checker.min.js',
+    },
 }
 
 #-------------------------------------------------------------------------------

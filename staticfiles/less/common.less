@@ -184,25 +184,6 @@ body {
 				margin-bottom: 30px;
 			}
 		}
-
-		.social-login {
-			margin-top: 3em;
-		}
-
-		.social-login-row {
-			.make-row();
-
-			> div {
-				.make-sm-column(4);
-				> a {
-					.btn;
-					.btn-default;
-					.btn-lg;
-					display: block;
-					width: 100%;
-				}
-			}
-		}
 	}
 
     .about-alltoez-beta {
@@ -380,6 +361,24 @@ body {
 }
 
 // LOGIN/SINGUP COMMON PAGE
+.social-login {
+    margin-top: 3em;
+}
+
+.social-login-row {
+    .make-row();
+
+    > div {
+        > a {
+            .btn;
+            .btn-default;
+            .btn-lg;
+            padding-left: 25px;
+            padding-right: 25px;
+        }
+    }
+}
+
 .login-div, .signup-div {
 	text-align: center;
 	h1 {
@@ -754,13 +753,7 @@ body {
     }
 }
 
-.beta-info {
-    p {
-        margin-top: 30px;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 18px;
-        line-height: 1.3em;
-        text-align: justify;
-    }
+.login-prompt-modal {
+    background: url(../img/img-hearts-modal.jpg) center center no-repeat;
+    background-size: 100%;
 }

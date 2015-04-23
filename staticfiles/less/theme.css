@@ -6212,8 +6212,8 @@ button.close {
 .panel-body:after,
 .modal-footer:before,
 .modal-footer:after,
-body.home .social-login-row:before,
-body.home .social-login-row:after {
+.social-login-row:before,
+.social-login-row:after {
   content: " ";
   display: table;
 }
@@ -6232,7 +6232,7 @@ body.home .social-login-row:after {
 .pager:after,
 .panel-body:after,
 .modal-footer:after,
-body.home .social-login-row:after {
+.social-login-row:after {
   clear: both;
 }
 .center-block {
@@ -7584,131 +7584,6 @@ body.home #above-the-fold h2 {
   margin-top: 0px;
   margin-bottom: 30px;
 }
-body.home .social-login {
-  margin-top: 3em;
-}
-body.home .social-login-row {
-  margin-left: -15px;
-  margin-right: -15px;
-}
-body.home .social-login-row > div {
-  position: relative;
-  min-height: 1px;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-@media (min-width: 768px) {
-  body.home .social-login-row > div {
-    float: left;
-    width: 33.33333333%;
-  }
-}
-body.home .social-login-row > div > a {
-  display: inline-block;
-  margin-bottom: 0;
-  font-weight: normal;
-  text-align: center;
-  vertical-align: middle;
-  touch-action: manipulation;
-  cursor: pointer;
-  background-image: none;
-  border: 1px solid transparent;
-  white-space: nowrap;
-  padding: 6px 12px;
-  font-size: 14px;
-  line-height: 1.42857143;
-  border-radius: 4px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  color: #333333;
-  background-color: #ffffff;
-  border-color: #cccccc;
-  padding: 10px 16px;
-  font-size: 18px;
-  line-height: 1.33;
-  border-radius: 6px;
-  display: block;
-  width: 100%;
-}
-body.home .social-login-row > div > a:focus,
-body.home .social-login-row > div > a:active:focus,
-body.home .social-login-row > div > a.active:focus,
-body.home .social-login-row > div > a.focus,
-body.home .social-login-row > div > a:active.focus,
-body.home .social-login-row > div > a.active.focus {
-  outline: thin dotted;
-  outline: 5px auto -webkit-focus-ring-color;
-  outline-offset: -2px;
-}
-body.home .social-login-row > div > a:hover,
-body.home .social-login-row > div > a:focus,
-body.home .social-login-row > div > a.focus {
-  color: #333333;
-  text-decoration: none;
-}
-body.home .social-login-row > div > a:active,
-body.home .social-login-row > div > a.active {
-  outline: 0;
-  background-image: none;
-  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  behavior: url("/static/css/PIE.htc");
-}
-body.home .social-login-row > div > a.disabled,
-body.home .social-login-row > div > a[disabled],
-fieldset[disabled] body.home .social-login-row > div > a {
-  cursor: not-allowed;
-  pointer-events: none;
-  opacity: 0.65;
-  filter: alpha(opacity=65);
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-  behavior: url("/static/css/PIE.htc");
-}
-body.home .social-login-row > div > a:hover,
-body.home .social-login-row > div > a:focus,
-body.home .social-login-row > div > a.focus,
-body.home .social-login-row > div > a:active,
-body.home .social-login-row > div > a.active,
-.open > .dropdown-togglebody.home .social-login-row > div > a {
-  color: #333333;
-  background-color: #e6e6e6;
-  border-color: #adadad;
-}
-body.home .social-login-row > div > a:active,
-body.home .social-login-row > div > a.active,
-.open > .dropdown-togglebody.home .social-login-row > div > a {
-  background-image: none;
-}
-body.home .social-login-row > div > a.disabled,
-body.home .social-login-row > div > a[disabled],
-fieldset[disabled] body.home .social-login-row > div > a,
-body.home .social-login-row > div > a.disabled:hover,
-body.home .social-login-row > div > a[disabled]:hover,
-fieldset[disabled] body.home .social-login-row > div > a:hover,
-body.home .social-login-row > div > a.disabled:focus,
-body.home .social-login-row > div > a[disabled]:focus,
-fieldset[disabled] body.home .social-login-row > div > a:focus,
-body.home .social-login-row > div > a.disabled.focus,
-body.home .social-login-row > div > a[disabled].focus,
-fieldset[disabled] body.home .social-login-row > div > a.focus,
-body.home .social-login-row > div > a.disabled:active,
-body.home .social-login-row > div > a[disabled]:active,
-fieldset[disabled] body.home .social-login-row > div > a:active,
-body.home .social-login-row > div > a.disabled.active,
-body.home .social-login-row > div > a[disabled].active,
-fieldset[disabled] body.home .social-login-row > div > a.active {
-  background-color: #ffffff;
-  border-color: #cccccc;
-}
-body.home .social-login-row > div > a .badge {
-  color: #ffffff;
-  background-color: #333333;
-}
 body .about-alltoez-beta {
   font-size: 50px;
 }
@@ -7984,6 +7859,119 @@ body.events .event-meta {
 }
 .children-info .children-list li span {
   float: right;
+}
+.social-login {
+  margin-top: 3em;
+}
+.social-login-row {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+.social-login-row > div > a {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  color: #333333;
+  background-color: #ffffff;
+  border-color: #cccccc;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 6px;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+.social-login-row > div > a:focus,
+.social-login-row > div > a:active:focus,
+.social-login-row > div > a.active:focus,
+.social-login-row > div > a.focus,
+.social-login-row > div > a:active.focus,
+.social-login-row > div > a.active.focus {
+  outline: thin dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+.social-login-row > div > a:hover,
+.social-login-row > div > a:focus,
+.social-login-row > div > a.focus {
+  color: #333333;
+  text-decoration: none;
+}
+.social-login-row > div > a:active,
+.social-login-row > div > a.active {
+  outline: 0;
+  background-image: none;
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  behavior: url("/static/css/PIE.htc");
+}
+.social-login-row > div > a.disabled,
+.social-login-row > div > a[disabled],
+fieldset[disabled] .social-login-row > div > a {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  behavior: url("/static/css/PIE.htc");
+}
+.social-login-row > div > a:hover,
+.social-login-row > div > a:focus,
+.social-login-row > div > a.focus,
+.social-login-row > div > a:active,
+.social-login-row > div > a.active,
+.open > .dropdown-toggle.social-login-row > div > a {
+  color: #333333;
+  background-color: #e6e6e6;
+  border-color: #adadad;
+}
+.social-login-row > div > a:active,
+.social-login-row > div > a.active,
+.open > .dropdown-toggle.social-login-row > div > a {
+  background-image: none;
+}
+.social-login-row > div > a.disabled,
+.social-login-row > div > a[disabled],
+fieldset[disabled] .social-login-row > div > a,
+.social-login-row > div > a.disabled:hover,
+.social-login-row > div > a[disabled]:hover,
+fieldset[disabled] .social-login-row > div > a:hover,
+.social-login-row > div > a.disabled:focus,
+.social-login-row > div > a[disabled]:focus,
+fieldset[disabled] .social-login-row > div > a:focus,
+.social-login-row > div > a.disabled.focus,
+.social-login-row > div > a[disabled].focus,
+fieldset[disabled] .social-login-row > div > a.focus,
+.social-login-row > div > a.disabled:active,
+.social-login-row > div > a[disabled]:active,
+fieldset[disabled] .social-login-row > div > a:active,
+.social-login-row > div > a.disabled.active,
+.social-login-row > div > a[disabled].active,
+fieldset[disabled] .social-login-row > div > a.active {
+  background-color: #ffffff;
+  border-color: #cccccc;
+}
+.social-login-row > div > a .badge {
+  color: #ffffff;
+  background-color: #333333;
 }
 .login-div,
 .signup-div {
@@ -8443,13 +8431,9 @@ body.events .event-meta {
   font-size: 20px;
   font-weight: bold;
 }
-.beta-info p {
-  margin-top: 30px;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 18px;
-  line-height: 1.3em;
-  text-align: justify;
+.login-prompt-modal {
+  background: url(../img/img-hearts-modal.jpg) center center no-repeat;
+  background-size: 100%;
 }
 @media (min-width: 1200px) {
   .signup-step2 .div_add_children ul .child-age,
