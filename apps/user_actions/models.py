@@ -33,7 +33,6 @@ class Done(UserEventActionsAbstractModel):
     """
     Done: events done by user
     """
-
     class Meta(UserEventActionsAbstractModel.Meta):
         unique_together = ('user', 'event')
 
@@ -43,3 +42,22 @@ class Share(UserEventActionsAbstractModel):
     Share: events shared by user
     """
     pass
+
+
+class Review(UserEventActionsAbstractModel):
+    """
+    Review: review and comment for an event
+    """
+    RATING_CHOICES = (
+        (0, 'No Rating'),
+        (1, 'One Star'),
+        (2, 'Two Star'),
+        (3, 'Three Star'),
+        (4, 'Four Star'),
+        (5, 'Five Star')
+    )
+    rating = models.PositiveSmallIntegerField(verbose_name="rating", choices=RATING_CHOICES, default=0)
+    comment = models.TextField(blank=False, null=False)
+
+    class Meta(UserEventActionsAbstractModel.Meta):
+        unique_together = ('user', 'event')

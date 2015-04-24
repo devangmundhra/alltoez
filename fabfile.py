@@ -291,3 +291,17 @@ def heroku_deploy():
     local('git push heroku master')
     local('heroku run python manage.py migrate')
     local('heroku maintenance:off')
+
+def heroku_quick_deploy():
+    """
+    Deploy to Heroku without maintanence
+    :return:
+    """
+    local('pip freeze > requirements.txt')
+    local('python manage.py collectstatic --noinput')
+    local('git add .')
+    print("enter your git commit comment: ")
+    comment = raw_input()
+    local('git commit -m "%s"' % comment)
+    local('git push -u origin master')
+    local('git push heroku master')

@@ -5,7 +5,7 @@ from tastypie import fields
 from tastypie.exceptions import Unauthorized
 from tastypie.cache import SimpleCache
 
-from apps.user_actions.models import View, Bookmark, Done, Share
+from apps.user_actions.models import View, Bookmark, Done, Share, Review
 from apps.alltoez_profile.api import UserInternalResource
 from apps.events.api import EventInternalResource
 
@@ -114,3 +114,12 @@ class ShareResource(UserActionAbstractResource):
     class Meta(UserActionAbstractResource.Meta):
         resource_name = 'share'
         queryset = Share.objects.all()
+
+
+class ReviewResource(UserActionAbstractResource):
+    """
+    ReviewResource
+    """
+    class Meta(UserActionAbstractResource.Meta):
+        resource_name = 'review'
+        queryset = Review.objects.all()
