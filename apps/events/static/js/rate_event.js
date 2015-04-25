@@ -1,126 +1,154 @@
-var rating = {
-    value: 0,
-    comment: ''
-};
+(function(){
+    
+    // rating model
+    var rating = {
+        // initial rating value
+        value: 0,
+        //initial rating comment
+        comment: '',
 
-var controller = {
-    init: function(){
-        popoverView.init();
-        modalView.init();
-    },
-    getRatingValue: function(){
-        return rating.value;
-    },
-    setRatingValue: function(value){
-        rating.value = value;
-    },
-    renderModalView: function(value){
-        modalView.render();
-    }
-};
+        // saving the rating to the backend
+        save: function(){
+            var self = this;
+            $.ajax({
+                type: "POST",
+                url: "/api/v1/review/?format=json",
 
-var popoverView = {
-    elem: $('#done-action'),
-    show: false,
-    init: function(){
-        var self = this;
+                // NOTE: this code relies on the 'myevent' variable
+                data: JSON.stringify({
+                    event: "" + myevent.resource_uri,
 
-        // initializing popover
-        this.elem.popover({
-            position: 'left',
-            container: 'body',
-            content: '<span class="rateit"></span>',
-            html: true,
-            show: false
-        });
+                    // user id is attached to the window in the
+                    // events/templates/events/event_details.html
+                    user: "/api/v1/users/" + window.user + "/",
+                    comment: self.comment,
+                    rating: self.value
+                }),
+                contentType: "application/json",
+                dataType: "html",
+                processData: false,
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log("" + textStatus + " in marking adding review " + errorThrown);
+                }
+            });
+        }
+    };
 
-        // adding event listeners for showing popover
-        this.elem.mouseenter(function(){
-            if(!self.show) self.render();
-        });
-
-        // adding event listeners for hiding popover 
-        // (Esc button, and click outside the popover and the button)
-        $(document).keyup(function (event) {
-            if (event.which === 27) {
-                self.hide();
-            }
-        });
-        $('body').click(function(event){
-            if(event.target.className.indexOf('popover') < 0 &&
-              event.target.id !== 'done-action'){
-                self.hide();
-            }
-        });
-    },
-    render: function(){
-        var self = this;
-        this.elem.popover('show');
-
-        // initializing rating stars
-        var rateitElem = $('.rateit');
-        rateitElem.rateit({
-            resetable: false
-        });
-
-        // getting a rating value
-        var value = controller.getRatingValue();
-
-        // setting the rating value
-        rateitElem.rateit('value', value);
-
-        // setting an event listener for 'rated' event
-        rateitElem.bind('rated', function(){
-            var value = $(this).rateit('value');
-            controller.setRatingValue(value);
-            controller.renderModalView();
-            self.hide();
-        });
-        this.show = true;
-    },
-    hide: function(){
-        this.elem.popover('hide');
-        this.show = false;
-    }
-};
-
-var modalView = {
-    elem: $('#modalRating'),
-    init: function(){
-
-        // initializing modal 
-        this.elem.modal({
-            keyboard: true,
-            show: false
-        });
-    },
-    render: function(){
-        // getting the rating value
-        var value = controller.getRatingValue();
-
-        this.elem.modal('show');
+    var controller = {
+        init: function(){
+            modalView.init();
+        },
+        getRatingValue: function(){
+            return rating.value;
+        },
+        setRatingComment: function(comment){
+            rating.comment = comment;
+        },
+        setRatingValue: function(value){
+            rating.value = value;
+        },
+        addReview: function(){
+            var self = this;
+            rating.save();
         
-        // initializing rating stars
-        var rateitElem = $('#modalRate');
-        rateitElem.rateit({
-            resetable: false
-        });
+        }
+    };
 
-        // updating the rating value in the view
-        rateitElem.rateit('value', value);
-        
-        // setting an event listener for 'rated' event
-        // (updating the rating value)
-        rateitElem.bind('rated', function(){
-            var value = $(this).rateit('value');
+    var modalView = {
+        $elem: $('#modalRating'),
+        $warn: $('#modalRatingWarn'),
+        $target: $('#done-action'),
+        init: function(){
+            var self = this;
+            // initializing modal for review creation 
+            this.$elem.modal({
+                keyboard: true,
+                show: false
+            });
+
+            // initializing the modal for notifying the user
+            // about review deletion (upon undone action)
+            this.$warn.modal({
+                keyboard: true,
+                show: false
+            });
+
+            // binding event listener to Done action, which
+            // either shows the modal or the warning
+            this.$target.on('click', function(){
+                if(this.className.indexOf('active') == -1){
+                    self.render();
+                } else {
+                    self.warn();
+                }
+            });
+
+            // binding event listener to submit event action
+            $('#reviewSubmit').on('click', function(){
+                self.submit();
+            });
+        },
+        // rendering the modal for review creation
+        render: function(){
+            // getting the rating value
+            var value = controller.getRatingValue();
+
+            this.$elem.modal('show');
+
+            // if the modal has error class for the comment input, then remove it
+            var $textarea = this.$elem.find('textarea');
+            $textarea.parent().removeClass('has-error');
+            
+            // initializing rating stars
+            this.$rateit = $('#modalRate');
+            this.$rateit.rateit({
+                resetable: false,
+                min: 0,
+                max: 5,
+                step: 1
+            });
+
+            // updating the rating value in the view
+            this.$rateit.rateit('value', value);
+            
+            // setting an event listener for 'rated' event
+            // (updating the rating value)
+            this.$rateit.bind('rated', function(){
+                var value = $(this).rateit('value');
+                controller.setRatingValue(value);
+            });
+        },
+        // render warning modal (undone action)
+        warn: function(){
+            this.$warn.modal('show');
+        },
+        // hiding the modal
+        hide: function(){
+            this.$warn.modal('hide');
+            this.$elem.modal('hide');
+        },
+
+        // submitting the review to the controller
+        submit: function(){
+            var $textarea = $('#modalRating textarea');
+            var comment = $textarea.val();
+            if(!comment){
+                $textarea.parent().addClass('has-error');
+                return;
+            }
+            this.hide();
+            controller.setRatingComment(comment);
+            
+            var value = this.$rateit.rateit('value');
             controller.setRatingValue(value);
-        });
-    },
-    hide: function(){
-        this.elem.modal('hide');
-    }
-};
+            
+            controller.addReview();
+        }
+    };
 
-window.onload = function(){
-    controller.init();
-};
+    // initialize the controller if the user is authenticated
+    $(document).ready(function(){
+        if(window.isLoggedIn) controller.init();
+    });
+
+})();
