@@ -263,6 +263,5 @@
         window.isLoggedIn = "{{user.is_authenticated}}" == "True";
         window.user = "{{user.pk}}";
     </script>
-    <script src="{% static 'js/rate_event.js'%}" type="text/javascript" charset="utf-8"></script>
-    <script src="{% static 'js/jquery.rateit.min.js'%}" type="text/javascript" charset="utf-8"></script>
+    {% javascript 'rate_event' %}
 {% endblock %}

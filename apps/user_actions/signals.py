@@ -5,7 +5,7 @@ import logging
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
-from apps.user_actions.models import Bookmark, Done, View
+from apps.user_actions.models import Bookmark, Done, View, Review
 from apps.user_actions.tasks import new_action
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -36,4 +36,9 @@ def bookmark_post_delete(sender, **kwargs):
 ## POST_DELETES
 @receiver(post_delete, sender=Done)
 def done_post_delete(sender, **kwargs):
-    pass
+    done = kwargs.get('instance')
+    try:
+        review = Review.objects.get(user=done.user, event=done.event)
+        review.delete()
+    except Review.DoesNotExist:
+        pass

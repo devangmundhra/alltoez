@@ -1,8 +1,13 @@
 from django.contrib import admin
 
-from apps.user_actions.models import View, Done, Bookmark, Share
+from apps.user_actions.models import View, Done, Bookmark, Share, Review
 
-admin.site.register(View)
-admin.site.register(Done)
-admin.site.register(Bookmark)
-admin.site.register(Share)
+
+class UserActionAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'user', 'event')
+
+admin.site.register(View, UserActionAdmin)
+admin.site.register(Done, UserActionAdmin)
+admin.site.register(Bookmark, UserActionAdmin)
+admin.site.register(Share, UserActionAdmin)
+admin.site.register(Review, UserActionAdmin)
