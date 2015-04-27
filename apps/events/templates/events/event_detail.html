@@ -88,7 +88,7 @@
                         <span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> Bookmark
                     </button>
                     <button type="button" data-target="#popoverRating" class="btn btn-primary {% if event.done %}active{% endif %}"
-                        {% if user.is_authenticated %}data-toggle="button"{% endif%} aria-pressed="{% if event.bookmark %}true{%else%}false{% endif %}"
+                        aria-pressed="{% if event.bookmark %}true{%else%}false{% endif %}"
                         id="done-action">
                         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Done
                     </button>

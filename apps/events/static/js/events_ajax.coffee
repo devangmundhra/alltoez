@@ -44,7 +44,8 @@ $(document).ready ->
 
   $('#done-action').on "click", (e) ->
     if isLoggedIn
-      if myevent.done
+      if !myevent.done
+      ###
         $.ajax
           type: "DELETE"
           url: myevent.done
@@ -58,6 +59,7 @@ $(document).ready ->
           success: (data, textStatus, jqXHR) ->
             myevent.done = ""
       else
+      ###
         $.ajax
           type: "POST"
           url: "#{done_url}"

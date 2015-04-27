@@ -59,7 +59,9 @@
     });
     $('#done-action').on("click", function(e) {
         if(isLoggedIn){
-          if (myevent.done) {
+          if (!myevent.done) 
+              /*
+              {
             return $.ajax({
               type: "DELETE",
               url: myevent.done,
@@ -75,7 +77,10 @@
                 return myevent.done = "";
               }
             });
-          } else {
+          } 
+          else 
+          */
+          {
             return $.ajax({
               type: "POST",
               url: "" + done_url,

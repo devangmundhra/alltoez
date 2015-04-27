@@ -31,6 +31,25 @@
                     console.log("" + textStatus + " in marking adding review " + errorThrown);
                 }
             });
+        },
+        delete: function(){
+            if (myevent.done) {
+                return $.ajax({
+                    type: "DELETE",
+                    url: myevent.done,
+                    contentType: "application/json",
+                    dataType: "html",
+                    processData: false,
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log("" + textStatus + " in marking event undone " + errorThrown);
+                    },
+                    success: function(data, textStatus, jqXHR) {
+                        $('#done-action').button("toggle");
+                        $('#done-action').removeClass("active");
+                        return myevent.done = "";
+                    }
+                });
+            } 
         }
     };
 
@@ -51,6 +70,9 @@
             var self = this;
             rating.save();
         
+        },
+        deleteDone: function(){
+            rating.delete();
         }
     };
 
@@ -77,6 +99,8 @@
             // either shows the modal or the warning
             this.$target.on('click', function(){
                 if(this.className.indexOf('active') == -1){
+                    $(this).button("toggle");
+                    $(this).addClass("active");
                     self.render();
                 } else {
                     self.warn();
@@ -87,6 +111,10 @@
             $('#reviewSubmit').on('click', function(){
                 self.submit();
             });
+            // binding event listener to submit event action
+            $('#reviewDelete').on('click', function(){
+                self.deleteReview();
+            });
         },
         // rendering the modal for review creation
         render: function(){
@@ -96,8 +124,10 @@
             this.$elem.modal('show');
 
             // if the modal has error class for the comment input, then remove it
+            /*
             var $textarea = this.$elem.find('textarea');
             $textarea.parent().removeClass('has-error');
+            */
             
             // initializing rating stars
             this.$rateit = $('#modalRate');
@@ -130,12 +160,15 @@
 
         // submitting the review to the controller
         submit: function(){
+
             var $textarea = $('#modalRating textarea');
             var comment = $textarea.val();
+            /*
             if(!comment){
                 $textarea.parent().addClass('has-error');
                 return;
             }
+            */
             this.hide();
             controller.setRatingComment(comment);
             
@@ -143,6 +176,12 @@
             controller.setRatingValue(value);
             
             controller.addReview();
+        },
+        deleteReview: function(){
+            this.hide();
+            controller.setRatingValue(0);
+            controller.setRatingComment('');
+            controller.deleteDone();
         }
     };
 
