@@ -121,6 +121,7 @@
             // getting the rating value
             var value = controller.getRatingValue();
 
+            $('#reviewSubmit').attr('disabled', 'disabled');
             this.$elem.modal('show');
 
             // if the modal has error class for the comment input, then remove it
@@ -146,6 +147,7 @@
             this.$rateit.bind('rated', function(){
                 var value = $(this).rateit('value');
                 controller.setRatingValue(value);
+                $('#reviewSubmit').removeAttr('disabled');
             });
         },
         // render warning modal (undone action)
