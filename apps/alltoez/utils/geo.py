@@ -54,12 +54,10 @@ def rev_geocode_location_component(lat, lng, result_type=""):
         return ""
     # Example https://maps.googleapis.com/maps/api/geocode/json?latlng=37.7628848%2C-122.428514&key=AIzaSyDOtkrcR4QFGYTMdR71WkkUYsMQ735c_EU&result_type=neighborhood
     try:
-        address = res['results'][0]['address_components'][0]['short_name']
-        import pdb
-
-        if result_type == 'political' and not address:
-            pdb.set_trace()
-        return address
+        for result in res['results'][0]['address_components']:
+            if result_type in result['types']:
+                return result['short_name']
+        return ""
     except ValueError:
         return ""
 

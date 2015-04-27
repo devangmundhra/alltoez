@@ -3,3 +3,5 @@
 {% for category in object.category.all %}
   {{ category.name }}
 {% endfor %}
+{{ object.venue.city }}
+{{ object.venue.neighborhood }}

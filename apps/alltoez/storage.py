@@ -14,7 +14,7 @@ def domain(url):
     return urlparse.urlparse(url).hostname
 
 
-class GZipPipelineStorage(GZIPMixin, PipelineStorage):
+class GZipPipelineStorage(PipelineStorage):
     pass
 
 

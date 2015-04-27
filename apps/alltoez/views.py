@@ -63,7 +63,6 @@ class AlltoezSearchView(FacetedSearchView):
         extra['page_template'] = self.page_template
         return extra
 
-
 def autocomplete(request):
     my_query = request.GET.get('q', '')
     sqs = SearchQuerySet().filter(end_date__gte=timezone.now().date()).autocomplete(title_auto=my_query)[:8]

@@ -3,15 +3,44 @@
 
 {% if query %}
     <!-- Begin faceting. -->
-    <div class="category-drilldown">
-        {% if facets.fields.categories %}
+    <div class="facet-drilldown venue-details">
+        {% if facets.fields.city and facets.fields.city|length > 1 %}
         <ul class="list-inline">
+        <li><span class="facet-heading">Cities </span></li>
+        {# Provide only the top 10 city #}
+        {% for city in facets.fields.city|slice:":50" %}
+            <li><a href="{{ request.get_full_path }}&amp;selected_facets=city:{{ city.0|urlencode }}" class="btn btn-default">
+                    {{ city.0 }} <span class="badge">{{ city.1 }}</span>
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+        <br/>
+        {% elif facets.fields.neighborhood and facets.fields.neighborhood|length > 1 %}
+        <ul class="list-inline">
+        <li><span class="facet-heading">Localities </span></li>
+        {# Provide only the top 10 neighborhoods #}
+        {% for neighborhood in facets.fields.neighborhood|slice:":10" %}
+            <li><a href="{{ request.get_full_path }}&amp;selected_facets=neighborhood:{{ neighborhood.0|urlencode }}" class="btn btn-default">
+                    {{ neighborhood.0 }} <span class="badge">{{ neighborhood.1 }}</span>
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+        <br/>
+        {% endif %}
+    </div>
+
+    <div class="category-drilldown categories">
+        {% if facets.fields.categories and facets.fields.categories|length > 1 %}
+        <ul class="list-inline">
+        <li><span class="facet-heading">Categories </span></li>
         {# Provide only the top 5 categories #}
         {% for category in facets.fields.categories|slice:":5" %}
-                <li><a href="{{ request.get_full_path }}&amp;selected_facets=categories:{{ category.0|urlencode }}" class="btn btn-default">
-                        {{ category.0 }} <span class="badge">{{ category.1 }}</span>
-                    </a>
-                </li>
+            <li><a href="{{ request.get_full_path }}&amp;selected_facets=categories:{{ category.0|urlencode }}" class="btn btn-default">
+                    {{ category.0 }} <span class="badge">{{ category.1 }}</span>
+                </a>
+            </li>
         {% endfor %}
         </ul>
         <br/>

@@ -21,6 +21,7 @@
 {% block extra_head %}
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 {% endblock %}
+{% block extracss %}{% stylesheet 'event_detail' %}{% endblock %}
 {% block site_header %}
 {% include "events/fragments/header_events.html" %}
 {% endblock %}

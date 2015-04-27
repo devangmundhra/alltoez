@@ -18,7 +18,8 @@ v1_api.register(DoneResource())
 v1_api.register(ReviewResource())
 v1_api.register(AlltoezProfileResource())
 
-sqs = SearchQuerySet().filter(end_date__gte=timezone.now().date()).facet('categories')
+sqs = SearchQuerySet().filter(end_date__gte=timezone.now().date()).facet('categories').\
+    facet('city',).facet('neighborhood',)
 
 urlpatterns = patterns('',
     url(r"^$", home,  name="home"),
