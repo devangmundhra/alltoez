@@ -1,0 +1,44 @@
+<!-- Modal -->
+<div class="modal fade" id="modalRating" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h2 class="modal-title" id="rate-event">Rate this event</h2>
+            </div>
+            <div class="modal-body">
+                <div style="text-align:center;">
+                    <span id="modalRate"></span>
+                </div>
+                <form>
+                    <div class="form-group">
+                        <label for="comment"></label>
+                        <textarea class="form-control" name="comment" placeholder="Help the community, give a review (optional)"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button id="reviewSubmit" type="button" class="btn btn-success" disabled="disabled">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="modalRatingWarn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h2 class="modal-title" id="review-remove-warning">Your review will also be removed.</h2>
+            </div>
+            <div class="modal-body">
+                Marking the event as "Undone" will also remove any review you might have written for the event.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button id="reviewDelete" type="button" class="btn btn-success">Understood</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -304,6 +304,13 @@ PIPELINE_JS = {
         ),
         'output_filename': 'js/login_checker.min.js',
     },
+    'rate_event': {
+        'source_filenames': (
+            'js/rate_event.js',
+            'js/jquery.rateit.min.js',
+        ),
+        'output_filename': 'js/rate_event.min.js',
+    },
 }
 
 #-------------------------------------------------------------------------------

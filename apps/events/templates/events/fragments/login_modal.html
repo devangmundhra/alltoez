@@ -1,6 +1,6 @@
 <div class="modal fade" id="loginModal">
     <div class="modal-dialog">
-        <div class="modal-content login-prompt-modal text-center">
+        <div class="modal-content login-prompt-modal heart-bkg text-center">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h2 class="modal-title" style="color:darkslategrey">Hope you are enjoying using Alltoez!</h2>
@@ -14,6 +14,27 @@
                 {% endif %}
                 <br/>
                 <h3 style="color:maroon">See something missing? <a href="mailto:support@alltoez.com" data-uv-trigger class="text-info">Let us know!</a></h3>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="loginModalActions">
+    <div class="modal-dialog">
+        <div class="modal-content login-prompt-modal text-center">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h2 class="modal-title" style="color:darkslategrey">Sign in is required</h2>
+            </div>
+            <div class="modal-body">
+                {% if not user.is_authenticated %}
+                    <h2>Please sign in first to Bookmark event or mark an event as Done</h2>
+                    {% include "alltoez/ui/fragments/social_login.html" %}
+                    <br/>
+                    {% include "alltoez/ui/fragments/email_login.html" %}
+                {% endif %}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
