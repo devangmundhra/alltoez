@@ -343,25 +343,6 @@ TWITTER_ENABLED = False
 OPENID_ENABLED = False
 
 #-------------------------------------------------------------------------------
-#	DJANGO-HUNGER SETTINGS
-#-------------------------------------------------------------------------------
-HUNGER_ENABLE = False
-HUNGER_ALWAYS_ALLOW_VIEWS = [
-    'apps.alltoez_profile.views.AlltoezSignupView',
-    'apps.alltoez.views.home',
-]
-HUNGER_ALWAYS_ALLOW_MODULES = [
-    'allauth.account.views',
-    'allauth.socialaccount.views',
-    'allauth.socialaccount.providers.oauth2.views',
-    # 'apps.events.views',
-    # 'apps.alltoez.views',
-]
-
-from django.core.urlresolvers import reverse_lazy
-HUNGER_VERIFIED_REDIRECT = reverse_lazy('alltoez_account_signup')
-
-#-------------------------------------------------------------------------------
 #	FILEBROWSER SETTINGS
 #-------------------------------------------------------------------------------
 FILEBROWSER_URL_FILEBROWSER_MEDIA = STATIC_URL + "filebrowser/"

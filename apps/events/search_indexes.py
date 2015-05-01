@@ -24,3 +24,7 @@ class EventIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_categories(self, obj):
         return [category.name for category in obj.category.all()]
+
+    def index_queryset(self, using=None):
+        """Used when the entire index for model is updated."""
+        return self.get_model().objects.filter(publish=True)
