@@ -44,22 +44,20 @@ $(document).ready ->
 
   $('#done-action').on "click", (e) ->
     if isLoggedIn
-      if !myevent.done
-      ###
-        $.ajax
-          type: "DELETE"
-          url: myevent.done
-          contentType: "application/json"
-          dataType: "html"
-          processData: false
-          error: (jqXHR, textStatus, errorThrown) ->
-            console.log "#{textStatus} in marking event undone #{errorThrown}"
-            $( e.target ).button "toggle"
-            $( e.target ).addClass "active"
-          success: (data, textStatus, jqXHR) ->
-            myevent.done = ""
-      else
-      ###
+      if not myevent.done
+      #   $.ajax
+      #     type: "DELETE"
+      #     url: myevent.done
+      #     contentType: "application/json"
+      #     dataType: "html"
+      #     processData: false
+      #     error: (jqXHR, textStatus, errorThrown) ->
+      #       console.log "#{textStatus} in marking event undone #{errorThrown}"
+      #       $( e.target ).button "toggle"
+      #       $( e.target ).addClass "active"
+      #     success: (data, textStatus, jqXHR) ->
+      #       myevent.done = ""
+      # else
         $.ajax
           type: "POST"
           url: "#{done_url}"

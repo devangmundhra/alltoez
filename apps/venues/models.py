@@ -57,6 +57,9 @@ class Venue(BaseModel, AddressMixin):
             if not self.zipcode:
                 self.zipcode = rev_geocode_location_component(self.latitude, self.longitude, 'postal_code')
                 changed = True
+            if self.neighborhood:
+                self.neighborhood = self.fix_neighborhood(self.neighborhood)
+
             # If any of the parameters were changed, save the model again
             if changed:
                 super(Venue, self).save(*args, **kwargs)
@@ -73,3 +76,14 @@ class Venue(BaseModel, AddressMixin):
             return "{}\r{}\r{}, {} {}".format(self.address, self.address_line_2, self.city, self.state, self.zipcode)
         else:
             return "{}\n{}, {} {}".format(self.address, self.city, self.state, self.zipcode)
+
+    @classmethod
+    def fix_neighborhood(cls, neighborhood):
+        if neighborhood is "Haight Ashbury":
+            return "Haight-Ashbury"
+        elif neighborhood is "Marina/ Cow Hollow":
+            return "Marina/Cow Hollow"
+        elif neighborhood is "Mission Dolores" or neighborhood is "Mission District":
+            return "Mission"
+        else:
+            return neighborhood

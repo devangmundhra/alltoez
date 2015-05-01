@@ -7981,6 +7981,8 @@ fieldset[disabled] .social-login-row > div > a.active {
 }
 .login-prompt-modal {
   background-color: white;
+}
+.login-prompt-modal .heart-bkg {
   background-image: url(../img/img-hearts-modal.jpg);
   background-position: center center;
   background-repeat: no-repeat;

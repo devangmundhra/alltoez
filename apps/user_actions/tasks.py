@@ -68,7 +68,7 @@ def new_action(event_type, user_id, event_id, session_id=None):
                 "cost": event.cost,
                 "start_date": event.start_date.isoformat(),
                 "end_date": event.end_date.isoformat() if event.end_date else None,
-                "publish_date": event.published_at.isoformat()
+                "publish_date": event.published_at.isoformat() if event.published_at else None
             },
             "venue": {
                 "venue_id": event.venue.id,
