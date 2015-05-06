@@ -8,7 +8,7 @@
  * @license MIT
  * @author Mykhailo Stadnyk <mikhus@gmail.com>
  */
-; var Url = (function() {
+ var Url = (function() {
 	"use strict";
 
 	var

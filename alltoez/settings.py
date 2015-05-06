@@ -241,8 +241,9 @@ DJANGO_REDIS_IGNORE_EXCEPTIONS = True
 #	PIPELINE SETTINGS
 #-------------------------------------------------------------------------------
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
-PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
+PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
 PIPELINE_YUGLIFY_BINARY = os.path.join(PROJECT_ROOT, "node_modules/yuglify/bin/yuglify")
+PIPELINE_UGLIFYJS_BINARY = os.path.join(PROJECT_ROOT, "node_modules/uglifyjs/bin/uglifyjs")
 PIPELINE_COFFEE_SCRIPT_BINARY = os.path.join(PROJECT_ROOT, "node_modules/coffee-script/bin/coffee")
 PIPELINE_DISABLE_WRAPPER = True
 PIPELINE_COMPILERS = (
@@ -284,7 +285,6 @@ PIPELINE_JS = {
             'js/lib/jquery.class.js',
             'js/lib/jquery.cookie.js',
             'js/lib/bootstrap.min.js',
-            # 'js/lib/chosen.jquery.js',
         ),
         'output_filename': 'js/base.min.js',
     },
