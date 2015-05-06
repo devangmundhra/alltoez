@@ -15,8 +15,9 @@ class ChildrenInline(admin.StackedInline):
 
 
 class MyUserAdmin(UserAdmin):
-    list_display = ('username','email','first_name','last_name','date_joined','last_login','is_staff', 'is_active')
-    list_editable = ['is_active']
+    list_display = ('username', 'email', 'first_name', 'last_name', 'date_joined', 'last_login',
+                    'is_staff', 'is_active')
+    list_editable = ['is_active',]
     inlines = [UserProfileInline, ChildrenInline]
 
 admin.site.unregister(User)

@@ -115,24 +115,6 @@ def add_class(value, css_class):
 		return mark_safe(string.replace('>', ' class="%s">' % css_class))
 	return value
 
-# placeholder_re = re.compile(r'(?<=placeholder=["\'])(.*)(?=["\'])')
-# @register.filter
-# def label_as_placeholder(input):
-#     """Applies a placeholder to any html element based on the label
-#     """
-#     string = unicode(input)
-#     match = placeholder_re.search(string)
-#     label_val = input.label.capitalize()
-#     if match:
-#         m = re.search(r'^%s$|^%s\s|\s%s\s|\s%s$' % (label_val, label_val,
-#         											label_val, label_val),
-#         											match.group(1))
-#         if not m:
-#             return mark_safe(placeholder_re.sub(match.group(1) + " " + label_val,
-#         								  string))
-#     else:
-#         return mark_safe(string.replace('>', ' placeholder="%s">' % label_val))
-#     return input
 
 class RecurseNode(template.Node):
 	def __init__(self, var, name, child, nodeList):

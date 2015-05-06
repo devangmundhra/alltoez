@@ -1,14 +1,20 @@
 {% extends "alltoez/ui/layouts/base.html" %}
 {% load common_tags %}
 {% load static from staticfiles %}
-{% load cache pipeline %}
+{% load cache pipeline future %}
 
 {% block site_header %}
 {% include "events/fragments/header_events.html" %}
 {% endblock %}
 
 {% block title %}Events{% endblock %}
-{% block extracss %}{% stylesheet 'event_list' %}{% endblock %}
+{% block extra_head %}
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+{% endblock %}
+{% block extracss %}
+{% stylesheet 'event_list' %}
+{% endblock %}
+
 {% block body_class %}events{% endblock %}
 
 {% block content_full_width %}
@@ -17,10 +23,21 @@
 			<div class="row">
 				<div class="col-xs-12 col-sm-12">
 					<div class="page-header">
-						<h1>Events</h1>
 						<p class="lead event-filter">I'm looking for
                             <a href="#" id="filter-category" class="filter-category">{% firstof category.name 'all events' %}</a>
+                            {% if location_string %}
+                             near
+                            <a href="#" id="filter-location" class="filter-location">{{ location_string }}</a>
+                            {% else %}
+                             in
+                            <a href="#" id="filter-location" class="filter-location">Bay Area</a>
+                            {% endif %}
                         </p>
+
+                        <div id="filter-location-header" class="filter-location-header visible">
+                            <input id="pac-input" class="controls" type="text" style="visibility:hidden;" placeholder="Search for a place or neighborhood">
+                            <div id="map-canvas"></div>
+                        </div>
 
 						<div id="filter-header" class="filter-header">
 							<div class="category-selection clearfix">
@@ -51,14 +68,12 @@
 	</div>
 
 	<div class="strip narrow light-grey">
+
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12 col-sm-12">
 					<span class="qty-events">
                         {{ paginator.object_list.count }} events
-                        {% if event_sort == 'distance' %}
-                        at {{ venue_radius }} miles from {{ location_string }}
-                        {% endif %}
                     </span>
 					<select class="sort-events form-control">
                         <option value="-published_at" {% if event_sort == '-published_at' %}SELECTED{% endif %}>New on Alltoez</option>
@@ -117,7 +132,275 @@
 {% endblock %}
 
 {% block extra_js %}
-    {% javascript 'get_location' %}
+      <script>
+        /**
+         * The SubmitControl adds a control to the map that submits the map info to the server.
+         * This constructor takes the control DIV as an argument.
+         * @constructor
+         */
+        function SubmitControl(controlDiv, map, circle) {
+
+          // Set CSS for the control border
+          var controlUI = document.createElement('button');
+          controlUI.className = 'btn btn-primary controls';
+          controlUI.innerHTML = 'Search here';
+          controlUI.title = 'Click to filter by location';
+          controlUI.style.marginLeft = '10px';
+          controlDiv.appendChild(controlUI);
+
+          // Setup the click event listeners: send the map coords to server
+          google.maps.event.addDomListener(controlUI, 'click', function() {
+            var u  = new Url;
+            delete u.query.area;
+            u.query.lat = circle.getCenter().lat();
+            u.query.lng = circle.getCenter().lng();
+            u.query.radius = Math.ceil(circle.getRadius() / 1609);
+            document.location.href = u;
+          });
+        }
+
+        /**
+         * The SubmitControl adds a control to the map that clears map info from server
+         * This constructor takes the control DIV as an argument.
+         * @constructor
+         */
+        function AllBayControl(controlDiv, map) {
+
+          // Set CSS for the control border
+          var controlUI = document.createElement('button');
+          controlUI.className = 'btn btn-default controls';
+          controlUI.innerHTML = 'Search all Bay Area';
+          if (isMobile.any)
+          {
+            controlUI.innerHTML = 'Bay Area';
+          }
+          controlUI.style.marginBottom = '10px';
+          controlUI.title = 'Click to remove filter by location';
+          controlDiv.appendChild(controlUI);
+
+          // Setup the click event listeners: send the map coords to server
+          google.maps.event.addDomListener(controlUI, 'click', function() {
+            var u  = new Url;
+            delete u.query.lat;
+            delete u.query.lng;
+            delete u.query.radius;
+            u.query.area = "Bay Area";
+            document.location.href = u;
+          });
+        }
+
+        /**
+         * The CurrentLocationControl adds a control to the map that clears map info from server
+         * This constructor takes the control DIV as an argument.
+         * @constructor
+         */
+        function CurrentLocationControl(controlDiv, map, circle) {
+
+          // Set CSS for the control border
+          var controlUI = document.createElement('button');
+          controlUI.className = 'btn btn-success controls';
+          controlUI.innerHTML = 'Current location';
+          controlUI.style.marginBottom = '10px';
+          controlUI.style.marginLeft = '10px';
+          controlUI.title = 'Click to filter at current location';
+          controlDiv.appendChild(controlUI);
+
+          // Setup the click event listeners: send the map coords to server
+          google.maps.event.addDomListener(controlUI, 'click', function() {
+              if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    currentLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+                    map.setCenter(currentLocation);
+                    circle.setCenter(currentLocation);
+                    circle.setRadius(20 * 1609); // 20 miles
+                    map.fitBounds(circle.getBounds());
+
+                    var u  = new Url;
+                    delete u.query.area;
+                    u.query.lat = position.coords.latitude;
+                    u.query.lng = position.coords.longitude
+                    u.query.radius = Math.ceil(circle.getRadius() / 1609);
+                    document.location.href = u;
+                }, function(error) {
+                  ga('send', 'event', 'error', 'geolocation', error.code);
+                });
+              }
+          });
+        }
+
+        function initialize() {
+          var map_center;
+          var currentLocation;
+          {% if latitude and longitude %}
+            map_center = new google.maps.LatLng({{ latitude }}, {{ longitude }});
+          {% else %}
+            map_center = new google.maps.LatLng(37.7577, -122.4376);
+          {% endif %}
+
+          var map = new google.maps.Map(document.getElementById('map-canvas'), {
+            zoom: 12,
+            center: map_center,
+            overviewMapControl: false,
+            streetViewControl: false,
+            mapTypeControl: false
+          });
+
+
+            var circleOptions = {
+                map: map,
+                strokeColor: '#0F8200',
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: '#0F8200',
+                fillOpacity: 0.35,
+                center: map_center,
+                radius: {{ venue_radius|default:50 }}*1609,
+                editable: true,
+                draggable: true,
+                geodesic: true
+            };
+            var filterCircle = new google.maps.Circle(circleOptions);
+
+            // Add an event listener on the circle.
+            google.maps.event.addListener(filterCircle, 'radius_changed', showNewCircle);
+            google.maps.event.addListener(filterCircle, 'center_changed', showNewCircle);
+
+            // Define an info window on the map.
+            infoWindow = new google.maps.InfoWindow();
+
+          // Create the search box and link it to the UI element.
+          var input = /** @type {HTMLInputElement} */(
+              document.getElementById('pac-input'));
+          input.index = 1;
+          map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+          var searchBox = new google.maps.places.SearchBox(
+            /** @type {HTMLInputElement} */(input));
+
+          // [START region_getplaces]
+          // Listen for the event fired when the user selects an item from the
+          // pick list. Retrieve the matching places for that item.
+          google.maps.event.addListener(searchBox, 'places_changed', function() {
+            var places = searchBox.getPlaces();
+
+            if (places.length == 0) {
+              return;
+            }
+
+            // For each place, get the icon, place name, and location.
+            var myPlace;
+            for (var i = 0, place; place = places[i]; i++) {
+              filterCircle.setCenter(place.geometry.location);
+              myPlace = place;
+            }
+
+            map.setCenter(myPlace.geometry.location);
+            map.fitBounds(filterCircle.getBounds());
+          });
+          // [END region_getplaces]
+
+          // Bias the SearchBox results towards places that are within the bounds of the
+          // current map's viewport.
+          google.maps.event.addListener(map, 'bounds_changed', function() {
+            var bounds = map.getBounds();
+            searchBox.setBounds(bounds);
+          });
+
+            // Create the DIV to hold the control and
+            // call the SubmitControl() constructor passing
+            // in this DIV.
+            var submitControlDiv = document.createElement('div');
+            var submitControl = new SubmitControl(submitControlDiv, map, filterCircle);
+
+            submitControlDiv.index = 1;
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(submitControlDiv);
+
+           // Create the DIV to hold the control and
+            // call the AllBayControl() constructor passing
+            // in this DIV.
+            var allBayControlDiv = document.createElement('div');
+            var allBayControl = new AllBayControl(allBayControlDiv, map);
+
+            allBayControlDiv.index = 1;
+            map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(allBayControlDiv);
+
+
+            if (navigator.geolocation) {
+               // Create the DIV to hold the control and
+                // call the AllBayControl() constructor passing
+                // in this DIV.
+                var curLocControlDiv = document.createElement('div');
+                var curLocControl = new CurrentLocationControl(curLocControlDiv, map, filterCircle);
+
+                curLocControlDiv.index = 1;
+                map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(curLocControlDiv);
+            }
+
+            /** @this {google.maps.Circle} */
+            function showNewCircle() {
+              var radius = Math.ceil(filterCircle.getRadius() / 1609);
+              var ne = filterCircle.getBounds().getNorthEast();
+              var sw = filterCircle.getBounds().getSouthWest();
+              var contentString = '<h5>' + radius + ' miles radius </h5>';
+
+              // Set the info window's content and position.
+              infoWindow.setContent(contentString);
+              infoWindow.setPosition({lat:(ne.lat() + sw.lat())/2, lng:sw.lng()});
+              infoWindow.open(map);
+
+              map.fitBounds(filterCircle.getBounds());
+            }
+
+            map.fitBounds(filterCircle.getBounds());
+
+            if (isMobile.any)
+            {
+                $("#filter-header").removeClass('visible');
+                $("#filter-location-header").toggleClass('visible');
+            }
+
+            $("#pac-input").css("visibility", "visible");
+        }
+
+        function loadGmapScript() {
+          var script = document.createElement('script');
+          script.type = 'text/javascript';
+          script.src = 'https://maps.googleapis.com/maps/api/js?v=3.19&libraries=places&sensor=false&callback=initialize';
+          document.body.appendChild(script);
+        }
+
+        window.onload = loadGmapScript;
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $("#filter-category").on('click', function(e) {
+                e.preventDefault();
+                $("#filter-location-header").removeClass('visible');
+                $("#filter-header").toggleClass('visible');
+            });
+
+            $("#filter-location").on('click', function(e) {
+                e.preventDefault();
+                $("#filter-header").removeClass('visible');
+                $("#filter-location-header").toggleClass('visible');
+            });
+
+            $('.sort-events').on('change', function(e) {
+                var sortBy = $(".sort-events").find(":selected").attr('value');
+                var u  = new Url;
+                u.query.sort = sortBy;
+                document.location.href = u;
+        //        $(".events-list").animate({opacity: 0}, 500, function(){
+        //            $.get("/events/sort/", {'sort': sortBy}, function(data) {
+        //                console.log(data);
+        //                $(".events-list").html(data);
+        //                $(".events-list").animate({opacity: 1});
+        //            });
+            });
+        });
+    </script>
+
     {% if not user.is_authenticated %}
         {% javascript 'login_prompt' %}
         <script src="{% static 'js/login_checker.js' %}" type="text/javascript" charset="utf-8"></script>

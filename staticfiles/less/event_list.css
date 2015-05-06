@@ -82,17 +82,30 @@
 body .event-filter {
   font-size: 28px;
 }
+body.events .filter-location-header {
+  position: relative;
+  opacity: 0.0;
+  height: 0px;
+  -webkit-transition: all 250ms ease-out;
+  -o-transition: all 250ms ease-out;
+  transition: all 250ms ease-out;
+  overflow: hidden;
+}
+body.events .filter-location-header.visible {
+  height: 250px;
+  opacity: 1.0;
+  margin-top: 20px;
+}
 body.events .filter-category,
-body.events .filter-distance {
+body.events .filter-location {
   border-bottom: dashed 1px #337ab7;
 }
 body.events .filter-category:hover,
-body.events .filter-distance:hover {
+body.events .filter-location:hover {
   text-decoration: none;
 }
 body.events .filter-header {
   position: relative;
-  margin-top: 20px;
   opacity: 0.0;
   height: 0px;
   -webkit-transition: all 250ms ease-out;
@@ -167,6 +180,7 @@ body.events .filter-header .category-selection > ul > li > ul > li a:hover {
 body.events .filter-header.visible {
   height: 100%;
   opacity: 1.0;
+  margin-top: 20px;
 }
 body.events .qty-events {
   font-weight: bold;
@@ -269,4 +283,67 @@ body.events .event-meta {
   margin-left: 3px;
   color: #999999;
   font-size: 12px;
+}
+body #map-canvas {
+  height: 250px;
+  margin: 0px;
+  padding: 0px;
+}
+body #map-canvas .controls {
+  margin-top: 16px;
+  border: 1px solid transparent;
+  border-radius: 2px 0 0 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  height: 32px;
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+body #map-canvas #pac-input {
+  background-color: #fff;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 300;
+  margin-left: 12px;
+  padding: 0 11px 0 13px;
+  text-overflow: ellipsis;
+  width: 400px;
+}
+body #map-canvas #pac-input:focus {
+  border-color: #4d90fe;
+}
+body #map-canvas .pac-container {
+  font-family: 'Open Sans', sans-serif;
+}
+body #map-canvas #type-selector {
+  color: #fff;
+  background-color: #4d90fe;
+  padding: 5px 11px 0px 11px;
+}
+body #map-canvas #type-selector label {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+}
+body #map-canvas #target {
+  width: 345px;
+}
+@media (max-width: 1199px) {
+  body #map-canvas {
+    height: 200px;
+    margin: 0px;
+    padding: 0px;
+  }
+  body #map-canvas .controls {
+    margin-top: 16px;
+    height: 32px;
+    font-size: 12px;
+  }
+  body #map-canvas #pac-input {
+    background-color: #fff;
+    margin-left: 12px;
+    padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+    width: 57%;
+  }
 }

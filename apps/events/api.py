@@ -47,10 +47,16 @@ class EventInternalResource(ModelResource):
     @newrelic.agent.function_trace()
     def dehydrate_distance(self, bundle):
         origin = None
-        if bundle.request.COOKIES.get('latitude', None) and bundle.request.COOKIES.get('longitude', None):
-            origin = Point(float(bundle.request.COOKIES['longitude']), float(bundle.request.COOKIES['latitude']))
-        elif bundle.request.user.is_authenticated():
-            origin = bundle.request.user.profile.point
+        if bundle.request.user.is_authenticated() and bundle.request.user.profile.last_filter_center:
+            lat = bundle.request.user.profile.last_filter_center.y
+            lng = bundle.request.user.profile.last_filter_center.x
+        # Check if there is anything in the cookies to use
+        else:
+            lat = bundle.request.session.get('latitude', None)
+            lng = bundle.request.session.get('longitude', None)
+
+        if lat and lng:
+            origin = Point(lng, lat)
         if not origin:
             return None
         event = Event.objects.all().filter(id=bundle.obj.id).distance(origin, field_name='venue__point').first()

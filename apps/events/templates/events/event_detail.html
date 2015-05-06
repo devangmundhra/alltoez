@@ -19,7 +19,7 @@
 {% block page_title_outer %}{% endblock %}
 {% block page_title %}{% endblock %}
 {% block extra_head %}
-    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
     <link href="{% static 'css/rateit.css' %}" rel="stylesheet" type="text/css">
 {% endblock %}
 {% block extracss %}{% stylesheet 'event_detail' %}{% endblock %}
@@ -122,7 +122,7 @@
                     <h4>{{ event.title}}</h4>
                     <p>{{event.venue.address|linebreaks}}</p>
                     {% if event.distance != None %}
-                    <p>{{ event.distance|floatformat }} mi from your location</p>
+                    <p>{{ event.distance|floatformat }} mi from {{ location_string }}</p>
                     {% endif %}
                     {% if request.user.is_superuser %}
                     <a href="{% url 'admin:venues_venue_change' object.venue.id %}" class="venue-admin btn btn-sm btn-primary">Edit Venue</a>
@@ -256,7 +256,6 @@
         });
     </script>
     {% javascript 'events_detail' %}
-    {% javascript 'get_location' %}
     {% if not user.is_authenticated %}
         {% javascript 'login_prompt' %}
     {% endif %}

@@ -279,10 +279,12 @@ PIPELINE_JS = {
         'source_filenames': (
             'js/main.js',
             'js/ajax_request.js',
+            'js/url.js',
+            'js/isMobile.js',
             'js/lib/jquery.class.js',
             'js/lib/jquery.cookie.js',
             'js/lib/bootstrap.min.js',
-            'js/lib/chosen.jquery.js',
+            # 'js/lib/chosen.jquery.js',
         ),
         'output_filename': 'js/base.min.js',
     },
@@ -291,12 +293,6 @@ PIPELINE_JS = {
             'js/events_ajax.coffee',
         ),
         'output_filename': 'js/events_detail.min.js',
-    },
-    'get_location': {
-        'source_filenames': (
-            'js/get_location.js',
-        ),
-        'output_filename': 'js/get_location.min.js',
     },
     'login_prompt': {
         'source_filenames': (
