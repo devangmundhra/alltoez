@@ -13,12 +13,14 @@ from django.contrib.sites.models import Site
 from django.conf.urls import url, patterns
 from django.template import RequestContext
 from django.shortcuts import render_to_response
+from django.db.models import Count
 
 from pagedown.widgets import AdminPagedownWidget
 from django_extensions.admin import ForeignKeyAutocompleteAdmin
 
 from apps.events.models import DraftEvent, Event, EventRecord, Category
 from apps.venues.models import Venue
+
 
 class ExpiredEventListFilter(admin.SimpleListFilter):
     # Human-readable title which will be displayed in the
@@ -194,7 +196,8 @@ class EventAdmin(ForeignKeyAutocompleteAdmin):
     def get_urls(self):
             urls = super(EventAdmin, self).get_urls()
             my_urls = patterns('',
-                               (r'^sourcelist/$', self.admin_site.admin_view(self.top_level_event_domain_view)),)
+                               (r'^sourcelist/$', self.admin_site.admin_view(self.top_level_event_domain_view)),
+                               (r'^venue_map/$', self.admin_site.admin_view(self.venue_map)),)
             return my_urls + urls
 
     def venue_admin_url(self, obj):
@@ -224,6 +227,23 @@ class EventAdmin(ForeignKeyAutocompleteAdmin):
         return render_to_response('admin/event_domains.html', {"domains": sorted_counts, "title": "Events domain list"},
                                   context_instance=RequestContext(request, current_app=self.admin_site.name))
 
+    def venue_map(self, request):
+        """
+        Displays all venues with event counts on a map
+        :param request:
+        :return:
+        """
+        venues = Event.objects.all().filter(publish=True).\
+            filter(Q(end_date__gte=timezone.now().date()) | Q(end_date=None)).values('venue').\
+            annotate(total=Count('venue')).order_by('total')
+
+        venue_list = []
+        for venue in venues:
+            venue_obj = Venue.objects.all().filter(pk=venue['venue']).first()
+            venue_list += [{'name': venue_obj.name, 'lat': venue_obj.latitude, 'lng': venue_obj.longitude,
+                            'count': venue['total']}]
+        return render_to_response('admin/venue_map.html', {"venue_list": venue_list, "title": "Venue map"},
+                                  context_instance=RequestContext(request, current_app=self.admin_site.name))
     pass
 
 admin.site.register(Event, EventAdmin)

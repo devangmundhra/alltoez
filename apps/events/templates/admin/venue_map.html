@@ -1,0 +1,53 @@
+{% extends 'admin/base_site.html' %}
+{% load i18n admin_urls admin_static admin_modify %}
+
+{% block extrahead %}
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Simple markers</title>
+    <style>
+      #map-canvas {
+        height: 70vh;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script>
+        function initialize() {
+          var myLatlng = new google.maps.LatLng(37.7577, -122.4376);
+          var mapOptions = {
+            zoom: 5,
+            center: myLatlng
+          }
+          var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+          var infoWindow = new google.maps.InfoWindow();
+          var marker;
+          {% for venue in venue_list %}
+              marker = new google.maps.Marker({
+                  position: new google.maps.LatLng({{ venue.lat }}, {{ venue.lng }}),
+                  map: map,
+                  title: '{{ venue.name }}'
+              });
+
+            google.maps.event.addListener(marker, "click", (function(marker) {
+              return function() {
+                infoWindow.setContent("<div> <p><b>{{ venue.name }}</b></p><p>{{ venue.count }} events</p></div>");
+                infoWindow.open(map, marker);
+              }
+            })(marker));
+          {% endfor %}
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+{% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+{% endblock %}
+
+{% block content %}
+    <div id="map-canvas"></div>
+{% endblock %}

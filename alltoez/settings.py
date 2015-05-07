@@ -431,6 +431,10 @@ ADMIN_SHORTCUTS = [
                 'url': '/admin/events/event/sourcelist/',
                 'title': 'Event Sources',
             },
+            {
+                'url': '/admin/events/event/venue_map/',
+                'title': 'Venue Map',
+            },
         ]
     },
 ]
