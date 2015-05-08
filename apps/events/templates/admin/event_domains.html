@@ -6,9 +6,19 @@
     <div class="breadcrumbs"><a href="/admin/"></a></div>
 {% endblock %}
 
-{% block extrastyle %}
+{% block extrahead %}
     {{ block.super }}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -21,12 +31,30 @@
     </tr>
     </thead>
     <tbody>
-    {% for url, count in domains %}
+    {% for url, info in domains %}
     <tr>
         <td>{{ forloop.counter }}</td>
         <td><a href="{{ url }}" target="_blank">{{ url }}</a></td>
-        <td>{{ count }}</td>
+        <td><button type="button" class="btn btn-sm" data-toggle="modal" data-target="#{{url|slugify}}Modal">{{ info.count }}</button>
     </tr>
+    <div class="modal fade" id="{{url|slugify}}Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">{{ info.count }} events at {{ url }}</h4>
+          </div>
+          <div class="modal-body">
+            {% for event_slug in info.slugs %}
+              <p><a href='{% url "event_detail" event_slug %}' target="_blank">{{ event_slug }}</a></p>
+            {% endfor %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     {% endfor %}
     </tbody>
 </table>

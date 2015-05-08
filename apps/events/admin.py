@@ -215,15 +215,18 @@ class EventAdmin(ForeignKeyAutocompleteAdmin):
         :param request:
         :return:
         """
-        events_url = Event.objects.all().values('url')
-        counts = dict()
-        for event_url in events_url:
-            url = event_url['url']
-            if url:
-                parsed_uri = urlparse(url)
+        events_detail = Event.objects.all().values('url', 'slug')
+        details = dict()
+        for event_detail in events_detail:
+            e_url = event_detail['url']
+            if e_url:
+                parsed_uri = urlparse(e_url)
                 uri = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
-                counts[uri] = counts.get(uri, 0) + 1
-        sorted_counts = sorted(counts.items(), key=operator.itemgetter(1), reverse=True)
+                count = details.get(uri, {}).get('count', 0) + 1
+                slugs = details.get(uri, {}).get('slugs', [])
+                slugs += [event_detail['slug']]
+                details[uri] = {'count': count, 'slugs': slugs}
+        sorted_counts = sorted(details.items(), key=operator.itemgetter(1), reverse=True)
         return render_to_response('admin/event_domains.html', {"domains": sorted_counts, "title": "Events domain list"},
                                   context_instance=RequestContext(request, current_app=self.admin_site.name))
 
