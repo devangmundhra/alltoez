@@ -268,9 +268,6 @@
             google.maps.event.addListener(filterCircle, 'radius_changed', showNewCircle);
             google.maps.event.addListener(filterCircle, 'center_changed', showNewCircle);
 
-            // Define an info window on the map.
-            infoWindow = new google.maps.InfoWindow();
-
           // Create the search box and link it to the UI element.
           var input = /** @type {HTMLInputElement} */(
               document.getElementById('pac-input'));
@@ -341,16 +338,6 @@
 
             /** @this {google.maps.Circle} */
             function showNewCircle() {
-              var radius = Math.ceil(filterCircle.getRadius() / 1609);
-              var ne = filterCircle.getBounds().getNorthEast();
-              var sw = filterCircle.getBounds().getSouthWest();
-              var contentString = '<h5>' + radius + ' miles radius </h5>';
-
-              // Set the info window's content and position.
-              infoWindow.setContent(contentString);
-              infoWindow.setPosition({lat:(ne.lat() + sw.lat())/2, lng:sw.lng()});
-              infoWindow.open(map);
-
               map.fitBounds(filterCircle.getBounds());
             }
 

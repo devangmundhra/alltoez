@@ -54,6 +54,7 @@ class Category(models.Model):
 
     class Meta:
         ordering = ("-parent_category__name", "name")
+        app_label = 'events'
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -85,6 +86,9 @@ class DraftEvent(models.Model):
     source = models.CharField(max_length=200)
     source_url = models.URLField(blank=True, null=True, unique=True)
     processed = models.BooleanField(default=False)
+
+    class Meta:
+        app_label = 'events'
 
     def save(self, *args, **kwargs):
         if self.event_set.count():
@@ -134,6 +138,7 @@ class Event(models.Model):
 
     class Meta:
         ordering = ['-published_at', '-start_date', 'end_date']
+        app_label = 'events'
 
     def save(self, *args, **kwargs):
         if not self.pk:
@@ -160,6 +165,7 @@ class EventRecord(models.Model):
     class Meta:
         unique_together = ('event', 'date')
         ordering = ['date']
+        app_label = 'events'
 
     def __unicode__(self):
         return u'{} on {}'.format(self.event.title, self.date)
@@ -171,5 +177,8 @@ class SimilarEvents(models.Model):
     This class stores a temporary mapping of similar events between for a given event
     """
     created_at = models.DateTimeField(auto_now_add=True)
-    event = models.ForeignKey(Event, unique=True)
+    event = models.OneToOneField(Event)
     similar_events = models.ManyToManyField(Event, related_name="+")
+
+    class Meta:
+        app_label = 'events'

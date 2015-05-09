@@ -1,6 +1,9 @@
+import pytz
+
 from django import http
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.utils import timezone
 
 
 class RedirectIfIncompleteProfile(object):
@@ -21,3 +24,9 @@ class RedirectIfIncompleteProfile(object):
                         not path.startswith('/beta-'):
             return http.HttpResponseRedirect(redirect_url)
         return None
+
+
+class TimezoneMiddleware(object):
+    def process_request(self, request):
+        tzname = 'US/Pacific-New'
+        timezone.activate(pytz.timezone(tzname))

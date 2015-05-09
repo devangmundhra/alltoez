@@ -11,6 +11,7 @@ class UserEventActionsAbstractModel(BaseModel):
 
     class Meta:
         abstract = True
+        app_label = 'user_actions'
 
 
 class View(UserEventActionsAbstractModel):

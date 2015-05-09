@@ -54,6 +54,9 @@ class UserProfile(BaseModel, AddressMixin):
 
     objects = models.GeoManager()
 
+    class Meta:
+        app_label = 'alltoez_profile'
+
     def get_absolute_url(self):
         return reverse('profile', args=[self.user.username])
 
@@ -94,6 +97,9 @@ class Child(BaseModel):
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
     gender = models.PositiveSmallIntegerField(default=0, choices=CHILD_GENDER_CHOICES.get_choices(), db_index=True)
     age = models.PositiveSmallIntegerField(blank=True, null=True)
+
+    class Meta:
+        app_label = 'alltoez_profile'
 
     @property
     def current_age(self):

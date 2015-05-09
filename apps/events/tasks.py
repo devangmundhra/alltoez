@@ -57,12 +57,12 @@ def get_redtri_events():
                                          to=["devangmundhra@gmail.com", "ruchikadamani90@gmail.com"], body=text_body)
             msg.attach_alternative(html_body, "text/html")
             msg.send()
-    except:
+    except Exception:
         pass
 
 
 def get_expired_events():
-    today = datetime.today()
+    today = datetime.today() + timedelta(days=1)
     expired_events_qs = Event.objects.filter(end_date=datetime.today())
     if expired_events_qs:
         expired_events = []

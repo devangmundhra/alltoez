@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.db.models import Q
 from django.utils import timezone
 from django.contrib.gis.geos import Point
@@ -41,8 +42,9 @@ class EventInternalResource(ModelResource):
         :return: Queryset of events
         """
         # If user is not authenticated, show all the events
+        end_date = timezone.now() + timedelta(days=1)
         return super(EventInternalResource, self).get_object_list(request).filter(publish=True).filter(
-            Q(end_date__gte=timezone.now().date()) | Q(end_date=None)).order_by('-published_at')
+            Q(end_date__gte=end_date.date()) | Q(end_date=None)).order_by('-published_at')
 
     @newrelic.agent.function_trace()
     def dehydrate_distance(self, bundle):

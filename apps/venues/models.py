@@ -24,6 +24,9 @@ class Venue(BaseModel, AddressMixin):
     facebook_url = models.URLField(blank=True, null=True, verbose_name='Facebook Url')
     objects = models.GeoManager()
 
+    class Meta:
+        app_label = 'venues'
+
     def __init__(self, *args, **kwargs):
         super(Venue, self).__init__(*args, **kwargs)
         self.__original_name = self.name
