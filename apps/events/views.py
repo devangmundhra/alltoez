@@ -30,10 +30,10 @@ class Events(ListView):
     longitude = None
 
     def get(self, request, *args, **kwargs):
-        # default sort is "-published_at"
+        # default sort is "end_date"
         self.ordering = self.request.GET.get('sort')
         if not self.ordering:
-            self.ordering = self.request.session.get('event_sort', '-published_at')
+            self.ordering = self.request.session.get('event_sort', 'end_date')
         else:
             self.request.session['event_sort'] = self.ordering
 
@@ -126,6 +126,20 @@ class Events(ListView):
                 self.category = Category.objects.get(slug=self.category_slug)
             except Category.DoesNotExist:
                 pass
+
+        """
+        TO BE REMOVED WHEN MOVING TO DJANGO 1.8
+        START
+        """
+        ordering = self.ordering
+        if ordering:
+            if isinstance(ordering, six.string_types):
+                ordering = (ordering,)
+            queryset = queryset.order_by(*ordering)
+        """
+        TO BE REMOVED WHEN MOVING TO DJANGO 1.8
+        END
+        """
 
         self.queryset = queryset
         return super(Events, self).get_queryset()
