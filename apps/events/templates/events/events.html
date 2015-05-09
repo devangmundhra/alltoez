@@ -264,10 +264,6 @@
             };
             var filterCircle = new google.maps.Circle(circleOptions);
 
-            // Add an event listener on the circle.
-            google.maps.event.addListener(filterCircle, 'radius_changed', showNewCircle);
-            google.maps.event.addListener(filterCircle, 'center_changed', showNewCircle);
-
           // Create the search box and link it to the UI element.
           var input = /** @type {HTMLInputElement} */(
               document.getElementById('pac-input'));
@@ -334,11 +330,6 @@
 
                 curLocControlDiv.index = 1;
                 map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(curLocControlDiv);
-            }
-
-            /** @this {google.maps.Circle} */
-            function showNewCircle() {
-              map.fitBounds(filterCircle.getBounds());
             }
 
             map.fitBounds(filterCircle.getBounds());

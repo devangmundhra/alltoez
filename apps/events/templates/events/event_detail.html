@@ -190,7 +190,7 @@
                     {% else %}
                     <dt>Cost:</dt>
                     {% if event.cost_detail %}
-                        <dd><p>{{ event.cost_detail }}</p></dd>
+                        <p>{{ event.cost_detail|format_event_cost|markdown }}</p>
                     {% else %}
                         <dd>${{ event.cost|floatformat }}</dd>
                     {% endif %}

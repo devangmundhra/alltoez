@@ -62,7 +62,7 @@ def get_redtri_events():
 
 
 def get_expired_events():
-    today = datetime.today() + timedelta(days=1)
+    today = datetime.today()
     expired_events_qs = Event.objects.filter(end_date=datetime.today())
     if expired_events_qs:
         expired_events = []

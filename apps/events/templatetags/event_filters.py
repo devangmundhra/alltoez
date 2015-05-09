@@ -13,6 +13,7 @@ from babel.dates import format_date, format_timedelta
 logger = logging.getLogger(__name__)
 register = template.Library()
 
+
 @register.filter(expects_localtime=True)
 def time_range(start_time, end_time):
     """Make time ranges like 7-9 p.m."""
@@ -30,6 +31,7 @@ def time_range(start_time, end_time):
     first_part = first_part.replace(' a.m.', '').replace(' p.m.', '')
     return u'%s-%s' % (first_part, time_format(end_time, 'P'))
 
+
 @register.filter
 def local_day_date(date_value):
     date = parse_date(date_value)
@@ -40,10 +42,12 @@ def get_datetime_date(date_value):
     date = parse_date(date_value)
     return date
 
+
 @register.filter
 def format_date_filter(date_value, format_type='medium'):
     date = parse_date(date_value)
     return format_date(date, format=format_type, locale=to_locale(get_language()))
+
 
 @register.filter
 def naturaldatetime(datetime_value):
@@ -51,11 +55,13 @@ def naturaldatetime(datetime_value):
     delta = timezone.now().date() - datetime.date()
     return format_timedelta(delta, granularity='day', locale=to_locale(get_language()))
 
+
 @register.filter
 def days_since(datetime_value):
     datetime = parse_datetime(datetime_value)
     delta = timezone.now().date() - datetime.date()
     return delta.days
+
 
 @register.filter
 @stringfilter
@@ -81,4 +87,32 @@ def format_event_datetime(value):
             out_lines.append('|'.join(split_line))
 
     output = split_string.join(out_lines)
+    return output
+
+
+@register.filter
+@stringfilter
+def format_event_cost(value):
+    """
+    Convert the event cost into GFM format of tables
+    https://help.github.com/articles/github-flavored-markdown/#tables
+    :param value: cost info persisted in the db
+    :return: tabular format of event days and time
+    """
+    if value.find(', ') == -1:
+        # No point converting this into table form since this is not in the Cost, (Attr) format
+        return value
+    split_string = ', '
+    in_lines = value.split(split_string)
+    out_lines = ['|', '-|-']
+    for line in in_lines:
+        split_line = line.split(' (')
+        print split_line
+        if len(split_line) == 1:
+            out_lines.append('{}|'.format(split_line[0]))
+        else:
+            out_lines.append('{}|{}'.format(split_line[1], split_line[0]))
+
+    output = '\r\n'.join(out_lines)
+    output = output.replace(')', '')
     return output
