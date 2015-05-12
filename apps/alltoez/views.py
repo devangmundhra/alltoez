@@ -1,17 +1,12 @@
 import json
 
-from django.core.urlresolvers import reverse
-from django.contrib import messages
-from django.template.defaulttags import regroup
 from django.http import HttpResponseServerError, HttpResponseRedirect, HttpResponse
 from django.template import loader, RequestContext
-from django.conf import settings
-from django.views.generic import TemplateView
-from django.views.generic.list import ListView
 from django.http import Http404
 from django.views.decorators.csrf import csrf_exempt, requires_csrf_token
 from django.shortcuts import render, redirect
 from django.utils import timezone
+from django.core.paginator import InvalidPage, Paginator, EmptyPage, Page
 
 from haystack.views import FacetedSearchView
 from haystack.query import SearchQuerySet
@@ -62,6 +57,36 @@ class AlltoezSearchView(FacetedSearchView):
             extra['suggestion'] = self.form.get_suggestion()
         extra['page_template'] = self.page_template
         return extra
+
+    def build_page(self):
+        """
+        Paginates the results appropriately.
+        In case someone does not want to use Django's built-in pagination, it
+        should be a simple matter to override this method to do what they would
+        like.
+        """
+        try:
+            page_no = int(self.request.GET.get('page', 1))
+        except (TypeError, ValueError):
+            raise Http404("Not a valid number for page.")
+
+        if page_no < 1:
+            raise Http404("Pages should be 1 or greater.")
+
+        # start_offset = (page_no - 1) * self.results_per_page
+        # self.results[start_offset:start_offset + self.results_per_page]
+
+        paginator = Paginator(self.results, self.results_per_page)
+
+        try:
+            page = paginator.page(page_no)
+        except EmptyPage:
+            page = None
+        except InvalidPage:
+            raise Http404("This is an invalid page number!")
+
+        return (paginator, page)
+
 
 def autocomplete(request):
     my_query = request.GET.get('q', '')

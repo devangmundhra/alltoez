@@ -326,7 +326,13 @@ def url_replace(request, field, value):
     :return:
     """
     dict_ = request.GET.copy()
-    dict_[field] = value
+    if not value:
+        try:
+            dict_.pop(field)
+        except KeyError:
+            pass
+    else:
+        dict_[field] = value
     return dict_.urlencode()
 
 @register.filter(name='times')

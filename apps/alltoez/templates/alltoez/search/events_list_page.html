@@ -9,7 +9,7 @@
         <li><span class="facet-heading">Cities </span></li>
         {# Provide only the top 10 city #}
         {% for city in facets.fields.city|slice:":50" %}
-            <li><a href="{{ request.get_full_path }}&amp;selected_facets=city:{{ city.0|urlencode }}" class="btn btn-default">
+            <li><a href="?{% url_replace request 'page' 0 %}&amp;selected_facets=city:{{ city.0|urlencode }}" class="btn btn-default">
                     {{ city.0 }} <span class="badge">{{ city.1 }}</span>
                 </a>
             </li>
@@ -21,7 +21,7 @@
         <li><span class="facet-heading">Localities </span></li>
         {# Provide only the top 10 neighborhoods #}
         {% for neighborhood in facets.fields.neighborhood|slice:":10" %}
-            <li><a href="{{ request.get_full_path }}&amp;selected_facets=neighborhood:{{ neighborhood.0|urlencode }}" class="btn btn-default">
+            <li><a href="?{% url_replace request 'page' 0 %}&amp;selected_facets=neighborhood:{{ neighborhood.0|urlencode }}" class="btn btn-default">
                     {{ neighborhood.0 }} <span class="badge">{{ neighborhood.1 }}</span>
                 </a>
             </li>
@@ -37,7 +37,7 @@
         <li><span class="facet-heading">Categories </span></li>
         {# Provide only the top 5 categories #}
         {% for category in facets.fields.categories|slice:":5" %}
-            <li><a href="{{ request.get_full_path }}&amp;selected_facets=categories:{{ category.0|urlencode }}" class="btn btn-default">
+            <li><a href="?{% url_replace request 'page' 0 %}&amp;selected_facets=categories:{{ category.0|urlencode }}" class="btn btn-default">
                     {{ category.0 }} <span class="badge">{{ category.1 }}</span>
                 </a>
             </li>
