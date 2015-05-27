@@ -40,7 +40,6 @@ $(document).ready ->
             $( e.target ).removeClass "active"
           success: (data, textStatus, jqXHR) ->
             bookmark = JSON.parse data
-            console.log bookmark
             myevent.bookmark = bookmark.resource_uri
 
   $('#done-action').on "click", (e) ->

@@ -45,6 +45,7 @@ class ShareSerializer(UserActionAbstractSerializer):
     class Meta(UserActionAbstractSerializer.Meta):
         model = Share
 
+
 class ReviewSerializer(UserActionAbstractSerializer):
     class Meta(UserActionAbstractSerializer.Meta):
         model = Review

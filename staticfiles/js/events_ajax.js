@@ -52,7 +52,6 @@
             success: function(data, textStatus, jqXHR) {
               var bookmark;
               bookmark = JSON.parse(data);
-              console.log(bookmark);
               return myevent.bookmark = bookmark.resource_uri;
             }
           });
