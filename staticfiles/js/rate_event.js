@@ -1,5 +1,4 @@
 (function(){
-    
     // rating model
     var rating = {
         // initial rating value
@@ -10,17 +9,18 @@
         // saving the rating to the backend
         save: function(){
             var self = this;
+            console.log(window.user);
             $.ajax({
                 type: "POST",
-                url: "/api/v1/review/?format=json",
+                url: "/api/v1/review/.json",
 
                 // NOTE: this code relies on the 'myevent' variable
                 data: JSON.stringify({
-                    event: "" + myevent.resource_uri,
+                    event: "" + myevent.pk,
 
                     // user id is attached to the window in the
                     // events/templates/events/event_details.html
-                    user: "/api/v1/users/" + window.user + "/",
+                    user: window.user.id,
                     comment: self.comment,
                     rating: self.value
                 }),
@@ -28,7 +28,7 @@
                 dataType: "html",
                 processData: false,
                 error: function(jqXHR, textStatus, errorThrown) {
-                    console.log("" + textStatus + " in marking adding review " + errorThrown);
+                    console.log("" + textStatus + " in adding review " + errorThrown);
                 }
             });
         },

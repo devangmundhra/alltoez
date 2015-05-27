@@ -2,19 +2,15 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.contrib import messages
-from django.conf import settings
 from django.http.response import HttpResponseBadRequest
 from django.utils.decorators import method_decorator
-from django.views.generic.base import View
-from django.views.generic import TemplateView, FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import Http404, HttpResponseRedirect
-from django.core.urlresolvers import NoReverseMatch
 from django.contrib.gis.geoip import GeoIP
 
 from allauth.account.views import SignupView
+from rest_framework.renderers import JSONRenderer
 
 from apps.alltoez.utils.view_utils import LoginRequiredMixin, MessageMixin
 from apps.alltoez.utils.misc import get_client_ip
@@ -33,7 +29,7 @@ class UserProfileDetail(LoginRequiredMixin, DetailView):
     request = None
 
     def get(self, request, *args, **kwargs):
-        from apps.alltoez.api import AlltoezProfileResource
+        from apps.alltoez.serializers import UserSerializer
         """
         This method has been copied from django/views/generic/detail.py
         :param request:
@@ -43,11 +39,10 @@ class UserProfileDetail(LoginRequiredMixin, DetailView):
         """
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
-        res = AlltoezProfileResource()
-        res_bundle = res.build_bundle(obj=self.object, request=request)
-        profile_json = res.serialize(None, res.full_dehydrate(res_bundle), 'application/json')
-        profile = json.loads(profile_json)
-        context['profile'] = profile
+        serializer = UserSerializer(self.object.user, context={'request': request})
+        user_json = JSONRenderer().render(serializer.data)
+        user = json.loads(user_json)
+        context['cur_user'] = user
         return self.render_to_response(context)
 
     def get_object(self, queryset=None):

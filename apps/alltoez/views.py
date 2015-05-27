@@ -7,9 +7,104 @@ from django.views.decorators.csrf import csrf_exempt, requires_csrf_token
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.core.paginator import InvalidPage, Paginator, EmptyPage, Page
+from django.db.models import Max, Min
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from django.db.models import Q
+from django.contrib.auth.models import User
+from django.utils.decorators import classonlymethod
 
 from haystack.views import FacetedSearchView
 from haystack.query import SearchQuerySet
+from rest_framework.decorators import detail_route, renderer_classes, api_view
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework import viewsets
+from rest_framework import permissions
+from rest_framework.request import Request
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+
+from apps.alltoez.serializers import EventSerializer, UserSerializer
+from apps.events.models import Event, SimilarEvents
+from apps.events.views import EventInternalViewSet
+
+"""
+ALLTOEZ API VIEWS
+"""
+
+
+class EventViewSet(EventInternalViewSet):
+    """
+    API endpoint that allows events to be viewed or edited.
+    """
+    serializer_class = EventSerializer
+
+    def get_queryset(self):
+        qs = super(EventViewSet, self).get_queryset()
+        if not self.request.user.is_authenticated():
+            return qs.prefetch_related('category')
+        else:
+            # TODO: Use the current_age property instead of age here
+            age_range = self.request.user.children.aggregate(Min('age'), Max('age'))
+            min_age = age_range['age__min'] if age_range['age__min'] else Event.DEFAULT_MAX_AGE_EVENT #Yes, DEFAULT_MAX!
+            max_age = age_range['age__max'] if age_range['age__max'] else Event.DEFAULT_MIN_AGE_EVENT #Yes, DEFAULT_MIN!
+            # The above defaults are set in such a way so that no events are filtered unnecessarily
+            return qs.filter(min_age__lte=min_age, max_age__gte=max_age).prefetch_related('category')
+
+    @detail_route(methods=['get'], renderer_classes=[TemplateHTMLRenderer])
+    def similar(self, request, *args, **kwargs):
+        template = "alltoez/recommendation/similar_events.html"
+
+        if not request.is_ajax():
+            return Response("This is not an ajax request", status=status.HTTP_400_BAD_REQUEST, template_name=template)
+
+        try:
+            event = self.get_object()
+        except ObjectDoesNotExist:
+            return Response("Event not found", status=status.HTTP_404_NOT_FOUND, template_name=template)
+        except MultipleObjectsReturned:
+            return Response("More than one resource is found at this URI.", status=status.HTTP_300_MULTIPLE_CHOICES,
+                            template_name=template)
+
+        try:
+            similar_event_map = SimilarEvents.objects.get(event=event)
+            queryset = similar_event_map.similar_events.all().filter(Q(end_date__gte=timezone.now().date()) |
+                                                                     Q(end_date=None)).order_by('?')[:3]
+        except ObjectDoesNotExist:
+            queryset = Event.objects.none()
+
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response({"events_list": serializer.data}, template_name=template)
+
+    @classonlymethod
+    def get_direct_queryset(cls, request, **initkwargs):
+        """
+        TODO: Temporary until a better way is found
+        """
+        self = cls(**initkwargs)
+        request = Request(request, authenticators=(BasicAuthentication(), SessionAuthentication()))
+        self.request = request
+
+        return self.get_queryset()
+
+
+class IsOwner(permissions.BasePermission):
+    """
+    Object-level permission to only allow owners of an object to use it.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        return obj == request.user
+
+
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    API endpoint that allows events to be viewed or edited.
+    """
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    permission_classes = (IsOwner,)
 
 @requires_csrf_token
 def server_error(request, template_name='500.html'):

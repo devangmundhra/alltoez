@@ -1,11 +1,15 @@
 {% load event_filters %}
+{% load thumbnail %}
+
 {% for event in events_list %}
 <div class="col-xs-12 col-sm-12">
     <div class="event-item">
         <a href='{% url "event_detail" event.slug %}'>
             <div class="media">
               <div class="media-left media-middle event-image">
-                  <img src="{{ event.image }}">
+                {% thumbnail event.image "384x256" crop="center" as im %}
+                    <img src="{{ im.url }}">
+                {% endthumbnail %}
               </div>
               <div class="media-body">
                 <h4 class="media-heading">{{ event.title|truncatechars:'62' }}</h4>

@@ -4,10 +4,38 @@ from django.utils import timezone, six
 from django.views.generic import DetailView, ListView
 from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Point
+from django.db.models import Q
 
+from rest_framework import viewsets
+from rest_framework.renderers import JSONRenderer
+
+from apps.events.serializers import CategorySerializer, EventInternalSerializer
 from apps.events.models import Event, Category
-from apps.alltoez.api import EventsResource
 from apps.alltoez.utils.geo import rev_geocode_location_component
+
+"""
+API Endpoint for Events module
+"""
+
+
+class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    API endpoint that allows categories to be viewed or edited.
+    """
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+
+class EventInternalViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    API endpoint that allows events to be viewed or edited.
+    """
+    queryset = Event.objects.all()
+    serializer_class = EventInternalSerializer
+
+    def get_queryset(self):
+        return Event.objects.all().filter(publish=True).filter(
+            Q(end_date__gte=timezone.now()) | Q(end_date=None)).order_by('-published_at')
 
 """
 Alltoez event views
@@ -105,9 +133,8 @@ class Events(ListView):
         return super(Events, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
-        er = EventsResource()
-        request_bundle = er.build_bundle(request=self.request)
-        queryset = er.obj_get_list(request_bundle).prefetch_related('category')
+        from apps.alltoez.views import EventViewSet
+        queryset = EventViewSet.get_direct_queryset(self.request)
 
         # Apply any location filters if needed
         if self.latitude and self.longitude:
@@ -145,18 +172,15 @@ class Events(ListView):
         return super(Events, self).get_queryset()
 
     def get_context_data(self, **kwargs):
+        from apps.alltoez.serializers import EventSerializer
+
         context = super(Events, self).get_context_data(**kwargs)
         events_page = context['page_obj']
-        er = EventsResource()
-        bundles = []
-        for obj in events_page.object_list:
-            bundle = er.build_bundle(obj=obj, request=self.request)
-            bundles.append(er.full_dehydrate(bundle, for_list=True))
 
-        list_json = er.serialize(self.request, bundles, "application/json")
+        serializer = EventSerializer(events_page.object_list, many=True, context={'request': self.request})
 
         context['now'] = timezone.now()
-        context['events_list'] = json.loads(list_json)
+        context['events_list'] = json.loads(JSONRenderer().render(serializer.data))
         context['category_list'] = self.category_list
         context['category'] = self.category
         context['event_sort'] = self.ordering
@@ -182,7 +206,7 @@ class EventDetailView(DetailView):
         :param kwargs:
         :return: HttpResponse
         """
-        from apps.alltoez.api import EventsResource
+        from apps.alltoez.serializers import EventSerializer
         from apps.user_actions.tasks import mark_user_views_event, new_action
         self.object = self.get_object()
         if request.user.is_authenticated():
@@ -190,9 +214,8 @@ class EventDetailView(DetailView):
         else:
             new_action.delay("View", None, self.object.id, request.META['REMOTE_ADDR'])
         context = self.get_context_data(object=self.object)
-        er = EventsResource()
-        er_bundle = er.build_bundle(obj=self.object, request=request)
-        event_json = er.serialize(None, er.full_dehydrate(er_bundle), 'application/json')
+        serializer = EventSerializer(self.object, context={'request': request})
+        event_json = JSONRenderer().render(serializer.data)
         event = json.loads(event_json)
         context['event'] = event
         context['event_json'] = event_json # Needed for parsing bookmark info in event_detail template

@@ -30,7 +30,7 @@ $(document).ready ->
         $.ajax
           type: "POST"
           url: "#{bookmark_url}"
-          data: JSON.stringify {"event":"#{myevent.resource_uri}"}
+          data: JSON.stringify {"event":"#{myevent.pk}"}
           contentType: "application/json"
           dataType: "html"
           processData: false
@@ -61,7 +61,7 @@ $(document).ready ->
         $.ajax
           type: "POST"
           url: "#{done_url}"
-          data: JSON.stringify {"event":"#{myevent.resource_uri}"}
+          data: JSON.stringify {"event":"#{myevent.pk}"}
           contentType: "application/json"
           dataType: "html"
           processData: false
