@@ -30,7 +30,7 @@ $(document).ready ->
         $.ajax
           type: "POST"
           url: "#{bookmark_url}"
-          data: JSON.stringify {"event":"#{myevent.resource_uri}"}
+          data: JSON.stringify {"event":"#{myevent.pk}"}
           contentType: "application/json"
           dataType: "html"
           processData: false
@@ -40,6 +40,7 @@ $(document).ready ->
             $( e.target ).removeClass "active"
           success: (data, textStatus, jqXHR) ->
             bookmark = JSON.parse data
+            console.log bookmark
             myevent.bookmark = bookmark.resource_uri
 
   $('#done-action').on "click", (e) ->
@@ -61,7 +62,7 @@ $(document).ready ->
         $.ajax
           type: "POST"
           url: "#{done_url}"
-          data: JSON.stringify {"event":"#{myevent.resource_uri}"}
+          data: JSON.stringify {"event":"#{myevent.pk}"}
           contentType: "application/json"
           dataType: "html"
           processData: false

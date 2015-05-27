@@ -39,7 +39,7 @@
             type: "POST",
             url: "" + bookmark_url,
             data: JSON.stringify({
-              "event": "" + myevent.resource_uri
+              "event": "" + myevent.pk
             }),
             contentType: "application/json",
             dataType: "html",
@@ -65,7 +65,7 @@
             type: "POST",
             url: "" + done_url,
             data: JSON.stringify({
-              "event": "" + myevent.resource_uri
+              "event": "" + myevent.pk
             }),
             contentType: "application/json",
             dataType: "html",

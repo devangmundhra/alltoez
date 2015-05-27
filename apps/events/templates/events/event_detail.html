@@ -238,13 +238,13 @@
 {% endif %}
 {% endblock %}
 {% block extra_js %}
-    {% url 'api_dispatch_list' resource_name="bookmark" api_name="v1" as bookmark_url %}
-    {% url 'api_dispatch_list' resource_name="done" api_name="v1" as done_url %}
-    {% url 'api_get_recommendations' resource_name="events" api_name="v1" pk=event.id as similar_events_url %}
+    {% url 'api:bookmark-list' format='json' as bookmark_url %}
+    {% url 'api:done-list' format='json' as done_url %}
+    {% url 'api:event-similar' pk=event.id as similar_events_url %}
     <script type="text/javascript">
-        var bookmark_url = "{{ bookmark_url }}?format=json"
-        var done_url = "{{ done_url }}?format=json"
-        var similar_events_url = "{{ similar_events_url }}?format=json"
+        var bookmark_url = "{{ bookmark_url }}"
+        var done_url = "{{ done_url }}"
+        var similar_events_url = "{{ similar_events_url }}"
         var myevent = JSON.parse('{{ event_json|escapejs }}')
     </script>
     <script type="text/javascript">

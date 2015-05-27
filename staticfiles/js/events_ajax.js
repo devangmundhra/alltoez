@@ -39,7 +39,7 @@
             type: "POST",
             url: "" + bookmark_url,
             data: JSON.stringify({
-              "event": "" + myevent.resource_uri
+              "event": "" + myevent.pk
             }),
             contentType: "application/json",
             dataType: "html",
@@ -52,6 +52,7 @@
             success: function(data, textStatus, jqXHR) {
               var bookmark;
               bookmark = JSON.parse(data);
+              console.log(bookmark);
               return myevent.bookmark = bookmark.resource_uri;
             }
           });
@@ -65,7 +66,7 @@
             type: "POST",
             url: "" + done_url,
             data: JSON.stringify({
-              "event": "" + myevent.resource_uri
+              "event": "" + myevent.pk
             }),
             contentType: "application/json",
             dataType: "html",

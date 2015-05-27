@@ -146,7 +146,7 @@ INSTALLED_APPS = [
     'location_field',
     'phonenumber_field',
     'haystack',
-    'tastypie',
+    'rest_framework',
     'pagedown',
     'markdown_deux',
     'bootstrapform',
@@ -496,6 +496,22 @@ MANDRILL_API_KEY = os.environ.get('MANDRILL_APIKEY', "")
 PIO_ACCESS_KEY = os.environ.get('PIO_ACCESS_KEY', "")
 PIO_ENGINE_ENDPOINT = os.environ.get('PIO_ENGINE_ENDPOINT', "")
 PIO_EVENT_SERVER_ENDPOINT = os.environ.get('PIO_EVENT_SERVER_ENDPOINT', "")
+
+#-------------------------------------------------------------------------------
+#	DJANGO REST FRAMEWORK CONFIG
+#-------------------------------------------------------------------------------
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
+}
 
 #-------------------------------------------------------------------------------
 #	SORL THUMBNAIL

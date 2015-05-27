@@ -17,6 +17,7 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('apps.alltoez_profile.urls')),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^admin/filebrowser/', include(site.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 )
 
 urlpatterns += patterns('',

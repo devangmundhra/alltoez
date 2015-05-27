@@ -18,7 +18,7 @@ class Venue(BaseModel, AddressMixin):
                             help_text="The part of the name (if provided) that is used in the url. \
                             Leave this blank if you want the system to generate one for you.")
     neighborhood = models.CharField(max_length=200, blank=True, null=True,
-                                    help_text="Neigborhood/rough area of venue. Leave blank for auto-fill")
+                                    help_text="Neighborhood/rough area of venue. Leave blank for auto-fill")
     phone_number = PhoneNumberField(blank=True, verbose_name="Phone number", help_text="Phone number, if available")
     yelp_url = models.URLField(blank=True, null=True, verbose_name='Yelp Url')
     facebook_url = models.URLField(blank=True, null=True, verbose_name='Facebook Url')
