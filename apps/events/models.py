@@ -115,7 +115,6 @@ class Event(models.Model):
     slug = models.SlugField(max_length=50, unique=True)
     description = models.TextField(verbose_name='Event description')
     category = models.ManyToManyField(Category, db_index=True)
-    image_info = JSONField(default="{\"url\":\"\",\"source_name\":\"\",\"source_url\":\"\"}")
     image = models.ImageField(upload_to="events_media")
     min_age = models.PositiveSmallIntegerField(default=DEFAULT_MIN_AGE_EVENT, db_index=True)
     max_age = models.PositiveSmallIntegerField(default=DEFAULT_MAX_AGE_EVENT, db_index=True)
