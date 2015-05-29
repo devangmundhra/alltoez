@@ -18,24 +18,18 @@ SITE_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__f
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 ADMIN_MEDIA_PREFIX = "/static/admin/"
-# STATIC_ROOT = os.path.join(SITE_ROOT, "static")
-STATIC_ROOT = 'staticfiles'
+STATIC_ROOT = os.path.join(SITE_ROOT, "static")
+# STATIC_ROOT = 'staticfiles'
 MEDIA_ROOT = os.path.join(SITE_ROOT, "media")
 
 PROJECT_DOMAIN = "http://www.alltoez.com"
 
-STATIC_URL = "/static/"
-"""
-STATICFILES_STORAGE = 'apps.alltoez.storage.S3PipelineStorage'
+STATICFILES_STORAGE = 'apps.alltoez.storage.S3GZipPipelineStorage'
 
-STATIC_URL = "https://%s/" % STATIC_S3_DOMAIN
-"""
 STATIC_FILES_BUCKET = 'alltoezstatic'
 STATIC_S3_DOMAIN = '%s.s3.amazonaws.com' % STATIC_FILES_BUCKET
-STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'static'),
-)
-STATICFILES_STORAGE = 'apps.alltoez.storage.GZipPipelineStorage'
+
+STATIC_URL = "https://%s/" % STATIC_S3_DOMAIN
 
 MEDIA_FILES_BUCKET = 'alltoez'
 MEDIA_S3_DOMAIN = '%s.s3.amazonaws.com' % MEDIA_FILES_BUCKET
@@ -248,8 +242,8 @@ PIPELINE_UGLIFYJS_BINARY = os.path.join(PROJECT_ROOT, "node_modules/uglifyjs/bin
 PIPELINE_COFFEE_SCRIPT_BINARY = os.path.join(PROJECT_ROOT, "node_modules/coffee-script/bin/coffee")
 PIPELINE_DISABLE_WRAPPER = True
 PIPELINE_COMPILERS = (
-    'pipeline.compilers.less.LessCompiler',
-    'pipeline.compilers.coffee.CoffeeScriptCompiler',
+    'apps.alltoez.compilers.FixedLessCompiler',
+    'apps.alltoez.compilers.FixedCoffeeScriptCompiler',
 )
 PIPELINE_LESS_BINARY = 'lessc'
 PIPELINE_CSS = {
@@ -378,7 +372,7 @@ DEFAULT_FILE_STORAGE = 'apps.alltoez.storage.MediaFilesStorage'
 try:
     redis_url = urlparse.urlparse(os.environ.get('REDISCLOUD_URL'))
     BROKER_URL = 'redis://:%s@%s:%s/0' % (redis_url.password, redis_url.hostname, redis_url.port)
-except:
+except Exception:
     BROKER_URL = 'sqs://'
 CELERY_RESULT_BACKEND = BROKER_URL
 CELERY_SEND_TASK_ERROR_EMAILS = True

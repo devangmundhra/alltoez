@@ -267,6 +267,7 @@ def manage_command(command):
     with prefix('source %(env_path)s/bin/activate' % env):
         run('python %(repo_path)s/%(project_name)s/configs/%(settings)s/manage.py %(command)s;' % env)
 
+
 def rebuild_index():
     """
     Rebuild haystack indexes
@@ -281,7 +282,7 @@ def heroku_deploy():
     :return:
     """
     local('pip freeze > requirements.txt')
-    local('python manage.py collectstatic --noinput')
+    # local('python manage.py collectstatic --noinput')
     local('git add .')
     print("enter your git commit comment: ")
     comment = raw_input()
@@ -292,13 +293,14 @@ def heroku_deploy():
     local('heroku run python manage.py migrate')
     local('heroku maintenance:off')
 
+
 def heroku_quick_deploy():
     """
     Deploy to Heroku without maintanence
     :return:
     """
     local('pip freeze > requirements.txt')
-    local('python manage.py collectstatic --noinput')
+    # local('python manage.py collectstatic --noinput')
     local('git add .')
     print("enter your git commit comment: ")
     comment = raw_input()

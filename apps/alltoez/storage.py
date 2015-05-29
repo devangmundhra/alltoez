@@ -14,11 +14,11 @@ def domain(url):
     return urlparse.urlparse(url).hostname
 
 
-class GZipPipelineStorage(PipelineStorage):
+class GZipPipelineStorage(PipelineStorage, GZIPMixin):
     pass
 
 
-class S3PipelineStorage(PipelineMixin, CachedFilesMixin, S3BotoStorage):
+class S3GZipPipelineStorage(PipelineMixin, CachedFilesMixin, S3BotoStorage):
     bucket_name = settings.STATIC_FILES_BUCKET
     custom_domain = settings.STATIC_S3_DOMAIN
 

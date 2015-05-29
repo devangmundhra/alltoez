@@ -56,15 +56,16 @@ class EventViewSet(EventInternalViewSet):
         template = "alltoez/recommendation/similar_events.html"
 
         if not request.is_ajax():
-            return Response("This is not an ajax request", status=status.HTTP_400_BAD_REQUEST, template_name=template)
+            return Response({"error": "This is not an ajax request"}, status=status.HTTP_400_BAD_REQUEST,
+                            template_name=template)
 
         try:
             event = self.get_object()
         except ObjectDoesNotExist:
-            return Response("Event not found", status=status.HTTP_404_NOT_FOUND, template_name=template)
+            return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND, template_name=template)
         except MultipleObjectsReturned:
-            return Response("More than one resource is found at this URI.", status=status.HTTP_300_MULTIPLE_CHOICES,
-                            template_name=template)
+            return Response({"error": "More than one resource is found at this URI."},
+                            status=status.HTTP_300_MULTIPLE_CHOICES, template_name=template)
 
         try:
             similar_event_map = SimilarEvents.objects.get(event=event)

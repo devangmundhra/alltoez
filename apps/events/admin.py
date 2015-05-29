@@ -15,10 +15,9 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.db.models import Count
 
-from pagedown.widgets import AdminPagedownWidget
 from django_extensions.admin import ForeignKeyAutocompleteAdmin
 
-from apps.events.models import DraftEvent, Event, EventRecord, Category
+from apps.events.models import Event, Category
 from apps.venues.models import Venue
 
 
@@ -97,6 +96,8 @@ class EventAdminForm(forms.ModelForm):
     """
 
     def __init__(self, *args, **kwargs):
+        from pagedown.widgets import AdminPagedownWidget # Imported here to prevent errors from collectstatic
+
         super(EventAdminForm, self).__init__(*args, **kwargs)
         self.fields['description'].widget = AdminPagedownWidget()
         self.fields['time_detail'].widget = AdminPagedownWidget()
