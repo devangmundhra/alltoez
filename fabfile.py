@@ -282,7 +282,6 @@ def heroku_deploy():
     :return:
     """
     local('pip freeze > requirements.txt')
-    # local('python manage.py collectstatic --noinput')
     local('git add .')
     print("enter your git commit comment: ")
     comment = raw_input()
@@ -300,7 +299,6 @@ def heroku_quick_deploy():
     :return:
     """
     local('pip freeze > requirements.txt')
-    # local('python manage.py collectstatic --noinput')
     local('git add .')
     print("enter your git commit comment: ")
     comment = raw_input()
