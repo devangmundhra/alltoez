@@ -7989,18 +7989,18 @@ fieldset[disabled] .social-login-row > div > a.active {
   background-size: cover;
 }
 .about-alltoez .spin-it {
-  -webkit-animation: spin-it 2s linear infinite;
-  -moz-animation: spin-it 2s linear infinite;
-  -ms-animation: spin-it 2s linear infinite;
-  animation: spin-it 2s linear infinite;
+  -webkit-animation: spin-it 2s ease infinite;
+  -moz-animation: spin-it 2s ease infinite;
+  -ms-animation: spin-it 2s ease infinite;
+  animation: spin-it 2s ease infinite;
 }
 @keyframes "spin-it" {
   0% {
-    -webkit-transform: scale(1.2);
-    -moz-transform: scale(1.2);
-    -o-transform: scale(1.2);
-    -ms-transform: scale(1.2);
-    transform: scale(1.2);
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
   }
   50% {
     -webkit-transform: scale(0.8);
@@ -8019,8 +8019,8 @@ fieldset[disabled] .social-login-row > div > a.active {
 }
 @-moz-keyframes spin-it {
   0% {
-    -moz-transform: scale(1.2);
-    transform: scale(1.2);
+    -moz-transform: scale(1.1);
+    transform: scale(1.1);
   }
   50% {
     -moz-transform: scale(0.8);
@@ -8033,8 +8033,8 @@ fieldset[disabled] .social-login-row > div > a.active {
 }
 @-webkit-keyframes "spin-it" {
   0% {
-    -webkit-transform: scale(1.2);
-    transform: scale(1.2);
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
   }
   50% {
     -webkit-transform: scale(0.8);
@@ -8047,8 +8047,8 @@ fieldset[disabled] .social-login-row > div > a.active {
 }
 @-ms-keyframes "spin-it" {
   0% {
-    -ms-transform: scale(1.2);
-    transform: scale(1.2);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
   }
   50% {
     -ms-transform: scale(0.8);
