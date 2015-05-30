@@ -30,6 +30,9 @@ STATIC_FILES_BUCKET = 'alltoezstatic'
 STATIC_S3_DOMAIN = '%s.s3.amazonaws.com' % STATIC_FILES_BUCKET
 
 STATIC_URL = "https://%s/" % STATIC_S3_DOMAIN
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+)
 
 MEDIA_FILES_BUCKET = 'alltoez'
 MEDIA_S3_DOMAIN = '%s.s3.amazonaws.com' % MEDIA_FILES_BUCKET

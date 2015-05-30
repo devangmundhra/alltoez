@@ -154,20 +154,6 @@ class Events(ListView):
             except Category.DoesNotExist:
                 pass
 
-        """
-        TO BE REMOVED WHEN MOVING TO DJANGO 1.8
-        START
-        """
-        ordering = self.ordering
-        if ordering:
-            if isinstance(ordering, six.string_types):
-                ordering = (ordering,)
-            queryset = queryset.order_by(*ordering)
-        """
-        TO BE REMOVED WHEN MOVING TO DJANGO 1.8
-        END
-        """
-
         self.queryset = queryset
         return super(Events, self).get_queryset()
 
