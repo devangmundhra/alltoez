@@ -1,8 +1,5 @@
 __author__ = 'devangmundhra'
-from django.http import HttpResponse
-from django.dispatch import receiver
 from django.shortcuts import redirect
-from django.conf import settings
 
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter

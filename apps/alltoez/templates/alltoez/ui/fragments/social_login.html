@@ -1,8 +1,8 @@
-{% load socialaccount %}
+{% load socialaccount common_tags %}
 <div class="social-login">
     <div class="social-login-row text-center">
         <div>
-            <a href='{% provider_login_url "facebook" process="login" %}'>
+            <a href='{% provider_login_url "facebook" process="login" next=request|next_param %}'>
                 <i class="fa fa-facebook-square"></i> Log in using Facebook
             </a>
         </div>

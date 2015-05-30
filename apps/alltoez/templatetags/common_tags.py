@@ -343,3 +343,14 @@ def times(number):
     :return:
     """
     return range(number)
+
+@register.filter()
+def next_param(request):
+    """
+    Get the 'next' parameter from a request
+    :param request:
+    :return:
+    """
+    if not request:
+        return "/"
+    return request.GET.get('next', request.path)

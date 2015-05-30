@@ -27,14 +27,12 @@
                             </a>
 							<ul class="dropdown-menu" role="menu">
 								<li role="presentation"><a href="{% url 'show_profile' %}" role="menuitem"><i class="icon-user"></i>  My Profile</a></li>
-
-								<!--<li role="presentation"><a href="{% url 'account_change_password' %}" role="menuitem"><i class="icon-user"></i>  Change Password</a></li>-->
 								<li role="presentation" class="divider"></li>
 								<li role="presentation"><a href="{% url 'account_logout' %}" role="menuitem"><i class="icon-remove"></i>  Logout</a></li>
 							</ul>
 						</li>
 					{% else %}
-                        <li><a href="{% url 'account_login' %}">Login</a></li>
+                        <li><a href="{% url 'account_login' %}?next={{ request.path }}">Login</a></li>
 					{% endif %}
 				</ul>
 			</div>
@@ -46,7 +44,7 @@
 	<div class="container">
 		{% for message in messages %}
 		<div class="alert alert-block {% if message.tags|contains:'success' %}alert-success{% endif %} {% if message.tags|contains:'error' %}alert-error{% endif %} {% if message.tags|contains:'info' %}alert-info{% endif %}">
-			<a class="close" data-dismiss="alert" href="#">×</a>
+			<a class="close" data-dismiss="alert" href="#"><i class="fa fa-times-circle"></i></a>
 			{{ message }}
 		</div>
 		{% endfor %}
