@@ -2,7 +2,7 @@ __author__ = 'devangmundhra'
 
 import urlparse
 
-from django.contrib.staticfiles.storage import CachedFilesMixin
+from django.contrib.staticfiles.storage import ManifestFilesMixin
 from django.conf import settings
 
 from pipeline.storage import PipelineMixin, GZIPMixin, PipelineStorage
@@ -18,7 +18,7 @@ class GZipPipelineStorage(PipelineStorage, GZIPMixin):
     pass
 
 
-class S3GZipPipelineStorage(PipelineMixin, CachedFilesMixin, S3BotoStorage):
+class S3GZipPipelineStorage(PipelineMixin, ManifestFilesMixin, S3BotoStorage):
     bucket_name = settings.STATIC_FILES_BUCKET
     custom_domain = settings.STATIC_S3_DOMAIN
 
