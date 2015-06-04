@@ -7,7 +7,7 @@ from apps.events.models import Event
 from apps.user_actions.models import Bookmark, Done
 from apps.alltoez_profile.serializers import UserInternalSerializer
 from apps.events.serializers import EventInternalSerializer
-
+from apps.venues.serializers import VenueSerializer
 
 class EventSerializer(EventInternalSerializer):
     bookmark = serializers.SerializerMethodField(read_only=True)
@@ -61,3 +61,10 @@ class UserSerializer(UserInternalSerializer):
         done_events = Event.objects.filter(pk__in=done_event_ids)
         serializer = EventSerializer(done_events, many=True, context=self.context)
         return serializer.data
+
+
+class VenueDetailSerializer(VenueSerializer):
+    event_set = EventSerializer(many=True, read_only=True)
+
+    class Meta(VenueSerializer.Meta):
+        fields = VenueSerializer.Meta.fields + ('event_set',)

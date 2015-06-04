@@ -269,6 +269,13 @@ PIPELINE_CSS = {
         'output_filename': 'css/event_list.min.css',
         'variant': 'datauri'
     },
+    'venue_detail': {
+        'source_filenames': (
+            'less/venue_detail.less',
+        ),
+        'output_filename': 'css/venue_detail.min.css',
+        'variant': 'datauri'
+    },
 }
 PIPELINE_JS = {
     'base': {

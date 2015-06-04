@@ -53,7 +53,7 @@
             <div class="event-address">
                 <dl>
                     <dt>WHERE</dt>
-                    <dd>{{ event.venue.name }}</dd>
+                    <dd><a href="{% url 'venue_detail' slug=event.venue.slug %}">{{ event.venue.name }}</a></dd>
                 </dl>
             </div>
             <div class="event-neighborhood">

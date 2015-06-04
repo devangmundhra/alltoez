@@ -1,0 +1,81 @@
+{% extends "alltoez/ui/layouts/base.html" %}
+{% load common_tags %}
+{% load static from staticfiles %}
+{% load cache pipeline future %}
+
+{% block site_header %}
+{% include "events/fragments/header_events.html" %}
+{% endblock %}
+
+{% block title %}{{ venue.name }}{% endblock %}
+{% block extra_head %}
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+{% endblock %}
+{% block extracss %}
+{% stylesheet 'event_list' %}
+{% stylesheet 'venue_detail' %}
+{% endblock %}
+
+{% block body_class %}events{% endblock %}
+
+{% block post_strip %}
+    <div class="container-fluid">
+        <div class="row center-block">
+            <ul class="pager no-top-margin">
+                <li class="previous"><a class="back-to-events" href="{% url 'events' %}"><span aria-hidden="true">&larr;</span> Back to Events</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page_title_outer %}
+<div class="venue-info page-header">
+    <h2>{{ venue.name }}</h2>
+    <h4>{{ venue.neighborhood }}</h4>
+    <p>{{venue.address|linebreaks}}</p>
+    {% if venue.phone_number %}
+    <p>
+        <i class="fa fa-phone"></i>
+        {{ venue.phone_number }}
+    </p>
+    {% endif %}
+    {% if venue.facebook_url %}
+    <a href="{{ venue.facebook_url }}" target="_blank" class="facebook"><i class="fa fa-facebook"></i> Facebook</a>
+    {% endif %}
+    {% if venue.yelp_url %}
+    <a href="{{ venue.yelp_url }}" target="_blank" class="yelp"><i class="fa fa-yelp"></i> Yelp</a>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+	<div class="strip white">
+        <h3 class="text-center">Events in this venue</h3>
+        <div class="container events-list">
+            <div class="row">
+                {% include page_template with events_list=venue.event_set %}
+            </div>
+        </div>
+	</div>
+
+<div class="row">
+    <div class="col-xs-12 col-md-4">
+        {% if request.user.is_superuser %}
+        <br/>
+        <br/>
+        <a href="{% url 'admin:venues_venue_change' object.pk %}" class="venue-admin btn btn-lg btn-primary">Edit Venue</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            if (document.referrer.search("/events/") != -1)
+            {
+                $(".back-to-events").attr("href", document.referrer)
+            }
+        });
+    </script>
+{% endblock %}
