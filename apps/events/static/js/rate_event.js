@@ -30,27 +30,8 @@
                     console.log("" + textStatus + " in adding review " + errorThrown);
                 }
             });
-        },
-        delete: function(){
-            if (myevent.done) {
-                return $.ajax({
-                    type: "DELETE",
-                    url: myevent.done,
-                    contentType: "application/json",
-                    dataType: "html",
-                    processData: false,
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log("" + textStatus + " in marking event undone " + errorThrown);
-                    },
-                    success: function(data, textStatus, jqXHR) {
-                        $('#done-action').button("toggle");
-                        $('#done-action').removeClass("active");
-                        return myevent.done = "";
-                    }
-                });
-            } 
         }
-    };
+      };
 
     var controller = {
         init: function(){
@@ -68,42 +49,26 @@
         addReview: function(){
             var self = this;
             rating.save();
-        
-        },
-        deleteDone: function(){
-            rating.delete();
+
         }
     };
 
     var modalView = {
         $elem: $('#modalRating'),
-        $warn: $('#modalRatingWarn'),
-        $target: $('#done-action'),
+        $target: $('#review-action'),
         init: function(){
             var self = this;
-            // initializing modal for review creation 
+            // initializing modal for review creation
             this.$elem.modal({
                 keyboard: true,
                 show: false
             });
 
-            // initializing the modal for notifying the user
-            // about review deletion (upon undone action)
-            this.$warn.modal({
-                keyboard: true,
-                show: false
-            });
-
-            // binding event listener to Done action, which
-            // either shows the modal or the warning
+            // binding event listener to Review action, which
+            // shows the modal
             this.$target.on('click', function(){
-                if(this.className.indexOf('active') == -1){
-                    $(this).button("toggle");
-                    $(this).addClass("active");
-                    self.render();
-                } else {
-                    self.warn();
-                }
+                $(this).button("toggle");
+                self.render();
             });
 
             // binding event listener to submit event action
@@ -128,7 +93,7 @@
             var $textarea = this.$elem.find('textarea');
             $textarea.parent().removeClass('has-error');
             */
-            
+
             // initializing rating stars
             this.$rateit = $('#modalRate');
             this.$rateit.rateit({
@@ -140,7 +105,7 @@
 
             // updating the rating value in the view
             this.$rateit.rateit('value', value);
-            
+
             // setting an event listener for 'rated' event
             // (updating the rating value)
             this.$rateit.bind('rated', function(){
@@ -149,13 +114,8 @@
                 $('#reviewSubmit').removeAttr('disabled');
             });
         },
-        // render warning modal (undone action)
-        warn: function(){
-            this.$warn.modal('show');
-        },
         // hiding the modal
         hide: function(){
-            this.$warn.modal('hide');
             this.$elem.modal('hide');
         },
 
@@ -172,17 +132,16 @@
             */
             this.hide();
             controller.setRatingComment(comment);
-            
+
             var value = this.$rateit.rateit('value');
             controller.setRatingValue(value);
-            
+
             controller.addReview();
         },
         deleteReview: function(){
             this.hide();
             controller.setRatingValue(0);
             controller.setRatingComment('');
-            controller.deleteDone();
         }
     };
 
