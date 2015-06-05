@@ -67,6 +67,8 @@
             // binding event listener to Review action, which
             // shows the modal
             this.$target.on('click', function(){
+              var isLoggedIn = window.isLoggedIn;
+              if isLoggedIn
                 $(this).button("toggle");
                 self.render();
             });
