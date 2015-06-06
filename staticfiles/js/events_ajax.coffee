@@ -73,6 +73,7 @@ $(document).ready ->
             done = JSON.parse data
             myevent.done = done.resource_uri
 
+
   $('#share-action').on "click", (e)->
     if not $( e.target ).hasClass "active"
       $('#share-info-dropdown').addClass "visible"

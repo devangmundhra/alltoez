@@ -257,21 +257,21 @@ PIPELINE_CSS = {
     },
     'event_detail': {
         'source_filenames': (
-            'less/event_detail.less'
+            'less/event_detail.less',
         ),
         'output_filename': 'css/event_detail.min.css',
         'variant': 'datauri'
     },
     'event_list': {
         'source_filenames': (
-            'less/event_list.less'
+            'less/event_list.less',
         ),
         'output_filename': 'css/event_list.min.css',
         'variant': 'datauri'
     },
     'venue_detail': {
         'source_filenames': (
-            'less/venue_detail.less'
+            'less/venue_detail.less',
         ),
         'output_filename': 'css/venue_detail.min.css',
         'variant': 'datauri'

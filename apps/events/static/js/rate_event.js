@@ -2,16 +2,16 @@
     // rating model
     var rating = {
         // initial rating value
-        value: 0,
+        value: myevent.review ? myevent.review.rating : 0,
         //initial rating comment
-        comment: '',
+        comment: myevent.review ? myevent.review.comment : '',
 
         // saving the rating to the backend
         save: function(){
             var self = this;
             $.ajax({
-                type: "POST",
-                url: "/api/v1/review/.json",
+                type: myevent.review ? "PUT" : "POST",
+                url: myevent.review ? "/api/v1/review/" + myevent.review.id +"/.json" : "/api/v1/review/.json",
 
                 // NOTE: this code relies on the 'myevent' variable
                 data: JSON.stringify({
@@ -28,6 +28,11 @@
                 processData: false,
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log("" + textStatus + " in adding review " + errorThrown);
+                },
+                success: function(data, textStatus, jqXHR) {
+                  var review;
+                  review = JSON.parse(data);
+                  return myevent.review = review;
                 }
             });
         }
@@ -36,6 +41,9 @@
     var controller = {
         init: function(){
             modalView.init();
+        },
+        getRatingComment: function(){
+            return rating.comment;
         },
         getRatingValue: function(){
             return rating.value;
@@ -68,9 +76,9 @@
             // shows the modal
             this.$target.on('click', function(){
               var isLoggedIn = window.isLoggedIn;
-              if isLoggedIn
-                $(this).button("toggle");
+              if (isLoggedIn) {
                 self.render();
+              }
             });
 
             // binding event listener to submit event action
@@ -85,9 +93,17 @@
         // rendering the modal for review creation
         render: function(){
             // getting the rating value
+            var $textarea = $('#modalRating textarea');
+            if (controller.getRatingComment()){
+              $textarea.val(controller.getRatingComment());
+            }
             var value = controller.getRatingValue();
-
-            $('#reviewSubmit').attr('disabled', 'disabled');
+            if (!value){
+              $('#reviewSubmit').attr('disabled', 'disabled');
+            }
+            else {
+              $('#reviewSubmit').removeAttr('disabled');
+            }
             this.$elem.modal('show');
 
             // if the modal has error class for the comment input, then remove it

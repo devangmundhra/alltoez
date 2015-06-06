@@ -47,5 +47,7 @@ class ShareSerializer(UserActionAbstractSerializer):
 
 
 class ReviewSerializer(UserActionAbstractSerializer):
+    comment = serializers.CharField(style={'base_template': 'textarea.html'}, required=False, allow_blank=True)
+
     class Meta(UserActionAbstractSerializer.Meta):
         model = Review

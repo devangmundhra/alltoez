@@ -12,15 +12,18 @@ API Endpoint for user_actions module
 class UserActionPermission(permissions.BasePermission):
     """
     Permission granted as follows-
-    Create: Allow any user to create
+    Create: Allow any authenticated user to create
     Read: Any user is allowed to read
     Update: Only the user associated with the model is allowed to update
     Delete: Only the user associated with the model is allowed to delete
     """
 
     def has_object_permission(self, request, view, obj):
-        if request.method in ['GET', 'POST']:
+        if request.method in ['GET']:
             return True
+
+        if request.method in ['POST']:
+            return obj.user.is_authenticated()
 
         if request.method in ['PUT', 'DELETE']:
             return obj.user == request.user
