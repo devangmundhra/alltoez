@@ -48,6 +48,7 @@ class UserProfile(BaseModel, AddressMixin):
     user = AutoOneToOneField(User, related_name="profile", editable=False)
     profile_image = models.ImageField(upload_to=get_upload_to, null=True, blank=True)
     gender = models.PositiveSmallIntegerField(choices=GENDER_CHOICES.get_choices(), db_index=True, default=0)
+    bio = models.TextField(verbose_name='User bio', blank=True)
     last_filter_center = models.PointField(blank=True, null=True)
     last_filter_radius = models.FloatField(blank=True, null=True) #radius in miles
     last_filter_location_name = models.CharField(blank=True, max_length=300)

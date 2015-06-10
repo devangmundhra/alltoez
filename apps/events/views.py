@@ -196,8 +196,9 @@ class EventDetailView(DetailView):
         from apps.user_actions.tasks import mark_user_views_event, new_action
         self.object = self.get_object()
         if request.user.is_authenticated():
-            mark_user_views_event.delay(self.object.id, request.user.id)
+            mark_user_views_event.delay(self.object.id, request.user.id, request.META['REMOTE_ADDR'])
         else:
+            mark_user_views_event.delay(self.object.id, None, request.META['REMOTE_ADDR'])
             new_action.delay("View", None, self.object.id, request.META['REMOTE_ADDR'])
         context = self.get_context_data(object=self.object)
         serializer = EventSerializer(self.object, context={'request': request})

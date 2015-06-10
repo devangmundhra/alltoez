@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.contrib.gis.db import models
 from django.core.urlresolvers import reverse
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 from jsonfield import JSONField
 
@@ -69,36 +70,6 @@ class Category(models.Model):
         return self.parent_category
 
 
-class DraftEvent(models.Model):
-    """
-    DraftEvent class
-    This class is used to store the events that are parsed from different websites
-    """
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    title = models.CharField(max_length=200)
-    raw = models.TextField(unique=True)
-    '''
-    These are some of the sources for the events
-    '''
-    SFKIDS = "sfkids.org"
-    REDTRI = "redtri.com"
-    source = models.CharField(max_length=200)
-    source_url = models.URLField(blank=True, null=True, unique=True)
-    processed = models.BooleanField(default=False)
-
-    class Meta:
-        app_label = 'events'
-
-    def save(self, *args, **kwargs):
-        if self.event_set.count():
-            self.processed = True
-        super(DraftEvent, self).save(*args, **kwargs)
-
-    def __unicode__(self):
-        return u'{} from {}'.format(self.title, self.source)
-
-
 class Event(models.Model):
     """
     Event class
@@ -109,7 +80,7 @@ class Event(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
-    draft = models.ForeignKey(DraftEvent, blank=True, null=True)
+    suggested_by = models.ForeignKey(User, blank=True, null=True, related_name='suggested_events')
     venue = models.ForeignKey(Venue, blank=True, null=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=200, verbose_name='Event name')
     slug = models.SlugField(max_length=50, unique=True)
@@ -121,7 +92,6 @@ class Event(models.Model):
     cost = models.FloatField(default=0, db_index=True)
     cost_detail = models.CharField(max_length=500, blank=True,
                                    help_text="Enter if there is more than one cost value")
-    # Currently we expect an event to occur atmost once per day (so only one start time/end time)
     start_date = models.DateField(db_index=True)
     end_date = models.DateField(blank=True, null=True, db_index=True,
                                 help_text="End date of the event, if applicable")
@@ -151,23 +121,6 @@ class Event(models.Model):
 
     def __unicode__(self):
         return unicode(self.title)
-
-
-class EventRecord(models.Model):
-    """
-    EventRecord class
-    This class is the actual individual events shown to the user.
-    """
-    event = models.ForeignKey(Event)
-    date = models.DateField(db_index=True)
-
-    class Meta:
-        unique_together = ('event', 'date')
-        ordering = ['date']
-        app_label = 'events'
-
-    def __unicode__(self):
-        return u'{} on {}'.format(self.event.title, self.date)
 
 
 class SimilarEvents(models.Model):

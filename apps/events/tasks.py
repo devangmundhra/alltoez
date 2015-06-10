@@ -1,8 +1,7 @@
 from __future__ import absolute_import
 
 import logging
-from datetime import datetime, timedelta
-from croniter import croniter
+from datetime import datetime
 from celery import shared_task
 
 from django.utils import timezone
@@ -12,7 +11,7 @@ from django.template.loader import render_to_string
 from django.contrib.sites.models import Site
 from django.conf import settings
 
-from apps.events.models import Event, EventRecord
+from apps.events.models import Event
 from apps.events.eventparsers import redtri
 
 # Get an instance of a logger
@@ -82,40 +81,3 @@ def get_expired_events():
                                          to=["devangmundhra@gmail.com", "ruchikadamani90@gmail.com"], body=text_body)
             msg.attach_alternative(html_body, "text/html")
             msg.send()
-
-
-"""
-Number of days before which an event for the date should be created
-"""
-EVENTS_NUM_DAYS_RECORD_LOOK_AHEAD = 8
-
-
-@shared_task()
-def create_event_records():
-    """
-    Creates event records from single or recurring events
-    :return:
-    """
-    # Get all the events whose next day is between now and EVENTS_NUM_DAYS_RECORD_LOOK_AHEAD
-    # Once a record has been made, update the next_date field taking into account the end_date
-    now = timezone.now()
-    look_ahead_date = now + timedelta(days=EVENTS_NUM_DAYS_RECORD_LOOK_AHEAD)
-    event_records = []
-
-    events = Event.objects.filter(next_date__range=(now, look_ahead_date)).only('cron_recurrence_format', 'next_date',
-                                                                                'start_date', 'start_time', 'end_date')
-    for event in events:
-        next_datetime = datetime.combine(event.next_date, event.start_time)
-        event_records.append(EventRecord(event=event, date=next_datetime))
-        if event.cron_recurrence_format:
-            cron = croniter(event.cron_recurrence_format, next_datetime)
-            next_datetime = cron.get_next(ret_type=datetime)
-            if next_datetime.date() > event.end_date:
-                event.next_date = None
-            else:
-                event.next_date = next_datetime.date()
-        else:
-            event.next_date = None
-        event.save(update_fields=['next_date'])
-
-    EventRecord.objects.bulk_create(event_records)

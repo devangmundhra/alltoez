@@ -17,9 +17,10 @@ class EventSerializer(EventInternalSerializer):
     bookmark = serializers.SerializerMethodField(read_only=True)
     done = serializers.SerializerMethodField(read_only=True)
     review = serializers.SerializerMethodField(read_only=True, required=False)
+    view_count = serializers.SerializerMethodField(read_only=True, required=False)
 
     class Meta(EventInternalSerializer.Meta):
-        fields = EventInternalSerializer.Meta.fields + ('bookmark', 'done', 'review')
+        fields = EventInternalSerializer.Meta.fields + ('bookmark', 'done', 'review', 'view_count')
 
     def get_bookmark(self, obj):
         request = self.context.get('request')
@@ -51,6 +52,9 @@ class EventSerializer(EventInternalSerializer):
             return serializer.data
         except ObjectDoesNotExist:
             return None
+
+    def get_view_count(self, obj):
+        return obj.viewip_set.count()
 
 
 class UserSerializer(UserInternalSerializer):

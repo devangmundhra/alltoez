@@ -21,6 +21,19 @@ class View(UserEventActionsAbstractModel):
     pass
 
 
+class ViewIP(models.Model):
+    """
+    ViewIP: events viewed by ipaddress
+    """
+    ip_address = models.GenericIPAddressField(db_index=True)
+    event = models.ForeignKey(Event)
+    count = models.IntegerField(default=0)
+
+    class Meta:
+        app_label = 'user_actions'
+        unique_together = ('ip_address', 'event')
+
+
 class Bookmark(UserEventActionsAbstractModel):
     """
     Bookmark: events bookmarked by user

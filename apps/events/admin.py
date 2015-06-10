@@ -136,40 +136,6 @@ class EventInline(admin.StackedInline):
     form = EventAdminForm
 
 
-class DraftEventAdminForm(forms.ModelForm):
-    """
-    Custom form for DraftEvent admin form
-    """
-    def __init__(self, *args, **kwargs):
-        super(DraftEventAdminForm, self).__init__(*args, **kwargs)
-
-
-class DraftEventAdmin(admin.ModelAdmin):
-    """
-    Model admin for DraftEvent model
-    """
-    date_hierarchy = 'created_at'
-    list_filter = ('processed', 'source')
-    ordering = ['created_at']
-    search_fields = ['title',]
-    inlines = [EventInline]
-    actions = ["mark_processed", "mark_unprocessed"]
-    list_display = ('title', 'source')
-    form = DraftEventAdminForm
-
-    def mark_processed(self, request, queryset):
-        rows_updated = queryset.update(processed=True)
-        self.message_user(request, "%s draft event(s) successfully marked as processed." % rows_updated)
-    mark_processed.short_description = "Mark selected draft events as processed"
-
-    def mark_unprocessed(self, request, queryset):
-        rows_updated = queryset.update(processed=False)
-        self.message_user(request, "%s draft event(s) successfully marked as unprocessed." % rows_updated)
-    mark_unprocessed.short_description = "Mark selected draft events as unprocessed"
-
-# admin.site.register(DraftEvent, DraftEventAdmin)
-
-
 class EventAdmin(ForeignKeyAutocompleteAdmin):
     """
     Model admin for Event Model
@@ -188,7 +154,7 @@ class EventAdmin(ForeignKeyAutocompleteAdmin):
     }
     form = EventAdminForm
     readonly_fields = ('venue_admin_url', 'published_at',)
-    fields = ('draft', 'title', 'slug', ('venue', 'venue_admin_url',),
+    fields = ('title', 'slug', ('venue', 'venue_admin_url',),
               'description', 'category', 'image', ('min_age', 'max_age',),
               ('cost', 'cost_detail',), ('start_date', 'end_date',),
               'recurrence_detail', 'time_detail', 'url', 'additional_info',

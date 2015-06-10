@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 from rest_framework import permissions
 
-from apps.user_actions.serializers import DoneSerializer, BookmarkSerializer, ViewSerializer, ShareSerializer, ReviewSerializer
-from apps.user_actions.models import Done, Bookmark, View, Share, Review
+from apps.user_actions.serializers import DoneSerializer, BookmarkSerializer, ReviewSerializer
+from apps.user_actions.models import Done, Bookmark, Review
 
 """
 API Endpoint for user_actions module
@@ -49,22 +49,6 @@ class BookmarkViewSet(UserActionAbstractViewSet):
     """
     queryset = Bookmark.objects.all()
     serializer_class = BookmarkSerializer
-    
-    
-class ViewViewSet(UserActionAbstractViewSet):
-    """
-    API endpoint for View model
-    """
-    queryset = View.objects.all()
-    serializer_class = ViewSerializer
-    
-    
-class ShareViewSet(UserActionAbstractViewSet):
-    """
-    API endpoint for Share model
-    """
-    queryset = Share.objects.all()
-    serializer_class = ShareSerializer
     
     
 class ReviewViewSet(UserActionAbstractViewSet):

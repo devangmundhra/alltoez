@@ -6,13 +6,14 @@ import logging
 
 from django.conf import settings
 from django.utils import timezone
+from django.db.models import F
 
 from celery import shared_task
 import predictionio
 import keen
 from allauth.utils import get_user_model
 
-from apps.user_actions.models import View
+from apps.user_actions.models import View, ViewIP
 from apps.events.models import Event
 
 # Get an instance of a logger
@@ -22,12 +23,19 @@ logger = logging.getLogger(__name__)
 pio_access_key = getattr(settings, 'PIO_ACCESS_KEY', "unknown access key")
 pio_eventserver = getattr(settings, 'PIO_EVENT_SERVER_ENDPOINT', "http://localhost:7070")
 
+
 @shared_task
-def mark_user_views_event(event_id, user_id=None):
-    view = View()
-    view.event_id = event_id
-    view.user_id = user_id
-    view.save()
+def mark_user_views_event(event_id, user_id, ip_address):
+    if user_id:
+        view = View()
+        view.event_id = event_id
+        view.user_id = user_id
+        view.save()
+
+    ipview, created = ViewIP.objects.get_or_create(event_id=event_id, ip_address=ip_address)
+    ipview.count = F('count') + 1
+    ipview.save()
+
 
 @shared_task
 def new_action(event_type, user_id, event_id, session_id=None):

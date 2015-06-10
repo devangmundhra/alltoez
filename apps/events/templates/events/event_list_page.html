@@ -59,6 +59,9 @@
     </div>
     <div class="event-meta">
         <span>Posted {{ event.published_at|naturaldatetime }} ago</span>
+        {% if event.view_count > 0 %}
+        <span class="pull-right"><i class="fa fa-eye"></i> {{ event.view_count }}</span>
+        {% endif %}
     </div>
 </div>
 {% endfor %}

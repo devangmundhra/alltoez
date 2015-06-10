@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from apps.user_actions.models import View, Bookmark, Done, Share, Review
+from apps.user_actions.models import Bookmark, Done, Review
 
 
 class UserActionAbstractSerializer(serializers.ModelSerializer):
@@ -25,11 +25,6 @@ class DoneSerializer(UserActionAbstractSerializer):
         return reverse('api:done-detail', args=[obj, 'json'], request=request)
 
 
-class ViewSerializer(UserActionAbstractSerializer):
-    class Meta(UserActionAbstractSerializer.Meta):
-        model = View
-
-
 class BookmarkSerializer(UserActionAbstractSerializer):
     resource_uri = serializers.SerializerMethodField(read_only=True)
 
@@ -39,11 +34,6 @@ class BookmarkSerializer(UserActionAbstractSerializer):
     def get_resource_uri(self, obj):
         request = self.context.get('request')
         return reverse('api:bookmark-detail', args=[obj, 'json'], request=request)
-
-
-class ShareSerializer(UserActionAbstractSerializer):
-    class Meta(UserActionAbstractSerializer.Meta):
-        model = Share
 
 
 class ReviewSerializer(UserActionAbstractSerializer):
