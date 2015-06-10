@@ -1,11 +1,11 @@
 from __future__ import unicode_literals
 
+import random
+
 from django.contrib.gis.db import models
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
-
-from jsonfield import JSONField
 
 from apps.alltoez.utils.model_utils import unique_slugify
 from apps.venues.models import Venue
@@ -103,6 +103,7 @@ class Event(models.Model):
     additional_info = models.TextField(blank=True, null=True)
     publish = models.BooleanField(default=True)
     published_at = models.DateTimeField(db_index=True, null=True, blank=True)
+    view_seed = models.PositiveIntegerField(default=0)
     objects = models.GeoManager()
 
     class Meta:
@@ -112,6 +113,7 @@ class Event(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             unique_slugify(self, self.title)
+            self.view_seed = random.randint(5, 50)
         if not self.published_at and self.publish:
             self.published_at = timezone.now()
         super(Event, self).save(*args, **kwargs)

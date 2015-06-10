@@ -54,7 +54,7 @@ class EventSerializer(EventInternalSerializer):
             return None
 
     def get_view_count(self, obj):
-        return obj.viewip_set.count()
+        return obj.view_seed + obj.viewip_set.count()
 
 
 class UserSerializer(UserInternalSerializer):
