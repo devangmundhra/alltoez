@@ -5,8 +5,8 @@ from django.core.urlresolvers import reverse
 from django.http.response import HttpResponseBadRequest
 from django.utils.decorators import method_decorator
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.http import Http404, HttpResponseRedirect
+from django.views.generic.edit import UpdateView
+from django.http import HttpResponseRedirect
 from django.contrib.gis.geoip import GeoIP
 
 from allauth.account.views import SignupView

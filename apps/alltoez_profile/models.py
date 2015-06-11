@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.deconstruct import deconstructible
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import GEOSGeometry
+from django.db.models.signals import post_save
 
 from apps.alltoez.utils.fields import AutoOneToOneField
 from apps.alltoez.utils.abstract_models import BaseModel, AddressMixin
@@ -88,6 +89,11 @@ class UserProfile(BaseModel, AddressMixin):
             return user.username
 
 
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+
+
 class Child(BaseModel):
     """
     Profile to add children to a user's profile
@@ -106,3 +112,5 @@ class Child(BaseModel):
     def current_age(self):
         time_since_updated = timezone.now() - self.updated
         return self.age + int(time_since_updated.days/365.2425)
+
+post_save.connect(create_user_profile, sender=User)

@@ -14,15 +14,16 @@ class RedirectIfIncompleteProfile(object):
         """
         redirect_url = reverse('register_children')
         path = request.get_full_path()
+
         if request.user.is_authenticated() and \
                 not request.user.profile.profile_complete() and \
                         path != redirect_url and \
                         '/admin/' not in path and \
                         '/accounts/social/signup/' not in path and \
                         '/accounts/social/login/' not in path and \
-                        '/accounts/logout/' not in path and \
-                        not path.startswith('/beta-'):
+                        '/accounts/logout/' not in path:
             return http.HttpResponseRedirect(redirect_url)
+
         return None
 
 
