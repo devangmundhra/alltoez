@@ -31,7 +31,7 @@
                         - {{ event.end_date|local_day_date }}
                         {% endif %}
                     </span>
-                    {% if event.end_date|days_since <= 5 %}
+                    {% if event.end_date|days_since >= -5 %}
                         <span class="event-freshness expiring">Expiring soon</span>
                     {% endif %}
                 {% endif %}
