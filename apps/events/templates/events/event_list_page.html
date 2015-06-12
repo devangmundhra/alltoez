@@ -24,7 +24,7 @@
                 </p>
             </div>
             <div class="event-overlay">
-                {% if not event.recurrence_detail %}
+                {% if event.end_date %}
                     <span class="event-date">
                         {{ event.start_date|local_day_date }}
                         {% if event.start_date != event.end_date and event.end_date %}
