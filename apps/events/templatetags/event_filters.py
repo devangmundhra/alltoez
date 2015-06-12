@@ -58,9 +58,17 @@ def naturaldatetime(datetime_value):
 
 @register.filter
 def days_since(datetime_value):
+    date = None
     datetime = parse_datetime(datetime_value)
-    delta = timezone.now().date() - datetime.date()
-    return delta.days
+    if datetime:
+        date = datetime.date()
+    if not date:
+        date = parse_date(datetime_value)
+    if date:
+        delta = timezone.now().date() - date
+        return delta.days
+    else:
+        return None
 
 
 @register.filter
