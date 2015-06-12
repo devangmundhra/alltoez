@@ -9,7 +9,8 @@ class VenueSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Venue
-        fields = ('name', 'latitude', 'longitude', 'phone_number', 'neighborhood', 'address', 'slug')
+        fields = ('name', 'latitude', 'longitude', 'phone_number', 'neighborhood', 'address', 'slug', 'yelp_url',
+                  'facebook_url', 'city', 'state', 'country')
 
     def get_address(self, obj):
         return obj.display_address()
