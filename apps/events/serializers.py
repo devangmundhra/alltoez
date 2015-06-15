@@ -26,15 +26,9 @@ class EventInternalSerializer(serializers.HyperlinkedModelSerializer):
     def get_distance(self, obj):
         request = self.context.get('request')
         origin = None
-        if request.user.is_authenticated() and request.user.profile.last_filter_center:
-            lat = request.user.profile.last_filter_center.y
-            lng = request.user.profile.last_filter_center.x
-        # Check if there is anything in the cookies to use
-        else:
-            lat = request.session.get('latitude', None)
-            lng = request.session.get('longitude', None)
-
-        if lat and lng:
+        if request.user.is_authenticated() and request.user.profile.last_known_location_bounds:
+            lat = request.user.profile.last_known_location_bounds.centroid.y
+            lng = request.user.profile.last_known_location_bounds.centroid.x
             origin = Point(lng, lat)
         if not origin:
             return None

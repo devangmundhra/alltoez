@@ -42,14 +42,16 @@ class EventViewSet(EventInternalViewSet):
     def get_queryset(self):
         qs = super(EventViewSet, self).get_queryset()
         if not self.request.user.is_authenticated():
-            return qs.prefetch_related('category')
+            qs = qs.prefetch_related('category')
         else:
             # TODO: Use the current_age property instead of age here
             age_range = self.request.user.children.aggregate(Min('age'), Max('age'))
             min_age = age_range['age__min'] if age_range['age__min'] else Event.DEFAULT_MAX_AGE_EVENT #Yes, DEFAULT_MAX!
             max_age = age_range['age__max'] if age_range['age__max'] else Event.DEFAULT_MIN_AGE_EVENT #Yes, DEFAULT_MIN!
             # The above defaults are set in such a way so that no events are filtered unnecessarily
-            return qs.filter(min_age__lte=min_age, max_age__gte=max_age).prefetch_related('category')
+            qs = qs.filter(min_age__lte=min_age, max_age__gte=max_age).prefetch_related('category')
+
+        return qs
 
     @detail_route(methods=['get'], renderer_classes=[TemplateHTMLRenderer])
     def similar(self, request, *args, **kwargs):

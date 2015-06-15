@@ -1,9 +1,9 @@
 import json
 
-from django.utils import timezone, six
+from django.utils import timezone
 from django.views.generic import DetailView, ListView
 from django.contrib.gis.measure import D
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import Polygon
 from django.db.models import Q
 
 from rest_framework import viewsets
@@ -32,10 +32,12 @@ class EventInternalViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = Event.objects.all()
     serializer_class = EventInternalSerializer
+    ordering = ('-published_at',)
+    ordering_fields = ('published_at', 'end_date', 'cost', 'min_age', 'max_age', 'view_count', 'distance')
 
     def get_queryset(self):
-        return Event.objects.all().filter(publish=True).filter(
-            Q(end_date__gte=timezone.now()) | Q(end_date=None)).order_by('-published_at')
+        qs = Event.objects.all().filter(publish=True).filter(Q(end_date__gte=timezone.now()) | Q(end_date=None))
+        return qs
 
 """
 Alltoez event views
@@ -49,83 +51,57 @@ class Events(ListView):
     category_list = None
     category_slug = None
     ordering = None
-    radius_mi = 7  # 7 miles
     request = None
     paginate_by = 21
-    location_available = False
     location_name = ""
     latitude = None
     longitude = None
+    location_available = False
+    bounds = None
+    zoom = 8
 
     def get(self, request, *args, **kwargs):
         # default sort is "end_date"
-        self.ordering = self.request.GET.get('sort')
+        self.ordering = self.request.GET.get('ordering')
         if not self.ordering:
             self.ordering = self.request.session.get('event_sort', 'end_date')
         else:
             self.request.session['event_sort'] = self.ordering
 
-        all_bay_area = self.request.GET.get('area', None)
-        self.latitude = float(self.request.GET.get('lat', 0))
-        self.longitude = float(self.request.GET.get('lng', 0))
-        self.radius_mi = self.request.GET.get('radius', 0)
+        bounds = self.request.GET.get('bounds', None)
+        self.zoom = self.request.GET.get('zoom', 8)
 
-        # User specified not to get do location filter
-        if all_bay_area and all_bay_area == 'Bay Area':
-            if self.request.user.is_authenticated():
-                profile = self.request.user.profile
-                profile.last_filter_center = None
-                profile.last_filter_radius = None
-                profile.last_filter_location_name = ''
-                profile.save()
-            # Delete all location related cookies
+        if bounds:
             try:
-                del self.request.session['latitude']
-            except KeyError:
+                bounds_list = bounds.split(',')
+                sw = (bounds_list[0], bounds_list[1])
+                ne = (bounds_list[2], bounds_list[3])
+                xmin=sw[1]
+                ymin=sw[0]
+                xmax=ne[1]
+                ymax=ne[0]
+                bbox = (xmin, ymin, xmax, ymax)
+                self.bounds = Polygon.from_bbox(bbox)
+                if self.request.user.is_authenticated():
+                    profile = self.request.user.profile
+                    profile.last_known_location_bounds = self.bounds
+                    profile.last_map_zoom = self.zoom
+                    profile.save()
+            except IndexError:
                 pass
-            try:
-                del self.request.session['longitude']
-            except KeyError:
-                pass
-            try:
-                del self.request.session['radius']
-            except KeyError:
-                pass
-            try:
-                del self.request.session['location_name']
-            except KeyError:
-                pass
-        # User provided new location filter info
-        elif self.latitude and self.longitude and self.radius_mi:
+        if not self.bounds and self.request.user.is_authenticated():
+            self.bounds = self.request.user.profile.last_known_location_bounds
+            self.zoom = self.request.user.profile.last_map_zoom
+        if self.bounds:
+            centroid = self.bounds.centroid
+            self.latitude = centroid.y
+            self.longitude = centroid.x
             neighborhood = rev_geocode_location_component(self.latitude, self.longitude, 'neighborhood')
             if not neighborhood:
                 #If not succeed in first try, try again (with a bigger net)
                 neighborhood = rev_geocode_location_component(self.latitude, self.longitude, 'political')
             city = rev_geocode_location_component(self.latitude, self.longitude, 'locality')
             self.location_name = "{}, {}".format(neighborhood, city)
-            if self.request.user.is_authenticated():
-                profile = self.request.user.profile
-                profile.last_filter_center = Point(self.longitude, self.latitude)
-                profile.last_filter_radius = self.radius_mi
-                profile.last_filter_location_name = self.location_name
-                profile.save()
-            # Set all location related cookies
-            self.request.session['latitude'] = self.latitude
-            self.request.session['longitude'] = self.longitude
-            self.request.session['radius'] = self.radius_mi
-            self.request.session['location_name'] = self.location_name
-        # Check if this user already has last filter location stored
-        elif self.request.user.is_authenticated() and self.request.user.profile.last_filter_center:
-            self.latitude = self.request.user.profile.last_filter_center.y
-            self.longitude = self.request.user.profile.last_filter_center.x
-            self.radius_mi = self.request.user.profile.last_filter_radius
-            self.location_name = self.request.user.profile.last_filter_location_name
-        # Check if there is anything in the cookies to use
-        else:
-            self.latitude = self.request.session.get('latitude', None)
-            self.longitude = self.request.session.get('longitude', None)
-            self.radius_mi = self.request.session.get('radius', 7)
-            self.location_name = self.request.session.get('location_name', '')
 
         self.category_slug = kwargs.get('cat_slug', None)
         self.category_list = Category.objects.filter(parent_category__isnull=False)
@@ -137,15 +113,10 @@ class Events(ListView):
         queryset = EventViewSet.get_direct_queryset(self.request)
 
         # Apply any location filters if needed
-        if self.latitude and self.longitude:
-            origin = Point(self.longitude, self.latitude)
-            self.radius_mi = self.radius_mi if self.radius_mi else 20
-            queryset = queryset.filter(venue__point__distance_lt=(origin, D(mi=self.radius_mi))).\
-                distance(origin, field_name='venue__point')
+        if self.bounds:
+            queryset = queryset.filter(venue__point__within=self.bounds).\
+                distance(self.bounds.centroid, field_name='venue__point')
             self.location_available = True
-        elif self.ordering == 'distance':
-            # If an ordering by distance was requested but there is no location info, don't do the ordering
-            self.ordering = ''
 
         if self.category_slug:
             queryset = queryset.filter(category__slug=self.category_slug)
@@ -170,12 +141,12 @@ class Events(ListView):
         context['category_list'] = self.category_list
         context['category'] = self.category
         context['event_sort'] = self.ordering
-        context['venue_radius'] = self.radius_mi
         context['page_template'] = self.page_template
         context['latitude'] = self.latitude
         context['longitude'] = self.longitude
         context['location_available'] = self.location_available
         context['location_string'] = self.location_name
+        context['zoom'] = self.zoom if self.zoom else 8
         return context
 
 
