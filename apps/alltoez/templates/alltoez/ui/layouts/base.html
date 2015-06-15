@@ -47,6 +47,7 @@
 	</head>
 
 	<body class="{% block body_class %}{% endblock %}">
+        <div id="fb-root"></div>
         {% block site_header %}
 		{% include "alltoez/ui/fragments/header_base.html" %}
         {% endblock %}
@@ -99,7 +100,7 @@
               appId      : '{{settings.FACEBOOK_APP_ID}}',
               xfbml      : true,
               frictionlessRequests : true,
-              version    : 'v2.1'
+              version    : 'v2.3'
             });
           };
 
