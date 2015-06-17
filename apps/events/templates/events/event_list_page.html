@@ -24,6 +24,9 @@
                 </p>
             </div>
             <div class="event-overlay">
+                {% if event.published_at|days_since <= 2 %}
+                    <span class="event-freshness just-in">Just in</span>
+                {% endif %}
                 {% if event.end_date %}
                     <span class="event-date">
                         {{ event.start_date|local_day_date }}
@@ -32,11 +35,8 @@
                         {% endif %}
                     </span>
                     {% if event.end_date|days_since >= -5 %}
-                        <span class="event-freshness expiring">Expiring soon</span>
+                        <span class="event-freshness expiring" {% if event.published_at|days_since <= 2 %}style="top:40px"{% endif %}>Expiring soon</span>
                     {% endif %}
-                {% endif %}
-                {% if event.published_at|days_since <= 2 %}
-                    <span class="event-freshness just-in">Just in</span>
                 {% endif %}
             </div>
             <div class="event-age-cost">
@@ -58,7 +58,13 @@
         </a>
     </div>
     <div class="event-meta">
-        <span>Posted {{ event.published_at|naturaldatetime }} ago</span>
+        {% if '0 day' in event.published_at|naturaldatetime %}
+            <span>Posted today</span>
+        {% elif '1 day' in event.published_at|naturaldatetime %}
+            <span>Posted yesterday</span>
+        {% else %}
+            <span>Posted {{ event.published_at|naturaldatetime }} ago</span>
+        {% endif %}
         {% if event.view_count > 0 %}
         <span class="pull-right"><i class="fa fa-eye"></i> {{ event.view_count }}</span>
         {% endif %}
