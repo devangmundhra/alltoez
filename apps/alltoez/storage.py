@@ -14,10 +14,6 @@ def domain(url):
     return urlparse.urlparse(url).hostname
 
 
-class GZipPipelineStorage(PipelineStorage, GZIPMixin):
-    pass
-
-
 class S3GZipPipelineStorage(PipelineMixin, GZIPMixin, ManifestFilesMixin, S3BotoStorage):
     bucket_name = settings.STATIC_FILES_BUCKET
     custom_domain = settings.STATIC_S3_DOMAIN
