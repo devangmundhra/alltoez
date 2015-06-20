@@ -8,6 +8,7 @@ from django.db.models import Q
 
 from rest_framework import viewsets
 from rest_framework.renderers import JSONRenderer
+import keen
 
 from apps.events.serializers import CategorySerializer, EventInternalSerializer
 from apps.events.models import Event, Category
@@ -117,6 +118,14 @@ class Events(ListView):
             queryset = queryset.filter(venue__point__within=self.bounds).\
                 distance(self.bounds.centroid, field_name='venue__point')
             self.location_available = True
+            keen.add_event('event_filter', {
+                'keen': {
+                    'location': {
+                        'coordinates': [self.bounds.centroid.x, self.bounds.centroid.y],
+                    }
+                },
+                'category': self.category_slug,
+            }, timezone.now())
 
         if self.category_slug:
             queryset = queryset.filter(category__slug=self.category_slug)

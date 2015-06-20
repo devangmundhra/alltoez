@@ -36,6 +36,58 @@ def mark_user_views_event(event_id, user_id, ip_address):
     ipview.count = F('count') + 1
     ipview.save()
 
+    # Send info to keen
+    staff_status = False
+    if user_id:
+        try:
+            user = get_user_model().objects.get(pk=user_id)
+            staff_status = user.is_staff
+        except get_user_model().DoesNotExist:
+            keen.add_event("Error", {
+                "msg": "User.DoesNotExist",
+                "id": user_id
+            })
+
+    event = Event.objects.get(pk=event_id)
+
+    keen_events = []
+
+    for category in event.category.all():
+        event = {
+            'view_single': {
+                'keen': {
+                    'time_stamp': timezone.now(),
+                    'location': {
+                        'coordinates': [event.venue.longitude, event.venue.latitude],
+                    }
+                },
+                "user": {
+                    "user_id": user_id,
+                    "staff": staff_status,
+                    "ip": ip_address
+                },
+                "event": {
+                    "event_id": event_id,
+                    "category": category.name,
+                    "min_age": event.min_age,
+                    "max_age": event.max_age,
+                    "cost": event.cost,
+                    "start_date": event.start_date.isoformat(),
+                    "end_date": event.end_date.isoformat() if event.end_date else None,
+                    "publish_date": event.published_at.isoformat() if event.published_at else None
+                },
+                "venue": {
+                    "venue_id": event.venue.id,
+                    "name": event.venue.name,
+                    "city": event.venue.city,
+                    "neighborhood": event.venue.neighborhood,
+                }
+            }
+        }
+        keen_events += event
+
+    keen.add_events(keen_events)
+
 
 @shared_task
 def new_action(event_type, user_id, event_id, session_id=None):

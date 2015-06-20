@@ -23,6 +23,7 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.request import Request
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+import keen
 
 from apps.alltoez.serializers import EventSerializer, UserSerializer
 from apps.events.models import Event, SimilarEvents
@@ -149,6 +150,13 @@ class AlltoezSearchView(FacetedSearchView):
     AlltoezSearchView
     Search view for Alltoez
     """
+    def get_query(self):
+        query = super(AlltoezSearchView, self).get_query()
+        keen.add_event('search', {
+            "query": query
+        }, timezone.now())
+        return query
+
     def extra_context(self):
         extra = super(AlltoezSearchView, self).extra_context()
         if hasattr(self.results, 'query') and self.results.query.backend.include_spelling:
