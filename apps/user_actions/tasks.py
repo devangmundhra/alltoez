@@ -53,7 +53,7 @@ def mark_user_views_event(event_id, user_id, ip_address):
     keen_events = []
 
     for category in event.category.all():
-        event = {
+        keen_events += {
             'view_single': {
                 'keen': {
                     'time_stamp': timezone.now(),
@@ -84,7 +84,6 @@ def mark_user_views_event(event_id, user_id, ip_address):
                 }
             }
         }
-        keen_events += event
 
     keen.add_events(keen_events)
 

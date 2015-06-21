@@ -151,25 +151,19 @@
                 </div>
                 {% endif %}
             </div>
-            {% comment %}
-            If there is an event.time_detail, always show the When info.
-            However, if there is no recurrence_detail, then that means that the event is only on some specific days,
-            so in that case show the "When" info too.
-            {% endcomment %}
-            {% if event.time_detail or not event.recurrence_detail %}
             <div class="open-hours">
                 <dl class="dl">
                     <dt>When:</dt>
-                    {% if not event.recurrence_detail %}
                     <p>{{ event.start_date|format_date_filter:"long" }} {% if event.end_date and event.start_date != event.end_date %} to {{ event.end_date|format_date_filter:"long" }} {% endif %}</p>
                     <br/>
+                    {% if event.recurrence_detail %}
+                    <p>{{ event.recurrence_detail }}</p>
                     {% endif %}
                     {% if event.time_detail %}
                     <p>{{ event.time_detail|format_event_datetime|markdown }}</p>
                     {% endif %}
                 </dl>
             </div>
-            {% endif %}
             <div class="age-allowed">
                 <dl class="dl-horizontal">
                     {% if event.min_age == 0 and event.max_age == 100 %}
