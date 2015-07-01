@@ -1,8 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from apps.alltoez.graph import *
 from apps.alltoez.utils.abstract_models import BaseModel
 from apps.events.models import Event
+from apps.alltoez_profile.models import UserProfile
+
+
+class GraphName(object):
+    class NodeLabel(object):
+        pass
+
+    class Relationship(object):
+        BOOKMARK = "BOOKMARK"
+        DONE = "Done"
 
 
 class UserEventActionsAbstractModel(BaseModel):
@@ -38,17 +49,44 @@ class Bookmark(UserEventActionsAbstractModel):
     """
     Bookmark: events bookmarked by user
     """
+    GRAPH_USER_EVENT_RELATIONSHIP = "BOOKMARK"
 
     class Meta(UserEventActionsAbstractModel.Meta):
         unique_together = ('user', 'event')
+
+    def create_relationship(self):
+        event_node = neo4j_graph.merge_one(Event.GRAPH_NODE_NAME, "id", self.event.id)
+        user_node = neo4j_graph.merge_one(UserProfile.GRAPH_USER_NODE_NAME, "id", self.user.id)
+        neo4j_graph.create_unique(Relationship(event_node, Bookmark.GRAPH_USER_EVENT_RELATIONSHIP, user_node))
+
+    @classmethod
+    def drop_relationship(cls, event_id, user_id):
+        event_node = neo4j_graph.merge_one(Event.GRAPH_NODE_NAME, "id", event_id)
+        user_node = neo4j_graph.merge_one(UserProfile.GRAPH_USER_NODE_NAME, "id", user_id)
+        rel = neo4j_graph.match_one(event_node, Bookmark.GRAPH_USER_EVENT_RELATIONSHIP, user_node)
+        neo4j_graph.delete(rel)
 
 
 class Done(UserEventActionsAbstractModel):
     """
     Done: events done by user
     """
+    GRAPH_USER_EVENT_RELATIONSHIP = "DONE"
+
     class Meta(UserEventActionsAbstractModel.Meta):
         unique_together = ('user', 'event')
+
+    def create_relationship(self):
+        event_node = neo4j_graph.merge_one(Event.GRAPH_NODE_NAME, "id", self.event.id)
+        user_node = neo4j_graph.merge_one(UserProfile.GRAPH_USER_NODE_NAME, "id", self.user.id)
+        neo4j_graph.create_unique(Relationship(event_node, Done.GRAPH_USER_EVENT_RELATIONSHIP, user_node))
+
+    @classmethod
+    def drop_relationship(cls, event_id, user_id):
+        event_node = neo4j_graph.merge_one(Event.GRAPH_NODE_NAME, "id", event_id)
+        user_node = neo4j_graph.merge_one(UserProfile.GRAPH_USER_NODE_NAME, "id", user_id)
+        rel = neo4j_graph.match_one(event_node, Done.GRAPH_USER_EVENT_RELATIONSHIP, user_node)
+        neo4j_graph.delete(rel)
 
 
 class Share(UserEventActionsAbstractModel):

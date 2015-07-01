@@ -77,10 +77,10 @@ class Events(ListView):
                 bounds_list = bounds.split(',')
                 sw = (bounds_list[0], bounds_list[1])
                 ne = (bounds_list[2], bounds_list[3])
-                xmin=sw[1]
-                ymin=sw[0]
-                xmax=ne[1]
-                ymax=ne[0]
+                xmin = sw[1]
+                ymin = sw[0]
+                xmax = ne[1]
+                ymax = ne[0]
                 bbox = (xmin, ymin, xmax, ymax)
                 self.bounds = Polygon.from_bbox(bbox)
                 if self.request.user.is_authenticated():
@@ -102,7 +102,7 @@ class Events(ListView):
                 #If not succeed in first try, try again (with a bigger net)
                 neighborhood = rev_geocode_location_component(self.latitude, self.longitude, 'political')
             city = rev_geocode_location_component(self.latitude, self.longitude, 'locality')
-            self.location_name = "{}, {}".format(neighborhood, city)
+            self.location_name = u"{}, {}".format(neighborhood, city)
 
         self.category_slug = kwargs.get('cat_slug', None)
         self.category_list = Category.objects.filter(parent_category__isnull=False)

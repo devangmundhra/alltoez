@@ -13,7 +13,7 @@ import predictionio
 import keen
 from allauth.utils import get_user_model
 
-from apps.user_actions.models import View, ViewIP
+from apps.user_actions.models import View, ViewIP, Bookmark, Done
 from apps.events.models import Event
 
 # Get an instance of a logger
@@ -163,3 +163,32 @@ def pio_new_event(event_type, user_id, event_id, created):
         event_client.close()
     except predictionio.NotCreatedError:
         pass
+
+
+@shared_task
+def bookmark_post_save_task(pk):
+    try:
+        bookmark = Bookmark.objects.get(id=pk)
+        bookmark.create_relationship()
+    except Bookmark.DoesNotExist:
+        pass
+
+
+@shared_task
+def bookmark_post_delete_task(event_id, user_id):
+    Bookmark.drop_relationship(event_id, user_id)
+    
+
+
+@shared_task
+def done_post_save_task(pk):
+    try:
+        done = Done.objects.get(id=pk)
+        done.create_relationship()
+    except Done.DoesNotExist:
+        pass
+
+
+@shared_task
+def done_post_delete_task(event_id, user_id):
+    Done.drop_relationship(event_id, user_id)

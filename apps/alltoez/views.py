@@ -25,6 +25,7 @@ from rest_framework.request import Request
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 import keen
 
+from apps.alltoez.graph.neo4j import get_similar_events
 from apps.alltoez.serializers import EventSerializer, UserSerializer
 from apps.events.models import Event, SimilarEvents
 from apps.events.views import EventInternalViewSet
@@ -57,7 +58,6 @@ class EventViewSet(EventInternalViewSet):
     @detail_route(methods=['get'], renderer_classes=[TemplateHTMLRenderer])
     def similar(self, request, *args, **kwargs):
         template = "alltoez/recommendation/similar_events.html"
-
         if not request.is_ajax():
             return Response({"error": "This is not an ajax request"}, status=status.HTTP_400_BAD_REQUEST,
                             template_name=template)
@@ -70,13 +70,16 @@ class EventViewSet(EventInternalViewSet):
             return Response({"error": "More than one resource is found at this URI."},
                             status=status.HTTP_300_MULTIPLE_CHOICES, template_name=template)
 
+        """
+        THIS IS RECOMENDATION VIA PIO
         try:
             similar_event_map = SimilarEvents.objects.get(event=event)
             queryset = similar_event_map.similar_events.all().filter(Q(end_date__gte=timezone.now().date()) |
                                                                      Q(end_date=None)).order_by('?')[:3]
         except ObjectDoesNotExist:
             queryset = Event.objects.none()
-
+        """
+        queryset = get_similar_events(event=event, limit=3, skip=0)
         serializer = self.get_serializer(queryset, many=True)
 
         return Response({"events_list": serializer.data}, template_name=template)

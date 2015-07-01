@@ -330,17 +330,22 @@ ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_ADAPTER = "apps.alltoez_profile.adapter.AlltoezAccountAdapter"
 SOCIALACCOUNT_ADAPTER = "apps.alltoez_profile.adapter.AlltoezSocialAccountAdapter"
 SOCIALACCOUNT_ENABLED = True
-SOCIALACCOUNT_PROVIDERS = {}
 SOCIALACCOUNT_QUERY_EMAIL = ACCOUNT_EMAIL_REQUIRED
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_AVATAR_SUPPORT = False
 SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
 
+SOCIALACCOUNT_PROVIDERS = \
+    {'facebook':
+        {'SCOPE': ['email', 'public_profile', 'user_friends'],
+            'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+            'METHOD': 'oauth2',
+            'VERIFIED_EMAIL': True}}
+
 EMAIL_CONFIRMATION_DAYS = 7
 FACEBOOK_ENABLED = True
 TWITTER_ENABLED = False
 OPENID_ENABLED = False
-
 #-------------------------------------------------------------------------------
 #	FILEBROWSER SETTINGS
 #-------------------------------------------------------------------------------
@@ -491,6 +496,7 @@ AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', "")
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', "")
 GOOGLE_MAPS_V3_APIKEY = os.environ.get('GOOGLE_API_KEY', "")
 MANDRILL_API_KEY = os.environ.get('MANDRILL_APIKEY', "")
+NEO4J_URL = os.environ.get("GRAPHENEDB_URL", "http://neo4j:test@localhost:7474/")
 
 #-------------------------------------------------------------------------------
 #	PREDICTIONIO CONFIG
