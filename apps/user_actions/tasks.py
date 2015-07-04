@@ -57,7 +57,7 @@ def mark_user_views_event(event_id, user_id, ip_address):
             'keen': {
                 'time_stamp': timezone.now().isoformat(),
                 'location': {
-                    'coordinates': [event.venue.longitude, event.venue.latitude],
+                    'coordinates': [float(event.venue.longitude), float(event.venue.latitude)],
                 }
             },
             "user": {
