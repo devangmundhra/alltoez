@@ -4,11 +4,7 @@ import logging
 from datetime import datetime
 from celery import shared_task
 
-from django.utils import timezone
-from django.core.mail import EmailMultiAlternatives
-from django.template import Context
-from django.template.loader import render_to_string
-from django.contrib.sites.models import Site
+from django.core.mail import EmailMessage
 from django.conf import settings
 
 from apps.events.models import Event
@@ -42,20 +38,21 @@ def get_redtri_events():
         for parsed_event in redtri_events:
             title = parsed_event.get('title', None)
             url = parsed_event.get('orig_link', None)
-            redtri_events_context.append({"url": url, "title": title})
+            redtri_events_context.append({"event_url": url, "event_title": title})
         if redtri_events_context and not settings.DEBUG:
             # Now send mail
-            plaintext_context = Context(autoescape=False)  # HTML escaping not appropriate in plaintext
             subject = "Alltoez | Redtri events | {}".format(today.strftime("%A, %d. %B"))
-            text_body = render_to_string("email/redtri_scrape/redtri_scrape.txt",
-                                         {"redtri_events": redtri_events_context}, plaintext_context)
-            html_body = render_to_string("email/redtri_scrape/redtri_scrape.html",
-                                         {"redtri_events": redtri_events_context, "site": Site.objects.get_current()})
 
-            msg = EmailMultiAlternatives(subject=subject, from_email=("No Reply", "noreply@alltoez.com"),
-                                         to=["devangmundhra@gmail.com", "ruchikadamani90@gmail.com"], body=text_body)
-            msg.attach_alternative(html_body, "text/html")
+            msg = EmailMessage(subject=subject, from_email=("No Reply", "noreply@alltoez.com"),
+                               to=["devangmundhra@gmail.com", "ruchikadamani90@gmail.com"])
+            msg.template_name = "RedTri Events"
+            msg.global_merge_vars = {
+                "events": redtri_events_context,
+                "CHECK_DATE": "{}".format(today.strftime("%A, %d. %B")),
+                "redtri_event_count": len(redtri_events_context)
+            }
             msg.send()
+
     except Exception:
         pass
 
@@ -66,18 +63,18 @@ def get_expired_events():
     if expired_events_qs:
         expired_events = []
         for event in expired_events_qs:
-            expired_events.append({"url": event.url, "title": event.title})
+            expired_events.append({"event_url": event.url, "event_title": event.title, "image_url": event.image.url})
 
         if not settings.DEBUG:
             # Now send mail
-            plaintext_context = Context(autoescape=False)  # HTML escaping not appropriate in plaintext
             subject = "Alltoez | Expired Events | {}".format(today.strftime("%A, %d. %B"))
-            text_body = render_to_string("email/expired_events/expired_events.txt",
-                                         {"expired_events": expired_events}, plaintext_context)
-            html_body = render_to_string("email/expired_events/expired_events.html",
-                                         {"expired_events": expired_events, "site": Site.objects.get_current()})
 
-            msg = EmailMultiAlternatives(subject=subject, from_email="noreply@alltoez.com",
-                                         to=["devangmundhra@gmail.com", "ruchikadamani90@gmail.com"], body=text_body)
-            msg.attach_alternative(html_body, "text/html")
+            msg = EmailMessage(subject=subject, from_email=("No Reply", "noreply@alltoez.com"),
+                               to=["devangmundhra@gmail.com", "ruchikadamani90@gmail.com"])
+            msg.template_name = "Expired Events"
+            msg.global_merge_vars = {
+                "events": expired_events,
+                "CHECK_DATE": "{}".format(today.strftime("%A, %d. %B")),
+                "expired_count": expired_events_qs.count()
+            }
             msg.send()

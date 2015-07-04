@@ -1,4 +1,0 @@
-{{ expired_events|length }} Expired events
-{% for event in expired_events %}
-    {{ forloop.counter }} {{ event.title }}: {{ event.url }}
-{% endfor %}
