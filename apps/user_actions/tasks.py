@@ -55,7 +55,7 @@ def mark_user_views_event(event_id, user_id, ip_address):
     for category in event.category.all():
         keen_events.append({
             'keen': {
-                'time_stamp': timezone.now(),
+                'time_stamp': timezone.now().isoformat(),
                 'location': {
                     'coordinates': [event.venue.longitude, event.venue.latitude],
                 }
