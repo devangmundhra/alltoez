@@ -12,10 +12,7 @@ from apps.venues.models import Venue
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+
 @receiver(post_save, sender=Venue)
-def venue_post_save(sender, **kwargs):
-    return
-    venue = kwargs['instance']
-    events = venue.events
-    for event in events:
-        invalidate_obj(event)
+def venue_post_save(sender, instance, created, **kwargs):
+    instance.create_graph_node()

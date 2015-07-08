@@ -3,6 +3,7 @@ from django.contrib.gis.db import models
 
 from phonenumber_field.modelfields import PhoneNumberField
 
+from apps.alltoez.graph import *
 from apps.alltoez.utils.abstract_models import BaseModel, AddressMixin
 from apps.alltoez.utils.geo import rev_geocode_location_component
 from apps.alltoez.utils.model_utils import unique_slugify
@@ -12,6 +13,8 @@ class Venue(BaseModel, AddressMixin):
     """
     Model to store information about venues
     """
+    GRAPH_NODE_NAME = "Venue"
+
     __original_name = None
     name = models.CharField(max_length=200, verbose_name='Venue name')
     slug = models.SlugField(null=True, blank=True, unique=True,
@@ -79,6 +82,14 @@ class Venue(BaseModel, AddressMixin):
             return "{}\r{}\r{}, {} {}".format(self.address, self.address_line_2, self.city, self.state, self.zipcode)
         else:
             return "{}\n{}, {} {}".format(self.address, self.city, self.state, self.zipcode)
+
+    def create_graph_node(self):
+        venue_node = neo4j_graph.merge_one(Venue.GRAPH_NODE_NAME, "id", self.id)
+        venue_node.properties['name'] = self.name
+        venue_node.properties['city'] = self.city
+        venue_node.properties['neighborhood'] = self.neighborhood
+        neo4j_graph.push(venue_node)
+        return venue_node
 
     @classmethod
     def fix_neighborhood(cls, neighborhood):
