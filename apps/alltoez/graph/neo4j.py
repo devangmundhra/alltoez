@@ -3,6 +3,9 @@ __author__ = 'devangmundhra'
 from datetime import datetime
 import calendar
 
+from django.db.models import Q
+from django.utils import timezone
+
 from apps.alltoez.graph import *
 
 from apps.alltoez_profile.models import UserProfile
@@ -30,12 +33,15 @@ def update_graph(delete_graph=False, update_schema=False):
     for category in Category.objects.all():
         category.create_graph_node()
 
+    '''
+    Don't add all venues for now (to prevent paying for Graphene Pro)
     # Add all venues to graph
     for venue in Venue.objects.all():
         venue.create_graph_node()
+    '''
 
     # Add all events to graph
-    for event in Event.objects.all():
+    for event in Event.objects.filter(Q(end_date__gte=timezone.now()) | Q(end_date=None)):
         event.create_graph_node()
 
     # Add all user actions to graph
