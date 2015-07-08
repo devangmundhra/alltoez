@@ -35,7 +35,7 @@
                         {% endif %}
                     </span>
                     {% if event.end_date|days_since >= -5 %}
-                        <span class="event-freshness expiring" {% if event.published_at|days_since <= 2 %}style="top:40px"{% endif %}>Expiring soon</span>
+                        <span class="event-freshness expiring" {% if event.published_at|days_since <= 2 %}style="top:40px"{% endif %}>Ending soon</span>
                     {% endif %}
                 {% endif %}
             </div>

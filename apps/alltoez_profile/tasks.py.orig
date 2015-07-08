@@ -1,15 +1,9 @@
 __author__ = 'devangmundhra'
 
-import logging
-
-from django.core.mail import EmailMessage
-
+<<<<<<< HEAD
 from celery import shared_task
 
 from apps.alltoez_profile.models import UserProfile
-
-# Get an instance of a logger
-logger = logging.getLogger(__name__)
 
 
 @shared_task
@@ -19,6 +13,14 @@ def post_save_task(pk):
         instance.create_graph_node()
     except UserProfile.DoesNotExist:
         pass
+=======
+import logging
+from celery import shared_task
+
+from django.core.mail import EmailMessage
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 
 @shared_task
@@ -27,3 +29,4 @@ def send_welcome_email(email_address):
                        to=[email_address])
     msg.template_name = "Welcome To Alltoez"
     msg.send()
+>>>>>>> master

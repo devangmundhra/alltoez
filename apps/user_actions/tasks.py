@@ -53,39 +53,36 @@ def mark_user_views_event(event_id, user_id, ip_address):
     keen_events = []
 
     for category in event.category.all():
-        keen_events += {
-            'view_single': {
-                'keen': {
-                    'time_stamp': timezone.now(),
-                    'location': {
-                        'coordinates': [event.venue.longitude, event.venue.latitude],
-                    }
-                },
-                "user": {
-                    "user_id": user_id,
-                    "staff": staff_status,
-                    "ip": ip_address
-                },
-                "event": {
-                    "event_id": event_id,
-                    "category": category.name,
-                    "min_age": event.min_age,
-                    "max_age": event.max_age,
-                    "cost": event.cost,
-                    "start_date": event.start_date.isoformat(),
-                    "end_date": event.end_date.isoformat() if event.end_date else None,
-                    "publish_date": event.published_at.isoformat() if event.published_at else None
-                },
-                "venue": {
-                    "venue_id": event.venue.id,
-                    "name": event.venue.name,
-                    "city": event.venue.city,
-                    "neighborhood": event.venue.neighborhood,
+        keen_events.append({
+            'keen': {
+                'time_stamp': timezone.now().isoformat(),
+                'location': {
+                    'coordinates': [float(event.venue.longitude), float(event.venue.latitude)],
                 }
-            }
-        }
+            },
+            "user": {
+                "user_id": user_id,
+                "staff": staff_status,
+                "ip": ip_address
+            },
+            "event": {
+                "event_id": event_id,
+                "category": category.name,
+                "min_age": event.min_age,
+                "max_age": event.max_age,
+                "cost": event.cost,
+                "start_date": event.start_date.isoformat(),
+                "end_date": event.end_date.isoformat() if event.end_date else None,
+                "publish_date": event.published_at.isoformat() if event.published_at else None
+            },
+            "venue": {
+                "venue_id": event.venue.id,
+                "name": event.venue.name,
+                "city": event.venue.city,
+                "neighborhood": event.venue.neighborhood,
+            }})
 
-    keen.add_events(keen_events)
+    keen.add_events({"view_single": keen_events})
 
 
 @shared_task

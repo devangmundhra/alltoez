@@ -1,4 +1,0 @@
-{{ redtri_events|length }} Redtri events
-{% for event in redtri_events %}
-    {{ forloop.counter }} {{ event.title }}: {{ event.url }}
-{% endfor %}

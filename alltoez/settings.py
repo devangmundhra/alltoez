@@ -1,9 +1,12 @@
+from __future__ import absolute_import
+
 import os, django, os.path
 import logging
 import urlparse
 import dj_database_url
 from datetime import timedelta
 from django.utils.translation import ugettext_lazy as _
+from celery.schedules import crontab
 
 #-------------------------------------------------------------------------------
 #	BASE SETTINGS
@@ -401,6 +404,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'apps.venues.tasks.check_invalid_venues',
         'schedule': timedelta(days=2),
     },
+    'send-bookmark-reminder': {
+        'task': 'apps.alltoez.tasks.send_bookmark_reminder_email',
+        'schedule': crontab(hour=16, minute=30, day_of_week=4),
+    }
 }
 
 
@@ -575,7 +582,7 @@ LOGGING = {
 }
 
 try:
-    from local_settings import *
+    from alltoez.local_settings import *
 except ImportError:
     pass
 
