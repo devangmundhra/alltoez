@@ -304,5 +304,13 @@ def heroku_quick_deploy():
     print("enter your git commit comment: ")
     comment = raw_input()
     local('git commit -m "%s"' % comment)
+    heroku_nocommit_quick_deploy()
+
+
+def heroku_nocommit_quick_deploy():
+    """
+    Deploy to Heroku without maintanence or commit
+    :return:
+    """
     local('git push -u origin master')
     local('git push heroku master')

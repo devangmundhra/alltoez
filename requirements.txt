@@ -8,7 +8,7 @@ boto==2.38.0
 celery==3.1.17
 dj-database-url==0.3.0
 dj-static==0.0.6
-Django==1.8.2
+Django==1.8.3
 django-admin-shortcuts==1.2.5
 django-adv-imagefield==0.0.4
 django-allauth==0.20.0
@@ -20,7 +20,7 @@ django-endless-pagination==2.0
 django-extensions==1.5.5
 django-filebrowser-no-grappelli-nph==3.4.4
 django-filter==0.10.0
-django-haystack==2.3.1
+django-haystack==2.4.0
 django-haystack-panel==0.2.1
 django-jsonfield==0.9.13
 django-location-field==1.5.1
@@ -71,7 +71,7 @@ requests==2.7.0
 requests-oauthlib==0.5.0
 simplejson==3.4.1
 six==1.9.0
-sorl-thumbnail==12.2
+sorl-thumbnail==12.3
 sqlparse==0.1.15
 static3==0.5.1
 urllib3==1.10
