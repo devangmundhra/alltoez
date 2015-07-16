@@ -37,7 +37,7 @@ def send_bookmark_reminder_email():
         # What day will it be 7 days from now-
         now = timezone.now().date()
         seven_days = now + timedelta(days=7)
-        my_bookmarks = Bookmark.objects.filter(user=user, event__end_date__lte=seven_days)
+        my_bookmarks = Bookmark.objects.filter(user=user, event__end_date__gte=now, event__end_date__lte=seven_days)
 
         if my_bookmarks:
             bookmarked_events = []
@@ -46,7 +46,7 @@ def send_bookmark_reminder_email():
                 bookmarked_events.append({"EVENT_TITLE": bookmark.event.title,
                                      "IMAGE_URL": bookmark.event.image.url,
                                      "EVENT_DESCRIPTION": bookmark.event.description,
-                                     "EVENT_URL": "http://" + Site.objects.get_current().domain + bookmark.event.get_absolute_url(),
+                                     "EVENT_URL": "http://www." + Site.objects.get_current().domain + bookmark.event.get_absolute_url(),
                                      "END_DATE": "{}".format(bookmark.event.end_date.strftime("%A, %d. %B"))})
             subject = "Events ending soon on Alltoez"
 
