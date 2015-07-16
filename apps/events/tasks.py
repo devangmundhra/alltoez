@@ -64,7 +64,7 @@ def get_expired_events():
     if expired_events_qs:
         expired_events = []
         for event in expired_events_qs:
-            expired_events.append({"event_url": "http://" + Site.objects.get_current().domain + event.get_absolute_url(),
+            expired_events.append({"event_url": "http://www." + Site.objects.get_current().domain + event.get_absolute_url(),
                                    "event_title": event.title, "image_url": event.image.url})
 
         if not settings.DEBUG:

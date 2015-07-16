@@ -8,7 +8,7 @@ from django.template.defaultfilters import stringfilter
 from django.utils.text import normalize_newlines
 from django.conf import settings
 from django.utils.encoding import force_unicode
-from django.contrib.admin.util import NestedObjects
+from django.contrib.admin.utils import NestedObjects
 from django.utils.safestring import mark_safe
 from django.db import router
 
