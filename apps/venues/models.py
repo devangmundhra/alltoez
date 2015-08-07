@@ -84,12 +84,15 @@ class Venue(BaseModel, AddressMixin):
             return "{}\n{}, {} {}".format(self.address, self.city, self.state, self.zipcode)
 
     def create_graph_node(self):
-        venue_node = neo4j_graph.merge_one(Venue.GRAPH_NODE_NAME, "id", self.id)
-        venue_node.properties['name'] = self.name
-        venue_node.properties['city'] = self.city
-        venue_node.properties['neighborhood'] = self.neighborhood
-        neo4j_graph.push(venue_node)
-        return venue_node
+        try:
+            venue_node = neo4j_graph.merge_one(Venue.GRAPH_NODE_NAME, "id", self.id)
+            venue_node.properties['name'] = self.name
+            venue_node.properties['city'] = self.city
+            venue_node.properties['neighborhood'] = self.neighborhood
+            neo4j_graph.push(venue_node)
+            return venue_node
+        except IOError:
+            pass
 
     @classmethod
     def fix_neighborhood(cls, neighborhood):

@@ -5,6 +5,7 @@ import calendar
 
 from django.db.models import Q
 from django.utils import timezone
+from django.conf import settings
 
 from apps.alltoez.graph import *
 
@@ -53,6 +54,10 @@ def update_graph(delete_graph=False, update_schema=False):
 
 
 def get_similar_events(event=None, limit=5, skip=0):
+    if settings.DEBUG:
+        events = Event.objects.all()[skip:skip+limit]
+        return events
+
     SIMILAR_EVENT = "similar_event"
     now_dt = datetime.now()
     now_utc = calendar.timegm(now_dt.timetuple())

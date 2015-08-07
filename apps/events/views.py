@@ -2,7 +2,6 @@ import json
 
 from django.utils import timezone
 from django.views.generic import DetailView, ListView
-from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Polygon
 from django.db.models import Q
 
@@ -118,14 +117,17 @@ class Events(ListView):
             queryset = queryset.filter(venue__point__within=self.bounds).\
                 distance(self.bounds.centroid, field_name='venue__point')
             self.location_available = True
-            keen.add_event('event_filter', {
-                'keen': {
-                    'location': {
-                        'coordinates': [self.bounds.centroid.x, self.bounds.centroid.y],
-                    }
-                },
-                'category': self.category_slug,
-            }, timezone.now())
+            try:
+                keen.add_event('event_filter', {
+                    'keen': {
+                        'location': {
+                            'coordinates': [self.bounds.centroid.x, self.bounds.centroid.y],
+                        }
+                    },
+                    'category': self.category_slug,
+                }, timezone.now())
+            except keen.InvalidEnvironmentError:
+                pass
 
         if self.category_slug:
             queryset = queryset.filter(category__slug=self.category_slug)

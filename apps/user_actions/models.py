@@ -55,16 +55,22 @@ class Bookmark(UserEventActionsAbstractModel):
         unique_together = ('user', 'event')
 
     def create_relationship(self):
-        event_node = neo4j_graph.merge_one(Event.GRAPH_NODE_NAME, "id", self.event.id)
-        user_node = neo4j_graph.merge_one(UserProfile.GRAPH_USER_NODE_NAME, "id", self.user.id)
-        neo4j_graph.create_unique(Relationship(event_node, Bookmark.GRAPH_USER_EVENT_RELATIONSHIP, user_node))
+        try:
+            event_node = neo4j_graph.merge_one(Event.GRAPH_NODE_NAME, "id", self.event.id)
+            user_node = neo4j_graph.merge_one(UserProfile.GRAPH_USER_NODE_NAME, "id", self.user.id)
+            neo4j_graph.create_unique(Relationship(event_node, Bookmark.GRAPH_USER_EVENT_RELATIONSHIP, user_node))
+        except IOError:
+            pass
 
     @classmethod
     def drop_relationship(cls, event_id, user_id):
-        event_node = neo4j_graph.merge_one(Event.GRAPH_NODE_NAME, "id", event_id)
-        user_node = neo4j_graph.merge_one(UserProfile.GRAPH_USER_NODE_NAME, "id", user_id)
-        rel = neo4j_graph.match_one(event_node, Bookmark.GRAPH_USER_EVENT_RELATIONSHIP, user_node)
-        neo4j_graph.delete(rel)
+        try:
+            event_node = neo4j_graph.merge_one(Event.GRAPH_NODE_NAME, "id", event_id)
+            user_node = neo4j_graph.merge_one(UserProfile.GRAPH_USER_NODE_NAME, "id", user_id)
+            rel = neo4j_graph.match_one(event_node, Bookmark.GRAPH_USER_EVENT_RELATIONSHIP, user_node)
+            neo4j_graph.delete(rel)
+        except IOError:
+            pass
 
 
 class Done(UserEventActionsAbstractModel):
@@ -77,16 +83,22 @@ class Done(UserEventActionsAbstractModel):
         unique_together = ('user', 'event')
 
     def create_relationship(self):
-        event_node = neo4j_graph.merge_one(Event.GRAPH_NODE_NAME, "id", self.event.id)
-        user_node = neo4j_graph.merge_one(UserProfile.GRAPH_USER_NODE_NAME, "id", self.user.id)
-        neo4j_graph.create_unique(Relationship(event_node, Done.GRAPH_USER_EVENT_RELATIONSHIP, user_node))
+        try:
+            event_node = neo4j_graph.merge_one(Event.GRAPH_NODE_NAME, "id", self.event.id)
+            user_node = neo4j_graph.merge_one(UserProfile.GRAPH_USER_NODE_NAME, "id", self.user.id)
+            neo4j_graph.create_unique(Relationship(event_node, Done.GRAPH_USER_EVENT_RELATIONSHIP, user_node))
+        except IOError:
+            pass
 
     @classmethod
     def drop_relationship(cls, event_id, user_id):
-        event_node = neo4j_graph.merge_one(Event.GRAPH_NODE_NAME, "id", event_id)
-        user_node = neo4j_graph.merge_one(UserProfile.GRAPH_USER_NODE_NAME, "id", user_id)
-        rel = neo4j_graph.match_one(event_node, Done.GRAPH_USER_EVENT_RELATIONSHIP, user_node)
-        neo4j_graph.delete(rel)
+        try:
+            event_node = neo4j_graph.merge_one(Event.GRAPH_NODE_NAME, "id", event_id)
+            user_node = neo4j_graph.merge_one(UserProfile.GRAPH_USER_NODE_NAME, "id", user_id)
+            rel = neo4j_graph.match_one(event_node, Done.GRAPH_USER_EVENT_RELATIONSHIP, user_node)
+            neo4j_graph.delete(rel)
+        except IOError:
+            pass
 
 
 class Share(UserEventActionsAbstractModel):

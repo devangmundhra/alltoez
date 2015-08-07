@@ -74,10 +74,13 @@ class Category(models.Model):
         return self.parent_category
 
     def create_graph_node(self):
-        category_node = neo4j_graph.merge_one(Category.GRAPH_NODE_NAME, "id", self.id)
-        category_node.properties['name'] = self.name
-        neo4j_graph.push(category_node)
-        return category_node
+        try:
+            category_node = neo4j_graph.merge_one(Category.GRAPH_NODE_NAME, "id", self.id)
+            category_node.properties['name'] = self.name
+            neo4j_graph.push(category_node)
+            return category_node
+        except IOError:
+            pass
 
 
 class Event(models.Model):
@@ -141,27 +144,30 @@ class Event(models.Model):
         return unicode(self.title)
 
     def create_graph_node(self):
-        event_node = neo4j_graph.merge_one(Event.GRAPH_NODE_NAME, "id", self.id)
-        s_dt = datetime(self.start_date.year, self.start_date.month, self.start_date.day)
-        if self.end_date:
-            e_dt = datetime(self.end_date.year, self.end_date.month, self.end_date.day, 23, 59, 59)
-        else:
-            e_dt = datetime(2020, 12, 31)
+        try:
+            event_node = neo4j_graph.merge_one(Event.GRAPH_NODE_NAME, "id", self.id)
+            s_dt = datetime(self.start_date.year, self.start_date.month, self.start_date.day)
+            if self.end_date:
+                e_dt = datetime(self.end_date.year, self.end_date.month, self.end_date.day, 23, 59, 59)
+            else:
+                e_dt = datetime(2020, 12, 31)
 
-        event_node.properties['start_date'] = calendar.timegm(s_dt.timetuple())
-        event_node.properties['end_date'] = calendar.timegm(e_dt.timetuple())
-        event_node.properties['min_age'] = self.min_age
-        event_node.properties['max_age'] = self.max_age
-        event_node.properties['title'] = self.title
-        neo4j_graph.push(event_node)
+            event_node.properties['start_date'] = calendar.timegm(s_dt.timetuple())
+            event_node.properties['end_date'] = calendar.timegm(e_dt.timetuple())
+            event_node.properties['min_age'] = self.min_age
+            event_node.properties['max_age'] = self.max_age
+            event_node.properties['title'] = self.title
+            neo4j_graph.push(event_node)
 
-        for category in self.category.all():
-            category_node = category.create_graph_node()
-            neo4j_graph.create_unique(Relationship(event_node, Event.GRAPH_EVENT_CATEGORY_RELATIONSHIP, category_node))
-        venue_node = self.venue.create_graph_node()
-        neo4j_graph.create_unique(Relationship(event_node, Event.GRAPH_EVENT_VENUE_RELATIONSHIP, venue_node))
+            for category in self.category.all():
+                category_node = category.create_graph_node()
+                neo4j_graph.create_unique(Relationship(event_node, Event.GRAPH_EVENT_CATEGORY_RELATIONSHIP, category_node))
+            venue_node = self.venue.create_graph_node()
+            neo4j_graph.create_unique(Relationship(event_node, Event.GRAPH_EVENT_VENUE_RELATIONSHIP, venue_node))
 
-        return event_node
+            return event_node
+        except IOError:
+            pass
 
 
 class SimilarEvents(models.Model):

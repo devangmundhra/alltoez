@@ -106,43 +106,45 @@ class UserProfile(BaseModel, AddressMixin):
             return user.username
 
     def create_graph_node(self):
-        facebook_app = SocialApp.objects.get(provider='facebook')
-        user = self.user
-        user_node = neo4j_graph.merge_one(UserProfile.GRAPH_USER_NODE_NAME, "id", user.id)
-        user_node.properties['name'] = str(user)
-        neo4j_graph.push(user_node)
         try:
-            account = SocialAccount.objects.get(user_id=user.id, provider='facebook')
-            fb_data = account.extra_data
-            fbid = fb_data['id']
-            fb_user_node = neo4j_graph.merge_one(UserProfile.GRAPH_FBUSER_NODE_NAME, "id", fbid)
-            fb_user_node.properties['name'] = fb_data['name']
-            neo4j_graph.push(fb_user_node)
-            neo4j_graph.create_unique(Relationship(user_node, UserProfile.GRAPH_USER_FBUSER_RELATIONSHIP, fb_user_node))
-
-            # Get user's fb friends
-            token = account.socialtoken_set.all()[0].token
-            fb_graph = facebook.GraphAPI(access_token=token)
+            facebook_app = SocialApp.objects.get(provider='facebook')
+            user = self.user
+            user_node = neo4j_graph.merge_one(UserProfile.GRAPH_USER_NODE_NAME, "id", user.id)
+            user_node.properties['name'] = str(user)
+            neo4j_graph.push(user_node)
             try:
-                fb_graph.extend_access_token(facebook_app.client_id, facebook_app.secret)
-                friends = fb_graph.get_connections(id='me', connection_name='friends').get('data', [])
-                for friend in friends:
-                    friend_fbid = friend['id']
-                    friend_fbuser_node = neo4j_graph.merge_one(UserProfile.GRAPH_FBUSER_NODE_NAME, "id", friend_fbid)
-                    friend_fbuser_node.properties['name'] = friend['name']
-                    neo4j_graph.push(friend_fbuser_node)
-                    neo4j_graph.create_unique(Relationship(fb_user_node, UserProfile.GRAPH_FBUSER_FRIEND_RELATIONSHIP,
-                                                           friend_fbuser_node))
-            except facebook.GraphAPIError as e:
-                print logger.error("For user {}, FBGraphAPI error {}".format(user, e))
+                account = SocialAccount.objects.get(user_id=user.id, provider='facebook')
+                fb_data = account.extra_data
+                fbid = fb_data['id']
+                fb_user_node = neo4j_graph.merge_one(UserProfile.GRAPH_FBUSER_NODE_NAME, "id", fbid)
+                fb_user_node.properties['name'] = fb_data['name']
+                neo4j_graph.push(fb_user_node)
+                neo4j_graph.create_unique(Relationship(user_node, UserProfile.GRAPH_USER_FBUSER_RELATIONSHIP, fb_user_node))
+
+                # Get user's fb friends
+                token = account.socialtoken_set.all()[0].token
+                fb_graph = facebook.GraphAPI(access_token=token)
+                try:
+                    fb_graph.extend_access_token(facebook_app.client_id, facebook_app.secret)
+                    friends = fb_graph.get_connections(id='me', connection_name='friends').get('data', [])
+                    for friend in friends:
+                        friend_fbid = friend['id']
+                        friend_fbuser_node = neo4j_graph.merge_one(UserProfile.GRAPH_FBUSER_NODE_NAME, "id", friend_fbid)
+                        friend_fbuser_node.properties['name'] = friend['name']
+                        neo4j_graph.push(friend_fbuser_node)
+                        neo4j_graph.create_unique(Relationship(fb_user_node, UserProfile.GRAPH_FBUSER_FRIEND_RELATIONSHIP,
+                                                               friend_fbuser_node))
+                except facebook.GraphAPIError as e:
+                    print logger.error("For user {}, FBGraphAPI error {}".format(user, e))
+                    return None
+
+            except SocialAccount.DoesNotExist:
+                print logger.info("No fb account for {}".format(user))
                 return None
 
-        except SocialAccount.DoesNotExist:
-            print logger.info("No fb account for {}".format(user))
-            return None
-
-        return user_node
-
+            return user_node
+        except IOError:
+            pass
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
