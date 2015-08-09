@@ -40,6 +40,8 @@ info_dict = {
 urlpatterns = patterns('',
     url(r"^$", home,  name="home"),
     url('^about/$', TemplateView.as_view(template_name='alltoez/about.html'), name="about-alltoez"),
+    url('^teach/$', TemplateView.as_view(template_name='alltoez/survey/teach.html'), name="tutor-survey"),
+    url('^parents/$', TemplateView.as_view(template_name='alltoez/survey/parents.html'), name="parents-survey"),
     url(r'^search/autocomplete/', autocomplete, name="search_autocomplete"),
     url(r'^search/', search_view_factory(
         view_class=AlltoezSearchView,
