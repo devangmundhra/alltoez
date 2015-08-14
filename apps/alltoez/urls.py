@@ -18,6 +18,7 @@ from apps.user_actions.views import DoneViewSet, BookmarkViewSet, ReviewViewSet
 from apps.alltoez.views import home, AlltoezSearchView, autocomplete
 from apps.events.models import Event
 from apps.alltoez.sitemaps import StaticViewSitemap
+from apps.alltoez_profile.api.views import FacebookLogin, UserRegisterViewSet, ProfileEditViewSet,ChildUpdateViewSet
 
 router = routers.DefaultRouter()
 router.register(r'events', EventViewSet, base_name='event')
@@ -27,6 +28,9 @@ router.register(r'done', DoneViewSet)
 router.register(r'bookmark', BookmarkViewSet)
 router.register(r'review', ReviewViewSet)
 router.register(r'users', UserViewSet)
+router.register(r'signup', UserRegisterViewSet)
+router.register(r'profile',ProfileEditViewSet)
+router.register(r'child',ChildUpdateViewSet)
 
 
 sqs = SearchQuerySet().filter(end_date__gte=timezone.now().date()).facet('categories').\
@@ -48,6 +52,7 @@ urlpatterns = patterns('',
         searchqueryset=sqs,
         ), name='search'),
     url(r'^api/v1/', include(router.urls, namespace='api')),
+    url(r'^api/v1/facebook/$', FacebookLogin.as_view(), name='fb_login'),
     url(r'^sitemap\.xml$', sitemap,
         {'sitemaps': {'events': GenericSitemap(info_dict, priority=0.6), 'static': StaticViewSitemap}},
         name='django.contrib.sitemaps.views.sitemap')

@@ -63,6 +63,7 @@ celerybeat-schedule
 
 alltoez/configs/common/local_settings.py
 local_settings.py
+local.py
 
 fixtures/*
 
@@ -71,3 +72,5 @@ start_dep_processes.sh
 *.rdb
 
 staticfiles/*
+*.dump
+*.json

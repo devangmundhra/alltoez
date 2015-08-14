@@ -7,7 +7,7 @@ from rest_framework.reverse import reverse
 
 from apps.events.models import Event
 from apps.user_actions.models import Bookmark, Done, Review
-from apps.alltoez_profile.serializers import UserInternalSerializer
+from apps.alltoez_profile.api.serializers import UserInternalSerializer
 from apps.events.serializers import EventInternalSerializer
 from apps.venues.serializers import VenueSerializer
 from apps.user_actions.serializers import ReviewSerializer

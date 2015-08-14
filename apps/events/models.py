@@ -80,6 +80,14 @@ class Category(models.Model):
         return category_node
 
 
+# class Landingpage:
+#     """
+#     This is used to store the description about the landing page of Alltoez. We can change
+#     it through the backend side.
+#     """
+#     brief_desc = models.CharField(max_length=1000)
+
+
 class Event(models.Model):
     """
     Event class
