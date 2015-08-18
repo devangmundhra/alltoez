@@ -69,12 +69,15 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 
 
 
-
 class ChildSerializer(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        many = kwargs.pop('many', True)
+        super(ChildSerializer, self).__init__(many=many, *args, **kwargs)
+
     class Meta:
         model = Child
-        fields = ('user', 'name', 'first_name', 'last_name', 'gender', 'age')
-
+        fields = ('user', 'name', 'gender', 'age', )
+        read_only_fields = ('user', )
 
 
 class AlltoezProfileSerializer(serializers.ModelSerializer):

@@ -30,7 +30,7 @@ WSGI_APPLICATION = 'alltoez.wsgi.application'
 
 ADMINS = (('Devang', 'devang.mundhra@alltoez.com'), ('Server', 'server@alltoez.com')),
 MANAGERS = ADMINS
-SITE_ID = 1
+SITE_ID=1
 
 # Local time
 TIME_ZONE = "UTC"
