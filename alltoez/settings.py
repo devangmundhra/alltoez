@@ -8,10 +8,11 @@ from datetime import timedelta
 from django.utils.translation import ugettext_lazy as _
 from celery.schedules import crontab
 
-
 #-------------------------------------------------------------------------------
 #	BASE SETTINGS
 #-------------------------------------------------------------------------------
+DEBUG = False
+TEMPLATE_DEBUG = DEBUG
 INTERNAL_IPS = ('127.0.0.1', 'localhost')
 SECRET_KEY = '-x83)5-^cugn@*t6gh%76j@cb)zj)q7l_rm!%3=)@sw&v&d_ww'
 
@@ -26,11 +27,37 @@ MEDIA_ROOT = os.path.join(SITE_ROOT, "media")
 
 PROJECT_DOMAIN = "http://www.alltoez.com"
 
+STATICFILES_STORAGE = 'apps.alltoez.storage.S3GZipPipelineStorage'
+
+STATIC_FILES_BUCKET = 'alltoezstatic'
+STATIC_S3_DOMAIN = '%s.s3.amazonaws.com' % STATIC_FILES_BUCKET
+
+STATIC_URL = "https://%s/" % STATIC_S3_DOMAIN
+
+MEDIA_FILES_BUCKET = 'alltoez'
+MEDIA_S3_DOMAIN = '%s.s3.amazonaws.com' % MEDIA_FILES_BUCKET
+# MEDIA_URL = "https://%s/" % MEDIA_S3_DOMAIN
+MEDIA_URL = 'http://d1wqe2m0m7wb9o.cloudfront.net/'
+
+AWS_STORAGE_BUCKET_NAME = MEDIA_FILES_BUCKET
+AWS_S3_CUSTOM_DOMAIN = MEDIA_S3_DOMAIN
+AWS_CLOUDFRONT_DOMAIN ='http://d1wqe2m0m7wb9o.cloudfront.net'
+AWS_QUERYSTRING_AUTH = False
+AWS_HEADERS = {  # see http://developer.yahoo.com/performance/rules.html#expires
+        'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+        'Cache-Control': 'max-age=94608000',
+    }
+
 WSGI_APPLICATION = 'alltoez.wsgi.application'
+
+ALLOWED_HOSTS = [
+    '.alltoez.com',
+    '.alltoez.herokuapp.com',
+]
 
 ADMINS = (('Devang', 'devang.mundhra@alltoez.com'), ('Server', 'server@alltoez.com')),
 MANAGERS = ADMINS
-SITE_ID=1
+SITE_ID = 2
 
 # Local time
 TIME_ZONE = "UTC"
@@ -48,7 +75,7 @@ TEMPLATE_LOADERS = (
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, 'templates'),
-    os.path.join(PROJECT_ROOT, "../", "templates")
+    os.path.join(PROJECT_ROOT, "alltoez", "templates")
 )
 
 STATICFILES_FINDERS = (
@@ -155,8 +182,16 @@ LANGUAGES = (
     ('en', _('English')),
 )
 
+DATABASES = {'default': dj_database_url.config()}
+DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
+
 ROOT_URLCONF = 'alltoez.urls'
 AUTH_PROFILE_MODULE = 'alltoez_profile.UserProfile'
+
+EMAIL_SUBJECT_PREFIX = "[Alltoez Server]"
+SERVER_EMAIL = 'Alltoez Server <server@alltoez.com>'
+DEFAULT_FROM_EMAIL = 'Alltoez Postmaster <postmaster@alltoez.com>'
+EMAIL_BACKEND = 'djrill.mail.backends.djrill.DjrillBackend'
 
 #-------------------------------------------------------------------------------
 #	CACHE SETTINGS
@@ -317,6 +352,33 @@ EMAIL_CONFIRMATION_DAYS = 7
 FACEBOOK_ENABLED = True
 TWITTER_ENABLED = False
 OPENID_ENABLED = False
+#-------------------------------------------------------------------------------
+#	FILEBROWSER SETTINGS
+#-------------------------------------------------------------------------------
+FILEBROWSER_URL_FILEBROWSER_MEDIA = STATIC_URL + "filebrowser/"
+FILEBROWSER_PATH_FILEBROWSER_MEDIA = os.path.join(STATIC_URL, 'filebrowser/')
+FILEBROWSER_EXTENSIONS = {
+    'Folder': [''],
+    'Image': ['.jpg','.jpeg','.gif','.png','.tif','.tiff'],
+    'Video': ['.mov','.wmv','.mpeg','.mpg','.avi','.rm','.swf'],
+    'Document': ['.pdf','.doc','.rtf','.txt','.xls','.csv'],
+    'Sound': ['.mp3','.mp4','.wav','.aiff','.midi','.m4p'],
+    'Code': ['.html','.py','.js','.css'],
+}
+FILEBROWSER_ADMIN_THUMBNAIL = 'fb_thumb'
+FILEBROWSER_IMAGE_MAXBLOCK = 1024*1024
+FILEBROWSER_MAX_UPLOAD_SIZE = 10485760 # 10485760 bytes = about 10megs
+FILEBROWSER_VERSIONS = {
+    'fb_thumb': {'verbose_name': 'Admin Thumbnail', 'width': 60, 'height': 60, 'opts': 'crop upscale'},
+    'thumb': {'verbose_name': 'Grid Thumb', 'width': 150, 'height': 150, 'opts': 'crop upscale'},
+    'small': {'verbose_name': 'Small (210px)', 'width': 210, 'height': '', 'opts': ''},
+    'medium': {'verbose_name': 'Medium (370px)', 'width': 370, 'height': '', 'opts': ''},
+    'large': {'verbose_name': 'Large (530px)', 'width': 530, 'height': '', 'opts': ''},
+}
+FILEBROWSER_ADMIN_VERSIONS = [
+    'thumb', 'small', 'medium', 'large',
+]
+
 
 #-------------------------------------------------------------------------------
 #	STORAGES SETTINGS
@@ -414,7 +476,7 @@ MARKDOWN_DEUX_STYLES = {
 #-------------------------------------------------------------------------------
 #	GEOIP CONFIG
 #-------------------------------------------------------------------------------
-GEOIP_PATH = os.path.join(PROJECT_ROOT, "alltoez/data/../data/geoip_data")
+GEOIP_PATH = os.path.join(PROJECT_ROOT, "alltoez/data/geoip_data")
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
@@ -456,9 +518,6 @@ PIO_EVENT_SERVER_ENDPOINT = os.environ.get('PIO_EVENT_SERVER_ENDPOINT', "")
 #-------------------------------------------------------------------------------
 #	DJANGO REST FRAMEWORK CONFIG
 #-------------------------------------------------------------------------------
-
-
-# Rest framework
 REST_FRAMEWORK = {
     'PAGINATE_BY': 10,
     'DEFAULT_RENDERER_CLASSES': (
@@ -483,10 +542,10 @@ THUMBNAIL_QUALITY = 100
 #-------------------------------------------------------------------------------
 #	LOGGING
 #-------------------------------------------------------------------------------
-# from sorl.thumbnail.log import ThumbnailLogHandler
-# handler = ThumbnailLogHandler()
-# handler.setLevel(logging.ERROR)
-# logging.getLogger('sorl.thumbnail').addHandler(handler)
+from sorl.thumbnail.log import ThumbnailLogHandler
+handler = ThumbnailLogHandler()
+handler.setLevel(logging.ERROR)
+logging.getLogger('sorl.thumbnail').addHandler(handler)
 
 LOGGING = {
     'version': 1,
@@ -527,3 +586,30 @@ LOGGING = {
         },
     }
 }
+
+try:
+    from alltoez.local_settings import *
+except ImportError:
+    pass
+
+# Add the debug info apps after local settings has been imported
+USE_DEBUG_TOOLBAR = False
+if DEBUG and USE_DEBUG_TOOLBAR:
+    TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.debug',)
+    MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+    INSTALLED_APPS += ('haystack_panel', 'debug_toolbar',)
+    DEBUG_TOOLBAR_PANELS = [
+        'debug_toolbar.panels.versions.VersionsPanel',
+        'debug_toolbar.panels.timer.TimerPanel',
+        'debug_toolbar.panels.settings.SettingsPanel',
+        'debug_toolbar.panels.headers.HeadersPanel',
+        'debug_toolbar.panels.request.RequestPanel',
+        'debug_toolbar.panels.sql.SQLPanel',
+        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+        'debug_toolbar.panels.templates.TemplatesPanel',
+        'debug_toolbar.panels.cache.CachePanel',
+        'debug_toolbar.panels.signals.SignalsPanel',
+        'debug_toolbar.panels.logging.LoggingPanel',
+        'debug_toolbar.panels.redirects.RedirectsPanel',
+        'haystack_panel.panel.HaystackDebugPanel'
+    ]

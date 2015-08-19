@@ -13,7 +13,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     """
     User register serializer returns token
     """
-    username = serializers.CharField(validators=[UniqueValidator(queryset=User.objects.all(),
+    username = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all(),
                                                                  message=_('Username Already exists.'))])
     token = serializers.SerializerMethodField(read_only=True)
 
