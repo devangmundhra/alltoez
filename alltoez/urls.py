@@ -12,6 +12,7 @@ handler500 = 'apps.alltoez.views.server_error'
 # Pluggable / django apps / inernal apps
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^', include('django.contrib.auth.urls')),
     url(r'^', include('apps.alltoez.urls')),
     url(r'^events/', include('apps.events.urls')),
     url(r'^venues/', include('apps.venues.urls')),
