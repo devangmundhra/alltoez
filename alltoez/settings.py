@@ -144,6 +144,8 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'haystack',
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
     'pagedown',
     'markdown_deux',
     'bootstrapform',
@@ -154,6 +156,7 @@ INSTALLED_APPS = [
     # Registration, Signin and Account Management
     'allauth',
     'allauth.account',
+    'rest_auth.registration',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
 
@@ -516,17 +519,20 @@ PIO_EVENT_SERVER_ENDPOINT = os.environ.get('PIO_EVENT_SERVER_ENDPOINT', "")
 #	DJANGO REST FRAMEWORK CONFIG
 #-------------------------------------------------------------------------------
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ],
-    'PAGE_SIZE': 10,
+    'PAGINATE_BY': 10,
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    )
+
+    ),
 }
+
+REST_SESSION_LOGIN = False
 
 #-------------------------------------------------------------------------------
 #	SORL THUMBNAIL

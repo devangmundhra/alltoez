@@ -12,13 +12,16 @@ handler500 = 'apps.alltoez.views.server_error'
 # Pluggable / django apps / inernal apps
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^', include('django.contrib.auth.urls')),
     url(r'^', include('apps.alltoez.urls')),
     url(r'^events/', include('apps.events.urls')),
     url(r'^venues/', include('apps.venues.urls')),
     url(r'^accounts/', include('apps.alltoez_profile.urls')),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^admin/filebrowser/', include(site.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url('^api/v1/', include('rest_auth.urls')),
+    url(r'^api/v1/registration/', include('rest_auth.registration.urls')),
 )
 
 urlpatterns += patterns('',
