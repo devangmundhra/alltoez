@@ -93,3 +93,17 @@ class UserInternalSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'pk', 'username', 'first_name', 'last_name', 'email', 'children', 'profile')
+
+# class VerifyEmail(APIView, ConfirmEmailView):
+#
+#     permission_classes = (AllowAny,)
+#     allowed_methods = ('POST', 'OPTIONS', 'HEAD')
+#
+#     def get(self, *args, **kwargs):
+#         return Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+#
+#     def post(self, request, *args, **kwargs):
+#         self.kwargs['key'] = self.request.DATA.get('key', '')
+#         confirmation = self.get_object()
+#         confirmation.confirm(self.request)
+#         return Response({'message': 'ok'}, status=status.HTTP_200_OK)

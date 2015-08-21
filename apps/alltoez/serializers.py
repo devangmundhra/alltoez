@@ -1,60 +1,13 @@
 import json
 
-from django.core.exceptions import ObjectDoesNotExist
-
 from rest_framework import serializers
-from rest_framework.reverse import reverse
 
 from apps.events.models import Event
-from apps.user_actions.models import Bookmark, Done, Review
+from apps.user_actions.models import Bookmark, Done
 from apps.alltoez_profile.serializers import UserInternalSerializer
-from apps.events.serializers import EventInternalSerializer
 from apps.venues.serializers import VenueSerializer
-from apps.user_actions.serializers import ReviewSerializer
-
-
-class EventSerializer(EventInternalSerializer):
-    bookmark = serializers.SerializerMethodField(read_only=True)
-    done = serializers.SerializerMethodField(read_only=True)
-    review = serializers.SerializerMethodField(read_only=True, required=False)
-    view_count = serializers.SerializerMethodField(read_only=True, required=False)
-
-    class Meta(EventInternalSerializer.Meta):
-        fields = EventInternalSerializer.Meta.fields + ('bookmark', 'done', 'review', 'view_count')
-
-    def get_bookmark(self, obj):
-        request = self.context.get('request')
-        if not request.user.is_authenticated():
-            return None
-        try:
-            bookmark = Bookmark.objects.get(event=obj, user=request.user)
-            return reverse('api:bookmark-detail', args=(bookmark,), request=request)
-        except ObjectDoesNotExist:
-            return None
-
-    def get_done(self, obj):
-        request = self.context.get('request')
-        if not request.user.is_authenticated():
-            return None
-        try:
-            done = Done.objects.get(event=obj, user=request.user)
-            return reverse('api:done-detail', args=(done,), request=request)
-        except ObjectDoesNotExist:
-            return None
-
-    def get_review(self, obj):
-        request = self.context.get('request')
-        if not request.user.is_authenticated():
-            return None
-        try:
-            review = Review.objects.get(event=obj, user=request.user)
-            serializer = ReviewSerializer(review, context=self.context)
-            return serializer.data
-        except ObjectDoesNotExist:
-            return None
-
-    def get_view_count(self, obj):
-        return obj.view_seed + obj.viewip_set.count()
+from apps.events.api.serializers import EventSerializer
+from allauth.socialaccount.models import SocialAccount
 
 
 class UserSerializer(UserInternalSerializer):
@@ -88,3 +41,7 @@ class VenueDetailSerializer(VenueSerializer):
 
     class Meta(VenueSerializer.Meta):
         fields = VenueSerializer.Meta.fields + ('event_set',)
+
+class AllauthSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SocialAccount

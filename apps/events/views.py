@@ -5,39 +5,11 @@ from django.views.generic import DetailView, ListView
 from django.contrib.gis.geos import Polygon
 from django.db.models import Q
 
-from rest_framework import viewsets
 from rest_framework.renderers import JSONRenderer
 import keen
 
-from apps.events.serializers import CategorySerializer, EventInternalSerializer
 from apps.events.models import Event, Category
 from apps.alltoez.utils.geo import rev_geocode_location_component
-
-"""
-API Endpoint for Events module
-"""
-
-
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    API endpoint that allows categories to be viewed or edited.
-    """
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-
-
-class EventInternalViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    API endpoint that allows events to be viewed or edited.
-    """
-    queryset = Event.objects.all()
-    serializer_class = EventInternalSerializer
-    ordering = ('-published_at',)
-    ordering_fields = ('published_at', 'end_date', 'cost', 'min_age', 'max_age', 'view_count', 'distance')
-
-    def get_queryset(self):
-        qs = Event.objects.all().filter(publish=True).filter(Q(end_date__gte=timezone.now()) | Q(end_date=None))
-        return qs
 
 """
 Alltoez event views
@@ -109,7 +81,7 @@ class Events(ListView):
         return super(Events, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
-        from apps.alltoez.views import EventViewSet
+        from apps.events.api.views import EventViewSet
         queryset = EventViewSet.get_direct_queryset(self.request)
 
         # Apply any location filters if needed
