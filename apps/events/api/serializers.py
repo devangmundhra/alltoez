@@ -85,6 +85,7 @@ class EventSerializer(EventInternalSerializer):
     def get_view_count(self, obj):
         return obj.view_seed + obj.viewip_set.count()
 
+
 class TextSearchSerializer(serializers.ModelSerializer):
     # venue = VenueSerializer(read_only=True)
     description = serializers.CharField(read_only=True)
@@ -100,3 +101,34 @@ class TextSearchSerializer(serializers.ModelSerializer):
         fields = ( 'venue', 'title', 'description', 'min_age',
                   'max_age', 'cost', 'cost_detail','start_date','end_date'
                  )
+
+
+class HaystackSerializer(serializers.Serializer):
+    description = serializers.SerializerMethodField(method_name='_description')
+    min_age = serializers.SerializerMethodField(method_name='_min_age')
+    min_age = serializers.SerializerMethodField(method_name='_max_age')
+    cost = serializers.SerializerMethodField(method_name='_cost')
+    start_date = serializers.SerializerMethodField(method_name='_start_date')
+    end_date = serializers.SerializerMethodField(method_name='_end_date')
+
+    def _description(self, obj):
+        return obj.object.description
+
+    def _min_age(self, obj):
+        return obj.object.min_age
+
+    def _max_age(self, obj):
+        return obj.object.min_age
+
+    def _cost(self, obj):
+        return obj.object.cost
+
+    def _start_date(self, obj):
+        return obj.object.start_date
+
+    def _end_date(self, obj):
+        return obj.object.end_date
+
+
+
+
