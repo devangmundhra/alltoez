@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.utils.decorators import classonlymethod
 
 from haystack.query import EmptySearchQuerySet
+import django_filters
 
 from rest_framework.decorators import detail_route, renderer_classes, api_view
 from rest_framework import status, viewsets
@@ -27,6 +28,17 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CategorySerializer
 
 
+class EventFilter(django_filters.FilterSet):
+    min_age = django_filters.NumberFilter(name="min_age", lookup_type='gte')
+    max_age = django_filters.NumberFilter(name="max_age", lookup_type='lte')
+    category = django_filters.CharFilter(name="category__slug")
+    max_cost = django_filters.NumberFilter(name="cost", lookup_type='lte')
+
+    class Meta:
+        model = Event
+        fields = ['category', 'min_age', 'max_age', 'max_cost',]
+
+
 class EventInternalViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint that allows events to be viewed or edited.
@@ -35,6 +47,7 @@ class EventInternalViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = EventInternalSerializer
     ordering = ('-published_at',)
     ordering_fields = ('published_at', 'end_date', 'cost', 'min_age', 'max_age', 'view_count', 'distance')
+    filter_class = EventFilter
 
     def get_queryset(self):
         qs = Event.objects.all().filter(publish=True).filter(Q(end_date__gte=timezone.now()) | Q(end_date=None))

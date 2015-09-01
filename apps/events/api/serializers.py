@@ -42,6 +42,7 @@ class EventInternalSerializer(serializers.HyperlinkedModelSerializer):
             return dObj.mi
         return None
 
+
 class EventSerializer(EventInternalSerializer):
     bookmark = serializers.SerializerMethodField(read_only=True)
     done = serializers.SerializerMethodField(read_only=True)
@@ -85,6 +86,7 @@ class EventSerializer(EventInternalSerializer):
     def get_view_count(self, obj):
         return obj.view_seed + obj.viewip_set.count()
 
+
 class TextSearchSerializer(serializers.ModelSerializer):
     # venue = VenueSerializer(read_only=True)
     description = serializers.CharField(read_only=True)
@@ -94,9 +96,7 @@ class TextSearchSerializer(serializers.ModelSerializer):
     start_date = serializers.DateTimeField(read_only=True)
     end_date = serializers.DateTimeField(read_only=True)
 
-
     class Meta:
         model = Event
-        fields = ( 'venue', 'title', 'description', 'min_age',
-                  'max_age', 'cost', 'cost_detail','start_date','end_date'
-                 )
+        fields = ('venue', 'title', 'description', 'min_age',
+                  'max_age', 'cost', 'cost_detail', 'start_date', 'end_date')
