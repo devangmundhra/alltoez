@@ -154,6 +154,7 @@ INSTALLED_APPS = [
     'cacheops',
     'sorl.thumbnail',
     'corsheaders',
+    'djangular',
 
     # Registration, Signin and Account Management
     'allauth',
@@ -422,9 +423,9 @@ CELERY_TASK_PUBLISH_RETRY_POLICY = {
     'interval_step': 10,
     'interval_max': 3600,
 }
-ACCOUNT_FORMS = {
-    'signup': 'path.to.custom.SignupForm'
-}
+# ACCOUNT_FORMS = {
+#     'signup': 'path.to.custom.SignupForm'
+# }
 
 #-------------------------------------------------------------------------------
 #	ADMIN SHORTCUT SETTINGS

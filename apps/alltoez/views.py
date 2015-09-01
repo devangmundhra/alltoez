@@ -110,7 +110,7 @@ class AlltoezSearchView(FacetedSearchView):
 
         # start_offset = (page_no - 1) * self.results_per_page
         # self.results[start_offset:start_offset + self.results_per_page]
-
+        print self.results, "resultsssssssssssssssssssssssssssssssssss"
         paginator = Paginator(self.results, self.results_per_page)
 
         try:
