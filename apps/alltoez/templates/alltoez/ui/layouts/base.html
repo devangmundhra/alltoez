@@ -56,9 +56,11 @@
 		{% include "alltoez/ui/fragments/header_base.html" %}
         {% endblock %}
 
-       <div ng-view>
 
-        </div>
+<div ng-view>
+
+</div>
+        <div id="remove-this-id">
    {% block content_full_width %}
 
 			<div class="strip white">
@@ -77,6 +79,7 @@
 				</div>
 			</div>
 		{% endblock %}
+        </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
