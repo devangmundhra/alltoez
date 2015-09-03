@@ -4,18 +4,20 @@ app.config(['$routeProvider',
     $routeProvider.
     when('/about', {
         templateUrl: '/static/js/angular/templates/about.html',
-        controller: 'aboutPageController'
+        controller: 'CommonPageController'
   }).
         when('/parents', {
         templateUrl: '/static/js/angular/templates/parents.html',
-        controller: 'aboutPageController'
+        controller: 'CommonPageController'
   }).
         when('/teach', {
         templateUrl: '/static/js/angular/templates/teach.html',
-        controller: 'aboutPageController'
+        controller: 'CommonPageController'
   }).
         when('/', {
-            url: '/home'
+            url: '/home',
+            templateUrl: '/static/js/angular/templates/home.html',
+            controller: 'HomePageController'
         })
 
 
