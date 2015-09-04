@@ -9,23 +9,17 @@ app.controller('mainController', function($scope, $location, $http, $sce){
 
             }).
             error(function (data, status, headers, config) {
-                alert("failed");
+                //handle error here if needed
             });
 
 });
 
 app.controller('CommonPageController', function($scope, $location) {
-
-
     jQuery("body").removeClass("home");
-
 });
 
 
 app.controller('HomePageController', function($scope, $location, $http) {
-
-
-    jQuery("#remove-this-id").hide();
     jQuery("body").addClass("home");
 
 });

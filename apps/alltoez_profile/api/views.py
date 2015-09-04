@@ -1,11 +1,13 @@
 from django.core.mail import EmailMessage
 from django.http import Http404
 from django.contrib.auth.models import User
+from django.template.loader import render_to_string
 
 from rest_auth.registration.views import SocialLogin,ConfirmEmailView
 from rest_framework import viewsets, permissions,mixins,status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
 
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 import requests
@@ -142,18 +144,17 @@ class ChildUpdateViewSet(UserRequired, viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-from rest_framework.views import APIView
-from django.template.loader import render_to_string
-
 
 class HomePageTemplateView(APIView):
+    """
+    View for returning home page html content
+    """
     http_method_names = ['get']
     permission_classes = (permissions.AllowAny, )
 
     def get(self, request, format=None):
-        from django.template import Context, Template
         """
-        Return a list of all users.
+        Returns the home page template division.
         """
 
         template = render_to_string(template_name='home.html', request=request)
