@@ -141,3 +141,22 @@ class ChildUpdateViewSet(UserRequired, viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+from rest_framework.views import APIView
+from django.template.loader import render_to_string
+
+
+class HomePageTemplateView(APIView):
+    http_method_names = ['get']
+    permission_classes = (permissions.AllowAny, )
+
+    def get(self, request, format=None):
+        from django.template import Context, Template
+        """
+        Return a list of all users.
+        """
+
+        template = render_to_string(template_name='home.html', request=request)
+        print template,"8*******************"
+
+        return Response(template)

@@ -2,7 +2,10 @@
 app.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
-    when('/about', {
+    when('/', {
+        templateUrl: '/static/js/angular/templates/home.html',
+        controller: 'mainController'
+  }).when('/about', {
         templateUrl: '/static/js/angular/templates/about.html',
         controller: 'CommonPageController'
   }).
@@ -13,12 +16,7 @@ app.config(['$routeProvider',
         when('/teach', {
         templateUrl: '/static/js/angular/templates/teach.html',
         controller: 'CommonPageController'
-  }).
-        when('/', {
-            url: '/home',
-            templateUrl: '/static/js/angular/templates/home.html',
-            controller: 'HomePageController'
-        })
+  })
 
 
   }]);

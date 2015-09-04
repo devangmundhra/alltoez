@@ -1,19 +1,23 @@
-app.controller('mainController', function($scope, $location, $http){
+app.controller('mainController', function($scope, $location, $http, $sce){
 
-    $scope.redirectToHome= function () {
-        window.location.href = '/';
-        $location.path('/'); };
+        $http({ method: 'GET', url: '/api/v1/get_home_page' }).
+            success(function (data, status, headers, config) {
+
+                jQuery("body").addClass("home");
+                $scope.page = $sce.trustAsHtml(data);
+
+
+            }).
+            error(function (data, status, headers, config) {
+                alert("failed");
+            });
 
 });
 
 app.controller('CommonPageController', function($scope, $location) {
 
 
-//    var main_div = angular.element( document.querySelector( '#remove-this-id' ) );
-//    main_div.remove();
-    jQuery("#remove-this-id").hide()
     jQuery("body").removeClass("home");
-    console.log('In new router state');
 
 });
 

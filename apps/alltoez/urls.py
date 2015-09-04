@@ -58,6 +58,9 @@ urlpatterns = patterns('',
         searchqueryset=sqs,
         ), name='search'),
     url(r'^api/v1/', include(router.urls, namespace='api')),
+    url(r'^api/v1/get_home_page', api_views.HomePageTemplateView.as_view(), name='get_home_page'),
+
+
     url(r'^api/v1/facebook/$', api_views.FacebookLogin.as_view(), name='fb_login'),
     #url(r'^confirmemail/$',api_views.ConfirmEmailView.as_view(),name='confirmemail'),
     url(r'^sitemap\.xml$', sitemap,

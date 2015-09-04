@@ -65,7 +65,7 @@ def home(request):
     if request.user.is_authenticated():
         return redirect('events')
     else:
-        return render(request, "alltoez/home.html")
+        return render(request, "base.html")
 
 
 """
