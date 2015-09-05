@@ -107,6 +107,7 @@ With caching middleware enabled, if the zipcode of a user is edited, it does not
 """
 MIDDLEWARE_CLASSES = [
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     # 'django.middleware.cache.UpdateCacheMiddleware', # Disable caching since there is some issue with invalidation
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.cache.FetchFromCacheMiddleware',
@@ -152,6 +153,7 @@ INSTALLED_APPS = [
     'storages',
     'cacheops',
     'sorl.thumbnail',
+    'corsheaders',
 
     # Registration, Signin and Account Management
     'allauth',

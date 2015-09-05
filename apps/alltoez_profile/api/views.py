@@ -2,8 +2,8 @@ from django.core.mail import EmailMessage
 from django.http import Http404
 from django.contrib.auth.models import User
 
-from rest_auth.registration.views import SocialLogin,ConfirmEmailView
-from rest_framework import viewsets, permissions,mixins,status
+from rest_auth.registration.views import SocialLogin, ConfirmEmailView
+from rest_framework import viewsets, status, mixins
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -17,7 +17,7 @@ from .import serializers
 from common.mixins import UserRequired
 
 
-class UserRegisterViewSet(viewsets.ModelViewSet):
+class UserRegisterViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
     View set for registration.
     :parameter     email
@@ -34,7 +34,7 @@ class UserRegisterViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         email_address = serializer.data['username']
         msg = EmailMessage(from_email=("Alltoez", "noreply@alltoez.com"),
-                       to=[email_address])
+                           to = [email_address])
         msg.template_name = "Welcome To Alltoez"
         msg.send()
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -62,33 +62,15 @@ class FacebookLogin(SocialLogin):
     adapter_class = FacebookOAuth2Adapter
 
 
-class ProfileEditViewSet(UserRequired, viewsets.ModelViewSet):
+class ProfileEditViewSet(UserRequired,
+                         mixins.RetrieveModelMixin,
+                         mixins.UpdateModelMixin,
+                         viewsets.GenericViewSet):
     """
     View set to update profile of current user.
     """
-    http_method_names = ['put', 'get']
     serializer_class = serializers.UpdateUserSerializer
     queryset = UserProfile.objects.all()
-
-    def update(self, request, *args, **kwargs):
-
-        """
-        Update method to check the url. to support edit
-        """
-        if self.kwargs.get('pk') != "update":
-            raise Http404
-        return super(ProfileEditViewSet, self).update(request, *args, **kwargs)
-
-    def get_object(self):
-        """
-        Get user object.
-        """
-        return UserProfile.objects.get(user=self.request.user.id)
-
-    def get_queryset(self):
-        if not self.kwargs.get('pk'):
-            raise Http404
-        return super(ProfileEditViewSet, self).get_queryset()
 
 
 class SocialAccountDiscontinueViewSet(UserRequired, viewsets.ModelViewSet):
