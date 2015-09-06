@@ -1,9 +1,14 @@
+import json
+
 from django.utils import timezone
 from django.db.models import Max, Min, Q
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.utils.decorators import classonlymethod
 
-from haystack.query import EmptySearchQuerySet
+import django_filters
+from haystack.query import EmptySearchQuerySet, SearchQuerySet, Clean
+from haystack.views import FacetedSearchView
+from haystack.forms import SearchForm
 
 from rest_framework.decorators import detail_route, renderer_classes, api_view
 from rest_framework import status, viewsets
@@ -15,7 +20,8 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from apps.alltoez.serializers import EventSerializer
 from apps.events.models import Event, Category
 from apps.alltoez.graph.neo4j import get_similar_events
-from apps.events.api.serializers import CategorySerializer, EventInternalSerializer,TextSearchSerializer
+from apps.events.api.serializers import CategorySerializer, EventInternalSerializer,TextSearchSerializer, \
+    HaystackSerializer
 from apps.alltoez.serivces import EventSearchServices
 
 
@@ -27,6 +33,17 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CategorySerializer
 
 
+class EventFilter(django_filters.FilterSet):
+    min_age = django_filters.NumberFilter(name="min_age", lookup_type='gte')
+    max_age = django_filters.NumberFilter(name="max_age", lookup_type='lte')
+    category = django_filters.CharFilter(name="category__slug")
+    max_cost = django_filters.NumberFilter(name="cost", lookup_type='lte')
+
+    class Meta:
+        model = Event
+        fields = ['category', 'min_age', 'max_age', 'max_cost',]
+
+
 class EventInternalViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint that allows events to be viewed or edited.
@@ -35,6 +52,7 @@ class EventInternalViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = EventInternalSerializer
     ordering = ('-published_at',)
     ordering_fields = ('published_at', 'end_date', 'cost', 'min_age', 'max_age', 'view_count', 'distance')
+    filter_class = EventFilter
 
     def get_queryset(self):
         qs = Event.objects.all().filter(publish=True).filter(Q(end_date__gte=timezone.now()) | Q(end_date=None))
@@ -119,17 +137,11 @@ class EventViewSet(EventInternalViewSet):
 
 class EventSearchViewSet(viewsets.ModelViewSet):
 
-    serializer_class = TextSearchSerializer
+    serializer_class = HaystackSerializer
 
-    def get_queryset(self, *args, **kwargs):
-        request = self.request
-        queryset = EmptySearchQuerySet()
-
-        if request.GET.get('q') is not None:
-            query = request.GET.get('q')
-            queryset = Event.objects.filter(Q(title__icontains=query) | Q(description__icontains=query))
-            # queryset = SearchQuerySet().models(Event).filter(title=Clean(query))
-            # print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%",queryset
+    def get_queryset(self):
+        form = SearchForm(self.request.GET)
+        queryset = form.search()
         return queryset
 
 
@@ -139,7 +151,7 @@ class EventSortViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self, *args, **kwargs):
         request = self.request
-        queryset= EmptySearchQuerySet()
+        queryset = EmptySearchQuerySet()
 
         if request.GET.get('q') is not None:
             query = request.GET.get('q')
@@ -149,3 +161,5 @@ class EventSortViewSet(viewsets.ModelViewSet):
             ordering = request.GET.get('ordering')
             queryset = queryset.order_by(ordering)
         return queryset
+
+
