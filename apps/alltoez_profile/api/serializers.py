@@ -39,13 +39,14 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user = super(UserRegisterSerializer, self).create(validated_data)
         return user
 
+
 class UserAccountSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
 
     class Meta:
         model = User
-        fields = ('first_name','last_name')
+        fields = ('first_name', 'last_name')
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):
@@ -66,7 +67,6 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
-
 
 
 class ChildSerializer(serializers.ModelSerializer):

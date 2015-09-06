@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from apps.events.models import Event
 from apps.user_actions.models import Bookmark, Done
-from apps.alltoez_profile.serializers import UserInternalSerializer
+from apps.alltoez_profile.api.serializers import UserInternalSerializer
 from apps.venues.serializers import VenueSerializer
 from apps.events.api.serializers import EventSerializer
 from allauth.socialaccount.models import SocialAccount
@@ -41,6 +41,7 @@ class VenueDetailSerializer(VenueSerializer):
 
     class Meta(VenueSerializer.Meta):
         fields = VenueSerializer.Meta.fields + ('event_set',)
+
 
 class AllauthSerializer(serializers.ModelSerializer):
     class Meta:
