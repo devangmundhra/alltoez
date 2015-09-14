@@ -16,7 +16,23 @@ app.config(['$routeProvider',
         when('/teach', {
         templateUrl: '/static/js/angular/templates/teach.html',
         controller: 'CommonPageController'
-  })
+  }).
+      when('/login',{
+          templateUrl:'/static/js/angular/templates/login_register.html',
+          controller:'LoginPageController'
+   }).
+        when('/signup',{
+            templateUrl:'/static/js/angular/templates/signup.html',
+            controller:'SignupPageController'
+   }).
+        when('/signup/step2',{
+            templateUrl: '/static/js/angular/templates/signup_step2.html',
+            controller: 'SignUpPage2Controller'
+   }).
+        when('/child',{
+            templateUrl:'/static/js/angular/templates/teach.html',
+            controller: 'ChildController'
+        })
 
 
   }]);
