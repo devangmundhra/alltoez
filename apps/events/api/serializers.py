@@ -3,6 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from rest_framework import serializers
 from rest_framework.reverse import reverse
+from sorl.thumbnail import get_thumbnail
 
 from apps.events.models import Event, Category
 from apps.user_actions.models import Bookmark, Done, Review
@@ -20,17 +21,20 @@ class EventInternalSerializer(serializers.HyperlinkedModelSerializer):
     distance = serializers.SerializerMethodField()
     venue = VenueSerializer(read_only=True)
     category = CategorySerializer(many=True)
+    thumbnail_384_256 = serializers.SerializerMethodField()
 
     class Meta:
         model = Event
         fields = ('pk', 'id', 'created_at', 'updated_at', 'venue', 'title', 'slug', 'description', 'category', 'image', 'min_age',
                   'max_age', 'cost', 'cost_detail', 'start_date', 'end_date', 'recurrence_detail', 'time_detail', 'url',
-                  'additional_info', 'published_at', 'distance')
+                  'additional_info', 'published_at', 'distance', 'thumbnail_384_256')
 
     def get_distance(self, obj):
         request = self.context.get('request')
         origin = None
-        if request.user.is_authenticated() and request.user.profile.last_known_location_bounds:
+        if request.query_params.get('latitude', None) and request.query_params.get('longitude', None):
+            origin = Point(float(request.query_params['longitude']), float(request.query_params['latitude']))
+        elif request.user.is_authenticated() and request.user.profile.last_known_location_bounds:
             lat = request.user.profile.last_known_location_bounds.centroid.y
             lng = request.user.profile.last_known_location_bounds.centroid.x
             origin = Point(lng, lat)
@@ -41,6 +45,17 @@ class EventInternalSerializer(serializers.HyperlinkedModelSerializer):
         if dObj is not None:
             return dObj.mi
         return None
+
+    def get_thumbnail_384_256(self, obj):
+        try:
+            im = get_thumbnail(obj.image, '384x256', crop='center')
+            url = im.url
+            request = self.context.get('request', None)
+            if request is not None:
+                return request.build_absolute_uri(url)
+            return url
+        except (ValueError, IOError):
+            return None
 
 
 class EventSerializer(EventInternalSerializer):

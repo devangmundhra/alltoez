@@ -33,15 +33,30 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CategorySerializer
 
 
+class MultiFieldMethodFilter(django_filters.MethodFilter):
+    """
+    This filter will allow you to run a method that exists on the filterset class
+    """
+    def __init__(self, *args, **kwargs):
+        self.fields = kwargs.get('fields', None)
+        super(MultiFieldMethodFilter, self).__init__(*args, **kwargs)
+
+
 class EventFilter(django_filters.FilterSet):
     min_age = django_filters.NumberFilter(name="min_age", lookup_type='gte')
     max_age = django_filters.NumberFilter(name="max_age", lookup_type='lte')
     category = django_filters.CharFilter(name="category__slug")
     max_cost = django_filters.NumberFilter(name="cost", lookup_type='lte')
+    location = django_filters.MethodFilter(name="location", action='filter_location')
 
     class Meta:
         model = Event
-        fields = ['category', 'min_age', 'max_age', 'max_cost',]
+        fields = ['category', 'min_age', 'max_age', 'max_cost', 'location']
+
+    def filter_location(self, queryset, value):
+        event_service = EventSearchServices(circle=value)
+        qs = event_service.get_events_near_center(queryset)
+        return qs
 
 
 class EventInternalViewSet(viewsets.ReadOnlyModelViewSet):
