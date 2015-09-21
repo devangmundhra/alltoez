@@ -10,6 +10,7 @@ from rest_framework.views import APIView
 
 
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+from allauth.account.forms import LoginForm
 import requests
 
 from apps.alltoez_profile.models import Child, UserProfile
@@ -77,6 +78,8 @@ class ProfileEditViewSet(UserRequired, viewsets.ModelViewSet):
         """
         Update method to check the url. to support edit
         """
+        userss = request.user
+        print userss,'aaaaaaaaaaaaaaaa'
         if self.kwargs.get('pk') != "update":
             raise Http404
         return super(ProfileEditViewSet, self).update(request, *args, **kwargs)
@@ -137,6 +140,7 @@ class ChildUpdateViewSet(UserRequired, viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
+        print request.DATA, "oooooooooooooooooooooo"
         children = request.DATA['children']
         serializer = self.get_serializer(data=children, many=True)
         serializer.is_valid(raise_exception=True)
@@ -158,6 +162,41 @@ class HomePageTemplateView(APIView):
         """
 
         template = render_to_string(template_name='home.html', request=request)
-        print template,"8*******************"
+
+        return Response(template)
+
+
+class LoginPageTemplateView(APIView):
+    """
+    View for returning login page html content
+    """
+    http_method_names = ['get']
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self,request,format=None):
+        """
+
+        Returns the login page template view
+        """
+        form = LoginForm()
+        template = render_to_string(template_name='login.html', request=request, context={'form':form})
+
+        return Response(template)
+
+
+class EventPageTemplateView(APIView):
+    """
+    View for returning login page html content
+    """
+    http_method_names = ['get']
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self,request,format=None):
+        """
+
+        Returns the Event page template view
+        """
+
+        template = render_to_string(template_name='event.html', request=request)
 
         return Response(template)

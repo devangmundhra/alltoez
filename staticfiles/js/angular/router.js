@@ -29,13 +29,20 @@ app.config(['$routeProvider',
             templateUrl: '/static/js/angular/templates/signup_step2.html',
             controller: 'SignUpPage2Controller'
    }).
-        when('/child',{
+            when('/child',{
             templateUrl:'/static/js/angular/templates/teach.html',
             controller: 'ChildController'
-        })
+   }).
+
+        when('/events',{
+            templateUrl:'/static/js/angular/templates/event_list_page.html',
+            controller : 'EventPageController'
+   })
 
 
   }]);
+
+
 
 
 

@@ -28,6 +28,8 @@ app.controller('mainController', function($scope, $location, $http, $sce){
         console.log($location.path())
         jQuery("#login-button").attr('ng-click', 'login()');
     }
+
+
 });
 
 app.controller('CommonPageController', function($scope, $location) {
@@ -50,7 +52,7 @@ app.controller('LoginFormController',function($scope, $http, $state){
 });
 
 app.controller('LoginPageController',function($scope, $location, $http, $sce){
-            //console.log("hiiiiiiiiiiiiiiiiiiiiiiiiiiii")
+
 
     $http({ method: 'GET', url: '/api/v1/get_login_page' }).
             success(function (data, status, headers, config) {
@@ -80,8 +82,6 @@ app.controller('LoginFormController', function($scope, $http, $location,$window)
             data: data
         }).
             success(function (data, status, headers, config) {
-
-                console.log("Success")
                 $window.location.href = '#events';
             }).
             error(function (data, status, headers, config) {
@@ -103,7 +103,6 @@ app.controller('SignupPageController',function($scope,$http,$location,$sce){
 });
 
 app.controller('SignUpFormController', function($scope, $http, $location,$window){
-        console.log("jshjdhsjdh")
         $scope.signup1 = function(){
         username = $("#Username").val()
         password = $("#Password").val()
@@ -116,33 +115,28 @@ app.controller('SignUpFormController', function($scope, $http, $location,$window
             data: data
         }).
             success(function (data, status, headers, config) {
-
-                console.log("Success")
                 $window.location.href = '#signup/step2';
 
             }).
             error(function (data, status, headers, config) {
-                alert("Error")
-                console.log("Error123");
             });
                                }
+
 
 
 });
 
 app.controller('SignUpPage2Controller', function($scope, $location,$http,$window) {
     jQuery("body").removeClass("home");
-    console.log("*********************************")
 
     $http.get("/api/v1/profile/update/").then(function(result) {
      $scope.currentUser = result.data.user;
-        console.log("00000000000000",result.data.user.id)
   })
 
-    $scope.data = [{'name':'Chris', 'email':''} ]
+    $scope.data = [{'name':'', 'email':''} ]
 
     $scope.addNewChild = function(){
-                 $scope.data.push({'question': "", id: "", 'answer': ""});
+                 $scope.data.push({'name': "", 'age': "", 'gender': ""});
                };
 
     console.log("Next step is to save")
@@ -159,7 +153,7 @@ app.controller('SignUpPage2Controller', function($scope, $location,$http,$window
             childname = $("#id_child").val()
             age = $("#id_age").val()
             gender1 =$("#gender1").val()
-            console.log("shdgshdghsgdhjsgdksghdksgd", childname,age,gender1)
+            console.log("@@@@@@@@@@@@@@@@@@@@@@", childname,age,gender1)
 
         data = {
                 'user' : $scope.currentUser,
@@ -194,15 +188,77 @@ app.controller('SignUpPage2Controller', function($scope, $location,$http,$window
                 console.log("Success")
             }).
             error(function(data,status){
-                console.log("Errorsssssss")
+                console.log("Error")
             })
 
     }
 });
 
 
+app.controller("EventController",function($scope,$http,$location){
+    console.log("Welcome");
+    jQuery("body").removeClass("home");
+    $scope.is_pagination_request_fired = false
 
 
+
+
+        $scope.PageNext = function() {
+
+            if('next_url_params' in $scope){
+                    console.log("Entered in IF");
+                    next_url_params = $scope.next_url_params
+                } else{
+                    console.log("Entered in ELSE");
+                    next_url_params = '/api/v1/events/'
+                    $scope.pagination = []
+                }
+
+
+        $http({ method: 'GET', url: next_url_params}).
+
+            success(function (data, status) {
+                console.log("count", data.count);
+                $scope.events = data.results;
+
+                console.log("Data...", data.next);
+                $scope.next_url_params = data.next;
+                $scope.pagination = $scope.pagination.concat(data.results);
+
+            }).
+
+            error(function (data, status) {
+                console.log("Failed");
+            })
+
+    }
+
+});
+
+
+
+
+
+//     $scope.filteredTodos = [];
+//            $scope.currentPage = 1;
+//            $scope.numPerPage = 10;
+//            $scope.maxSize = 5;
+//
+//
+//            $scope.makeTodos = function() {
+//            $scope.todos = [];
+//            for (i=1;i<=data.count;i++) {
+//              $scope.todos.push({ text:"todo "+i, done:false});
+//                                        }
+//
+//                                        };
+//            $scope.makeTodos();
+//
+//            $scope.$watch("currentPage + numPerPage", function() {
+//            var begin = (($scope.currentPage - 1) * $scope.numPerPage);
+//            end = begin + $scope.numPerPage;
+//            $scope.filteredTodos = $scope.todos.slice(begin, end);
+//          });
 
 
 
