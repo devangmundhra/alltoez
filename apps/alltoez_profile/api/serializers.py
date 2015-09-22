@@ -83,7 +83,8 @@ class ChildSerializer(serializers.ModelSerializer):
 class AlltoezProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('first_name',)
+        fields = ('first_name', 'last_name', 'zipcode', 'city', 'state', 'country',
+                  'profile_image', 'gender')
 
 
 class UserInternalSerializer(serializers.HyperlinkedModelSerializer):

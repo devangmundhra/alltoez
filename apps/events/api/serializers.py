@@ -32,8 +32,8 @@ class EventInternalSerializer(serializers.HyperlinkedModelSerializer):
     def get_distance(self, obj):
         request = self.context.get('request')
         origin = None
-        if request.query_params.get('latitude', None) and request.query_params.get('longitude', None):
-            origin = Point(float(request.query_params['longitude']), float(request.query_params['latitude']))
+        if request.GET.get('latitude', None) and request.GET.get('longitude', None):
+            origin = Point(float(request.GET['longitude']), float(request.GET['latitude']))
         elif request.user.is_authenticated() and request.user.profile.last_known_location_bounds:
             lat = request.user.profile.last_known_location_bounds.centroid.y
             lng = request.user.profile.last_known_location_bounds.centroid.x
