@@ -1,3 +1,5 @@
+from distutils.util import strtobool
+
 from fabric.api import *
 
 """
@@ -276,17 +278,19 @@ def rebuild_index():
         run('python %(repo_path)s/%(project_name)s/configs/%(settings)s/manage.py rebuild_index;' % env)
 
 
-def heroku_deploy():
+def heroku_deploy(commit="True"):
     """
     Deploy to Heroku
     :return:
     """
+    commit = bool(strtobool(commit))
     local('pip freeze > requirements.txt')
-    local('git add .')
-    print("enter your git commit comment: ")
-    comment = raw_input()
-    local('git commit -m "%s"' % comment)
-    local('git push -u origin master')
+    if commit:
+        local('git add .')
+        print("enter your git commit comment: ")
+        comment = raw_input()
+        local('git commit -m "%s"' % comment)
+        local('git push -u origin master')
     local('heroku maintenance:on')
     local('git push heroku master')
     local('heroku run python manage.py migrate')
@@ -294,23 +298,17 @@ def heroku_deploy():
     local('heroku maintenance:off')
 
 
-def heroku_quick_deploy():
+def heroku_quick_deploy(commit="True"):
     """
     Deploy to Heroku without maintanence
     :return:
     """
+    commit = bool(strtobool(commit))
     local('pip freeze > requirements.txt')
-    local('git add .')
-    print("enter your git commit comment: ")
-    comment = raw_input()
-    local('git commit -m "%s"' % comment)
-    heroku_nocommit_quick_deploy()
-
-
-def heroku_nocommit_quick_deploy():
-    """
-    Deploy to Heroku without maintanence or commit
-    :return:
-    """
+    if commit:
+        local('git add .')
+        print("enter your git commit comment: ")
+        comment = raw_input()
+        local('git commit -m "%s"' % comment)
     local('git push -u origin master')
     local('git push heroku master')
