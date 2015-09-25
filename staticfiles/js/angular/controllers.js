@@ -1,3 +1,39 @@
+var cities = [
+    {
+        city : 'Toronto',
+        desc : 'This is the best city in the world!',
+        lat : 43.7000,
+        long : -79.4000
+    },
+    {
+        city : 'New York',
+        desc : 'This city is aiiiiite!',
+        lat : 40.6700,
+        long : -73.9400
+    },
+    {
+        city : 'Chicago',
+        desc : 'This is the second best city in the world!',
+        lat : 41.8819,
+        long : -87.6278
+    },
+    {
+        city : 'Los Angeles',
+        desc : 'This city is live!',
+        lat : 34.0500,
+        long : -118.2500
+    },
+    {
+        city : 'Las Vegas',
+        desc : 'Sin City...\'nuff said!',
+        lat : 36.0800,
+        long : -115.1522
+    }
+];
+
+var event={};
+var count;
+
 app.controller('mainController', function($scope, $location, $http, $sce){
     if($location.path()=='/') {
         $http({ method: 'GET', url: '/api/v1/get_home_page' }).
@@ -25,7 +61,6 @@ app.controller('mainController', function($scope, $location, $http, $sce){
             error(function (data, status, headers, config) {
                 //handle error here if needed
             });
-        console.log($location.path())
         jQuery("#login-button").attr('ng-click', 'login()');
     }
 
@@ -46,8 +81,6 @@ app.controller('LoginViewController', function($scope, $location, $http) {
 });
 
 app.controller('LoginFormController',function($scope, $http, $state){
-    console.log("Enetered........................");
-
 
 });
 
@@ -196,21 +229,92 @@ app.controller('SignUpPage2Controller', function($scope, $location,$http,$window
 
 
 app.controller("EventController",function($scope,$http,$location){
-    console.log("Welcome");
     jQuery("body").removeClass("home");
     $scope.is_pagination_request_fired = false
 
 
+        $scope.getEvents = function(url, type) {
+            if(!url && type){
+                url = '/api/v1/order/?ordering='
+            }
+            if(type){
+                url = url + type
+            }
+            console.log(url)
+            $http({ method: 'GET', url: url}).
 
+                success(function (data, status) {
+                    count = data.count;
+                    event = data.results;
+                    $scope.events = data.results;
+                    console.log(data.results[0].venue.latitude, data.results[0].venue.longitude, data.results[0].venue.name,data.results[0].description)
+                    $scope.counts = data.count;
+                    $scope.next_url_params = data.next;
+                    $scope.pagination = $scope.pagination.concat(data.results);
+
+                }).
+
+                error(function (data, status) {
+                    console.log("Failed");
+                })
+        }
 
         $scope.PageNext = function() {
 
             if('next_url_params' in $scope){
-                    console.log("Entered in IF");
                     next_url_params = $scope.next_url_params
                 } else{
-                    console.log("Entered in ELSE");
                     next_url_params = '/api/v1/events/'
+                    $scope.pagination = []
+                }
+            $scope.getEvents(next_url_params, '');
+    }
+
+});
+
+
+app.controller("EventDetailController",function($scope,$http,$location){
+
+    console.log("Entered in  to Event Controller");
+
+    var url = $location.path().split( '/detail/' );
+    console.log(url);
+    var regex = new RegExp(/([0-9]+)/);
+    var match = regex.exec(url);
+    $scope.event_id =  match[1];
+    new_url = '/api/v1/detail/?q=' + $scope.event_id
+
+    jQuery("body").removeClass("home");
+
+    $http({ method:'GET',url: new_url}).
+
+    success(function(data,status){
+
+        $scope.event = data.results[0];
+    }).
+
+    error(function(data,status){
+        console.log("Failed");
+    })
+
+});
+
+app.controller("CategoryController",function($scope,$http,$location){
+    console.log("Entered in to Category Controller");
+
+    jQuery("body").removeClass("home");
+
+    var url = $location.path().split('/events/category/');
+    console.log("Location Path:", url[1]);
+    new_url = '/api/v1/sort/?q=' + url[1]
+
+    $scope.PageNext = function() {
+
+
+            if('next_url_params' in $scope){
+                    next_url_params = $scope.next_url_params
+                } else{
+                    next_url_params = new_url;
                     $scope.pagination = []
                 }
 
@@ -220,8 +324,7 @@ app.controller("EventController",function($scope,$http,$location){
             success(function (data, status) {
                 console.log("count", data.count);
                 $scope.events = data.results;
-
-                console.log("Data...", data.next);
+                $scope.counts = data.count;
                 $scope.next_url_params = data.next;
                 $scope.pagination = $scope.pagination.concat(data.results);
 
@@ -233,32 +336,111 @@ app.controller("EventController",function($scope,$http,$location){
 
     }
 
-});
+
+
+})
+
+app.controller("GoogleMapController", function($scope,$location,$http){
+
+    console.log("Entered in to Google Map Controller");
+
+    var mapOptions = {
+        zoom: 4,
+        center: new google.maps.LatLng(40.0000, -98.0000),
+        mapTypeId: google.maps.MapTypeId.TERRAIN
+    }
+
+    $scope.map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+    $scope.markers = [];
+
+var infoWindow = new google.maps.InfoWindow();
+
+    var createMarker = function (info) {
+
+        var marker = new google.maps.Marker({
+            map: $scope.map,
+            position: new google.maps.LatLng(info.lat, info.long),
+            title: info.city
+        });
+        marker.content = '<div class="infoWindowContent">' + info.desc + '</div>';
+
+    google.maps.event.addListener(marker, 'click', function(){
+            infoWindow.setContent('<h2>' + marker.title + '</h2>' + marker.content);
+            infoWindow.open($scope.map, marker);
+        });
+
+        $scope.markers.push(marker);
+
+    }
+
+    for (i = 0; i < cities.length; i++){
+        createMarker(cities[i]);
+    }
+
+    $scope.openInfoWindow = function(e, selectedMarker){
+        e.preventDefault();
+        google.maps.event.trigger(selectedMarker, 'click');
+    }
+
+
+})
+
+
+var cities = [
+    {
+        city : 'Toronto',
+        desc : 'This is the best city in the world!',
+        lat : 43.7000,
+        long : -79.4000
+    },
+    {
+        city : 'New York',
+        desc : 'This city is aiiiiite!',
+        lat : 40.6700,
+        long : -73.9400
+    },
+    {
+        city : 'Chicago',
+        desc : 'This is the second best city in the world!',
+        lat : 41.8819,
+        long : -87.6278
+    },
+    {
+        city : 'Los Angeles',
+        desc : 'This city is live!',
+        lat : 34.0500,
+        long : -118.2500
+    },
+    {
+        city : 'Las Vegas',
+        desc : 'Sin City...\'nuff said!',
+        lat : 36.0800,
+        long : -115.1522
+    }
+];
+
+var event={};
+var count;
+console.log(data.results[0].venue.latitude,"@@@@@@@@@@@@", data.results[0].venue.longitude, data.results[0].venue.name,data.results[0].description)
+
+
+for (i=0;i<count;i++)
+{
+    var cities = [
+
+    ]
+
+}
 
 
 
 
 
-//     $scope.filteredTodos = [];
-//            $scope.currentPage = 1;
-//            $scope.numPerPage = 10;
-//            $scope.maxSize = 5;
-//
-//
-//            $scope.makeTodos = function() {
-//            $scope.todos = [];
-//            for (i=1;i<=data.count;i++) {
-//              $scope.todos.push({ text:"todo "+i, done:false});
-//                                        }
-//
-//                                        };
-//            $scope.makeTodos();
-//
-//            $scope.$watch("currentPage + numPerPage", function() {
-//            var begin = (($scope.currentPage - 1) * $scope.numPerPage);
-//            end = begin + $scope.numPerPage;
-//            $scope.filteredTodos = $scope.todos.slice(begin, end);
-//          });
+
+
+
+
+
 
 
 

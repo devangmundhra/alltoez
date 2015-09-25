@@ -15,7 +15,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from apps.alltoez.serializers import EventSerializer
 from apps.events.models import Event, Category
 from apps.alltoez.graph.neo4j import get_similar_events
-from apps.events.api.serializers import CategorySerializer, EventInternalSerializer,TextSearchSerializer
+from apps.events.api.serializers import CategorySerializer, EventInternalSerializer,TextSearchSerializer, EventDetailSerializer
 from apps.alltoez.serivces import EventSearchServices
 
 
@@ -25,6 +25,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
 
 
 class EventInternalViewSet(viewsets.ReadOnlyModelViewSet):
@@ -128,8 +129,6 @@ class EventSearchViewSet(viewsets.ModelViewSet):
         if request.GET.get('q') is not None:
             query = request.GET.get('q')
             queryset = Event.objects.filter(Q(title__icontains=query) | Q(description__icontains=query))
-            # queryset = SearchQuerySet().models(Event).filter(title=Clean(query))
-            # print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%",queryset
         return queryset
 
 
@@ -144,8 +143,44 @@ class EventSortViewSet(viewsets.ModelViewSet):
         if request.GET.get('q') is not None:
             query = request.GET.get('q')
             queryset = Event.objects.filter(category__name__iexact=query)
+            if not queryset:
+                queryset = Event.objects.filter(category__slug__iexact=query)
+        return queryset
+
+
+
+class EventDetailViewSet(viewsets.ModelViewSet):
+
+    serializer_class = EventDetailSerializer
+    http_method_names = ['get']
+
+    def get_queryset(self,*args,**kwargs):
+        request = self.request
+
+        if request.GET.get('q') is not None:
+            query = request.GET.get('q')
+            queryset = Event.objects.filter(id = query)
+            return queryset
+
+        else:
+            queryset = []
+            return queryset
+
+
+class EventOrderViewSet(viewsets.ModelViewSet):
+
+    serializer_class = TextSearchSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        request = self.request
+        queryset= EmptySearchQuerySet()
 
         if request.GET.get('ordering') is not None:
             ordering = request.GET.get('ordering')
+            queryset = Event.objects.all()
             queryset = queryset.order_by(ordering)
         return queryset
+
+
+
+

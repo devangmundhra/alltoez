@@ -36,11 +36,22 @@ app.config(['$routeProvider',
 
         when('/events',{
             templateUrl:'/static/js/angular/templates/event_list_page.html',
-            controller : 'EventPageController'
-   })
+            controller : 'EventController'
+   }).
+      when('/detail/:slug/:event_id',{
+          templateUrl:'/static/js/angular/templates/event_detail_page.html',
+          controller: 'EventDetailController'
+
+   }).
+       when('/events/category/:slug',{
+            templateUrl:'/static/js/angular/templates/event_list_page.html',
+            controller: 'CategoryController'
+        })
 
 
   }]);
+
+
 
 
 
