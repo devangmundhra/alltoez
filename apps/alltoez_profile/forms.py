@@ -75,6 +75,6 @@ class ChildForm(forms.ModelForm):
         model = Child
         fields = ('name', 'age', 'gender')
         widgets = {
-            'gender': forms.RadioSelect(attrs={'class':'radio-inline'}),
+            'gender': forms.RadioSelect(attrs={'class': 'radio-inline'}),
         }
 ChildrenFormset = inlineformset_factory(User, Child, form=ChildForm, extra=1, labels='Children', max_num=8)

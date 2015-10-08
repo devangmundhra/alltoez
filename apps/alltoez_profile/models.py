@@ -1,7 +1,8 @@
-import re, unicodedata, os, random, string
+import os
 from uuid import uuid4
 import logging
 
+from django.dispatch import receiver
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
@@ -10,6 +11,7 @@ from django.utils.deconstruct import deconstructible
 from django.contrib.gis.db import models
 
 from allauth.socialaccount.models import SocialApp, SocialAccount
+from allauth.account.signals import user_signed_up
 import facebook
 
 from apps.alltoez.graph import *
@@ -155,6 +157,13 @@ def create_user_profile(sender, instance, created, **kwargs):
         send_welcome_email.delay(instance.email)
 
 
+@receiver(user_signed_up)
+def populate_profile(request, user, **kwargs):
+    profile = user.profile
+    import pdb
+    pdb.set_trace()
+
+
 class Child(BaseModel):
     """
     Profile to add children to a user's profile
@@ -172,4 +181,4 @@ class Child(BaseModel):
     @property
     def current_age(self):
         time_since_updated = timezone.now() - self.updated
-        return self.age + int(time_since_updated.days/365.2425)
+        return int(self.age) + int(time_since_updated.days/365.2425)
