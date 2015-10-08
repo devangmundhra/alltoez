@@ -11,7 +11,6 @@ from django.utils.deconstruct import deconstructible
 from django.contrib.gis.db import models
 
 from allauth.socialaccount.models import SocialApp, SocialAccount
-from allauth.account.signals import user_signed_up
 import facebook
 
 from apps.alltoez.graph import *
@@ -155,13 +154,6 @@ def create_user_profile(sender, instance, created, **kwargs):
         # Send welcome email
         from apps.alltoez_profile.tasks import send_welcome_email
         send_welcome_email.delay(instance.email)
-
-
-@receiver(user_signed_up)
-def populate_profile(request, user, **kwargs):
-    profile = user.profile
-    import pdb
-    pdb.set_trace()
 
 
 class Child(BaseModel):

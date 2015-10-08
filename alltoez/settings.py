@@ -153,6 +153,7 @@ INSTALLED_APPS = [
     'sorl.thumbnail',
     'corsheaders',
     'djangular',
+    'django_countries',
 
     # Registration, Signin and Account Management
     'allauth',

@@ -9,6 +9,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
 from allauth.account.forms import LoginForm
+from django_countries.widgets import CountrySelectWidget
 
 from models import UserProfile, Child, GENDER_CHOICES, CHILD_GENDER_CHOICES
 
@@ -29,9 +30,10 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ('first_name', 'last_name', 'gender', 'zipcode', 'city', 'state')
+        fields = ('first_name', 'last_name', 'gender', 'country', 'zipcode', 'city', 'state')
         widgets = {
             'gender': forms.RadioSelect(),
+            'country': CountrySelectWidget()
         }
 
     def __init__(self, *args, **kwargs):
@@ -39,6 +41,7 @@ class UserProfileForm(forms.ModelForm):
         # Get updated information from user model
         self.fields['first_name'].initial = self.instance.user.first_name
         self.fields['last_name'].initial = self.instance.user.last_name
+        self.fields['country'].initial = self.instance.country
         # self.fields['email'].initial = self.instance.user.email
 
     def save(self, *args, **kwargs):
@@ -49,19 +52,6 @@ class UserProfileForm(forms.ModelForm):
         # profile.user.email = self.cleaned_data.get('email')
         profile.user.save()
         return profile
-
-    def clean_zipcode(self):
-        data = self.cleaned_data['zipcode']
-        postal_code = re.match(r'^\d{5}(-\d{4})?$', data)
-        if not postal_code:
-            raise ValidationError(
-                _('Invalid zipcode: %(value)s'),
-                code='invalid',
-                params={'value': data},
-            )
-        # Always return the cleaned data, whether you have changed it or
-        # not.
-        return data
 
 
 class ChildForm(forms.ModelForm):
