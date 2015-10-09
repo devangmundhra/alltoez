@@ -4,10 +4,9 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.utils.decorators import classonlymethod
 
 import django_filters
-from haystack.query import EmptySearchQuerySet
 
-from rest_framework.decorators import detail_route, renderer_classes, api_view
-from rest_framework import status, viewsets
+from rest_framework.decorators import detail_route
+from rest_framework import status, viewsets, filters
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.request import Request
@@ -53,6 +52,7 @@ class EventFilter(django_filters.FilterSet):
         qs = event_service.get_events_near_center(queryset)
         return qs
 
+
 class EventInternalViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint that allows events to be viewed or edited.
@@ -61,6 +61,7 @@ class EventInternalViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = EventInternalSerializer
     ordering = ('-published_at',)
     ordering_fields = ('published_at', 'end_date', 'cost', 'min_age', 'max_age', 'view_count', 'distance')
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter,)
     filter_class = EventFilter
 
     def get_queryset(self):
