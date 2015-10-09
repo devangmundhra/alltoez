@@ -1,14 +1,10 @@
-import json
-
 from django.utils import timezone
 from django.db.models import Max, Min, Q
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.utils.decorators import classonlymethod
 
 import django_filters
-from haystack.query import EmptySearchQuerySet, SearchQuerySet, Clean
-from haystack.views import FacetedSearchView
-from haystack.forms import SearchForm
+from haystack.query import EmptySearchQuerySet
 
 from rest_framework.decorators import detail_route, renderer_classes, api_view
 from rest_framework import status, viewsets
@@ -20,12 +16,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from apps.alltoez.serializers import EventSerializer
 from apps.events.models import Event, Category
 from apps.alltoez.graph.neo4j import get_similar_events
-<<<<<<< HEAD
-from apps.events.api.serializers import CategorySerializer, EventInternalSerializer,TextSearchSerializer, \
-    HaystackSerializer
-=======
 from apps.events.api.serializers import CategorySerializer, EventInternalSerializer,TextSearchSerializer, EventDetailSerializer
->>>>>>> origin/feature/angular-implementation-about-page
 from apps.alltoez.serivces import EventSearchServices
 
 
@@ -37,7 +28,6 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CategorySerializer
 
 
-<<<<<<< HEAD
 class MultiFieldMethodFilter(django_filters.MethodFilter):
     """
     This filter will allow you to run a method that exists on the filterset class
@@ -62,9 +52,6 @@ class EventFilter(django_filters.FilterSet):
         event_service = EventSearchServices(circle=value)
         qs = event_service.get_events_near_center(queryset)
         return qs
-
-=======
->>>>>>> origin/feature/angular-implementation-about-page
 
 class EventInternalViewSet(viewsets.ReadOnlyModelViewSet):
     """
@@ -157,43 +144,6 @@ class EventViewSet(EventInternalViewSet):
         return self.get_queryset()
 
 
-class EventSearchViewSet(viewsets.ModelViewSet):
-
-    serializer_class = HaystackSerializer
-
-<<<<<<< HEAD
-    def get_queryset(self):
-        form = SearchForm(self.request.GET)
-        queryset = form.search()
-=======
-    def get_queryset(self, *args, **kwargs):
-        request = self.request
-        queryset = EmptySearchQuerySet()
-
-        if request.GET.get('q') is not None:
-            query = request.GET.get('q')
-            queryset = Event.objects.filter(Q(title__icontains=query) | Q(description__icontains=query))
->>>>>>> origin/feature/angular-implementation-about-page
-        return queryset
-
-
-class EventSortViewSet(viewsets.ModelViewSet):
-
-    serializer_class = TextSearchSerializer
-
-    def get_queryset(self, *args, **kwargs):
-        request = self.request
-        queryset = EmptySearchQuerySet()
-
-        if request.GET.get('q') is not None:
-            query = request.GET.get('q')
-            queryset = Event.objects.filter(category__name__iexact=query)
-            if not queryset:
-                queryset = Event.objects.filter(category__slug__iexact=query)
-        return queryset
-
-
-
 class EventDetailViewSet(viewsets.ModelViewSet):
 
     serializer_class = EventDetailSerializer
@@ -211,24 +161,3 @@ class EventDetailViewSet(viewsets.ModelViewSet):
             queryset = []
             return queryset
 
-
-class EventOrderViewSet(viewsets.ModelViewSet):
-
-    serializer_class = TextSearchSerializer
-
-    def get_queryset(self, *args, **kwargs):
-        request = self.request
-        queryset= EmptySearchQuerySet()
-
-        if request.GET.get('ordering') is not None:
-            ordering = request.GET.get('ordering')
-            queryset = Event.objects.all()
-            queryset = queryset.order_by(ordering)
-        return queryset
-
-
-<<<<<<< HEAD
-=======
-
-
->>>>>>> origin/feature/angular-implementation-about-page

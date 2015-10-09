@@ -13,7 +13,7 @@ from haystack.query import SearchQuerySet
 from apps.alltoez.views import UserViewSet
 from apps.venues.views import VenueViewSet
 from apps.user_actions.views import DoneViewSet, BookmarkViewSet, ReviewViewSet
-from apps.events.api.views import EventInternalViewSet,EventSearchViewSet,EventSortViewSet,EventDetailViewSet,EventOrderViewSet
+from apps.events.api.views import EventDetailViewSet
 
 from apps.alltoez.views import home, AlltoezSearchView, autocomplete
 from apps.events.models import Event
@@ -32,11 +32,8 @@ router.register(r'users', UserViewSet)
 router.register(r'signup', api_views.UserRegisterViewSet)
 router.register(r'profile', api_views.ProfileEditViewSet)
 router.register(r'child', api_views.ChildUpdateViewSet)
-router.register(r'search', EventSearchViewSet,base_name='search'),
-router.register(r'sort', EventSortViewSet,base_name='sort'),
 router.register(r'detail', EventDetailViewSet, base_name='detail')
-router.register(r'order', EventOrderViewSet, base_name='order')
-router.register(r'disconnect_profile', api_views.SocialAccountDiscontinueViewSet,base_name='disconnect_profile')
+router.register(r'disconnect_profile', api_views.SocialAccountDiscontinueViewSet, base_name='disconnect_profile')
 
 
 sqs = SearchQuerySet().filter(end_date__gte=timezone.now().date()).facet('categories').\

@@ -75,7 +75,7 @@ class EventSerializer(EventInternalSerializer):
             bookmark = Bookmark.objects.get(event=obj, user=request.user)
             return reverse('api:bookmark-detail', args=(bookmark,), request=request)
         except ObjectDoesNotExist:
-            return Nonepublished_at
+            return None
 
     def get_done(self, obj):
         request = self.context.get('request')
