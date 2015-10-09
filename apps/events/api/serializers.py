@@ -75,7 +75,7 @@ class EventSerializer(EventInternalSerializer):
             bookmark = Bookmark.objects.get(event=obj, user=request.user)
             return reverse('api:bookmark-detail', args=(bookmark,), request=request)
         except ObjectDoesNotExist:
-            return None
+            return Nonepublished_at
 
     def get_done(self, obj):
         request = self.context.get('request')
@@ -104,42 +104,60 @@ class EventSerializer(EventInternalSerializer):
 
 class TextSearchSerializer(serializers.ModelSerializer):
     # venue = VenueSerializer(read_only=True)
+    distance = serializers.SerializerMethodField()
     description = serializers.CharField(read_only=True)
     min_age = serializers.IntegerField(read_only=True)
     max_age = serializers.IntegerField(read_only=True)
     cost = serializers.IntegerField(read_only=True)
     start_date = serializers.DateTimeField(read_only=True)
     end_date = serializers.DateTimeField(read_only=True)
+    venue = VenueSerializer(read_only=True)
+    category = CategorySerializer(many=True)
 
     class Meta:
         model = Event
-        fields = ( 'venue', 'title', 'description', 'min_age',
-                  'max_age', 'cost', 'cost_detail','start_date','end_date'
-                 )
+        fields = ('pk', 'id', 'created_at', 'updated_at', 'venue', 'title', 'slug', 'description', 'category', 'image', 'min_age',
+                  'max_age', 'cost', 'cost_detail', 'start_date', 'end_date', 'recurrence_detail', 'time_detail', 'url',
+                  'additional_info', 'published_at', 'distance')
+
+    def get_distance(self, obj):
+        request = self.context.get('request')
+        origin = None
+        if request.user.is_authenticated() and request.user.profile.last_known_location_bounds:
+            lat = request.user.profile.last_known_location_bounds.centroid.y
+            lng = request.user.profile.last_known_location_bounds.centroid.x
+            origin = Point(lng, lat)
+        if not origin:
+            return None
+        event = Event.objects.all().filter(id=obj.id).distance(origin, field_name='venue__point').first()
+        dObj = event.distance
+        if dObj is not None:
+            return dObj.mi
+        return None
 
 
-class HaystackSerializer(serializers.Serializer):
-    description = serializers.SerializerMethodField(method_name='_description')
-    min_age = serializers.SerializerMethodField(method_name='_min_age')
-    min_age = serializers.SerializerMethodField(method_name='_max_age')
-    cost = serializers.SerializerMethodField(method_name='_cost')
-    start_date = serializers.SerializerMethodField(method_name='_start_date')
-    end_date = serializers.SerializerMethodField(method_name='_end_date')
+class EventDetailSerializer(serializers.ModelSerializer):
+    distance = serializers.SerializerMethodField()
+    venue = VenueSerializer(read_only=True)
+    category = CategorySerializer(many=True)
 
-    def _description(self, obj):
-        return obj.object.description
+    class Meta:
+        model = Event
+        fields = ('pk', 'id', 'created_at', 'updated_at', 'venue', 'title', 'slug', 'description', 'category', 'image', 'min_age',
+                  'max_age', 'cost', 'cost_detail', 'start_date', 'end_date', 'recurrence_detail', 'time_detail', 'url',
+                  'additional_info', 'published_at', 'distance')
 
-    def _min_age(self, obj):
-        return obj.object.min_age
-
-    def _max_age(self, obj):
-        return obj.object.min_age
-
-    def _cost(self, obj):
-        return obj.object.cost
-
-    def _start_date(self, obj):
-        return obj.object.start_date
-
-    def _end_date(self, obj):
-        return obj.object.end_date
+    def get_distance(self, obj):
+        request = self.context.get('request')
+        origin = None
+        if request.user.is_authenticated() and request.user.profile.last_known_location_bounds:
+            lat = request.user.profile.last_known_location_bounds.centroid.y
+            lng = request.user.profile.last_known_location_bounds.centroid.x
+            origin = Point(lng, lat)
+        if not origin:
+            return None
+        event = Event.objects.all().filter(id=obj.id).distance(origin, field_name='venue__point').first()
+        dObj = event.distance
+        if dObj is not None:
+            return dObj.mi
+        return None
