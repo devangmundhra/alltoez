@@ -70,4 +70,3 @@ start_dep_processes.sh
 
 *.rdb
 
-staticfiles/*

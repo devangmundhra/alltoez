@@ -1,13 +1,15 @@
 from django.core.mail import EmailMessage
 from django.http import Http404
 from django.contrib.auth.models import User
+from django.template.loader import render_to_string
 
 from rest_auth.registration.views import SocialLogin, ConfirmEmailView
-from rest_framework import viewsets, status, mixins
+from rest_framework import viewsets, status, mixins, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+from allauth.account.forms import LoginForm
 import requests
 
 from apps.alltoez_profile.models import Child, UserProfile
@@ -72,6 +74,27 @@ class ProfileEditViewSet(UserRequired,
     serializer_class = serializers.UpdateUserSerializer
     queryset = UserProfile.objects.all()
 
+    def update(self, request, *args, **kwargs):
+
+        """
+        Update method to check the url. to support edit
+        """
+        userss = request.user
+        if self.kwargs.get('pk') != "update":
+            raise Http404
+        return super(ProfileEditViewSet, self).update(request, *args, **kwargs)
+
+    def get_object(self):
+        """
+        Get user object.
+        """
+        return UserProfile.objects.get(user=self.request.user.id)
+
+    def get_queryset(self):
+        if not self.kwargs.get('pk'):
+            raise Http404
+        return super(ProfileEditViewSet, self).get_queryset()
+
 
 class SocialAccountDiscontinueViewSet(UserRequired, viewsets.ModelViewSet):
     """
@@ -123,3 +146,56 @@ class ChildUpdateViewSet(UserRequired, viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class HomePageTemplateView(APIView):
+    """
+    View for returning home page html content
+    """
+    http_method_names = ['get']
+    permission_classes = (permissions.AllowAny, )
+
+    def get(self, request, format=None):
+        """
+        Returns the home page template division.
+        """
+
+        template = render_to_string(template_name='home.html', request=request)
+
+        return Response(template)
+
+
+class LoginPageTemplateView(APIView):
+    """
+    View for returning login page html content
+    """
+    http_method_names = ['get']
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self, request, format=None):
+        """
+
+        Returns the login page template view
+        """
+        form = LoginForm()
+        template = render_to_string(template_name='login.html', request=request, context={'form':form})
+
+        return Response(template)
+
+
+class EventPageTemplateView(APIView):
+    """
+    View for returning login page html content
+    """
+    http_method_names = ['get']
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self,request,format=None):
+        """
+
+        Returns the Event page template view
+        """
+
+        template = render_to_string(template_name='event.html', request=request)
+
+        return Response(template)
