@@ -39,13 +39,14 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user = super(UserRegisterSerializer, self).create(validated_data)
         return user
 
+
 class UserAccountSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
 
     class Meta:
         model = User
-        fields = ('first_name','last_name')
+        fields = ('first_name', 'last_name')
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):
@@ -68,7 +69,6 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         return instance
 
 
-
 class ChildSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         many = kwargs.pop('many', True)
@@ -83,7 +83,8 @@ class ChildSerializer(serializers.ModelSerializer):
 class AlltoezProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('first_name',)
+        fields = ('first_name', 'last_name', 'zipcode', 'city', 'state', 'country',
+                  'profile_image', 'gender')
 
 
 class UserInternalSerializer(serializers.HyperlinkedModelSerializer):

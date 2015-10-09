@@ -5,10 +5,10 @@ from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.auth.models import User
 
 from filebrowser.fields import FileBrowseField
+from django_countries.fields import CountryField
 
 from apps.alltoez.utils.model_utils import unique_slugify
 from apps.alltoez.utils.geo import geocode_location
-from apps.alltoez.utils.fields import CountryField
 
 """
     Abstract model classes that define common uses cases
@@ -97,8 +97,8 @@ class AddressMixin(GeoModelMixin):
     address_line_2 = models.CharField(max_length=250, null=True, blank=True)
     address_line_3 = models.CharField(max_length=250, null=True, blank=True)
     city = models.CharField(max_length=150, null=True, blank=True, db_index=True)
-    state = models.CharField(max_length=150, null=True, blank=True, default="CA", db_index=True)
-    country = CountryField(null=True, blank=True, default="US", db_index=True)
+    state = models.CharField(max_length=150, null=True, blank=True, db_index=True)
+    country = CountryField(null=True, blank=True, db_index=True, blank_label='(select country)')
 
     def get_location(self):
         address = ""

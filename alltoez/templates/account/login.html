@@ -1,6 +1,6 @@
 {% extends "account/base.html" %}
 {% load i18n common_tags %}
-{% load account %}
+{% load account socialaccount %}
 {% load url from future %}
 
 {% block head_title %}Login{% endblock %}
@@ -14,7 +14,8 @@
                 <h3>Alltoez helps parents and kids find activities they love to do.</h3>
             </div>
             <h3>Haven't signed up yet? <a href="{{ signup_url }}">Sign up here.</a></h3>
-            {% if socialaccount.providers  %}
+            {% get_providers as socialaccount_providers %}
+            {% if socialaccount_providers  %}
             <div class="socialaccount_ballot">
 
               <ul class="socialaccount_providers">

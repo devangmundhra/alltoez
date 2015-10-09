@@ -97,8 +97,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
     "django.contrib.messages.context_processors.messages",
     "apps.alltoez.context_processors.app_wide_vars",
-    "allauth.account.context_processors.account",
-    "allauth.socialaccount.context_processors.socialaccount",
 )
 
 """
@@ -107,6 +105,7 @@ With caching middleware enabled, if the zipcode of a user is edited, it does not
 """
 MIDDLEWARE_CLASSES = [
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     # 'django.middleware.cache.UpdateCacheMiddleware', # Disable caching since there is some issue with invalidation
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.cache.FetchFromCacheMiddleware',
@@ -152,6 +151,9 @@ INSTALLED_APPS = [
     'storages',
     'cacheops',
     'sorl.thumbnail',
+    'corsheaders',
+    'djangular',
+    'django_countries',
 
     # Registration, Signin and Account Management
     'allauth',
@@ -420,9 +422,9 @@ CELERY_TASK_PUBLISH_RETRY_POLICY = {
     'interval_step': 10,
     'interval_max': 3600,
 }
-ACCOUNT_FORMS = {
-    'signup': 'path.to.custom.SignupForm'
-}
+# ACCOUNT_FORMS = {
+#     'signup': 'path.to.custom.SignupForm'
+# }
 
 #-------------------------------------------------------------------------------
 #	ADMIN SHORTCUT SETTINGS
@@ -521,6 +523,7 @@ PIO_EVENT_SERVER_ENDPOINT = os.environ.get('PIO_EVENT_SERVER_ENDPOINT', "")
 #	DJANGO REST FRAMEWORK CONFIG
 #-------------------------------------------------------------------------------
 REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGINATE_BY': 10,
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
@@ -532,6 +535,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
 
     ),
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
 }
 
 REST_SESSION_LOGIN = False

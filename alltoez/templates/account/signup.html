@@ -2,6 +2,7 @@
 
 {% load url from future %}
 {% load i18n common_tags %}
+{% load socialaccount %}
 
 {% block head_title %}{% trans "Signup" %}{% endblock %}
 {% block page_title %}{% trans "Sign up with Alltoez" %}{% endblock %}
@@ -13,7 +14,8 @@
             <div class="alltoez-snippet">
                 <h3>Alltoez helps parents and kids find activities they love to do.</h3>
             </div>
-            {% if socialaccount.providers  %}
+            {% get_providers as socialaccount_providers %}
+            {% if socialaccount_providers  %}
             <div class="socialaccount_ballot">
                 <div class="socialaccount_providers">
                     {% include "socialaccount/snippets/provider_list.html" with process="login" %}

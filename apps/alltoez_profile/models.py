@@ -1,7 +1,8 @@
-import re, unicodedata, os, random, string
+import os
 from uuid import uuid4
 import logging
 
+from django.dispatch import receiver
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
@@ -172,4 +173,4 @@ class Child(BaseModel):
     @property
     def current_age(self):
         time_since_updated = timezone.now() - self.updated
-        return self.age + int(time_since_updated.days/365.2425)
+        return int(self.age) + int(time_since_updated.days/365.2425)

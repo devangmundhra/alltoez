@@ -12,8 +12,9 @@ from django.contrib.auth.models import User
 import keen
 from haystack.views import FacetedSearchView
 from haystack.query import SearchQuerySet
-from rest_framework import viewsets
-from rest_framework import permissions
+from rest_framework import viewsets, permissions, status
+from rest_framework.decorators import detail_route, list_route
+from rest_framework.response import Response
 
 from apps.alltoez.serializers import UserSerializer
 
@@ -38,6 +39,16 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     permission_classes = (IsOwner,)
+
+    @list_route(methods=['get'],)
+    def me(self, request, pk=None):
+        user = request.user
+        if not user.is_authenticated():
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            serializer = self.get_serializer(user)
+            return Response(serializer.data)
+
 
 @requires_csrf_token
 def server_error(request, template_name='500.html'):
@@ -110,7 +121,7 @@ class AlltoezSearchView(FacetedSearchView):
 
         # start_offset = (page_no - 1) * self.results_per_page
         # self.results[start_offset:start_offset + self.results_per_page]
-
+        print self.results, "resultsssssssssssssssssssssssssssssssssss"
         paginator = Paginator(self.results, self.results_per_page)
 
         try:
