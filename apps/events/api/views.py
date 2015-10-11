@@ -15,7 +15,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from apps.alltoez.serializers import EventSerializer
 from apps.events.models import Event, Category
 from apps.alltoez.graph.neo4j import get_similar_events
-from apps.events.api.serializers import CategorySerializer, EventInternalSerializer,TextSearchSerializer, EventDetailSerializer
+from apps.events.api.serializers import CategorySerializer, EventInternalSerializer
 from apps.alltoez.serivces import EventSearchServices
 
 
@@ -143,22 +143,4 @@ class EventViewSet(EventInternalViewSet):
         self.request = request
 
         return self.get_queryset()
-
-
-class EventDetailViewSet(viewsets.ModelViewSet):
-
-    serializer_class = EventDetailSerializer
-    http_method_names = ['get']
-
-    def get_queryset(self,*args,**kwargs):
-        request = self.request
-
-        if request.GET.get('q') is not None:
-            query = request.GET.get('q')
-            queryset = Event.objects.filter(id = query)
-            return queryset
-
-        else:
-            queryset = []
-            return queryset
 

@@ -152,7 +152,6 @@ INSTALLED_APPS = [
     'cacheops',
     'sorl.thumbnail',
     'corsheaders',
-    'djangular',
     'django_countries',
 
     # Registration, Signin and Account Management
@@ -538,7 +537,7 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
 }
 
-REST_SESSION_LOGIN = False
+REST_SESSION_LOGIN = True
 
 #-------------------------------------------------------------------------------
 #	SORL THUMBNAIL

@@ -13,7 +13,7 @@ import keen
 from haystack.views import FacetedSearchView
 from haystack.query import SearchQuerySet
 from rest_framework import viewsets, permissions, status
-from rest_framework.decorators import detail_route, list_route
+from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
 from apps.alltoez.serializers import UserSerializer
@@ -76,7 +76,7 @@ def home(request):
     if request.user.is_authenticated():
         return redirect('events')
     else:
-        return render(request, "base.html")
+        return render(request, "alltoez/home.html")
 
 
 """
@@ -121,7 +121,6 @@ class AlltoezSearchView(FacetedSearchView):
 
         # start_offset = (page_no - 1) * self.results_per_page
         # self.results[start_offset:start_offset + self.results_per_page]
-        print self.results, "resultsssssssssssssssssssssssssssssssssss"
         paginator = Paginator(self.results, self.results_per_page)
 
         try:
