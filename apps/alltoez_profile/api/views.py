@@ -11,6 +11,7 @@ from allauth.socialaccount.models import SocialAccount, SocialToken
 from apps.alltoez.api.serializers import AllauthSerializer
 from apps.alltoez_profile.api import serializers
 from common.mixins import UserRequired
+from apps.alltoez_profile.models import Child
 
 
 class UserRegisterViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
@@ -92,3 +93,12 @@ class SocialAccountDiscontinueViewSet(UserRequired, viewsets.ModelViewSet):
         account = SocialAccount.objects.get(user__id=self.request.user.id)
         token = SocialToken.objects.get(account=account)
         return account, token
+
+
+class ChildUpdateViewSet(UserRequired, viewsets.ModelViewSet):
+    queryset = Child.objects.all()
+    serializer_class = serializers.ChildSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+

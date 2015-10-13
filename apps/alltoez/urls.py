@@ -14,7 +14,8 @@ from apps.user_actions.api.views import DoneViewSet, BookmarkViewSet, ReviewView
 from apps.alltoez.views import home, AlltoezSearchView, autocomplete
 from apps.events.models import Event
 from apps.alltoez.sitemaps import StaticViewSitemap
-from apps.alltoez_profile.api.views import FacebookLogin, UserRegisterViewSet, SocialAccountDiscontinueViewSet
+from apps.alltoez_profile.api.views import FacebookLogin, UserRegisterViewSet, SocialAccountDiscontinueViewSet, \
+    ChildUpdateViewSet
 from apps.events.api.views import EventViewSet, CategoryViewSet
 
 router = routers.DefaultRouter()
@@ -26,6 +27,7 @@ router.register(r'bookmark', BookmarkViewSet)
 router.register(r'review', ReviewViewSet)
 router.register(r'users', UserViewSet)
 router.register(r'signup', UserRegisterViewSet)
+router.register(r'child', ChildUpdateViewSet)
 router.register(r'disconnect_profile', SocialAccountDiscontinueViewSet, base_name='disconnect_profile')
 
 

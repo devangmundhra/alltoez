@@ -15,6 +15,7 @@ from apps.alltoez.utils.view_utils import LoginRequiredMixin, MessageMixin
 from apps.alltoez.utils.misc import get_client_ip
 from apps.alltoez_profile.forms import UserProfileForm, ChildrenFormset
 from apps.alltoez_profile.models import UserProfile, GENDER_CHOICES, Child, CHILD_GENDER_CHOICES
+from apps.alltoez_profile.api.serializers import UserSerializer
 
 
 class UserProfileDetail(LoginRequiredMixin, DetailView):
@@ -28,7 +29,6 @@ class UserProfileDetail(LoginRequiredMixin, DetailView):
     request = None
 
     def get(self, request, *args, **kwargs):
-        from apps.alltoez.api.serializers import UserSerializer
         """
         This method has been copied from django/views/generic/detail.py
         :param request:

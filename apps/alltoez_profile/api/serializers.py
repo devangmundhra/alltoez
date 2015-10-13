@@ -14,7 +14,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     User register serializer returns token
     """
     username = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all(),
-                                                               message=_('Email address already registered.'))])
+                                                                  message=_('Email address already registered.'))])
     key = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -45,10 +45,13 @@ class ChildSerializer(serializers.ModelSerializer):
         many = kwargs.pop('many', True)
         super(ChildSerializer, self).__init__(many=many, *args, **kwargs)
 
+    def get_delete(self, obj):
+        return False
+
     class Meta:
         model = Child
-        fields = ('user', 'name', 'gender', 'age', 'pk')
-        read_only_fields = ('user', 'pk')
+        fields = ('user', 'name', 'gender', 'age', 'pk', 'id')
+        read_only_fields = ('user', 'pk', 'id')
 
 
 class AlltoezProfileSerializer(serializers.ModelSerializer):
@@ -74,7 +77,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('profile', {})
-        children_data = validated_data.pop('children', {})
 
         instance.first_name = validated_data.get('first_name')
         instance.last_name = validated_data.get('last_name')
@@ -85,22 +87,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         for attr, value in profile_data.items():
             setattr(profile, attr, value)
         profile.save()
-
-        for child_data in children_data:
-            child_data['user_id'] = instance.id
-            child_pk = child_data.get('pk', None)
-            if child_pk:
-                child = Child.objects.get(pk=child_pk)
-            else:
-                child = Child(user=instance)
-
-            should_delete = child_data.get('delete', False)
-            if should_delete:
-                child.delete()
-            else:
-                for attr, value in child_data.items():
-                    setattr(child, attr, value)
-                child.save()
 
         return instance
 
