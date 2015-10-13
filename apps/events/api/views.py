@@ -2,9 +2,7 @@ from django.utils import timezone
 from django.db.models import Max, Min, Q
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.utils.decorators import classonlymethod
-
 import django_filters
-
 from rest_framework.decorators import detail_route
 from rest_framework import status, viewsets, filters
 from rest_framework.response import Response
@@ -12,7 +10,7 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.request import Request
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
-from apps.alltoez.serializers import EventSerializer
+from apps.alltoez.api.serializers import EventSerializer
 from apps.events.models import Event, Category
 from apps.alltoez.graph.neo4j import get_similar_events
 from apps.events.api.serializers import CategorySerializer, EventInternalSerializer

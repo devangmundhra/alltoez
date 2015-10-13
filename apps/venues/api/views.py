@@ -1,11 +1,10 @@
 import json
 
 from django.views.generic import DetailView
-
 from rest_framework import viewsets
 from rest_framework.renderers import JSONRenderer
 
-from apps.venues.serializers import VenueSerializer
+from apps.venues.api.serializers import VenueSerializer
 from apps.venues.models import Venue
 
 """
@@ -29,7 +28,7 @@ class VenueDetailView(DetailView):
     request = None
 
     def get_context_data(self, **kwargs):
-        from apps.alltoez.serializers import VenueDetailSerializer
+        from apps.alltoez.api.serializers import VenueDetailSerializer
         context = super(VenueDetailView, self).get_context_data(**kwargs)
         serializer = VenueDetailSerializer(self.object, context={'request': self.request})
         venue_json = JSONRenderer().render(serializer.data)

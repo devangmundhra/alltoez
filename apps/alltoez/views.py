@@ -7,47 +7,9 @@ from django.views.decorators.csrf import requires_csrf_token
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.core.paginator import InvalidPage, Paginator, EmptyPage
-from django.contrib.auth.models import User
-
 import keen
 from haystack.views import FacetedSearchView
 from haystack.query import SearchQuerySet
-from rest_framework import viewsets, permissions, status
-from rest_framework.decorators import list_route
-from rest_framework.response import Response
-
-from apps.alltoez.serializers import UserSerializer
-
-"""
-ALLTOEZ API VIEWS
-"""
-
-
-class IsOwner(permissions.BasePermission):
-    """
-    Object-level permission to only allow owners of an object to use it.
-    """
-
-    def has_object_permission(self, request, view, obj):
-        return obj == request.user
-
-
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    API endpoint that allows events to be viewed or edited.
-    """
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
-    permission_classes = (IsOwner,)
-
-    @list_route(methods=['get'],)
-    def me(self, request, pk=None):
-        user = request.user
-        if not user.is_authenticated():
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        else:
-            serializer = self.get_serializer(user)
-            return Response(serializer.data)
 
 
 @requires_csrf_token

@@ -3,8 +3,6 @@ import json
 from django.utils import timezone
 from django.views.generic import DetailView, ListView
 from django.contrib.gis.geos import Polygon
-from django.db.models import Q
-
 from rest_framework.renderers import JSONRenderer
 import keen
 
@@ -73,6 +71,9 @@ class Events(ListView):
                 #If not succeed in first try, try again (with a bigger net)
                 neighborhood = rev_geocode_location_component(self.latitude, self.longitude, 'political')
             city = rev_geocode_location_component(self.latitude, self.longitude, 'locality')
+            if not city:
+                #If not succeed in first try, try again (with a bigger net)
+                city = rev_geocode_location_component(self.latitude, self.longitude, 'administrative_area')
             self.location_name = u"{}, {}".format(neighborhood, city)
 
         self.category_slug = kwargs.get('cat_slug', None)
@@ -112,7 +113,7 @@ class Events(ListView):
         return super(Events, self).get_queryset()
 
     def get_context_data(self, **kwargs):
-        from apps.alltoez.serializers import EventSerializer
+        from apps.alltoez.api.serializers import EventSerializer
 
         context = super(Events, self).get_context_data(**kwargs)
         events_page = context['page_obj']
@@ -146,7 +147,7 @@ class EventDetailView(DetailView):
         :param kwargs:
         :return: HttpResponse
         """
-        from apps.alltoez.serializers import EventSerializer
+        from apps.alltoez.api.serializers import EventSerializer
         from apps.user_actions.tasks import mark_user_views_event, new_action
         self.object = self.get_object()
         if request.user.is_authenticated():

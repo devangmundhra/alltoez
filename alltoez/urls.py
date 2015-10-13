@@ -9,7 +9,7 @@ from filebrowser.sites import site
 
 handler500 = 'apps.alltoez.views.server_error'
 
-# Pluggable / django apps / inernal apps
+# Pluggable / django apps / internal apps
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('django.contrib.auth.urls')),
@@ -25,22 +25,22 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += patterns('',
-	url(r'^favicon\.ico$', RedirectView.as_view(url=settings.STATIC_URL + 'ico/favicon.ico', permanent=True)),
-	url(r'^apple\-touch\-icon\.png$', RedirectView.as_view(url=settings.STATIC_URL + 'img/apple-touch-icon.png',
+    url(r'^favicon\.ico$', RedirectView.as_view(url=settings.STATIC_URL + 'ico/favicon.ico', permanent=True)),
+    url(r'^apple\-touch\-icon\.png$', RedirectView.as_view(url=settings.STATIC_URL + 'img/apple-touch-icon.png',
                                                            permanent=True)),
-	url(r'^robots\.txt$', RedirectView.as_view(url=settings.STATIC_URL + 'robots.txt', permanent=True))
+    url(r'^robots\.txt$', RedirectView.as_view(url=settings.STATIC_URL + 'robots.txt', permanent=True))
 )
 
 if settings.DEBUG:
-	urlpatterns+= patterns('',
-		(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
-			'document_root': settings.MEDIA_ROOT
-		}),
-		(r'^cache-forever/(?P<path>.*)$', 'django.views.static.serve', {
-			'document_root': settings.STATIC_ROOT,
-		}),
-		(r'^404/$', 'django.views.defaults.page_not_found'),
-		(r'^500/$', 'apps.alltoez.views.server_error')
-	)
+    urlpatterns+= patterns('',
+        (r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+            'document_root': settings.MEDIA_ROOT
+        }),
+        (r'^cache-forever/(?P<path>.*)$', 'django.views.static.serve', {
+            'document_root': settings.STATIC_ROOT,
+        }),
+        (r'^404/$', 'django.views.defaults.page_not_found'),
+        (r'^500/$', 'apps.alltoez.views.server_error')
+    )
 
 urlpatterns += staticfiles_urlpatterns()

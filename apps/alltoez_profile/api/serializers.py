@@ -14,16 +14,16 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     User register serializer returns token
     """
     username = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all(),
-                                                                 message=_('Username Already exists.'))])
-    token = serializers.SerializerMethodField(read_only=True)
+                                                               message=_('Email address already registered.'))])
+    key = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'password','token')
+        fields = ('id', 'username', 'password', 'key')
         read_only_fields = ('id', )
         write_only_fields = ('password', )
 
-    def get_token(self, obj):
+    def get_key(self, obj):
         token, created = Token.objects.get_or_create(user=obj)
         return token.key
 
@@ -40,35 +40,6 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         return user
 
 
-class UserAccountSerializer(serializers.ModelSerializer):
-    first_name = serializers.CharField(required=True)
-    last_name = serializers.CharField(required=True)
-
-    class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'id')
-
-
-class UpdateUserSerializer(serializers.ModelSerializer):
-    user = UserAccountSerializer()
-
-    class Meta:
-        model = UserProfile
-        fields = ('gender', 'zipcode', 'city', 'state', 'user')
-
-    def update(self, instance, validated_data):
-        user_details = validated_data.pop('user')
-        user = self.context['request'].user
-        user.first_name = user_details.get('first_name')
-        user.last_name = user_details.get('last_name')
-        user.save()
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-        instance.save()
-
-        return instance
-
-
 class ChildSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         many = kwargs.pop('many', True)
@@ -76,24 +47,63 @@ class ChildSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Child
-        fields = ('user', 'name', 'gender', 'age', )
-        read_only_fields = ('user', )
+        fields = ('user', 'name', 'gender', 'age', 'pk')
+        read_only_fields = ('user', 'pk')
 
 
 class AlltoezProfileSerializer(serializers.ModelSerializer):
+    is_complete = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = UserProfile
-        fields = ('first_name', 'last_name', 'zipcode', 'city', 'state', 'country',
-                  'profile_image', 'gender')
+        fields = ('zipcode', 'city', 'state', 'country',
+                  'profile_image', 'gender', 'is_complete', 'user', 'pk')
+        read_only_fields = ('user', 'pk')
+
+    def get_is_complete(self, obj):
+        return obj.profile_complete()
 
 
-class UserInternalSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     children = ChildSerializer(many=True, required=False)
     profile = AlltoezProfileSerializer()
 
     class Meta:
         model = User
         fields = ('id', 'pk', 'username', 'first_name', 'last_name', 'email', 'children', 'profile')
+
+    def update(self, instance, validated_data):
+        profile_data = validated_data.pop('profile', {})
+        children_data = validated_data.pop('children', {})
+
+        instance.first_name = validated_data.get('first_name')
+        instance.last_name = validated_data.get('last_name')
+        instance.save()
+
+        profile = instance.profile
+
+        for attr, value in profile_data.items():
+            setattr(profile, attr, value)
+        profile.save()
+
+        for child_data in children_data:
+            child_data['user_id'] = instance.id
+            child_pk = child_data.get('pk', None)
+            if child_pk:
+                child = Child.objects.get(pk=child_pk)
+            else:
+                child = Child(user=instance)
+
+            should_delete = child_data.get('delete', False)
+            if should_delete:
+                child.delete()
+            else:
+                for attr, value in child_data.items():
+                    setattr(child, attr, value)
+                child.save()
+
+        return instance
+
 
 # class VerifyEmail(APIView, ConfirmEmailView):
 #

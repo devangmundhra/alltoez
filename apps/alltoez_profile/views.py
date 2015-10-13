@@ -8,7 +8,6 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView
 from django.http import HttpResponseRedirect
 from django.contrib.gis.geoip import GeoIP
-
 from allauth.account.views import SignupView
 from rest_framework.renderers import JSONRenderer
 
@@ -29,7 +28,7 @@ class UserProfileDetail(LoginRequiredMixin, DetailView):
     request = None
 
     def get(self, request, *args, **kwargs):
-        from apps.alltoez.serializers import UserSerializer
+        from apps.alltoez.api.serializers import UserSerializer
         """
         This method has been copied from django/views/generic/detail.py
         :param request:

@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework import permissions
 
-from apps.user_actions.serializers import DoneSerializer, BookmarkSerializer, ReviewSerializer
+from apps.user_actions.api.serializers import DoneSerializer, BookmarkSerializer, ReviewSerializer
 from apps.user_actions.models import Done, Bookmark, Review
 
 """

@@ -98,7 +98,7 @@ class AddressMixin(GeoModelMixin):
     address_line_3 = models.CharField(max_length=250, null=True, blank=True)
     city = models.CharField(max_length=150, null=True, blank=True, db_index=True)
     state = models.CharField(max_length=150, null=True, blank=True, db_index=True)
-    country = CountryField(null=True, blank=True, db_index=True, blank_label='(select country)')
+    country = CountryField(default='US', db_index=True, blank_label='(select country)')
 
     def get_location(self):
         address = ""

@@ -1,21 +1,15 @@
+import requests
 from django.core.mail import EmailMessage
-from django.http import Http404
 from django.contrib.auth.models import User
-from django.template.loader import render_to_string
-
-from rest_auth.registration.views import SocialLogin, ConfirmEmailView
-from rest_framework import viewsets, status, mixins, permissions
+from rest_auth.registration.views import SocialLoginView, ConfirmEmailView
+from rest_framework import viewsets, status, mixins
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
-from allauth.account.forms import LoginForm
-import requests
-
-from apps.alltoez_profile.models import Child, UserProfile
-from apps.alltoez.serializers import AllauthSerializer
 from allauth.socialaccount.models import SocialAccount, SocialToken
-from .import serializers
+
+from apps.alltoez.api.serializers import AllauthSerializer
+from apps.alltoez_profile.api import serializers
 from common.mixins import UserRequired
 
 
@@ -36,7 +30,7 @@ class UserRegisterViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         headers = self.get_success_headers(serializer.data)
         email_address = serializer.data['username']
         msg = EmailMessage(from_email=("Alltoez", "noreply@alltoez.com"),
-                           to = [email_address])
+                           to=[email_address])
         msg.template_name = "Welcome To Alltoez"
         msg.send()
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -56,44 +50,12 @@ class VerifyEmailViewSet(UserRequired, APIView, ConfirmEmailView):
         return Response({'message': 'ok'}, status=status.HTTP_200_OK)
 
 
-class FacebookLogin(SocialLogin):
+class FacebookLogin(SocialLoginView):
     """
     View for facebook login/signup.
     :parameter     facebook access token
     """
     adapter_class = FacebookOAuth2Adapter
-
-
-class ProfileEditViewSet(UserRequired,
-                         mixins.RetrieveModelMixin,
-                         mixins.UpdateModelMixin,
-                         viewsets.GenericViewSet):
-    """
-    View set to update profile of current user.
-    """
-    serializer_class = serializers.UpdateUserSerializer
-    queryset = UserProfile.objects.all()
-
-    def update(self, request, *args, **kwargs):
-
-        """
-        Update method to check the url. to support edit
-        """
-        userss = request.user
-        if self.kwargs.get('pk') != "update":
-            raise Http404
-        return super(ProfileEditViewSet, self).update(request, *args, **kwargs)
-
-    def get_object(self):
-        """
-        Get user object.
-        """
-        return UserProfile.objects.get(user=self.request.user.id)
-
-    def get_queryset(self):
-        if not self.kwargs.get('pk'):
-            raise Http404
-        return super(ProfileEditViewSet, self).get_queryset()
 
 
 class SocialAccountDiscontinueViewSet(UserRequired, viewsets.ModelViewSet):
@@ -130,19 +92,3 @@ class SocialAccountDiscontinueViewSet(UserRequired, viewsets.ModelViewSet):
         account = SocialAccount.objects.get(user__id=self.request.user.id)
         token = SocialToken.objects.get(account=account)
         return account, token
-
-
-class ChildUpdateViewSet(UserRequired, viewsets.ModelViewSet):
-    queryset = Child.objects.all()
-    serializer_class = serializers.ChildSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-    def create(self, request, *args, **kwargs):
-        children = request.DATA['children']
-        serializer = self.get_serializer(data=children, many=True)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

@@ -537,7 +537,7 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
 }
 
-REST_SESSION_LOGIN = True
+REST_SESSION_LOGIN = False
 
 #-------------------------------------------------------------------------------
 #	SORL THUMBNAIL
