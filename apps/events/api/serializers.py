@@ -10,10 +10,18 @@ from apps.venues.api.serializers import VenueSerializer
 from apps.user_actions.api.serializers import ReviewSerializer
 
 
-class CategorySerializer(serializers.HyperlinkedModelSerializer):
+class ParentCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('name', 'slug', 'description')
+        fields = ('name', 'slug', 'font_awesome_icon_class')
+
+
+class CategorySerializer(serializers.HyperlinkedModelSerializer):
+    parent_category = ParentCategorySerializer()
+
+    class Meta:
+        model = Category
+        fields = ('name', 'slug', 'description', 'font_awesome_icon_class', 'parent_category')
 
 
 class EventInternalSerializer(serializers.HyperlinkedModelSerializer):

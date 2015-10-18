@@ -1,3 +1,5 @@
+from distutils.util import strtobool
+
 from django.utils import timezone
 from django.db.models import Max, Min, Q
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
@@ -17,12 +19,41 @@ from apps.events.api.serializers import CategorySerializer, EventInternalSeriali
 from apps.alltoez.serivces import EventSearchServices
 
 
+class CategoryFilter(django_filters.FilterSet):
+    parent_category = django_filters.MethodFilter(name="parent_category", action='is_parent_category')
+    font_awesome_icon_class = django_filters.MethodFilter(name="font_awesome_icon_class", action='valid_font_awesome_icon')
+
+    class Meta:
+        model = Category
+        fields = ['parent_category']
+
+    def is_parent_category(self, queryset, value):
+        bool_val = strtobool(value)
+        if bool_val:
+            # Client wants those categories that are parents
+            queryset = queryset.filter(parent_category__isnull=True)
+        else:
+            # Client wants those categories that are not parents
+            queryset = queryset.filter(parent_category__isnull=False)
+        return queryset
+
+    def valid_font_awesome_icon(self, queryset, value):
+        bool_val = strtobool(value)
+        if bool_val:
+            # Client wants those categories that are parents
+            queryset = queryset.exclude(font_awesome_icon_class__exact='')
+        else:
+            # Client wants those categories that are not parents
+            queryset = queryset.filter(font_awesome_icon_class__exact='')
+        return queryset
+
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint that allows categories to be viewed or edited.
     """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    filter_class = CategoryFilter
 
 
 class MultiFieldMethodFilter(django_filters.MethodFilter):
