@@ -16,7 +16,7 @@ from apps.events.models import Event
 from apps.alltoez.sitemaps import StaticViewSitemap
 from apps.alltoez_profile.api.views import FacebookLogin, UserRegisterViewSet, SocialAccountDiscontinueViewSet, \
     ChildUpdateViewSet
-from apps.events.api.views import EventViewSet, CategoryViewSet
+from apps.events.api.views import EventViewSet, CategoryViewSet, EventSearchViewSet
 
 router = routers.DefaultRouter()
 router.register(r'events', EventViewSet, base_name='event')
@@ -29,6 +29,7 @@ router.register(r'users', UserViewSet)
 router.register(r'signup', UserRegisterViewSet)
 router.register(r'child', ChildUpdateViewSet)
 router.register(r'disconnect_profile', SocialAccountDiscontinueViewSet, base_name='disconnect_profile')
+router.register("search", EventSearchViewSet, base_name="event-search")
 
 
 sqs = SearchQuerySet().filter(end_date__gte=timezone.now().date()).facet('categories').\

@@ -1,14 +1,16 @@
 from django.contrib.gis.geos import Point
 from django.core.exceptions import ObjectDoesNotExist
+
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 from sorl.thumbnail import get_thumbnail
+from drf_haystack.serializers import HaystackSerializerMixin
 
 from apps.events.models import Event, Category
 from apps.user_actions.models import Bookmark, Done, Review
 from apps.venues.api.serializers import VenueSerializer
 from apps.user_actions.api.serializers import ReviewSerializer
-
+from apps.events.search_indexes import EventIndex
 
 class ParentCategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -107,3 +109,10 @@ class EventSerializer(EventInternalSerializer):
 
     def get_view_count(self, obj):
         return obj.view_seed + obj.viewip_set.count()
+
+
+class EventSearchSerializer(HaystackSerializerMixin, EventSerializer):
+    class Meta(EventSerializer.Meta):
+        index_classes = [EventIndex, ]
+
+        search_fields = ('text',)

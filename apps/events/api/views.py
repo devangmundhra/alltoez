@@ -11,11 +11,12 @@ from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.request import Request
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from drf_haystack.viewsets import HaystackViewSet
 
 from apps.alltoez.api.serializers import EventSerializer
 from apps.events.models import Event, Category
 from apps.alltoez.graph.neo4j import get_similar_events
-from apps.events.api.serializers import CategorySerializer, EventInternalSerializer
+from apps.events.api.serializers import CategorySerializer, EventInternalSerializer, EventSearchSerializer
 from apps.alltoez.serivces import EventSearchServices
 
 
@@ -46,6 +47,7 @@ class CategoryFilter(django_filters.FilterSet):
             # Client wants those categories that are not parents
             queryset = queryset.filter(font_awesome_icon_class__exact='')
         return queryset
+
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     """
@@ -173,3 +175,7 @@ class EventViewSet(EventInternalViewSet):
 
         return self.get_queryset()
 
+
+class EventSearchViewSet(HaystackViewSet):
+    index_models = [Event, ]
+    serializer_class = EventSearchSerializer

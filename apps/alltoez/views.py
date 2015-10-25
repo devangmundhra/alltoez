@@ -54,9 +54,12 @@ class AlltoezSearchView(FacetedSearchView):
     """
     def get_query(self):
         query = super(AlltoezSearchView, self).get_query()
-        keen.add_event('search', {
-            "query": query
-        }, timezone.now())
+        try:
+            keen.add_event('search', {
+                "query": query
+            }, timezone.now())
+        except keen.InvalidEnvironmentError:
+            pass
         return query
 
     def extra_context(self):
