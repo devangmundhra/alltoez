@@ -618,3 +618,5 @@ if DEBUG and USE_DEBUG_TOOLBAR:
         'debug_toolbar.panels.redirects.RedirectsPanel',
         'haystack_panel.panel.HaystackDebugPanel'
     ]
+
+CORS_ORIGIN_ALLOW_ALL = True

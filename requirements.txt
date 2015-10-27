@@ -55,7 +55,7 @@ kombu==3.0.24
 Markdown==2.6.2
 markdown2==2.3.0
 msgpack-python==0.4.6
-newrelic==2.40.0.34
+newrelic==2.56.0.42
 oauthlib==1.0.3
 Padding==0.4
 paramiko==1.15.1

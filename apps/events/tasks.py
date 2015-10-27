@@ -40,7 +40,7 @@ def get_redtri_events():
             title = parsed_event.get('title', None)
             url = parsed_event.get('orig_link', None)
             redtri_events_context.append({"event_url": url, "event_title": title})
-        if redtri_events_context and not settings.DEBUG:
+        if redtri_events_context and not settings.DEBUG and False:
             # Now send mail
             subject = "Alltoez | Redtri events | {}".format(today.strftime("%A, %d. %B"))
 
