@@ -43,6 +43,14 @@ class EventInternalSerializer(serializers.HyperlinkedModelSerializer):
         origin = None
         if request.GET.get('latitude', None) and request.GET.get('longitude', None):
             origin = Point(float(request.GET['longitude']), float(request.GET['latitude']))
+        elif request.GET.get('location', None):
+            center = request.GET.get('location')
+            try:
+                circle_list = center.split(',')
+                # Sent latidude,longitude,radius
+                origin = Point(float(circle_list[1]), float(circle_list[0]))
+            except (IndexError, AttributeError, ValueError):
+                return None
         elif request.user.is_authenticated() and request.user.profile.last_known_location_bounds:
             lat = request.user.profile.last_known_location_bounds.centroid.y
             lng = request.user.profile.last_known_location_bounds.centroid.x

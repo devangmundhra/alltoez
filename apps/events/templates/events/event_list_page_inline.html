@@ -4,7 +4,7 @@
 {% for event in events_list %}
 <div class="col-xs-12 col-sm-12">
     <div class="event-item">
-        <a href='{% url "event_detail" event.slug %}'>
+        <a href='{% url "event_detail" event.slug %}' target="_blank">
             <div class="media">
               <div class="media-left media-middle event-image">
                 {% thumbnail event.image "384x256" crop="center" as im %}

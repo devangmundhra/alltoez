@@ -197,7 +197,9 @@
             center: map_center,
             overviewMapControl: false,
             streetViewControl: false,
-            mapTypeControl: false
+            mapTypeControl: false,
+            draggable: false,
+            scrollwheel: false
           });
 
           icon  = {
@@ -290,7 +292,8 @@
                 map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(curLocControlDiv);
             }
 
-            if (isMobile.any)
+
+            // if (isMobile.any) Hide for any kind
             {
                 $("#filter-header").removeClass('visible');
                 $("#filter-location-header").toggleClass('visible');

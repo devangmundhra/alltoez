@@ -24,6 +24,18 @@ a {
                 Read the story of Alltoez <a href="{% url 'about-alltoez' %}">here.</a>
             </p>
             <br/>
+            <a href="{% url 'events' %}" class="btn btn-info" style="text-decoration:none"><h3>Take Alltoez for a spin!</h3></a>
+            <br/><br/><br/><br/><br/><br/><br/>
+            {% comment "reduce call to actions" %}
+            {% if not user.is_authenticated %}
+                <br/>
+                <p class="text-center">or</p>
+                {% include "alltoez/ui/fragments/social_login.html" %}
+                <br/><br/>
+                {% include "alltoez/ui/fragments/email_login.html" %}
+            {% endif %}
+            {% endcomment %}
+            <div class="clearfix"></div>
             <div class="survey-links">
                 <div class="col-md-6 col-md-offset-3">
                     <div class="alert alert-success">
@@ -38,18 +50,6 @@ a {
                     <br/><br/><br/>
                 </div>
             </div>
-            <div class="clearfix"></div>
-            <a href="{% url 'events' %}" class="btn btn-info">Take Alltoez for a spin!</a>
-            <br/><br/><br/><br/><br/><br/><br/>
-            {% comment "reduce call to actions" %}
-            {% if not user.is_authenticated %}
-                <br/>
-                <p class="text-center">or</p>
-                {% include "alltoez/ui/fragments/social_login.html" %}
-                <br/><br/>
-                {% include "alltoez/ui/fragments/email_login.html" %}
-            {% endif %}
-            {% endcomment %}
         </div>
     </div>
 {% endblock %}
