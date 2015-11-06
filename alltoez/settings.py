@@ -25,7 +25,7 @@ STATIC_ROOT = os.path.join(SITE_ROOT, "static")
 # STATIC_ROOT = 'staticfiles'
 MEDIA_ROOT = os.path.join(SITE_ROOT, "media")
 
-PROJECT_DOMAIN = "http://www.alltoez.com"
+PROJECT_DOMAIN = "https://www.alltoez.com"
 
 STATICFILES_STORAGE = 'apps.alltoez.storage.S3GZipPipelineStorage'
 
