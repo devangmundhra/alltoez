@@ -50,7 +50,7 @@
 
 {% block content %}
 	<div class="strip white">
-        <h3 class="text-center">Events in this venue</h3>
+        <h3 class="text-center">{{ venue.event_set|length }} event{% if venue.event_set|length > 1 %}s{%endif%} at this venue</h3>
         <div class="container events-list">
             <div class="row">
                 {% include page_template with events_list=venue.event_set %}
