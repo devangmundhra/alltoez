@@ -1,6 +1,13 @@
+{% load static from staticfiles %}
+
 <div class="clearfix"></div>
 <footer class="footer">
 	<div class="container">
+        <p class="text-center">
+            <a href="https://itunes.apple.com/us/app/alltoez/id1050496349?ls=1&mt=8"><img alt="Download on the App Store" src="{% static 'img/download-on-appstore.svg' %}" height="36"/></a>
+            &nbsp;&nbsp;
+            <a href="https://play.google.com/store/apps/details?id=com.alltoez.alltoez&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="{% static 'img/google-play-badge.png' %}" height="36"/></a>
+        </p>
         <p class="text-center">
             <a href="{% url 'about-alltoez' %}">About</a>
             |
