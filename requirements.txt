@@ -37,7 +37,7 @@ django-split-json-widget==0.2
 django-storages-redux==1.2.2
 django-toolbelt==0.0.1
 djangocms-admin-style==0.2.5
-djangorestframework==3.2.4
+djangorestframework==3.11.2
 djrill==1.4.0
 drf-haystack==1.5.4
 ecdsa==0.11
