@@ -58,7 +58,7 @@ msgpack-python==0.4.6
 newrelic==2.56.0.42
 oauthlib==1.0.3
 Padding==0.4
-paramiko==1.15.1
+paramiko==2.10.1
 pgpdump==1.5
 phonenumbers==7.0.2
 Pillow==2.7.0
